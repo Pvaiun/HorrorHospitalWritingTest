@@ -428,8 +428,10 @@ export function bandFor(pat, key) {
 // File reveals are paced by cumulative scale movement (`enc._totalScaleMovement`)
 // rather than turns or fixed scale thresholds — so investigative *engagement*
 // uncovers the file, not the calendar. Reveals fire strictly in order and at
-// most one per response, so each line gets its own narrative beat.
-const DEFAULT_REVEAL_THRESHOLDS = [7, 20, 35];
+// most one per response, so each line gets its own narrative beat. Defaults
+// are calibrated so all three uncover by roughly the 55–60% point of a typical
+// fight (which resolves around 25–35 units of total movement).
+const DEFAULT_REVEAL_THRESHOLDS = [3, 9, 16];
 
 async function checkFileReveals(pat) {
   const enc = state.enc;
