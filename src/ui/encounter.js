@@ -30,7 +30,7 @@ function encStripEl() {
   const enc = state.enc;
   const wing = Math.min(state.run ? Math.ceil((state.run.idx + 1) / 2) : 1, 5);
   const left = el('div', { class: 'enc-strip-left' }, [
-    el('span', {}, '// engagement'),
+    el('span', {}, '// Containment'),
     el('span', { class: 'enc-sep' }, ' · '),
     el('span', {}, enc.patient.def.role === 'final' ? 'the final ward' : `wing ${wing}`),
     el('span', { class: 'enc-sep' }, ' · '),
@@ -89,7 +89,7 @@ function patientColEl(patient) {
     ? patient.def.presented(patient)
     : '';
   if (presented) {
-    col.appendChild(el('div', { class: 'enc-section-label' }, '─ she presents as ─'));
+    col.appendChild(el('div', { class: 'enc-section-label' }, '─ subject presents as ─'));
     col.appendChild(el('div', { class: 'enc-presented', html: parseProse(presented) }));
   }
 
@@ -132,7 +132,7 @@ function playerColEl(player) {
 
 function scaleListEl(patient) {
   const wrap = el('div', { class: 'enc-scales' });
-  wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ what shifts ─'));
+  wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ what the file tracks ─'));
   const entries = Object.entries(patient.def.scales || {});
   if (!entries.length) {
     wrap.appendChild(el('div', { class: 'enc-scale-empty' }, '— nothing the file tracks —'));
@@ -178,7 +178,7 @@ function bandTone(scaleDef, band) {
 
 function composureRowEl(player) {
   const row = el('div', { class: 'enc-stat-row' });
-  row.appendChild(el('span', { class: 'enc-stat-label' }, 'composure'));
+  row.appendChild(el('span', { class: 'enc-stat-label' }, 'Composure'));
   const pips = el('span', { class: 'enc-pips' });
   const max = player.composureMax || COMPOSURE_MAX;
   for (let i = 0; i < max; i++) {
@@ -194,7 +194,7 @@ function playerEffectsRowEl() {
   const eff = enc.patient.playerEffects || {};
   const items = Object.entries(eff).filter(([_, v]) => v > 0);
   const wrap = el('div', { class: 'enc-stat-row' });
-  wrap.appendChild(el('span', { class: 'enc-stat-label' }, 'on me'));
+  wrap.appendChild(el('span', { class: 'enc-stat-label' }, 'On me'));
   if (!items.length) {
     wrap.appendChild(el('span', { class: 'enc-status-empty' }, '— '));
     return wrap;
@@ -216,7 +216,7 @@ function playerEffectsRowEl() {
 
 function itemListEl(player) {
   const wrap = el('div', { class: 'enc-trait-block' });
-  wrap.appendChild(el('div', { class: 'enc-stat-label' }, 'in my pocket'));
+  wrap.appendChild(el('div', { class: 'enc-stat-label' }, 'In my pocket'));
   const items = (player.items || []).filter(i => ITEMS[i]);
   if (!items.length) {
     wrap.appendChild(el('div', { class: 'enc-status-empty' }, '— empty —'));
@@ -239,7 +239,7 @@ function itemListEl(player) {
 
 function scarRowEl(player) {
   const wrap = el('div', { class: 'enc-trait-block' });
-  wrap.appendChild(el('div', { class: 'enc-stat-label' }, 'scars'));
+  wrap.appendChild(el('div', { class: 'enc-stat-label' }, 'Scars'));
   const scars = (player.scars || []).filter(s => SCARS[s]);
   if (!scars.length) {
     wrap.appendChild(el('div', { class: 'enc-status-empty' }, '— none —'));
@@ -273,7 +273,7 @@ function narrativeOrActionsEl(enc) {
 function narrativeWindowEl() {
   const clickable = state.typingIdx >= 0 || state.logAwaitingClick;
   const wrap = el('div', { class: 'enc-narr' + (clickable ? ' clickable' : '') });
-  wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ the room ─'));
+  wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ field notes ─'));
   const idx = state.shownLogIdx;
   const entry = idx >= 0 ? state.log[idx] : null;
   const line = el('div', { class: 'enc-narr-line' + (entry ? ' ' + (entry.cls || '') : '') });
@@ -314,7 +314,7 @@ function verbMenuEl(enc) {
 
 function interjectionMenuEl(enc) {
   const wrap = el('div', { class: 'enc-actions interjection' });
-  wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ how I answer ─'));
+  wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ how I respond ─'));
   const grid = el('div', { class: 'enc-actions-grid' });
   enc.activeInterjection.responses.forEach((r, idx) => {
     const btn = el('button', { class: 'enc-act interjection-resp' });
@@ -363,7 +363,7 @@ function listVerbs(enc) {
     acts.push({
       id: 'leave',
       label: (pat.def.leave?.label || 'LEAVE').toUpperCase(),
-      desc: pat.def.leave?.desc || 'close the door behind you. ~~it leaves a mark.~~',
+      desc: pat.def.leave?.desc || 'Close the door behind you. ~~It leaves a mark.~~',
       danger: true,
     });
   }
@@ -401,7 +401,7 @@ function collapsePanelEl() {
   const wrap = el('div', { class: 'enc-loss' });
   wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ the page ends here ─'));
   const prose = el('div', { class: 'enc-loss-prose' });
-  prose.innerHTML = parseProse('I have no more of myself to spend. ~~the room~~ the room keeps the rest.');
+  prose.innerHTML = parseProse('I have no more of myself to spend. ~~The room takes the rest.~~ The room keeps it.');
   wrap.appendChild(prose);
   const btn = el('button', { class: 'doc-button', onclick: () => {
     import('../run.js').then(m => m.reportEncounterLost());

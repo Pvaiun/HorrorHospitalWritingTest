@@ -1,5 +1,5 @@
-// Wounds are admission reasons. Each is a starting state for a run: a
-// small handicap and a small gift. The wound is the seed of the player's
+// Wounds are admission reasons. Each is the anomalous quality the facility
+// has decided requires containment. The wound is the seed of the player's
 // file. Wounds no longer hand out signatures — those have been replaced
 // by the inventory system in src/items.js.
 
@@ -7,26 +7,23 @@ export const WOUNDS = {
   amnesia: {
     id: 'amnesia',
     name: 'Amnesia',
-    one_liner: 'I do not remember the address.',
+    one_liner: 'I do not remember the address. I am here anyway.',
     file: [
-      'Subject arrived unaccompanied. No identification.',
-      'Vitals normal. Responds to questions. !!Does not remember the address.!!',
-      'Settled in room without resistance.',
+      'Subject was admitted unaccompanied. No identification on file.',
+      'Vitals nominal. Responds to questions. !!Cannot produce a residence.!!',
+      'Settled in the assigned room without resistance. ~~Subject knew the way.~~',
     ],
-    // composureMax adds to your cap; startComposure is the per-fight
-    // baseline floor your composure drops to (you can always carry more
-    // across from events; never less than this).
     mods: { startComposure: 3 },
   },
 
   insomnia: {
     id: 'insomnia',
     name: 'Insomnia',
-    one_liner: 'I have been awake for a while now.',
+    one_liner: 'I have not slept in [[3]] days. I am still functioning.',
     file: [
-      'Subject has not slept since admission. Reports last sleep was [[5]] days prior.',
-      'Pupils normal. Pulse elevated.',
-      'When asked to lie down: !!declines.!!',
+      'Subject reports last sleep [[5]] days prior. Pupils normal. Pulse elevated.',
+      'EEG taken at 02:14: ~~normal awake state~~ no recorded state.',
+      'When instructed to lie down: !!declines.!!',
     ],
     mods: { startComposure: 3, composureMax: 1 },
   },
@@ -36,9 +33,9 @@ export const WOUNDS = {
     name: 'Absence',
     one_liner: 'I left a chair pulled out at home. ~~No one~~ Someone is sitting in it.',
     file: [
-      'Subject reports a previous self still active at the residence.',
-      'Subject is calm about this. Staff are not.',
-      'Asked which is here, in this chair: !!I do not know.!!',
+      'Subject reports a prior self ambulatory at the residence.',
+      'Subject is calm about this. !!Staff are not.!!',
+      'Asked which one is on the ward: ~~the wrong one~~ I do not know.',
     ],
     mods: { startComposure: 2 },
   },
@@ -48,9 +45,9 @@ export const WOUNDS = {
     name: 'Witness',
     one_liner: 'I saw something. I wrote it down. The paper is in my coat.',
     file: [
-      'Subject was found at the address with a written account in their coat.',
-      'The account is [[12]]. The handwriting matches.',
-      'Subject does not remember writing it.',
+      'Subject was located at the address with a written account in their coat.',
+      'The account is [[12]]. The handwriting matches the intake form.',
+      'Subject does not remember writing it. ~~The page is still warm.~~',
     ],
     mods: { startComposure: 2 },
   },
@@ -58,11 +55,11 @@ export const WOUNDS = {
   devotion: {
     id: 'devotion',
     name: 'Devotion',
-    one_liner: 'I came here on purpose. I think.',
+    one_liner: 'I came here on purpose. I had a list. I have most of the list.',
     file: [
       'Subject presented at admissions with a list of names.',
       'Two of the names are staff. The others are !!not yet on file.!!',
-      'Subject asks to be brought to one of them daily.',
+      'Subject requests to be brought to one of them daily. ~~We have been complying.~~',
     ],
     mods: { startComposure: 4 },
   },
@@ -70,11 +67,11 @@ export const WOUNDS = {
   hollow: {
     id: 'hollow',
     name: 'Hollow',
-    one_liner: 'I am not full of much.',
+    one_liner: 'I am empty. Something will come back to the empty place.',
     file: [
-      'Subject reports an internal emptiness. Imaging unremarkable.',
-      'Will not eat without prompting. Eats slowly when reminded.',
-      'When asked what is missing, answers: ~~everything~~ I will know when it comes back.',
+      'Subject reports an internal vacancy. Imaging unremarkable. !!Imaging does not register Subject.!!',
+      'Will not eat without prompting. When prompted, eats without satisfaction.',
+      'Asked what is missing: ~~everyone~~ I will know when it returns.',
     ],
     mods: { startComposure: 2, composureMax: 2 },
   },

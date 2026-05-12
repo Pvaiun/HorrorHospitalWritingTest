@@ -19,18 +19,18 @@ export const ITEMS = {
   photograph: {
     id: 'photograph',
     name: 'a photograph',
-    file: 'creased twice. ~~someone~~ someone is in it I do not quite know.',
-    desc: 'show it. for patients you need to be seen by.',
-    voice: 'I had this in my coat. I do not remember putting it there.',
+    file: 'Creased twice. Two figures. ~~The smaller one~~ has been folded out of frame.',
+    desc: 'Show it. For patients who need to be seen by someone.',
+    voice: 'A photograph. I do not remember keeping it.',
     when: (p) => p.def.scales?.recognition !== undefined,
     respond(p) {
       const shifts = { recognition: +3 };
       if (p.def.scales?.grief !== undefined) shifts.grief = +1;
       return {
         lines: [
-          'I take the photograph from my pocket. I show it to her.',
-          'she takes it. she does not give it back.',
-          '~~she has seen this face before.~~ she has seen this face before.',
+          'I take it from my pocket. I hold it up to her.',
+          'She lifts it carefully. She does not give it back.',
+          '~~She knows the smaller one.~~ She names the smaller one.',
         ],
         scales: shifts,
       };
@@ -40,14 +40,14 @@ export const ITEMS = {
   sugar_cube: {
     id: 'sugar_cube',
     name: 'a sugar cube',
-    file: 'wrapped in wax paper. one corner has gone soft.',
-    desc: 'eat it. restore composure.',
-    voice: 'I had this. I do not know why.',
+    file: 'Wax paper, slightly damp. The hand that gave it to me ~~was cold~~ did not warm it.',
+    desc: 'Eat it. Restore composure.',
+    voice: 'A sugar cube. I had it. I did not pack it.',
     respond() {
       return {
         lines: [
-          'I unwrap it. I put it on my tongue.',
-          '~~the room~~ the room stops humming for a moment.',
+          'I unwrap it. I set it on my tongue.',
+          'The room ~~stops humming~~ holds still for a moment.',
         ],
         composure: +2,
       };
@@ -57,9 +57,9 @@ export const ITEMS = {
   handkerchief: {
     id: 'handkerchief',
     name: 'a folded handkerchief',
-    file: 'pressed. an initial stitched in the corner — ~~not mine.~~',
-    desc: 'offer it. calm a patient. costs a little.',
-    voice: 'a handkerchief. ~~clean.~~ clean.',
+    file: 'Pressed. An initial stitched in the corner — ~~not mine.~~ Bears the laundry stamp of Ward [[2]].',
+    desc: 'Offer it. Calms a panicked patient. Costs a little.',
+    voice: 'A handkerchief. ~~Clean.~~ Laundered.',
     when: (p) => {
       const s = p.def.scales || {};
       return s.panic !== undefined || s.agitation !== undefined
@@ -74,22 +74,22 @@ export const ITEMS = {
       if (s.tension !== undefined)   shifts.tension = -2;
       return {
         lines: [
-          'I unfold the handkerchief. I offer it.',
-          'she takes it. she folds it again. she puts it in her own pocket.',
+          'I unfold it. I offer it.',
+          'She takes it. She folds it once more. She puts it in her own pocket.',
         ],
         scales: shifts,
         composure: -1,
-        composureCost: 'I gave away the only soft thing I had.',
+        composureCost: 'I gave away the only soft thing I came in with.',
       };
     },
   },
 
   childs_drawing: {
     id: 'childs_drawing',
-    name: 'a child\'s drawing',
-    file: 'crayon. folded twice. ~~signed~~ signed at the bottom in a name I almost recognize.',
-    desc: 'show it. for patients with tenderness or grief.',
-    voice: 'a drawing. ~~someone~~ someone gave it to me.',
+    name: "a child's drawing",
+    file: 'Crayon. Folded twice. Two figures holding hands. ~~My signature~~ A name in my own hand at the bottom. A name I have not used.',
+    desc: 'Show it. For patients holding tenderness or grief.',
+    voice: 'A drawing. ~~A child gave it to me.~~ I have no child.',
     when: (p) => {
       const s = p.def.scales || {};
       return s.tenderness !== undefined || s.grief !== undefined || s.release !== undefined;
@@ -102,13 +102,13 @@ export const ITEMS = {
       if (s.release !== undefined)    shifts.release = +2;
       return {
         lines: [
-          'I unfold the drawing. I hold it up.',
-          'her face changes. she does not take it.',
-          '!!she has not let herself look at one in a while.!!',
+          'I unfold it. I hold it up.',
+          'Her face changes. She does not reach for it.',
+          '!!She has not let herself look at one in a long time.!!',
         ],
         scales: shifts,
         composure: -1,
-        composureCost: '~~someone gave me~~ I do not remember where I got this.',
+        composureCost: '~~Someone gave me this.~~ I do not remember where I got it.',
       };
     },
   },
@@ -116,9 +116,9 @@ export const ITEMS = {
   pocket_watch: {
     id: 'pocket_watch',
     name: 'a pocket watch',
-    file: 'silver. it was ticking when I came in. it is not now.',
-    desc: 'wind it. resets the patient\'s worst scale.',
-    voice: 'a watch. ~~it has stopped.~~ it has stopped.',
+    file: 'Silver. Stopped at !!03:17.!! The minute hand resumes when held.',
+    desc: "Wind it. Resets the patient's worst condition.",
+    voice: 'A watch. ~~It has stopped.~~ It was stopped.',
     respond(p) {
       // find the scale that is most off in a bad direction. for negative
       // scales: highest value is worst. for positive: lowest is worst.
@@ -139,9 +139,9 @@ export const ITEMS = {
       }
       return {
         lines: [
-          'I take the watch from my pocket. I wind it.',
-          'the hand begins to move. the room settles a degree.',
-          '~~something is~~ something is being put back. ~~I do not~~ I do not know how long it holds.',
+          'I take it from my pocket. I wind the stem.',
+          'The hand begins to move. The room settles by a degree.',
+          '~~Something has been put back.~~ Something has been put back. I do not know how long it holds.',
         ],
         scales: shifts,
       };
@@ -151,16 +151,16 @@ export const ITEMS = {
   the_card: {
     id: 'the_card',
     name: 'the admission card',
-    file: 'creased. Patient 0413. !!I have been holding it.!!',
-    desc: 'name yourself. restore composure.',
-    voice: 'the card. ~~I am~~ I am 0413.',
+    file: 'Patient 0413. Creased. ~~The number has been written over another.~~ !!I have been holding it.!!',
+    desc: 'Name yourself. Restore composure.',
+    voice: 'The card. ~~I am~~ I have been 0413.',
     respond(p) {
       const shifts = {};
       if (p.def.scales?.self !== undefined)        shifts.self = +3;
       if (p.def.scales?.recognition !== undefined) shifts.recognition = +2;
       return {
         lines: [
-          'I take the card out. I read my own number off it. !!Patient 0413.!!',
+          'I take it out. I read my number off it. !!Patient 0413.!!',
           'I am here. I am the one who came in.',
         ],
         composure: +2,
@@ -172,9 +172,9 @@ export const ITEMS = {
   worn_ribbon: {
     id: 'worn_ribbon',
     name: 'a worn ribbon',
-    file: 'red. it has been tied and untied many times. ~~once~~ once it was tied around something.',
-    desc: 'give it. soft memory. gentle.',
-    voice: 'a ribbon. ~~someone~~ someone wore it.',
+    file: 'Red. Tied and untied many times. ~~Once~~ The shape of what it was tied around is still in it.',
+    desc: 'Give it. Soft memory. For tender patients.',
+    voice: 'A ribbon. ~~Someone~~ Someone wore it.',
     when: (p) => {
       const s = p.def.scales || {};
       return s.tenderness !== undefined || s.recognition !== undefined
@@ -189,8 +189,8 @@ export const ITEMS = {
       if (s.trust !== undefined)       shifts.trust = +2;
       return {
         lines: [
-          'I take the ribbon out. she sees it before I have lifted it all the way.',
-          'she lets me put it in her hand. she does not say anything.',
+          'I take it out. She sees it before I have lifted it all the way.',
+          'She lets me lay it in her hand. She does not speak.',
         ],
         scales: shifts,
       };
@@ -200,17 +200,17 @@ export const ITEMS = {
   scrap_of_paper: {
     id: 'scrap_of_paper',
     name: 'a scrap of paper',
-    file: 'torn from something larger. a name. ~~not~~ not the one I expected.',
-    desc: 'read what\'s on it. ~~who knows~~ who knows what it is.',
-    voice: 'a scrap. with a name on it. ~~I~~ I did not write it.',
+    file: 'Torn from something larger. A name in handwriting. ~~Mine.~~ A name I have not used.',
+    desc: 'Read what is on it. The outcome is uncertain.',
+    voice: 'A scrap. With a name on it. ~~I did not write it.~~',
     respond(p) {
       // random behavior — sometimes a name lands, sometimes nothing
       const roll = Math.random();
       if (roll < 0.5 && p.def.scales?.recognition !== undefined) {
         return {
           lines: [
-            'I read the name. it is one I had not been carrying on purpose.',
-            'she looks up. she half-knows it.',
+            'I read the name. It is one I had not been carrying on purpose.',
+            'She looks up. She half-knows it.',
           ],
           scales: { recognition: +3 },
         };
@@ -218,21 +218,21 @@ export const ITEMS = {
       if (roll < 0.8) {
         return {
           lines: [
-            'I read the name. she does not respond to it.',
-            'I put the scrap back. ~~I am not~~ I am not certain it was a name.',
+            'I read the name. She does not answer to it.',
+            'I put the scrap back. ~~It was not a name.~~ It may not have been a name.',
           ],
           composure: -1,
-          composureCost: 'the name was for someone else. ~~someone I~~ I do not remember.',
+          composureCost: 'The name was for someone else. ~~Someone I.~~ I do not remember.',
         };
       }
       // rare — bad
       return {
         lines: [
-          'I read the name. it is mine.',
-          '!!I did not write it.!! someone wrote it down for me. ~~recently.~~',
+          'I read the name. It is mine.',
+          '!!I did not write it.!! Someone wrote it down for me. ~~Recently.~~',
         ],
         composure: -2,
-        composureCost: '!!someone has been writing my name in places I have not been.!!',
+        composureCost: '!!Someone has been writing my name in places I have not been.!!',
         scars: ['named'],
       };
     },
@@ -241,9 +241,9 @@ export const ITEMS = {
   black_coin: {
     id: 'black_coin',
     name: 'a black coin',
-    file: 'the size of a thumbnail. it does not catch the light. ~~I do not remember~~ I have been carrying it.',
-    desc: 'pay it. it costs. it shifts something stuck.',
-    voice: 'a coin. ~~it does not~~ it does not weigh much.',
+    file: 'Thumbnail-sized. ~~Does not catch light.~~ Warm in pocket. Cold in palm.',
+    desc: 'Pay it. Costs me. Shifts something stuck.',
+    voice: 'A coin. ~~The weight is wrong.~~',
     respond(p) {
       // shifts every negative scale down by 2 (good), at a composure cost.
       const shifts = {};
@@ -252,12 +252,12 @@ export const ITEMS = {
       }
       return {
         lines: [
-          'I take the coin out. I set it on the floor between us.',
-          'the room settles. ~~something has been~~ something has been paid for.',
+          'I take it out. I set it on the floor between us.',
+          'The room settles. ~~Something has been paid for.~~ Something has been paid for.',
         ],
         scales: shifts,
         composure: -2,
-        composureCost: '!!the coin was warm. it is not now.!!',
+        composureCost: '!!The coin was warm. It is not now.!!',
       };
     },
   },
@@ -265,17 +265,17 @@ export const ITEMS = {
   vial: {
     id: 'vial',
     name: 'a small vial',
-    file: 'glass. ~~half~~ half full. no label.',
-    desc: 'drink it. it calms. ~~it~~ it may also dull.',
-    voice: 'a vial. ~~someone~~ someone gave it to me. for the trip.',
+    file: 'Glass. ~~Half empty.~~ Half full. No label. The fluid does not slosh.',
+    desc: 'Drink it. Calms me. May also dull.',
+    voice: 'A vial. ~~A nurse~~ Someone gave it to me. For the descent.',
     respond(p) {
       const shifts = {};
       if (p.def.scales?.tending !== undefined)   shifts.tending = +2;
       if (p.def.scales?.insistence !== undefined) shifts.insistence = +1;
       return {
         lines: [
-          'I open the vial. I drink half of it.',
-          'the room is suddenly very soft. my edges have gone. ~~I am still~~ I am still here.',
+          'I open it. I drink half.',
+          'The room is suddenly very soft. ~~My edges are gone.~~ My edges are gone. !!I am still here.!!',
         ],
         composure: +2,
         scales: shifts,
@@ -287,18 +287,18 @@ export const ITEMS = {
   sliver_of_glass: {
     id: 'sliver_of_glass',
     name: 'a sliver of glass',
-    file: 'small. sharp at one end. ~~clean.~~ clean.',
-    desc: 'clutch it. costs composure now. wards off the next blow.',
-    voice: 'a sliver. ~~I~~ I will not need this.',
+    file: 'From a mirror in the east corridor. Sharp. ~~Clean.~~ Clean of fingerprints.',
+    desc: 'Clutch it. Costs composure. Wards off the next blow.',
+    voice: 'A sliver. ~~I will not need this.~~',
     respond() {
       return {
         lines: [
-          'I close my hand around the sliver. just enough to mark my palm.',
-          '!!the pain is small but it is the loudest thing in the room.!!',
+          'I close my hand around it. Just enough to mark my palm.',
+          '!!The pain is small but it is the loudest thing in the room.!!',
           '~~I am awake.~~ I am awake.',
         ],
         composure: -2,
-        composureCost: '~~a little blood.~~ a little blood. it keeps me here.',
+        composureCost: '~~A little blood.~~ A little blood. It keeps me here.',
         flags: { glass_clutched: true },
       };
     },
@@ -307,23 +307,19 @@ export const ITEMS = {
   ink_bottle: {
     id: 'ink_bottle',
     name: 'a bottle of ink',
-    file: 'black. half spilled. ~~the cap~~ the cap is gone.',
-    desc: 'write on the wall. ~~it costs.~~ uncovers her file in full.',
-    voice: 'ink. ~~black.~~ black.',
+    file: 'Black. Half spilled. The cap is gone. ~~Names~~ Words appear where the spill dries.',
+    desc: "Write on the wall. Uncovers her file in full. Costs.",
+    voice: 'Ink. ~~Black.~~ Cold.',
     respond(p) {
       // reveal all file lines
-      // engine will mark them; we just return a flag and let the engine
-      // pick it up. easiest: set patient flag here and have the engine
-      // honor it. (engine already runs checkFileReveals after each
-      // response — but that's gated by `when`. simpler: write directly.)
       return {
         lines: [
-          'I unstop the ink. I write what I have been told on the wall behind her.',
-          '~~I write~~ I write what I remember. the rest fills itself in.',
-          '!!the file is open in my hand. it is in full.!!',
+          'I unstop it. I write what I have been told on the wall behind her.',
+          '~~I write~~ I write what I remember. The rest fills itself in.',
+          '!!The file is open in my hand. All of it.!!',
         ],
         composure: -2,
-        composureCost: '~~my hand~~ my hand is black. I cannot wash it off in this room.',
+        composureCost: '~~My hand is black.~~ My hand is black. I cannot wash it off in this room.',
         flags: { _revealAllFile: true },
       };
     },
@@ -332,9 +328,9 @@ export const ITEMS = {
   small_bell: {
     id: 'small_bell',
     name: 'a small bell',
-    file: 'brass. one note. ~~someone~~ someone has rung it before.',
-    desc: 'ring it once. wakes patients who have gone elsewhere.',
-    voice: 'a bell. ~~the sound is~~ the sound is the same as the corridor.',
+    file: 'Brass. One note. ~~The note is somewhere in the building already.~~',
+    desc: 'Ring it once. Wakes patients who have gone elsewhere.',
+    voice: 'A bell. ~~The sound is the same as the corridor.~~',
     respond(p) {
       const shifts = {};
       if (p.def.scales?.sight !== undefined)       shifts.sight = +3;
@@ -344,8 +340,8 @@ export const ITEMS = {
       if (p.def.scales?.tending !== undefined)     shifts.tending = -2;
       return {
         lines: [
-          'I ring the bell. once. it is louder than the room.',
-          'she stops what she is doing. she is here. ~~partly.~~ partly.',
+          'I ring it. Once. It is louder than the room.',
+          'She stops what she is doing. She is here. ~~Partly.~~ Partly.',
         ],
         scales: shifts,
       };
@@ -378,7 +374,7 @@ export const STARTING_ITEMS = [
 ];
 
 // items the corridor can hand out mid-run. (the_card is special — every
-// run starts with it as the player\'s admission card.)
+// run starts with it as the player's admission card.)
 export const CORRIDOR_ITEMS = [
   'worn_ribbon',
   'scrap_of_paper',
