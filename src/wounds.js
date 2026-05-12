@@ -37,7 +37,7 @@ export const WOUNDS = {
       'Subject is calm about this. !!Staff are not.!!',
       'Asked which one is on the ward: ~~the wrong one~~ I do not know.',
     ],
-    mods: { startComposure: 2 },
+    mods: { startComposure: 2, composureMax: 2 },
   },
 
   witness: {
