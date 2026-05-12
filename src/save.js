@@ -57,8 +57,9 @@ export function wipeSave() {
   try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
 }
 
-// Mark a run finished. Adds an archive line, increments counters, and may
-// unlock content based on `payload`.
+// Mark a run finished. Adds an archive line, increments counters, and
+// writes the save. Every wound and patient is available from admission,
+// so this no longer unlocks anything.
 export function recordRunOutcome(save, payload) {
   save.runs++;
   if (payload.reachedFinal) save.finishes++;
@@ -67,18 +68,5 @@ export function recordRunOutcome(save, payload) {
   }
   if (payload.archiveLine) save.archive.unshift(payload.archiveLine);
   if (save.archive.length > 20) save.archive.length = 20;
-
-  // Each milestone unlocks more wounds. All patients are unlocked from
-  // the start, so the ladder only grants new admission reasons.
-  const UNLOCK_LADDER = [
-    { at: 1, wounds: ['witness']  },
-    { at: 2, wounds: ['devotion'] },
-    { at: 3, wounds: ['hollow']   },
-  ];
-  for (const tier of UNLOCK_LADDER) {
-    if (save.runs >= tier.at) {
-      for (const w of tier.wounds) if (!save.unlocked.wounds.includes(w)) save.unlocked.wounds.push(w);
-    }
-  }
   writeSave(save);
 }
