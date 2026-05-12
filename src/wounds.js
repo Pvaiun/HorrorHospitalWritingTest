@@ -13,7 +13,7 @@ export const WOUNDS = {
       'Vitals nominal. Responds to questions. !!Cannot produce a residence.!!',
       'Settled in the assigned room without resistance. ~~Subject knew the way.~~',
     ],
-    mods: { startComposure: 3 },
+    mods: { startComposure: 4 },
   },
 
   insomnia: {
