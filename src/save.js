@@ -8,10 +8,10 @@
 const KEY = 'bloodlines.save.v1';
 
 const STARTING_WOUNDS  = ['amnesia', 'insomnia', 'absence'];
-// The final encounter (choir) is always available — it's the room at the
-// end of the corridor, not a wing patient — so it lives in the starting
-// pool and never appears in UNLOCK_LADDER.
-const STARTING_PATIENTS = ['pram', 'pyrelord', 'soothlick', 'glimmer', 'frostfin', 'choir'];
+// Every patient is unlocked from the start. The final encounter (choir)
+// lives alongside the wing patients here; the run builder routes it to
+// the final slot.
+const STARTING_PATIENTS = ['pram', 'pyrelord', 'soothlick', 'glimmer', 'frostfin', 'hollow', 'mire', 'composer', 'choir'];
 
 export function defaultSave() {
   return {
@@ -68,17 +68,16 @@ export function recordRunOutcome(save, payload) {
   if (payload.archiveLine) save.archive.unshift(payload.archiveLine);
   if (save.archive.length > 20) save.archive.length = 20;
 
-  // Each milestone unlocks more content. The pool grows the more runs the
-  // player completes; eventually they have everything.
+  // Each milestone unlocks more wounds. All patients are unlocked from
+  // the start, so the ladder only grants new admission reasons.
   const UNLOCK_LADDER = [
-    { at: 1, wounds: ['witness'],  patients: ['mire']    },
-    { at: 2, wounds: ['devotion'], patients: ['hollow']  },
-    { at: 3, wounds: ['hollow'],   patients: ['composer']},
+    { at: 1, wounds: ['witness']  },
+    { at: 2, wounds: ['devotion'] },
+    { at: 3, wounds: ['hollow']   },
   ];
   for (const tier of UNLOCK_LADDER) {
     if (save.runs >= tier.at) {
-      for (const w of tier.wounds)   if (!save.unlocked.wounds.includes(w))   save.unlocked.wounds.push(w);
-      for (const p of tier.patients) if (!save.unlocked.patients.includes(p)) save.unlocked.patients.push(p);
+      for (const w of tier.wounds) if (!save.unlocked.wounds.includes(w)) save.unlocked.wounds.push(w);
     }
   }
   writeSave(save);

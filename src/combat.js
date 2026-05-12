@@ -33,9 +33,7 @@ export function makePlayer(wound, startingItemId) {
     composureMax: COMPOSURE_MAX,
     composure: 0,
   };
-  // the admission card is always in your pocket. add it as the first item.
-  if (ITEMS['the_card']) addItem(player, 'the_card');
-  // and whatever the player picked at admission.
+  // whatever the player picked at admission.
   if (startingItemId && ITEMS[startingItemId]) addItem(player, startingItemId);
   recomputePlayerStats(player);
   const initComposure = (w?.mods.startComposure || 0);
@@ -445,7 +443,7 @@ async function checkFileReveals(pat) {
   if ((enc._totalScaleMovement || 0) < threshold) return;
   enc._revealedFile.push(nextIdx);
   const announce = fr.announce || 'A line of the file fills itself in. ~~Where I can read it.~~';
-  pushLog({ text: announce, cls: 'reveal' });
+  pushLog({ text: `The patient's file becomes clearer. ${announce}`, cls: 'reveal' });
   await drainLog();
 }
 

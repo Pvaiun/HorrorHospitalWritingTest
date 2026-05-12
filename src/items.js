@@ -368,13 +368,12 @@ export function removeItem(player, id) {
 // the items the player chooses between at admission.
 export const STARTING_ITEMS = [
   'photograph',
-  'sugar_cube',
+  'the_card',
   'handkerchief',
   'pocket_watch',
 ];
 
-// items the corridor can hand out mid-run. (the_card is special — every
-// run starts with it as the player's admission card.)
+// items the corridor can hand out mid-run.
 export const CORRIDOR_ITEMS = [
   'worn_ribbon',
   'scrap_of_paper',

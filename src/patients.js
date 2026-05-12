@@ -893,7 +893,7 @@ const pyrelord = {
   name: '[The Chair]',
   glyph: 'Pyrelord',
   subtitle: 'He still presides.',
-  role: 'wing', tier: 2,
+  role: 'wing', tier: 1,
   file: [
     'Subject was pronounced deceased on [[8]]. Subject continues to occupy the chair.',
     'Family ~~visit weekly~~ are summoned weekly. Subject addresses them by name.',
@@ -1569,7 +1569,7 @@ const soothlick = {
   name: '[The Night Round]',
   glyph: 'Soothlick',
   subtitle: 'She is still rounding.',
-  role: 'wing', tier: 2,
+  role: 'wing', tier: 1,
   file: [
     "Subject's tenure as ward sister spanned ~~thirty~~ thirty-eight years. Subject's patients ~~expired~~ rested ahead of schedule.",
     'No inquest was held. Subject was admitted instead. !!Subject does not turn the door handle.!!',
@@ -2214,7 +2214,7 @@ const glimmer = {
   name: '[The Witness]',
   glyph: 'Glimmerfox',
   subtitle: 'He has not blinked.',
-  role: 'wing', tier: 3,
+  role: 'wing', tier: 2,
   file: [
     'Subject was [[1]] years old when [[8]] entered the road. Subject did not look away.',
     "Subject's eyes have not closed since. ~~Pupils dilate normally.~~ Pupils do not register staff.",
@@ -4465,7 +4465,7 @@ const mire = {
   name: '[The Pond]',
   glyph: 'Mireling',
   subtitle: 'There is no pond on the grounds.',
-  role: 'wing', tier: 3,
+  role: 'wing', tier: 2,
   file: [
     "Subject persists in asking after the pond. There is no pond on the grounds.",
     'Subject describes a ~~stone~~ statue at the edge. ~~None on file.~~ Of the right size for a small child.',
@@ -5043,7 +5043,7 @@ const composer = {
   name: '[The Composer]',
   glyph: 'Halowyrm',
   subtitle: 'She is composing the room.',
-  role: 'wing', tier: 3,
+  role: 'wing', tier: 2,
   file: [
     'Subject was a piano instructor. A student fell from the lesson-room window on [[8]]. Subject did not look up.',
     'Subject composes the same chord. Subject believes the chord will ~~bring the child back~~ correct the moment.',
