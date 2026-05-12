@@ -43,13 +43,13 @@ function sectionLabel(text) {
 // ── title ───────────────────────────────────────────────────────────────
 export function renderTitle() {
   app().appendChild(el('div', { class: 'doc-version' }, `v${VERSION}`));
-  const page = docPage('// admission · the door · open');
+  const page = docPage('// Admission · The door · open');
   page.appendChild(prose([
     'I do not remember the address. I have the card. I have been holding it.',
-    'a building. a desk. a nurse who was expecting me.',
-    'she has a file. she says it is mine. !!she has been waiting.!!',
+    'A building. A desk. A nurse who was expecting me.',
+    'She has my file. She says I am late. !!She has been waiting.!!',
   ].join('\n\n')));
-  page.appendChild(prose('there is a corridor beyond the desk. it descends.', true));
+  page.appendChild(prose('There is a corridor beyond the desk. ~~It descends.~~ It does not return.', true));
 
   const save = state.save || { runs: 0, finishes: 0, archive: [] };
   const meta = el('div', { class: 'doc-archive-summary' });
@@ -84,11 +84,11 @@ export function renderTitle() {
 // ── admission (wound + starting item) ──────────────────────────────────
 export function renderAdmission() {
   app().appendChild(el('div', { class: 'doc-version' }, `v${VERSION}`));
-  const page = docPage('// admission · patient 0413 · day one');
+  const page = docPage('// Admission · Patient 0413 · day one');
   page.appendChild(prose([
-    'the nurse opens the desk. she opens a file. she pushes it across to me.',
-    'the first line is for me to write. she says: !!just say what is wrong.!!',
-    'I read the choices already there. I do not remember which I came in for.',
+    'The nurse opens my file. She pushes it across to me.',
+    'The first line is for me to ~~confirm~~ sign. She says: !!Just say what is wrong.!!',
+    'The boxes are already checked. ~~I do not remember which I came in for.~~ I do not remember any of them being true.',
   ].join('\n\n')));
 
   const available = (state.save?.unlocked.wounds || []).filter(id => WOUNDS[id]);
@@ -103,8 +103,8 @@ export function renderAdmission() {
 
   // starting item — the nurse asks what I have in my pocket.
   page.appendChild(prose([
-    'she asks: !!what do you have in your pocket?!! I empty it onto the desk.',
-    '~~I do not remember packing it.~~ I do not remember putting any of this in.',
+    'She asks: !!What do you have in your pocket?!! I empty it onto the desk.',
+    '~~I do not remember packing this.~~ I do not remember putting any of it in.',
   ].join('\n\n')));
   page.appendChild(sectionLabel('what I brought'));
   const itemList = el('div', { class: 'doc-card-list' });
@@ -178,10 +178,10 @@ function woundMechLine(w) {
   const start = w.mods?.startComposure ?? 0;
   const capBonus = w.mods?.composureMax ?? 0;
   const cap = 5 + capBonus;
-  const parts = [`start · ${start} of ${cap} composure each room`];
-  if (capBonus > 0) parts.push('the gauge holds more');
-  if (start >= 4) parts.push('calmer at the door');
-  else if (start <= 2) parts.push('thin on entry');
+  const parts = [`Start · ${start} of ${cap} composure each room`];
+  if (capBonus > 0) parts.push('The gauge holds more');
+  if (start >= 4) parts.push('Calmer at the door');
+  else if (start <= 2) parts.push('Thin on entry');
   return parts.join(' · ');
 }
 
@@ -232,13 +232,13 @@ function corridorTag(n) {
 
 function corridorIntro(run, n) {
   if (n.kind === 'final') {
-    return 'the corridor ends at a door I have not seen before. ~~it is locked from~~ it is unlocked. !!from this side.!!';
+    return 'The corridor ends at a door I have not seen before. ~~It is locked.~~ It is unlocked. !!From this side.!!';
   }
   if (n.kind === 'patient') {
     const def = PATIENTS[n.id];
-    return `a room. the door is ajar. the file on the desk says ${def ? def.name : '[]'}. ~~the room is~~ the room is.`;
+    return `A room. The door is ajar. The file on the desk reads ${def ? def.name : '[]'}. ~~The room is contained.~~ The room is occupied.`;
   }
-  return 'I keep walking. ~~the hall does not~~ the hall does end.';
+  return 'I keep walking. ~~The hall does not end.~~ The hall does end.';
 }
 
 function corridorMapEl(run) {
@@ -262,7 +262,7 @@ function playerStatusEl(player) {
   const wrap = el('div', { class: 'corridor-status' });
   const w = WOUNDS[player.wound];
   wrap.appendChild(el('div', { class: 'corridor-status-head' }, [
-    el('span', { class: 'corridor-status-name' }, 'patient 0413'),
+    el('span', { class: 'corridor-status-name' }, 'Patient 0413'),
     el('span', { class: 'corridor-status-sep' }, ' · '),
     el('span', { class: 'corridor-status-meta' }, w ? w.name : 'unmarked'),
   ]));
@@ -434,18 +434,18 @@ export function renderArchive() {
   app().appendChild(el('div', { class: 'doc-version' }, `v${VERSION}`));
   const tag = summary?.payload.outcome === 'finished' ? 'discharged' :
               summary?.payload.outcome === 'lost'     ? 'expired'     : 'closed';
-  const page = docPage(`// archive · patient 0413 · ${tag}`);
+  const page = docPage(`// Archive · Patient 0413 · ${tag}`);
 
   if (summary?.payload.outcome === 'finished') {
     page.appendChild(prose([
-      'the door is open. the corridor behind me is closed.',
-      'I do not look back. ~~someone is signing me out~~. someone is signing me out.',
-      '!!the hand is not the one I came in with.!!',
+      'The door is open. The corridor behind me is closed.',
+      'I do not look back. ~~Someone is signing me out.~~ A hand is signing me out.',
+      '!!The hand is not the one I came in with.!!',
     ].join('\n\n')));
   } else {
     page.appendChild(prose([
-      'the page ~~ends~~ stops here.',
-      'another file has been opened. !!0413 was already taken.!!',
+      'The page ~~ends~~ stops here.',
+      'Another file has been opened. !!0413 was already taken.!!',
     ].join('\n\n')));
   }
 
@@ -453,7 +453,7 @@ export function renderArchive() {
   if (summary) {
     const w = WOUNDS[summary.wound];
     page.appendChild(sectionLabel('what was kept'));
-    page.appendChild(el('div', { class: 'doc-prose dim' }, `admitted · ${w ? w.name : summary.wound}`));
+    page.appendChild(el('div', { class: 'doc-prose dim' }, `Admitted · ${w ? w.name : summary.wound}`));
     if (summary.resolutions.length) {
       const list = el('div', { class: 'archive-resolutions' });
       for (const r of summary.resolutions) {
@@ -463,7 +463,7 @@ export function renderArchive() {
         card.appendChild(el('div', { class: 'archive-res-header' }, [
           el('span', { class: 'archive-res-patient' }, p ? p.name : `[${r.patient}]`),
           el('span', { class: 'archive-res-sep' }, ' — '),
-          el('span', { class: 'archive-res-key' }, r.endingTitle || r.endingId || 'unresolved'),
+          el('span', { class: 'archive-res-key' }, r.endingTitle || r.endingId || 'Unresolved'),
         ]));
         // ending prose recap, if recorded
         if (Array.isArray(r.endingLines) && r.endingLines.length) {
@@ -475,11 +475,11 @@ export function renderArchive() {
         }
         // item + scars taken
         const footer = el('div', { class: 'archive-res-footer' });
-        footer.appendChild(el('span', { class: 'archive-res-trait-label' }, 'took · '));
+        footer.appendChild(el('span', { class: 'archive-res-trait-label' }, 'Took · '));
         footer.appendChild(el('span', { class: 'archive-res-trait' }, it ? it.name : 'nothing'));
         if (r.scars && r.scars.length) {
           footer.appendChild(el('span', { class: 'archive-res-sep' }, ' · '));
-          footer.appendChild(el('span', { class: 'archive-res-trait-label' }, 'scars · '));
+          footer.appendChild(el('span', { class: 'archive-res-trait-label' }, 'Scars · '));
           footer.appendChild(el('span', { class: 'archive-res-scars' },
             r.scars.map(s => (SCARS[s] ? SCARS[s].name : s)).join(', ')));
         }
@@ -509,9 +509,9 @@ export function renderArchive() {
 }
 
 function nextUnlockHint(save) {
-  if (save.runs < 1) return 'one more file may open at the door.';
-  if (save.runs < 2) return 'another patient is still on file.';
-  if (save.runs < 3) return 'the desk still has pages I have not read.';
-  if (save.runs < 5) return 'the desk has the rest.';
+  if (save.runs < 1) return 'One more file may open at the desk.';
+  if (save.runs < 2) return 'Another patient is on file.';
+  if (save.runs < 3) return 'The desk still has pages I have not read.';
+  if (save.runs < 5) return 'The desk has the rest.';
   return null;
 }

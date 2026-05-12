@@ -156,7 +156,7 @@ function buildArchiveLine(run, payload) {
   const tag = (payload.outcome === 'finished') ? 'discharged' :
               (payload.outcome === 'lost')     ? 'expired'    :
               (payload.outcome === 'fled')     ? 'walked out' : 'closed';
-  return `Patient 0413 · file ${tag} · wing ${Math.ceil((run.idx || 1) / 2)}`;
+  return `Patient 0413 · File ${tag} · wing ${Math.ceil((run.idx || 1) / 2)}`;
 }
 
 function buildFragment(run, payload) {

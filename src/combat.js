@@ -190,7 +190,7 @@ async function runPlayerVerb(verbId) {
       ? pat.def.leave.respond(pat, p)
       : (typeof pat.def.onLeave === 'function')
         ? pat.def.onLeave(pat, p)
-        : { lines: ['I walk out. I leave the door open behind me.', 'I am farther from her than I came.'], composure: -2, composureCost: '~~I closed the door.~~ I closed the door.', scars: ['abandoned'] };
+        : { lines: ['I walk out. I leave the door open behind me.', 'I am farther from her than I came.'], composure: -2, composureCost: '~~I locked it behind me.~~ I closed the door behind me.', scars: ['abandoned'] };
     await applyResponse(resp);
   } else if (typeof verbId === 'string' && verbId.startsWith('item:')) {
     const itemId = verbId.slice(5);
@@ -204,7 +204,7 @@ async function runPlayerVerb(verbId) {
     }
     const resp = (typeof verb.respond === 'function')
       ? verb.respond(pat, p)
-      : { lines: ['nothing happens.'] };
+      : { lines: ['Nothing happens.'] };
     await applyResponse(resp);
   }
 
@@ -220,7 +220,7 @@ async function runPlayerItem(itemId) {
   const pat = enc.patient;
   const item = ITEMS[itemId];
   if (!item || !(p.items || []).includes(itemId)) {
-    pushLog({ text: 'I reach. it is not in my pocket anymore.', cls: 'flavor' });
+    pushLog({ text: 'I reach. It is not in my pocket anymore.', cls: 'flavor' });
     await drainLog();
     return;
   }
@@ -229,7 +229,7 @@ async function runPlayerItem(itemId) {
   await drainLog();
   const resp = (typeof item.respond === 'function')
     ? item.respond(pat, p)
-    : { lines: ['nothing happens.'] };
+    : { lines: ['Nothing happens.'] };
   await applyResponse(resp);
 }
 
@@ -290,12 +290,12 @@ function callDrift(pat, player) {
     try { resp = pat.def.drift(pat, player); }
     catch (e) { console.error('drift error', e); resp = null; }
   }
-  resp = resp || { lines: ['nothing happens, for a while.'] };
+  resp = resp || { lines: ['Nothing happens. For a while.'] };
   // scars can make drift bite harder.
   const bite = scarsDriftBite(player);
   if (bite > 0 && typeof resp.composure === 'number' && resp.composure < 0) {
     resp = { ...resp, composure: resp.composure - bite,
-             composureCost: resp.composureCost || 'the room is heavier than it should be. ~~something in me~~ something has been wearing.' };
+             composureCost: resp.composureCost || 'The room is heavier than it should be. ~~Something has been wearing.~~' };
   }
   return resp;
 }
@@ -348,7 +348,7 @@ async function applyResponse(resp) {
       enc._pendingCostLine = { text: resp.composureCost, amount: delta };
     } else if (delta < 0 && !resp.composureCost) {
       // fallback so every loss has at least a quiet acknowledgment
-      enc._pendingCostLine = { text: 'it costs me something I cannot put down.', amount: delta };
+      enc._pendingCostLine = { text: 'It costs me something I cannot put down.', amount: delta };
     }
   }
   if (Array.isArray(resp.scars)) {
@@ -442,7 +442,7 @@ async function checkFileReveals(pat) {
                   : (DEFAULT_REVEAL_THRESHOLDS[nextIdx] ?? 99);
   if ((enc._totalScaleMovement || 0) < threshold) return;
   enc._revealedFile.push(nextIdx);
-  const announce = fr.announce || 'a line of the file fills itself in. ~~in my hand.~~';
+  const announce = fr.announce || 'A line of the file fills itself in. ~~In my hand.~~';
   pushLog({ text: announce, cls: 'reveal' });
   await drainLog();
 }
@@ -504,7 +504,7 @@ async function fireEnding(ending) {
 
 async function fireCollapse() {
   const enc = state.enc;
-  pushLog({ text: 'I have no more of myself to spend. the room runs me out.', cls: 'fatal' });
+  pushLog({ text: 'I have no more of myself to spend. ~~The room runs me out.~~ The room keeps what is left.', cls: 'fatal' });
   await drainLog();
   enc.over = true;
   enc.outcome = 'collapsed';
