@@ -28,8 +28,8 @@ export const WOUNDS = {
     mods: { startComposure: 3, composureMax: 1 },
   },
 
-  absence: {
-    id: 'absence',
+  split_personality: {
+    id: 'split_personality',
     name: 'Split Personality',
     one_liner: 'I left a chair pulled out at home. ~~No one~~ Someone is sitting in it.',
     file: [

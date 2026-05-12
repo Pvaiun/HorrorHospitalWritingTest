@@ -7,7 +7,7 @@
 
 const KEY = 'bloodlines.save.v1';
 
-const STARTING_WOUNDS  = ['amnesia', 'insomnia', 'absence'];
+const STARTING_WOUNDS  = ['amnesia', 'insomnia', 'split_personality'];
 // Every patient is unlocked from the start. The final encounter (choir)
 // lives alongside the wing patients here; the run builder routes it to
 // the final slot.

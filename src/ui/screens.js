@@ -490,14 +490,11 @@ export function renderArchive() {
     }
   }
 
-  // unlock notifications
   const save = state.save;
   if (save) {
     page.appendChild(sectionLabel('the desk remembers'));
     page.appendChild(el('div', { class: 'doc-prose dim' },
       `${save.runs} admission${save.runs > 1 ? 's' : ''} on file. ${save.finishes} discharged.`));
-    const next = nextUnlockHint(save);
-    if (next) page.appendChild(el('div', { class: 'doc-prose dim', html: parseProse(next) }));
   }
 
   page.appendChild(actionRow(docButton('begin another admission', () => {
@@ -506,12 +503,4 @@ export function renderArchive() {
     import('./render.js').then(m => m.render());
   })));
   app().appendChild(page);
-}
-
-function nextUnlockHint(save) {
-  if (save.runs < 1) return 'One more file may open at the desk.';
-  if (save.runs < 2) return 'Another patient is on file.';
-  if (save.runs < 3) return 'The desk still has pages I have not read.';
-  if (save.runs < 5) return 'The desk has the rest.';
-  return null;
 }
