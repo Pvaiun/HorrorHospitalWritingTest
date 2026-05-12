@@ -21,7 +21,7 @@ export const SCARS = {
   witnessed: {
     id: 'witnessed',
     name: 'Witnessed',
-    file: 'I saw it. I have not put down what I saw. !!It is in my hand.!!',
+    file: 'I saw it. I have not put down what I saw. !!It is in my chest.!!',
     desc: 'Maximum composure −1.',
     composureCap: 4,
   },

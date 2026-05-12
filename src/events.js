@@ -31,13 +31,13 @@ export const EVENTS = {
       {
         key: 'take',
         label: 'Take what she offers',
-        prose: 'I take it. It is warm. ~~My hand~~ My hand is steadier for a moment.',
+        prose: 'I take it. It is warm. ~~The room~~ The room is steadier for a moment.',
         effect(p) { bumpComposure(p, 3); },
       },
       {
         key: 'refuse',
         label: 'Refuse',
-        prose: 'I keep my hands at my sides. She does not look up. The tray stays.',
+        prose: 'I say nothing. She does not look up. The tray stays.',
         effect() {},
       },
       {
@@ -74,7 +74,7 @@ export const EVENTS = {
       {
         key: 'rewrite',
         label: 'Rewrite the third page',
-        prose: 'I scratch out the line. I write another. The page does not ~~object~~ resist. !!I do not recognize my own hand.!!',
+        prose: 'I scratch out the line. I write another. The page does not ~~object~~ resist. !!I do not recognize the line I wrote.!!',
         effect(p) { addItem(p, 'ink_bottle'); applyScar(p, 'witnessed'); },
       },
     ],
@@ -104,7 +104,7 @@ export const EVENTS = {
       {
         key: 'shatter',
         label: 'Strike it',
-        prose: 'I strike the glass. It does not break. !!My hand does.!!',
+        prose: 'I strike the glass. It does not break. !!Something in me does.!!',
         effect(p) { bumpComposure(p, -1); addItem(p, 'sliver_of_glass'); applyScar(p, 'collapsed'); },
       },
     ],
@@ -171,13 +171,13 @@ export const EVENTS = {
     glyph: 'Sproutkin',
     prose: [
       'A window. There is a garden through it. !!There is no garden on the grounds.!!',
-      'Someone is kneeling in the dirt. ~~Their hands~~ They have my hands.',
+      'Someone is kneeling in the dirt. ~~Their face~~ They have my face.',
     ],
     choices: [
       {
         key: 'wave',
         label: 'Wave',
-        prose: 'They wave back. Exactly. ~~I am being copied.~~ I am being mirrored. When they straighten, there is a ribbon in their hand. And in mine.',
+        prose: 'They wave back. Exactly. ~~I am being copied.~~ I am being mirrored. When they straighten, there is a ribbon at their feet. And in my coat pocket.',
         effect(p) { addItem(p, 'worn_ribbon'); },
       },
       {
