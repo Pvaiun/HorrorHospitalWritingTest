@@ -40,7 +40,7 @@ export const ITEMS = {
   sugar_cube: {
     id: 'sugar_cube',
     name: 'a sugar cube',
-    file: 'Wax paper, slightly damp. The hand that gave it to me ~~was cold~~ did not warm it.',
+    file: 'Wax paper, slightly damp. The pocket I took it from ~~was cold~~ was not mine.',
     desc: 'Eat it. Restore composure.',
     voice: 'A sugar cube. I had it. I did not pack it.',
     respond() {
@@ -87,7 +87,7 @@ export const ITEMS = {
   childs_drawing: {
     id: 'childs_drawing',
     name: "a child's drawing",
-    file: 'Crayon. Folded twice. Two figures holding hands. ~~My signature~~ A name in my own hand at the bottom. A name I have not used.',
+    file: 'Crayon. Folded twice. Two figures, the smaller leaning into the taller. ~~My signature~~ A name at the bottom in careful letters. A name I have not used.',
     desc: 'Show it. For patients holding tenderness or grief.',
     voice: 'A drawing. ~~A child gave it to me.~~ I have no child.',
     when: (p) => {
@@ -140,7 +140,7 @@ export const ITEMS = {
       return {
         lines: [
           'I take it from my pocket. I wind the stem.',
-          'The hand begins to move. The room settles by a degree.',
+          'The mechanism resumes. The room settles by a degree.',
           '~~Something has been put back.~~ Something has been put back. I do not know how long it holds.',
         ],
         scales: shifts,
@@ -190,7 +190,7 @@ export const ITEMS = {
       return {
         lines: [
           'I take it out. She sees it before I have lifted it all the way.',
-          'She lets me lay it in her hand. She does not speak.',
+          'She lets me lay it across her knee. She does not speak.',
         ],
         scales: shifts,
       };
@@ -293,7 +293,7 @@ export const ITEMS = {
     respond() {
       return {
         lines: [
-          'I close my hand around it. Just enough to mark my palm.',
+          'I press my thumb against the edge. Just enough to mark the skin.',
           '!!The pain is small but it is the loudest thing in the room.!!',
           '~~I am awake.~~ I am awake.',
         ],
@@ -316,10 +316,10 @@ export const ITEMS = {
         lines: [
           'I unstop it. I write what I have been told on the wall behind her.',
           '~~I write~~ I write what I remember. The rest fills itself in.',
-          '!!The file is open in my hand. All of it.!!',
+          '!!The file is open in front of me. All of it.!!',
         ],
         composure: -2,
-        composureCost: '~~My hand is black.~~ My hand is black. I cannot wash it off in this room.',
+        composureCost: '~~The ink does not dry.~~ The ink does not dry. The room will not let it.',
         flags: { _revealAllFile: true },
       };
     },

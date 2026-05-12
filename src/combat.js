@@ -444,7 +444,7 @@ async function checkFileReveals(pat) {
                   : (DEFAULT_REVEAL_THRESHOLDS[nextIdx] ?? 99);
   if ((enc._totalScaleMovement || 0) < threshold) return;
   enc._revealedFile.push(nextIdx);
-  const announce = fr.announce || 'A line of the file fills itself in. ~~In my hand.~~';
+  const announce = fr.announce || 'A line of the file fills itself in. ~~Where I can read it.~~';
   pushLog({ text: announce, cls: 'reveal' });
   await drainLog();
 }

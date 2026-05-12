@@ -388,7 +388,7 @@ export function renderResolution() {
     ]));
   }
 
-  // item taken with me — pressed into your hand, or picked up off the floor
+  // item taken with me — offered to the player, or picked up off the floor
   const item = enc.pendingItem ? ITEMS[enc.pendingItem] : null;
   if (item) {
     const taken = el('div', { class: 'resolution-trait-taken' });
@@ -439,8 +439,8 @@ export function renderArchive() {
   if (summary?.payload.outcome === 'finished') {
     page.appendChild(prose([
       'The door is open. The corridor behind me is closed.',
-      'I do not look back. ~~Someone is signing me out.~~ A hand is signing me out.',
-      '!!The hand is not the one I came in with.!!',
+      'I do not look back. ~~Someone is signing me out.~~ Someone at the desk is signing me out.',
+      '!!The signature is not the one I came in with.!!',
     ].join('\n\n')));
   } else {
     page.appendChild(prose([
