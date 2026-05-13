@@ -918,23 +918,23 @@ const pram = {
 // ════════════════════════════════════════════════════════════════════════
 
 // ════════════════════════════════════════════════════════════════════════
-// THE FATHER IN THE CHAIR — Patient 0091
+// THE PATRIARCH — Patient 0091
 // ════════════════════════════════════════════════════════════════════════
 
-const pyrelord = {
-  id: 'pyrelord',
-  name: '[The Chair]',
+const patriarch = {
+  id: 'patriarch',
+  name: '[The Patriarch]',
   glyph: 'Pyrelord',
-  subtitle: 'He still presides.',
+  subtitle: 'He is waiting for his family.',
   role: 'wing', tier: 1,
   file: [
-    'Subject was pronounced deceased on [[8]]. Subject continues to occupy the chair.',
-    'Family ~~visit weekly~~ are summoned weekly. Subject addresses them by name.',
-    'Subject has requested his belt. !!The request is on permanent file.!!',
+    'Subject was head of the [[7]] family for forty years. He has been on the ward since his wife died in this room.',
+    'Family ~~have not visited~~ visit weekly. The visits are recorded as scheduled.',
+    'Subject has requested his belt on twelve occasions. !!The request is on permanent file.!!',
   ],
   intro: [
-    'He is in the chair. He was in the chair when I came in. ~~He chose it.~~ I did not choose this room.',
-    'He is watching the door. He is waiting for someone. He has not noticed me yet.',
+    'He is in the chair. He has arranged it to face the door.',
+    'He does not look up when I come in. He is waiting for someone else.',
   ],
 
   scales: {
@@ -944,16 +944,16 @@ const pyrelord = {
         { at: 0, word: 'small in the chair' },
         { at: 3, word: 'composed' },
         { at: 5, word: 'presiding' },
-        { at: 7, word: 'imperial' },
+        { at: 7, word: 'commanding' },
         { at: 9, word: 'absolute' },
       ],
       crossUp: {
-        3: 'His weight settles the room again. ~~I am a guest.~~',
-        4: 'The room has chosen its master. It is not me.',
+        3: 'He settles the room again. I am a guest here.',
+        4: 'The room has its master back. It is not me.',
       },
       crossDown: {
         2: 'The chair has begun to be a chair.',
-        1: 'He is small. ~~He was always small.~~ It took years to see.',
+        1: 'He is smaller than I first thought.',
         0: 'He is just a man in a chair.',
       },
     },
@@ -964,7 +964,7 @@ const pyrelord = {
         { at: 2, word: 'unsteady' },
         { at: 5, word: 'stirring' },
         { at: 7, word: 'rising' },
-        { at: 9, word: 'spilling' },
+        { at: 9, word: 'breaking' },
       ],
       crossUp: {
         2: 'His shoulders have begun to shake.',
@@ -972,7 +972,7 @@ const pyrelord = {
         4: '!!He is weeping without sound.!!',
       },
       crossDown: {
-        1: 'He has folded the grief back away.',
+        1: 'He has folded it away.',
         0: 'He is composed again. Nothing is the matter.',
       },
     },
@@ -986,8 +986,8 @@ const pyrelord = {
         { at: 9, word: 'all the way here' },
       ],
       crossUp: {
-        2: 'His eyes have come off the door. Briefly. To me.',
-        3: 'He is taking my face in. ~~For the first time.~~',
+        2: 'His eyes have come off the door. To me.',
+        3: 'He is taking my face in. For the first time.',
         4: '!!He is here. All the way here.!!',
       },
       crossDown: {
@@ -995,63 +995,67 @@ const pyrelord = {
       },
     },
   },
+
   initialize(p, player) {
-    p.scales.presence    = r(7, 9);
-    p.scales.grief       = r(1, 3);
+    p.scales.presence = r(7, 9);
+    p.scales.grief = r(1, 3);
     p.scales.recognition = 0;
-    if (player?.scars?.includes('named'))    p.scales.presence = Math.min(10, p.scales.presence + 1);
-    if (player?.scars?.includes('witnessed')) p.scales.recognition = Math.max(0, p.scales.recognition - 0);
+    if (player?.scars?.includes('named')) p.scales.presence = Math.min(10, p.scales.presence + 1);
   },
 
   fileReveals: [
-    { announce: 'A line writes itself in. ~~He has been deceased since [[8]].~~' },
-    { announce: 'Another. ~~Family are summoned. They have not refused.~~' },
-    { announce: 'The last line writes itself. **He has requested his belt.**' },
+    { announce: 'A line fills in. Subject was ~~committed by~~ admitted at the request of his three daughters.' },
+    { announce: 'Another. His son died in ~~the fire he set~~ a fire on [[8]]. Subject has not mentioned him in the [[2]] years he has been on the ward.' },
+    { announce: "The last line. The chair is ~~where it happened~~ his wife's. !!She died in it.!!" },
   ],
 
   presented(p) {
     const pr = p.scales.presence;
     const g  = p.scales.grief;
     const re = p.scales.recognition;
+
     let chair;
-    if (pr >= 8)      chair = 'He sits in the chair as if it has always been his. His weight settles the room.';
-    else if (pr >= 5) chair = 'He sits in the chair. Less easily than before. The room is still arranged around him.';
-    else if (pr >= 2) chair = 'He is in the chair. Smaller now. The room has begun to be a room.';
-    else              chair = 'He is small in the chair. It does not fit him.';
+    if (pr >= 8)      chair = 'He sits in the chair as if it has always been his. The room is arranged around him.';
+    else if (pr >= 5) chair = 'He sits in the chair, less easily than before. His weight is still settled.';
+    else if (pr >= 2) chair = 'He sits in the chair. Smaller than he was. The room is beginning to be a room.';
+    else              chair = 'He is small in the chair. It does not fit him anymore.';
+
     let eyes;
-    if (re >= 7)      eyes = 'His eyes are on me. All the way. He knows it is me.';
-    else if (re >= 4) eyes = 'His eyes find me sometimes. Then leave for someone he is expecting.';
-    else if (re >= 1) eyes = "He glances at me as if at a stranger's coat in his hallway.";
-    else              eyes = 'He is looking at someone who is not in the room.';
+    if (re >= 7)      eyes = 'His eyes are on me. He knows it is me.';
+    else if (re >= 4) eyes = 'His eyes find me sometimes. Then leave for the door.';
+    else if (re >= 1) eyes = 'He glances at me as if at a stranger in his foyer.';
+    else              eyes = 'He is looking past me. He is waiting for someone else.';
+
     let composure;
-    if (g >= 7)      composure = 'His jaw is locked. Whatever is rising in him has been pressed back down.';
-    else if (g >= 4) composure = 'His breathing has gone shallow. Unsteady.';
+    if (g >= 7)      composure = 'His jaw is locked. He is holding something back.';
+    else if (g >= 4) composure = 'His breathing has gone shallow.';
     else if (g >= 1) composure = 'He sits at ease, mostly. The chair holds him up.';
-    else             composure = 'He sits composed. Perfect. The chair is his and he is its.';
+    else             composure = 'He sits composed. The chair is his and he is its.';
+
     return `${chair} ${eyes} ${composure}`;
   },
 
   verbs: {
 
     listen_to_him: {
-      label: 'listen to him',
-      desc: 'Attend to what he is saying. Stay quiet.',
+      label: 'listen',
+      desc: 'Stay quiet. Let him speak.',
       respond(p) {
         const reps = streakCount(p, 'listen_to_him');
         if (reps >= 3) {
           return {
             lines: [
-              'I have been listening a long time. ~~He is repeating himself.~~ He is repeating himself, word for word.',
-              'He notices my attention has gone glassy. His voice loses certainty for the first time.',
+              'I have been listening a long time. He is repeating himself, word for word.',
+              'He notices my attention has gone glassy. His voice loses certainty.',
             ],
             scales: { presence: -2, grief: +1 },
           };
         }
         return {
           lines: [
-            'I let him speak. I do not interrupt. I do not look away.',
-            'He is dictating a letter to a clerk who is not in the room. The letter is to one of his daughters.',
-            'He keeps losing his place and starting over. The salutation has changed twice.',
+            'I let him speak. I do not interrupt.',
+            'He is dictating a letter to a clerk who is not in the room. The letter is to his oldest daughter.',
+            'He keeps losing his place. The salutation has changed twice.',
           ],
           scales: { recognition: +1, grief: +1 },
         };
@@ -1060,12 +1064,12 @@ const pyrelord = {
 
     hold_position: {
       label: 'hold the door',
-      desc: 'Stand silent at the threshold. Decline to acknowledge.',
+      desc: 'Stay at the threshold. Do not come into the room.',
       respond(p) {
         if (p.scales.presence >= 7) {
           return {
             lines: [
-              'I do not enter the room as a guest. I stand at the door. I do not address him.',
+              'I do not come in. I stand at the door. I do not address him.',
               'His eyes find me briefly. They do not find what they wanted there.',
             ],
             scales: { presence: -2 },
@@ -1074,7 +1078,7 @@ const pyrelord = {
         return {
           lines: [
             'I hold the door. The room is, marginally, mine to leave.',
-            'He speaks toward the wall. ~~The wall is also a daughter.~~ The wall does not answer either.',
+            'He speaks toward the wall. The wall does not answer either.',
           ],
           scales: { presence: -1, recognition: +1 },
         };
@@ -1083,14 +1087,15 @@ const pyrelord = {
 
     kneel: {
       label: 'kneel',
-      desc: 'Put yourself lower than him. ~~It costs.~~',
+      desc: 'Kneel beside his chair.',
       when: (p) => p.scales.presence >= 6,
       respond(p) {
         if (p.scales.presence >= 8) {
           return {
             lines: [
               'I kneel beside the chair. I look up at him.',
-              'He does not look down. He is satisfied this is the correct shape of a room. He rests his palm on the crown of my head. Briefly. Paternal.',
+              'He does not look down. He is satisfied this is the correct shape of a room.',
+              'He rests his palm on the crown of my head. Briefly. Paternal.',
             ],
             scales: { presence: +1, grief: +1 },
             composure: -2,
@@ -1099,8 +1104,8 @@ const pyrelord = {
         }
         return {
           lines: [
-            'I kneel. He does not understand why.',
-            'After a moment he reaches out and pats my shoulder. He calls me by a name. ~~It is not mine.~~',
+            'I kneel. He does not seem to know why.',
+            'After a moment he reaches out and pats my shoulder. He calls me by a name. It is not mine.',
           ],
           scales: { recognition: +1, grief: +1 },
           composure: -1,
@@ -1111,7 +1116,7 @@ const pyrelord = {
 
     interrupt: {
       label: 'speak over him',
-      desc: 'Cut into his sentence. Take the air.',
+      desc: 'Cut into what he is saying.',
       when: (p) => p.scales.presence >= 5,
       respond(p) {
         const reps = streakCount(p, 'interrupt');
@@ -1119,7 +1124,7 @@ const pyrelord = {
           return {
             lines: [
               'I interrupt again. And again. He goes quiet.',
-              'His quiet is the worst sound in the room. ~~I have done something wrong.~~',
+              'His quiet is the worst sound in the room. I have done something wrong.',
             ],
             scales: { grief: +2, recognition: -1 },
             composure: -2,
@@ -1129,8 +1134,8 @@ const pyrelord = {
         if (p.scales.presence >= 7) {
           return {
             lines: [
-              'I speak over him. !!Loudly.!! The word LISTEN has its own room briefly.',
-              'He stops. He looks at me. For the first time he is not above the room. For a moment he is just in it.',
+              'I speak over him. !!Loudly.!!',
+              'He stops. He looks at me. For a moment he is not above the room. He is just in it.',
             ],
             scales: { presence: -2, recognition: +1 },
             composure: -1,
@@ -1149,15 +1154,15 @@ const pyrelord = {
 
     ask_his_name: {
       label: 'ask his name',
-      desc: 'Gently. As if you had not been told it.',
+      desc: 'Ask what to call him.',
       when: (p) => p.scales.presence <= 6 && p.scales.recognition >= 2,
       respond(p) {
         return {
           lines: [
             'I ask: what should I call you?',
             p.scales.presence >= 6
-              ? "He gives me the family's honorific. Without hesitation. It is well-rehearsed."
-              : 'He pauses. It has been a while since anyone asked. He gives me his given name. Quietly.',
+              ? 'He gives me the family honorific. Without hesitation. It is well-rehearsed.'
+              : 'He pauses. It has been a long time since anyone asked. He gives me his given name. Quietly.',
           ],
           scales: { recognition: +2, presence: -1 },
         };
@@ -1166,7 +1171,7 @@ const pyrelord = {
 
     call_by_name: {
       label: 'call him by name',
-      desc: 'His given name. Not "father". Not "sir".',
+      desc: 'Use his given name. Not father. Not sir.',
       when: (p) => p.scales.recognition >= 5,
       respond(p) {
         const reps = streakCount(p, 'call_by_name');
@@ -1178,14 +1183,14 @@ const pyrelord = {
             ],
             scales: { grief: +1, recognition: -1 },
             composure: -1,
-            composureCost: 'The door does not need to be watched. ~~It does anyway.~~',
+            composureCost: 'The door does not need to be watched. I am watching it anyway.',
           };
         }
         if (p.scales.recognition >= 7) {
           return {
             lines: [
               'I say it. His given name. The one his mother used.',
-              'He turns toward me. All the way. ~~He is here.~~ He is here.',
+              'He turns toward me. All the way. He is here.',
               'His eyes fill. He does not speak.',
             ],
             scales: { recognition: +3, grief: +3, presence: -3 },
@@ -1195,7 +1200,7 @@ const pyrelord = {
           lines: [
             'I say it. His given name.',
             'He frowns. He is trying to remember if anyone calls him that.',
-            'Something passes through him. He does not speak for a moment.',
+            'Something passes through him.',
           ],
           scales: { recognition: +2, grief: +1, presence: -1 },
         };
@@ -1204,14 +1209,14 @@ const pyrelord = {
 
     touch_his_arm: {
       label: 'touch his arm',
-      desc: 'A small contact. Nothing more.',
+      desc: 'Lay your fingers on his sleeve briefly.',
       when: (p) => p.scales.grief >= 5 && p.scales.recognition >= 4,
       respond(p) {
         return {
           lines: [
             'I lay two fingers on his sleeve where it rests on the arm of the chair. He is dry and very still.',
             p.scales.recognition >= 6
-              ? 'He turns toward me and presses back into the contact. Firmly. Like a man holding onto a railing.'
+              ? 'He turns toward me and presses back into the contact. Firmly. Like a man holding a railing.'
               : 'He does not pull away. But he does not lean into it either.',
           ],
           scales: { grief: +2, recognition: +1, presence: -1 },
@@ -1221,7 +1226,7 @@ const pyrelord = {
 
     sit_in_chair: {
       label: 'sit in the chair',
-      desc: 'Lift him out. Take the seat. Claim the room.',
+      desc: 'Lift him out. Take the seat yourself.',
       when: (p) => p.scales.presence <= 3,
       respond(p) {
         if (p.scales.presence <= 1) {
@@ -1229,19 +1234,19 @@ const pyrelord = {
             lines: [
               'I help him out of the chair. He is light. He goes without protest.',
               'I sit. The chair fits. The room composes itself around me.',
-              'He stands a while, then sits on the floor at my feet. Like a guest.',
+              'He stands for a while, then sits on the floor at my feet. Like a guest.',
               '!!The room is mine now.!!',
             ],
             scales: { presence: -5 },
             composure: -1,
-            composureCost: 'He has not blinked. ~~For a long time.~~',
+            composureCost: 'He has not blinked. For a long time.',
             flags: { sat_in_chair: true },
           };
         }
         return {
           lines: [
             'I take his arm to lift him. He plants his weight.',
-            'He is heavier than the body in the chair. ~~I do not force it.~~ Not yet.',
+            'He is heavier than he looks. I do not force it.',
           ],
           scales: { grief: +1, presence: +1 },
           composure: -1,
@@ -1252,14 +1257,14 @@ const pyrelord = {
 
     close_his_eyes: {
       label: 'close his eyes',
-      desc: 'Lower the lids for him. Let him stop watching the door.',
+      desc: 'Lower his eyelids. Let him stop watching the door.',
       when: (p) => p.scales.grief >= 6 && p.scales.presence <= 4,
       respond(p) {
         if (p.scales.grief >= 7) {
           return {
             lines: [
               'I close his eyes with my palm. His lashes are dry.',
-              'He does not resist. ~~The breath he has been holding for years~~ A long held breath leaves him.',
+              'He does not resist. A long-held breath leaves him.',
               'The chair is suddenly too large.',
               '!!The room is a room again.!!',
             ],
@@ -1272,7 +1277,7 @@ const pyrelord = {
         return {
           lines: [
             'I reach. He flinches. He is still watching the door for someone.',
-            'I let the gesture fall short. !!Not yet.!!',
+            'I let the gesture fall short.',
           ],
           scales: { grief: +1, presence: +1 },
           composure: -1,
@@ -1284,11 +1289,9 @@ const pyrelord = {
 
   wait: {
     label: 'wait',
-    desc: 'Let him hold the room. Wait him out — or for him to slip.',
+    desc: 'Let him hold the room. Wait him out.',
     when: (p) => p.scales.presence >= 7 || p.turn >= 5,
   },
-
-  // ─── interjections — five authored, only some fire in any run ───────
 
   interjections: [
     {
@@ -1297,15 +1300,15 @@ const pyrelord = {
       when: (p) => p.scales.presence >= 8 && p.turn >= 2,
       prose: [
         'He pauses, expectant. No one is speaking. He turns his head toward me. Precisely.',
-        'He says: ~~Young man.~~ ~~Young woman.~~ — he tries both — !!you may sit.!!',
+        'He says: !!Young man.!! He looks at me again. !!Young woman.!! He tries both. !!You may sit.!!',
       ],
       responses: [
         {
           label: 'sit',
-          desc: 'Accept his courtesy.',
+          desc: 'Take the chair he indicates.',
           lines: [
-            'I sit on the chair he indicates. It is a guest chair, set across from his.',
-            'He nods, satisfied. The room is shaped correctly again. ~~He has a visitor at last.~~ He has a visitor.',
+            'I sit on the chair he indicates. A guest chair set across from his.',
+            'He nods, satisfied. The room is shaped correctly. He has a visitor.',
           ],
           scales: { presence: +2, recognition: +1 },
           composure: -1,
@@ -1313,11 +1316,11 @@ const pyrelord = {
         },
         {
           label: 'stay standing',
-          desc: 'Do not take the offered place.',
+          desc: 'Do not take the offered chair.',
           lines: [
             'I do not sit. I stay where I am.',
             'He holds the invitation open a moment longer than is comfortable. Then he lets it close.',
-            'He had not anticipated this. He is, briefly, surprised.',
+            'He had not anticipated this.',
           ],
           scales: { presence: -2, recognition: +1 },
         },
@@ -1325,8 +1328,8 @@ const pyrelord = {
           label: "I'm not young",
           desc: 'Correct him.',
           lines: [
-            'I say: I am not young. ~~Not now.~~ Not anymore.',
-            'He looks at me with new eyes. For a moment he is not sure what year it is. For a moment he allows that he is not sure.',
+            'I say: I am not young. Not anymore.',
+            'He looks at me with new eyes. For a moment he is not sure what year it is.',
           ],
           scales: { presence: -3, recognition: +2, grief: +1 },
         },
@@ -1339,7 +1342,7 @@ const pyrelord = {
       when: (p) => p.scales.grief >= 5 && p.scales.recognition >= 4,
       prose: [
         'He stops mid-sentence. His eyes track something across the room that is not there.',
-        'He says, smaller: ~~I had a son.~~ ~~I had~~ — I think I had a son.',
+        'He says, smaller: ~~I had a son.~~ I think I had a son.',
       ],
       responses: [
         {
@@ -1348,24 +1351,24 @@ const pyrelord = {
           lines: [
             'I ask: what was he like?',
             'He begins. He begins three times. It has been a long time since anyone asked.',
-            'After a while his account becomes very specific. A knee scar. A way of saying a particular word.',
+            'After a while his account becomes very specific. A scar on his knee. A way of saying a particular word.',
             '!!He is here. He is talking about someone real.!!',
           ],
           scales: { grief: +3, recognition: +3, presence: -3 },
           composure: -1,
-          composureCost: 'The door does not need to be watched. ~~It does anyway.~~',
+          composureCost: 'The door does not need to be watched. I am watching it anyway.',
         },
         {
           label: 'are you sure?',
           desc: 'Gently doubt the memory.',
           lines: [
             'I ask: are you sure?',
-            'He is quiet for a long time. Then he says: ~~no~~ ~~yes~~ ~~I think so.~~',
+            'He is quiet for a long time. Then he says: ~~no~~ I think so.',
             'The not-knowing is worse than the knowing.',
           ],
           scales: { grief: +2, presence: -2 },
           composure: -2,
-          composureCost: 'He has not blinked. ~~For a long time.~~',
+          composureCost: 'He has not blinked. For a long time.',
         },
         {
           label: 'I think you did',
@@ -1373,7 +1376,7 @@ const pyrelord = {
           lines: [
             'I say: I think you did.',
             'He nods, relieved. He looks at me with great attention.',
-            '~~He is grateful in a way I did not earn.~~',
+            'He is grateful in a way I did not earn.',
           ],
           scales: { recognition: +2, grief: +2, presence: -1 },
           scars: ['named'],
@@ -1395,7 +1398,8 @@ const pyrelord = {
           desc: 'Release him from the duty.',
           lines: [
             'I say: nothing.',
-            'He sits with that. His shoulders give way. He leans back into the chair. It is the first time he has used it as a chair, not as a throne.',
+            'He sits with that. His shoulders give way. He leans back into the chair.',
+            'It is the first time he has used it as a chair. Not as a station.',
           ],
           scales: { grief: +3, presence: -3 },
         },
@@ -1403,8 +1407,8 @@ const pyrelord = {
           label: 'your name',
           desc: 'Ask for what no one has asked.',
           lines: [
-            "I say: your name. The one you do not use anymore.",
-            'He stares at the wall. ~~He is afraid he will not find it.~~ He is trying to find it.',
+            'I say: your name. The one you do not use anymore.',
+            'He stares at the wall. He is trying to find it.',
             'Eventually he says it. Quietly. Then again, louder, as if to himself.',
           ],
           scales: { recognition: +3, grief: +1 },
@@ -1413,9 +1417,10 @@ const pyrelord = {
           label: "tell me you're finished",
           desc: 'Gentle. Precise.',
           lines: [
-            "I say: tell me you are finished.",
+            'I say: tell me you are finished.',
             'He looks up at me. For a long time he does not say anything.',
-            'Then he says: ~~yes.~~ ~~I am.~~ His eyes close.',
+            'Then he says: ~~yes.~~ I am.',
+            'His eyes close.',
           ],
           scales: { grief: +4, presence: -4 },
           composure: -1,
@@ -1429,7 +1434,7 @@ const pyrelord = {
             'I say: I do not know what I came in for. Tell me.',
             'He looks up. He is not used to being asked anything.',
             'After a moment he says: ~~you came in alone. You knew the way.~~',
-            'He sits with that, and I sit with that.',
+            'He sits with that. So do I.',
           ],
           scales: { recognition: +2, grief: +1, presence: -1 },
         },
@@ -1449,9 +1454,9 @@ const pyrelord = {
           desc: 'Address the man, not the chair.',
           when: (_, player) => player.wound === 'split_personality',
           lines: [
-            'I say: tell me which one of you I am talking to. The one in the chair, or the one underneath.',
+            'I say: tell me which one of you I am talking to. The man, or the chair.',
             'He goes still. He has not been asked that.',
-            'He says: ~~there is only the one.~~ He says: ~~there is only the one left.~~',
+            'He says: ~~there is only the one.~~ There is only the one left.',
           ],
           scales: { grief: +2, presence: -2, recognition: +1 },
           composure: -1,
@@ -1466,7 +1471,7 @@ const pyrelord = {
       when: (p) => p.scales.presence >= 7 && p.turn >= 4,
       prose: [
         'He stops dictating. He turns his head slightly. He addresses a corner of the room.',
-        'He says: !!Mr. Hargrove — take this down.!! ~~There is no Mr. Hargrove.~~ There is no Mr. Hargrove on the ward.',
+        'He says: !!Mr. Hargrove — take this down.!! There is no Mr. Hargrove in the room.',
       ],
       responses: [
         {
@@ -1497,8 +1502,8 @@ const pyrelord = {
           desc: 'Ask him.',
           lines: [
             'I ask: who was Mr. Hargrove?',
-            'He is quiet for a long time. ~~He cannot remember.~~ He is not sure.',
-            'Eventually he says: a friend. A long time ago.',
+            'He is quiet for a long time. He is not sure.',
+            'Eventually he says: my clerk. A long time ago.',
           ],
           scales: { recognition: +2, grief: +2, presence: -1 },
         },
@@ -1520,7 +1525,7 @@ const pyrelord = {
           lines: [
             "I say: they'll come.",
             'He nods. He goes back to watching the door.',
-            '~~He has been doing this a long time.~~',
+            'He has been doing this a long time.',
           ],
           scales: { presence: +2, recognition: -1, grief: -1 },
           scars: ['named'],
@@ -1529,8 +1534,8 @@ const pyrelord = {
           label: 'they came already',
           desc: 'The more painful truth.',
           lines: [
-            "I say: they came. Yesterday. You don't remember.",
-            'He sits with that. His eyes go past me to the wall. He says: ~~oh.~~ ~~Yes.~~',
+            'I say: they came. They left.',
+            'He sits with that. His eyes go past me to the wall. He says: ~~oh.~~ Yes.',
             '!!The room is suddenly larger than he is.!!',
           ],
           scales: { presence: -3, grief: +3, recognition: +1 },
@@ -1554,8 +1559,8 @@ const pyrelord = {
     if (p.scales.presence >= 7) {
       return pick([
         { lines: ['I wait. He speaks. He is dictating something to a clerk who is not in the room.'], scales: { presence: +1 } },
-        { lines: ['I wait. Someone — a daughter? — knocks at the door briefly. She does not come in. He nods, as if she had.'], scales: { presence: +1 }, composure: -1 },
-        { lines: ['I wait. He recounts a victory. It is one I have not heard before. It might be true.'], scales: { presence: +2 } },
+        { lines: ['I wait. Someone knocks at the door briefly. They do not come in. He nods, as if they had.'], scales: { presence: +1 }, composure: -1 },
+        { lines: ['I wait. He recounts a victory from years ago. It may even be true.'], scales: { presence: +2 } },
       ]);
     }
     if (p.scales.recognition >= 4) {
@@ -1568,7 +1573,7 @@ const pyrelord = {
       };
     }
     return {
-      lines: ['I wait. The room is still. ~~Someone is at the door.~~ No one is at the door.'],
+      lines: ['I wait. The room is still. He is watching the door for someone who is not coming.'],
       scales: { presence: -1 },
     };
   },
@@ -1602,7 +1607,7 @@ const pyrelord = {
       title: 'You take his place',
       lines: [
         'The chair fits. The room is mine. He is on the floor still.',
-        'He calls me sir, once. ~~Without irony.~~ I do not correct him.',
+        'He calls me sir, once. Without irony. I do not correct him.',
       ],
       item: 'ink_bottle',
       scars: ['named'],
@@ -1622,7 +1627,7 @@ const pyrelord = {
       id: 'abandoned',
       when: (p) => p.flags.left,
       title: 'You walk out',
-      lines: ['I close the door. ~~He was speaking when I left.~~ He kept speaking through the door.'],
+      lines: ['I close the door. He kept speaking through the door.'],
       item: null,
       scars: ['abandoned'],
     },
@@ -5902,7 +5907,7 @@ const composer = {
 // ════════════════════════════════════════════════════════════════════════
 
 export const PATIENTS = {
-  pram, pyrelord, soothlick, glimmer, frostfin, hollow, mire, composer, choir,
+  pram, patriarch, soothlick, glimmer, frostfin, hollow, mire, composer, choir,
 };
 
 export function getPatient(id) { return PATIENTS[id] || null; }
