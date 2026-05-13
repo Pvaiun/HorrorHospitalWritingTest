@@ -47,7 +47,7 @@ export function renderTitle() {
   page.appendChild(prose([
     "I'm at the address on the letter. The one I received in the mail written with ~~my own~~ a strange handwriting.",
     'I walk through the front door. A desk. A nurse greets me. !!Hello again!!, she says. !!I\'ve been expecting you.!!',
-    'The walls are dark and tall. Screams echo through the halls. This is a not a [[10]].',
+    'The walls are dark and tall. Screams echo through the halls. This is not a [[10]].',
   ].join('\n\n')));
   page.appendChild(prose('I glance at the corridor behind the desk. I cannot see anything beyond the darkness.', true));
 

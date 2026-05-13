@@ -16,7 +16,7 @@ export function render() {
   root.innerHTML = '';
   // title bar on non-encounter screens
   if (state.screen !== 'encounter') {
-    root.appendChild(el('h1', {}, 'THE SANITORIUM'));
+    root.appendChild(el('h1', {}, 'THE SANATORIUM'));
   }
   switch (state.screen) {
     case 'title':       renderTitle();       break;
