@@ -12,6 +12,8 @@ import { startNewRun, enterCurrentNode, currentNode, applyResolutionAndAdvance, 
 import { EVENTS } from '../events.js';
 import { SCARS } from '../scars.js';
 import { VERSION } from '../version.js';
+import { TITLE_OPENERS } from '../openers.js';
+import { pick } from '../rng.js';
 
 // ── helpers ─────────────────────────────────────────────────────────────
 function docPage(tag) {
@@ -44,11 +46,7 @@ function sectionLabel(text) {
 export function renderTitle() {
   app().appendChild(el('div', { class: 'doc-version' }, `v${VERSION}`));
   const page = docPage('// Admission · The door · open');
-  page.appendChild(prose([
-    "I'm at the address on the letter. The one I received in the mail written in ~~my own~~ a strange handwriting.",
-    'I walk through the front door. A desk. A nurse greets me. !!Hello again!!, she says. !!I\'ve been expecting you.!!',
-    'The walls are dark and tall. Screams echo through the halls. This is not a [[10]].',
-  ].join('\n\n')));
+  page.appendChild(prose(pick(TITLE_OPENERS).join('\n\n')));
   page.appendChild(prose('I glance at the corridor behind the desk. I cannot see anything beyond the darkness.', true));
 
   const save = state.save || { runs: 0, finishes: 0, archive: [] };
