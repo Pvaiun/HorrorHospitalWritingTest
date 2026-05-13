@@ -58,7 +58,7 @@ const pram = {
   file: [
     'Subject was admitted with a perambulator. ~~The perambulator is empty.~~ Contents of the perambulator have not been weighed since intake.',
     'Staff have been instructed not to ~~inform her~~ correct the discrepancy. Subject does not request correction.',
-    'Subject was asked when **the child** could be discharged. Subject corrected herself. !!She meant herself.!!',
+    'Subject is known to [[16]] staff that ask ~~about the child~~ the wrong questions.',
   ],
   intro: [
     'The door is half open. She does not look up. She is on the chair by the window with the pram between her knees.',
