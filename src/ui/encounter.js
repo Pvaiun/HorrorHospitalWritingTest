@@ -317,6 +317,11 @@ function interjectionMenuEl(enc) {
   wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ how I respond ─'));
   const grid = el('div', { class: 'enc-actions-grid' });
   enc.activeInterjection.responses.forEach((r, idx) => {
+    if (typeof r.when === 'function') {
+      let visible = false;
+      try { visible = !!r.when(enc.patient, enc.player); } catch (e) { visible = false; }
+      if (!visible) return;
+    }
     const btn = el('button', { class: 'enc-act interjection-resp' });
     btn.addEventListener('click', () => playerVerb(String(idx)));
     btn.appendChild(el('span', { class: 'enc-act-marker' }, '▸'));

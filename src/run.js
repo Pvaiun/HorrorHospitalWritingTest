@@ -25,21 +25,18 @@ export function startNewRun(wound, startingItem) {
   const save = state.save;
   const player = makePlayer(wound, startingItem);
   // build the corridor: alternate event-patient through RUN_DEPTH wings,
-  // ending with the final boss.
+  // ending with the final boss. Two patients are drawn from tier 1 (easy)
+  // for wings 1–2, then two from tier 2 (hard) for wings 3–4.
   const patientPool = save.unlocked.patients.filter(id => PATIENTS[id]);
-  const finalId = 'choir';   // the final is always the choir; not a wing patient.
-  // exclude the final from the wing patient pool. Sample without replacement,
-  // then sort by tier with jitter so adjacent tiers can swap — the player
-  // shouldn't always face the lowest-tier patient in wing 1, but a tier 3
-  // also shouldn't usually open the run.
+  const finalId = 'choir';
   const wingCandidates = patientPool.filter(id => id !== finalId && PATIENTS[id].role !== 'final');
-  const chosenPatients = pickN(wingCandidates, Math.min(RUN_DEPTH, wingCandidates.length));
-  while (chosenPatients.length < RUN_DEPTH) chosenPatients.push(pick(wingCandidates));
-  chosenPatients.sort((a, b) => {
-    const ta = (PATIENTS[a]?.tier ?? 2) + Math.random() * 1.2;
-    const tb = (PATIENTS[b]?.tier ?? 2) + Math.random() * 1.2;
-    return ta - tb;
-  });
+  const easyPool = wingCandidates.filter(id => (PATIENTS[id].tier ?? 1) === 1);
+  const hardPool = wingCandidates.filter(id => (PATIENTS[id].tier ?? 1) === 2);
+  const easyPicked = pickN(easyPool, Math.min(2, easyPool.length));
+  while (easyPicked.length < 2) easyPicked.push(pick(easyPool.length ? easyPool : wingCandidates));
+  const hardPicked = pickN(hardPool, Math.min(2, hardPool.length));
+  while (hardPicked.length < 2) hardPicked.push(pick(hardPool.length ? hardPool : wingCandidates));
+  const chosenPatients = [...easyPicked, ...hardPicked];
 
   const eventPool = pickEventPool(RUN_DEPTH);
 

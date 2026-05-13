@@ -12,6 +12,8 @@ import { startNewRun, enterCurrentNode, currentNode, applyResolutionAndAdvance, 
 import { EVENTS } from '../events.js';
 import { SCARS } from '../scars.js';
 import { VERSION } from '../version.js';
+import { TITLE_OPENERS } from '../openers.js';
+import { pick } from '../rng.js';
 
 // ── helpers ─────────────────────────────────────────────────────────────
 function docPage(tag) {
@@ -44,12 +46,8 @@ function sectionLabel(text) {
 export function renderTitle() {
   app().appendChild(el('div', { class: 'doc-version' }, `v${VERSION}`));
   const page = docPage('// Admission · The door · open');
-  page.appendChild(prose([
-    'I do not remember the address. I have the card. I have been holding it.',
-    'A building. A desk. A nurse who was expecting me.',
-    'She has my file. She says I am late. !!She has been waiting.!!',
-  ].join('\n\n')));
-  page.appendChild(prose('There is a corridor beyond the desk. ~~It descends.~~ It does not return.', true));
+  page.appendChild(prose(pick(TITLE_OPENERS).join('\n\n')));
+  page.appendChild(prose('I glance at the corridor behind the desk. I cannot see anything beyond the darkness.', true));
 
   const save = state.save || { runs: 0, finishes: 0, archive: [] };
   const meta = el('div', { class: 'doc-archive-summary' });
@@ -490,14 +488,11 @@ export function renderArchive() {
     }
   }
 
-  // unlock notifications
   const save = state.save;
   if (save) {
     page.appendChild(sectionLabel('the desk remembers'));
     page.appendChild(el('div', { class: 'doc-prose dim' },
       `${save.runs} admission${save.runs > 1 ? 's' : ''} on file. ${save.finishes} discharged.`));
-    const next = nextUnlockHint(save);
-    if (next) page.appendChild(el('div', { class: 'doc-prose dim', html: parseProse(next) }));
   }
 
   page.appendChild(actionRow(docButton('begin another admission', () => {
@@ -506,12 +501,4 @@ export function renderArchive() {
     import('./render.js').then(m => m.render());
   })));
   app().appendChild(page);
-}
-
-function nextUnlockHint(save) {
-  if (save.runs < 1) return 'One more file may open at the desk.';
-  if (save.runs < 2) return 'Another patient is on file.';
-  if (save.runs < 3) return 'The desk still has pages I have not read.';
-  if (save.runs < 5) return 'The desk has the rest.';
-  return null;
 }

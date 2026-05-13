@@ -5,7 +5,7 @@
 // to discharge (or to whatever takes you). state.run holds the per-run state;
 // state.save holds persistent meta progression (loaded from localStorage).
 
-export const RUN_DEPTH = 5;          // number of wings before the final encounter
+export const RUN_DEPTH = 4;          // number of wings before the final encounter
 export const COMPOSURE_MAX = 5;
 
 // The single state object. All modules mutate it directly.
