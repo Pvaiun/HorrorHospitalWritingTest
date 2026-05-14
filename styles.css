@@ -1734,8 +1734,7 @@
 
   /* spoke choice menu — when inside a multi-node sub-conversation, the
      hub menu is replaced by the current node's choices. The block reads
-     a little quieter than the urgent-spoke style — you are already
-     inside the moment, not entering it. */
+     a little quieter than the hub. */
   .enc-actions.spoke-active {
     border-left: 2px solid var(--ink-60);
     padding-left: var(--space-2);
@@ -1743,30 +1742,6 @@
   .enc-act.spoke-choice {
     border-left: 2px solid var(--ink-60);
     padding-left: var(--space-2);
-  }
-
-  /* urgent spoke — a triggered, time-sensitive option in the hub menu.
-     Red bar, red marker, red "now" tag. Pulses softly to draw the eye
-     without being obnoxious. */
-  .enc-act.urgent {
-    border-left: 2px solid var(--doc-blood);
-    padding-left: var(--space-2);
-    background: rgba(200, 48, 42, 0.03);
-    animation: urgent-pulse 2.4s ease-in-out infinite;
-  }
-  .enc-act.urgent:hover:not(:disabled) {
-    background: rgba(200, 48, 42, 0.08);
-  }
-  .enc-act.urgent .enc-act-marker { color: var(--doc-blood); }
-  .enc-act.urgent .enc-act-label  { color: var(--doc-blood); }
-  .enc-act-tag.urgent {
-    color: var(--doc-blood);
-    font-style: italic;
-    letter-spacing: var(--ls-label);
-  }
-  @keyframes urgent-pulse {
-    0%, 100% { background-color: rgba(200, 48, 42, 0.03); }
-    50%      { background-color: rgba(200, 48, 42, 0.09); }
   }
 
   /* scale name + word display (replaces the old reveal-gated pip rows).

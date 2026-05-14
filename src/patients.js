@@ -5702,12 +5702,15 @@ const children = {
                                         return 'silence';
     if (p.flags.they_have_recognized && !p.flags.recognition_resolved)
                                         return 'recognized';
-    if (p.flags.engaged) {
-      if (p.scales.invitation >= 14)    return 'pressing';
-      if (p.flags.in_mother_story)      return 'mother_story';
-      if (p.scales.suspicion >= 10)     return 'tense';
-      return 'engaged';
-    }
+    if (p.flags.engaged && p.scales.invitation >= 14) return 'pressing';
+    if (p.flags.in_mother_story)        return 'mother_story';
+    // 'tense' represents alarm — it persists whenever you have made a major
+    // catch or pushed suspicion past the line, whether or not you have
+    // spoken through the door. So a deep examination followed by an
+    // unrelated action does not collapse you back to at_the_door and lose
+    // the confront option.
+    if (p.scales.suspicion >= 10 || p.flags.confronted_anything) return 'tense';
+    if (p.flags.engaged)                return 'engaged';
     return 'at_the_door';
   },
 
@@ -5734,8 +5737,10 @@ const children = {
         return 'The shorter one is at the gap, telling me about her old kitchen. A window. A song her mother sang at it. '
           + 'The taller one is quiet behind her. I find I have been listening with my eyes closed.';
       case 'tense':
-        return 'They know I have caught them. The asking has not stopped. It has only gone quieter. '
-          + 'The shorter one chooses her words now. !!Neither of them moves on the linoleum.!!';
+        return (p.flags.engaged
+            ? 'They know I have caught them. The asking has not stopped. It has only gone quieter. The shorter one chooses her words now. '
+            : 'I have caught them at something. The asking continues at the same volume. They have not changed pace, but the cadence has thinned. ')
+          + '!!Neither of them moves on the linoleum.!!';
       case 'pressing':
         return '!!The bolt is loose in its housing. My hand is at my side, then at the bolt, then at my side. The word is in my mouth.!! '
           + 'The shorter one is at the gap, whispering. Her please is in time with my breathing.';
@@ -6600,19 +6605,24 @@ const children = {
 
     confront_what_you_caught: {
       label: 'tell them what you noticed',
-      desc: 'Name the catch out loud.',
-      when: (p, _pl, hub) => hub === 'tense' && !p.flags.confronted_anything
-        && (p.flags.heard_lesson || p.flags.counted_prints || p.flags.caught_them_out),
+      desc: 'Name a catch out loud.',
+      // Visible whenever any catch is still unaddressed. One catch per visit
+      // (each inner choice exits to hub), but the spoke stays in the menu
+      // across hubs and turns until every catch has been used.
+      when: (p, _pl, hub) => (hub === 'tense' || hub === 'engaged' || hub === 'pressing' || hub === 'mother_story')
+        && ((p.flags.heard_lesson      && !p.flags.confronted_rehearsal)
+         || (p.flags.counted_prints    && !p.flags.addressed_third)
+         || (p.flags.caught_them_out   && !p.flags.confronted_contradiction)),
       entry: 'pick',
       nodes: {
         pick: {
           lines: [
-            'I open my mouth at the door. I have caught more than one thing. I have to pick.',
+            'I open my mouth at the door. I pick one of the things I have caught.',
           ],
           choices: [
-            { label: 'i heard you rehearse', when: (p) => p.flags.heard_lesson, goto: 'rehearse' },
-            { label: 'i counted three sets of prints', when: (p) => p.flags.counted_prints, goto: 'prints' },
-            { label: 'i caught the contradiction', when: (p) => p.flags.caught_them_out, goto: 'contradict' },
+            { label: 'i heard you rehearse',            when: (p) => p.flags.heard_lesson   && !p.flags.confronted_rehearsal,    goto: 'rehearse' },
+            { label: 'i counted three sets of prints',  when: (p) => p.flags.counted_prints && !p.flags.addressed_third,         goto: 'prints' },
+            { label: 'i caught the contradiction',      when: (p) => p.flags.caught_them_out && !p.flags.confronted_contradiction, goto: 'contradict' },
           ],
         },
         rehearse: {
@@ -6649,7 +6659,8 @@ const children = {
             'A pause. The shorter one says, gently: ~~we are who we say we are, mister. We are who you let us be.~~',
           ],
           scales: { suspicion: +5, invitation: -2 },
-          flags: { confronted_anything: true },
+          flags: { confronted_anything: true, confronted_contradiction: true },
+          composure: -1,
           choices: [
             { label: 'press on', goto: { to: 'hub' } },
           ],

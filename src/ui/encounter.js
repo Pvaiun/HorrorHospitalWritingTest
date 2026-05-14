@@ -378,23 +378,16 @@ function listVerbs(enc) {
   const hub = enc.hubState;
 
   // Spokes — multi-node sub-conversations. Each declares when(p, player, hub)
-  // for hub visibility, and optionally urgent(p, player, hub) for styling.
-  // Spokes coexist with legacy verbs; a patient may declare either or both.
+  // for hub visibility. Spokes coexist with legacy verbs; a patient may
+  // declare either or both.
   for (const [id, sp] of Object.entries(pat.def.spokes || {})) {
     if (typeof sp.when === 'function') {
       try { if (!sp.when(pat, p, hub)) continue; } catch (e) { continue; }
-    }
-    let urgent = false;
-    if (typeof sp.urgent === 'function') {
-      try { urgent = !!sp.urgent(pat, p, hub); } catch (e) { urgent = false; }
-    } else if (sp.urgent === true) {
-      urgent = true;
     }
     acts.push({
       id: `spoke:${id}`,
       label: (sp.label || id).toUpperCase(),
       desc: sp.desc || '',
-      urgent,
     });
   }
 
@@ -453,15 +446,12 @@ function listVerbs(enc) {
 function verbButton(act) {
   const cls = 'enc-act'
     + (act.item ? ' item' : '')
-    + (act.danger ? ' danger' : '')
-    + (act.urgent ? ' urgent' : '');
+    + (act.danger ? ' danger' : '');
   const btn = el('button', { class: cls });
   btn.addEventListener('click', () => playerVerb(act.id));
-  const marker = act.urgent ? '!' : (act.item ? '◆' : '▸');
-  btn.appendChild(el('span', { class: 'enc-act-marker' }, marker));
+  btn.appendChild(el('span', { class: 'enc-act-marker' }, act.item ? '◆' : '▸'));
   btn.appendChild(el('span', { class: 'enc-act-label' }, act.label));
   if (act.item) btn.appendChild(el('span', { class: 'enc-act-tag' }, 'use'));
-  if (act.urgent) btn.appendChild(el('span', { class: 'enc-act-tag urgent' }, 'now'));
   btn.appendChild(el('span', { class: 'enc-act-desc', html: parseProse(act.desc || '') }));
   return btn;
 }
