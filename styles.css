@@ -1798,6 +1798,17 @@
   }
   .enc-narr-line.cost .enc-narr-dmg::before { content: 'composure '; color: var(--ink-60); font-size: var(--fs-label-2); }
 
+  /* composure gain — mirror of cost in gold. Fires after prose with the
+     amount in gold on the right. */
+  .enc-narr-line.gain {
+    color: var(--doc-gold);
+    border-left-color: var(--doc-gold);
+    font-style: italic;
+    background: rgba(212, 164, 40, 0.05);
+  }
+  .enc-narr-line.gain .enc-narr-heal { color: var(--doc-gold); font-size: 16px; }
+  .enc-narr-line.gain .enc-narr-heal::before { content: 'composure '; color: var(--ink-60); font-size: var(--fs-label-2); }
+
   /* item action buttons — rendered alongside verbs in the action menu.
      marked with a diamond instead of a triangle, and a soft gold tint so
      they read as something out of your pocket. */

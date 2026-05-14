@@ -286,6 +286,7 @@ function buildSpokeResponse(obj, pat, player) {
     if (obj[k] !== undefined) out[k] = evalDeep(obj[k]);
   }
   if (obj.composureCost) out.composureCost = obj.composureCost;
+  if (obj.composureGain) out.composureGain = obj.composureGain;
   if (obj.callout) out.callout = obj.callout;
   if (obj.shake) out.shake = obj.shake;
   return out;
@@ -539,14 +540,20 @@ async function applyResponse(resp) {
     const before = p.composure;
     p.composure = clamp(p.composure + resp.composure, 0, p.composureMax);
     const delta = p.composure - before;
-    // queue a styled cost line if the player took composure damage and the
-    // response authored a reason. fired AFTER the prose so the cost lands
-    // as punctuation, not preamble.
-    if (delta < 0 && resp.composureCost) {
-      enc._pendingCostLine = { text: resp.composureCost, amount: delta };
-    } else if (delta < 0 && !resp.composureCost) {
-      // fallback so every loss has at least a quiet acknowledgment
-      enc._pendingCostLine = { text: 'It costs me something I cannot put down.', amount: delta };
+    // queue a styled cost or gain line. Fired AFTER prose so it lands as
+    // punctuation, not preamble. Authors may override the text via
+    // `composureCost` (loss) or `composureGain` (gain); otherwise a quiet
+    // default fires.
+    if (delta < 0) {
+      enc._pendingCostLine = {
+        text: resp.composureCost || 'It costs me something I cannot put down.',
+        amount: delta,
+      };
+    } else if (delta > 0) {
+      enc._pendingGainLine = {
+        text: resp.composureGain || 'Something has come back to me.',
+        amount: delta,
+      };
     }
   }
   if (Array.isArray(resp.scars)) {
@@ -563,11 +570,18 @@ async function applyResponse(resp) {
     await drainLog();
   }
 
-  // emit composure-cost line AFTER prose. styled red, with the amount.
+  // emit composure-cost or gain line AFTER prose. cost is red with −N;
+  // gain is gold with +N. Both labeled "composure" in front of the number.
   if (enc._pendingCostLine) {
     const c = enc._pendingCostLine;
     pushLog({ text: c.text, cls: 'cost', damage: -c.amount });
     enc._pendingCostLine = null;
+    await drainLog();
+  }
+  if (enc._pendingGainLine) {
+    const g = enc._pendingGainLine;
+    pushLog({ text: g.text, cls: 'gain', heal: g.amount });
+    enc._pendingGainLine = null;
     await drainLog();
   }
 
