@@ -11,7 +11,11 @@ const STARTING_WOUNDS  = ['amnesia', 'insomnia', 'split_personality'];
 // Every patient is unlocked from the start. The final encounter (choir)
 // lives alongside the wing patients here; the run builder routes it to
 // the final slot.
-const STARTING_PATIENTS = ['pram', 'patriarch', 'soothlick', 'glimmer', 'frostfin', 'hollow', 'mire', 'composer', 'choir'];
+const STARTING_PATIENTS = [
+  'pram', 'patriarch', 'soothlick', 'glimmer', 'frostfin', 'hollow', 'mire', 'composer',
+  'roommate', 'visitor', 'surgeon', 'twin',
+  'choir',
+];
 
 export function defaultSave() {
   return {
