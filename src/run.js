@@ -25,18 +25,15 @@ export function startNewRun(wound, startingItem) {
   const save = state.save;
   const player = makePlayer(wound, startingItem);
   // build the corridor: alternate event-patient through RUN_DEPTH wings,
-  // ending with the final boss. Two patients are drawn from tier 1 (easy)
-  // for wings 1–2, then two from tier 2 (hard) for wings 3–4.
-  const patientPool = save.unlocked.patients.filter(id => PATIENTS[id]);
+  // ending with the final boss. The four wing patients are fixed in
+  // ascending threat order — every run faces the same sequence before
+  // the choir.
   const finalId = 'choir';
-  const wingCandidates = patientPool.filter(id => id !== finalId && PATIENTS[id].role !== 'final');
-  const easyPool = wingCandidates.filter(id => (PATIENTS[id].tier ?? 1) === 1);
-  const hardPool = wingCandidates.filter(id => (PATIENTS[id].tier ?? 1) === 2);
-  const easyPicked = pickN(easyPool, Math.min(2, easyPool.length));
-  while (easyPicked.length < 2) easyPicked.push(pick(easyPool.length ? easyPool : wingCandidates));
-  const hardPicked = pickN(hardPool, Math.min(2, hardPool.length));
-  while (hardPicked.length < 2) hardPicked.push(pick(hardPool.length ? hardPool : wingCandidates));
-  const chosenPatients = [...easyPicked, ...hardPicked];
+  const fixedWingOrder = ['children', 'sculpture', 'plague', 'weight'];
+  const chosenPatients = fixedWingOrder
+    .filter(id => PATIENTS[id])
+    .slice(0, RUN_DEPTH);
+  while (chosenPatients.length < RUN_DEPTH) chosenPatients.push(fixedWingOrder[fixedWingOrder.length - 1]);
 
   const eventPool = pickEventPool(RUN_DEPTH);
 

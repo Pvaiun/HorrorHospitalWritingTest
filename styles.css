@@ -1732,6 +1732,18 @@
     font-style: italic;
   }
 
+  /* spoke choice menu — when inside a multi-node sub-conversation, the
+     hub menu is replaced by the current node's choices. The block reads
+     a little quieter than the hub. */
+  .enc-actions.spoke-active {
+    border-left: 2px solid var(--ink-60);
+    padding-left: var(--space-2);
+  }
+  .enc-act.spoke-choice {
+    border-left: 2px solid var(--ink-60);
+    padding-left: var(--space-2);
+  }
+
   /* scale name + word display (replaces the old reveal-gated pip rows).
      each scale shows its label and the word that names its current band.
      the word is colored: gold when in a desired direction, red when bad,
@@ -1785,6 +1797,17 @@
     background: rgba(200, 48, 42, 0.05);
   }
   .enc-narr-line.cost .enc-narr-dmg::before { content: 'composure '; color: var(--ink-60); font-size: var(--fs-label-2); }
+
+  /* composure gain — mirror of cost in gold. Fires after prose with the
+     amount in gold on the right. */
+  .enc-narr-line.gain {
+    color: var(--doc-gold);
+    border-left-color: var(--doc-gold);
+    font-style: italic;
+    background: rgba(212, 164, 40, 0.05);
+  }
+  .enc-narr-line.gain .enc-narr-heal { color: var(--doc-gold); font-size: 16px; }
+  .enc-narr-line.gain .enc-narr-heal::before { content: 'composure '; color: var(--ink-60); font-size: var(--fs-label-2); }
 
   /* item action buttons — rendered alongside verbs in the action menu.
      marked with a diamond instead of a triangle, and a soft gold tint so

@@ -84,9 +84,11 @@ function patientColEl(patient) {
   col.appendChild(file);
 
   // presented state — the heart of the read. Composed from scales by the
-  // patient's own presented(patient) function.
+  // patient's own presented(patient, hubState) function. hubState is null
+  // for legacy patients without a hubState() declaration.
+  const hub = state.enc ? state.enc.hubState : null;
   const presented = (typeof patient.def.presented === 'function')
-    ? patient.def.presented(patient)
+    ? patient.def.presented(patient, hub)
     : '';
   if (presented) {
     col.appendChild(el('div', { class: 'enc-section-label' }, '─ subject presents as ─'));
@@ -301,8 +303,10 @@ function narrativeWindowEl() {
 }
 
 function verbMenuEl(enc) {
-  // Two modes: interjection (patient asks something, player picks a response)
-  // or normal verb menu (filtered by each verb's when() predicate).
+  // Three modes: in a spoke (player picks a choice on the current node),
+  // patient interjection (legacy — patient asks, player picks a response),
+  // or the hub menu (verbs + spokes, filtered by each one's when() predicate).
+  if (enc.activeSpoke) return spokeChoiceMenuEl(enc);
   if (enc.activeInterjection) return interjectionMenuEl(enc);
   const wrap = el('div', { class: 'enc-actions' });
   wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ what I may do ─'));
@@ -333,45 +337,95 @@ function interjectionMenuEl(enc) {
   return wrap;
 }
 
+function spokeChoiceMenuEl(enc) {
+  const pat = enc.patient;
+  const player = enc.player;
+  const spoke = (pat.def.spokes || {})[enc.activeSpoke.spokeId];
+  const node = spoke?.nodes?.[enc.activeSpoke.nodeId];
+  const wrap = el('div', { class: 'enc-actions spoke-active' });
+  wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ how I respond ─'));
+  if (!node) {
+    wrap.appendChild(el('div', { class: 'enc-status-empty' }, '— the moment passes —'));
+    return wrap;
+  }
+  const grid = el('div', { class: 'enc-actions-grid' });
+  const raw = (typeof node.choices === 'function')
+    ? node.choices(pat, player)
+    : (node.choices || []);
+  let visibleIdx = 0;
+  for (const c of raw) {
+    if (typeof c.when === 'function') {
+      let ok = false;
+      try { ok = !!c.when(pat, player); } catch (e) { ok = false; }
+      if (!ok) continue;
+    }
+    const myIdx = visibleIdx++;
+    const btn = el('button', { class: 'enc-act spoke-choice' });
+    btn.addEventListener('click', () => playerVerb(String(myIdx)));
+    btn.appendChild(el('span', { class: 'enc-act-marker' }, '▸'));
+    btn.appendChild(el('span', { class: 'enc-act-label' }, c.label));
+    if (c.desc) btn.appendChild(el('span', { class: 'enc-act-desc', html: parseProse(c.desc) }));
+    grid.appendChild(btn);
+  }
+  wrap.appendChild(grid);
+  return wrap;
+}
+
 function listVerbs(enc) {
   const p = enc.player;
   const pat = enc.patient;
   const acts = [];
+  const hub = enc.hubState;
+
+  // Spokes — multi-node sub-conversations. Each declares when(p, player, hub)
+  // for hub visibility. Spokes coexist with legacy verbs; a patient may
+  // declare either or both.
+  for (const [id, sp] of Object.entries(pat.def.spokes || {})) {
+    if (typeof sp.when === 'function') {
+      try { if (!sp.when(pat, p, hub)) continue; } catch (e) { continue; }
+    }
+    acts.push({
+      id: `spoke:${id}`,
+      label: (sp.label || id).toUpperCase(),
+      desc: sp.desc || '',
+    });
+  }
+
+  // Legacy verbs.
   for (const [id, v] of Object.entries(pat.def.verbs || {})) {
-    // contextual gating — verbs may declare when(patient, player) and only
-    // appear in the menu when their condition is met. Verbs with no when()
-    // are always available.
     if (typeof v.when === 'function') {
       try { if (!v.when(pat, p)) continue; } catch (e) { continue; }
     }
     acts.push({ id, label: v.label.toUpperCase(), desc: v.desc || '' });
   }
-  // WAIT is no longer in the menu by default. Each patient may surface it
-  // via `wait.when(patient, player)`; otherwise it stays hidden.
-  if (typeof pat.def.wait?.when === 'function') {
-    try {
-      if (pat.def.wait.when(pat, p)) {
-        acts.push({
-          id: 'wait',
-          label: (pat.def.wait.label || 'WAIT').toUpperCase(),
-          desc: pat.def.wait.desc || 'let the room move on its own.',
-        });
-      }
-    } catch (e) {}
+
+  // WAIT and LEAVE only surface for legacy patients. Spoke patients never
+  // get a default-fallback button — every action is authored as a spoke.
+  if (!pat.def.spokes) {
+    if (typeof pat.def.wait?.when === 'function') {
+      try {
+        if (pat.def.wait.when(pat, p)) {
+          acts.push({
+            id: 'wait',
+            label: (pat.def.wait.label || 'WAIT').toUpperCase(),
+            desc: pat.def.wait.desc || 'let the room move on its own.',
+          });
+        }
+      } catch (e) {}
+    }
+    const canLeave = (typeof pat.def.leave?.when === 'function')
+      ? (() => { try { return !!pat.def.leave.when(pat, p); } catch { return false; } })()
+      : (p.composure <= 1 || pat.turn >= 6);
+    if (canLeave) {
+      acts.push({
+        id: 'leave',
+        label: (pat.def.leave?.label || 'LEAVE').toUpperCase(),
+        desc: pat.def.leave?.desc || 'Close the door behind you. ~~It leaves a mark.~~',
+        danger: true,
+      });
+    }
   }
-  // LEAVE surfaces only when the player has run themselves down or stayed
-  // a long time — it's the "close the file" option, not a casual button.
-  const canLeave = (typeof pat.def.leave?.when === 'function')
-    ? (() => { try { return !!pat.def.leave.when(pat, p); } catch { return false; } })()
-    : (p.composure <= 1 || pat.turn >= 6);
-  if (canLeave) {
-    acts.push({
-      id: 'leave',
-      label: (pat.def.leave?.label || 'LEAVE').toUpperCase(),
-      desc: pat.def.leave?.desc || 'Close the door behind you. ~~It leaves a mark.~~',
-      danger: true,
-    });
-  }
+
   // items in pocket — each is a one-use verb gated by its own `when`.
   for (const iid of (p.items || [])) {
     const it = ITEMS[iid];
