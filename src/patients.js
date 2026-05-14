@@ -5547,48 +5547,34 @@ const composer = {
 };
 
 
+
 // ════════════════════════════════════════════════════════════════════════
 // THE CHILDREN AT THE DOOR — Patient(s) 0117 and 0118
 // ════════════════════════════════════════════════════════════════════════
 //
 // Folklore: the Black-Eyed Children. Two of them in the corridor. They
-// want to be let in. The encounter is a small state machine. The verb
-// menu shows three or four options at any moment; the SET shifts as the
-// conversation evolves.
+// want to be let in.
 //
-// The shape of a playthrough:
+// Structure: a SPOKE-AND-WHEEL conversation rather than a branching tree.
+// At every moment the player sees three or four verbs from a much larger
+// pool. Most verbs are one-shot. The HUB evolves with patient state — the
+// default verbs visible at any moment depend on engagement, on what has
+// been asked, on suspicion, on invitation. Small "SPOKES" appear briefly
+// when a specific narrative trigger fires (you heard them rehearse;
+// they called you mister; you counted three sets of prints; the taller
+// finally spoke). Each spoke is a one-shot reaction that returns the
+// conversation to a slightly modified hub.
 //
-//   STAGE A — at the door, deciding how to look.
-//     peek, listen, speak, wait
-//     • Each examining verb (peek / listen) unlocks a deeper variant
-//       and locks the equivalent if you've already engaged.
-//     • speak engages, which collapses the examining branch entirely.
+// Player choice does NOT lock out other options. Looking under the door
+// is still possible after you have asked their names. Examining and
+// engaging coexist. The conversation loops back over itself in the
+// sense that the hub is always the place you return to, but the hub
+// has shifted in your absence.
 //
-//   STAGE B — engaged, asking the three core questions.
-//     ask who, ask want, ask names, wait
-//     • Each consumes itself. tell_them_to_leave appears after the
-//       first question. After two questions, the FORK appears.
-//
-//   FORK (after 2 core questions asked):
-//     • ask_a_test_question     → HOSTILE PATH (catch them)
-//     • ask_about_their_mother  → SYMPATHY PATH (be drawn in)
-//     Picking one locks the other. The branches have different verbs,
-//     different interjections, and different endings.
-//
-//   HOSTILE PATH:
-//     • threaten_them, drop_the_chain, wedge_the_chair, shout_for_the_orderly
-//     • Leads to the orderly opening from the corridor side, or
-//       outwaiting them through defended doors.
-//
-//   SYMPATHY PATH:
-//     • ask_about_their_father, comfort_them, offer_warmth_through_gap,
-//       say_your_own_name (anchor), pull_back_from_the_sympathy
-//     • Invitation rises; suspicion barely moves. The trap is that you
-//       start reaching for the bolt without meaning to.
-//
-//   QUIET PATH (never engaged):
-//     • Drop chain on raw suspicion alone, wedge chair, listen for dawn.
-//     • Cleanest exit if your suspicion is high enough early.
+// Interjections are state-driven (suspicion crosses a threshold, the
+// patient escalates) or behavior-driven (you stamped on the finger,
+// they react). They modify the hub by setting flags that open new
+// spokes and close used ones.
 
 const children = {
   id: 'children',
@@ -5600,9 +5586,9 @@ const children = {
     'Subject reports two minors in the corridor outside Ward 1, both barefoot.',
     'Staff have not seen them. The night camera ~~has~~ has not.',
     'The minors have requested admission [[7]] times in three hours. !!They have not been let in.!!',
-    'Taller minor wears a uniform consistent with St. Anselm\'s. ~~St. Anselm\'s was demolished in [[1947]].~~',
+    'Taller minor wears a uniform consistent with St. Anselm\'s. ~~St. Anselm\'s was demolished in [[4]].~~',
     'Shorter minor has referred to Subject by ~~a given name not on the admission card.~~',
-    'Night nurse declines to walk past the door. !!She has been a nurse here for [[31]] years.!!',
+    'Night nurse declines to walk past the door. !!She has been a nurse here for [[2]] years.!!',
   ],
   intro: [
     'The door is closed. The bolt is set. There is a small brass peephole.',
@@ -5689,12 +5675,12 @@ const children = {
   },
 
   fileReveals: [
-    { at: 4,  announce: 'A line fills in. The minors have asked at three doors before mine. ~~All three refused.~~ All three.' },
-    { at: 9,  announce: 'Another. The shorter one knows my given name. ~~The given name is not on my admission card.~~' },
-    { at: 14, announce: 'Another. The taller one is wearing the uniform of a school that closed in [[1947]].' },
-    { at: 20, announce: 'Another. The night camera at the end of this corridor has been recording static for [[31]] years.' },
-    { at: 28, announce: 'Another. The night nurse declines to walk past this door. ~~She has been a nurse here her whole working life.~~' },
-    { at: 36, announce: '!!The last line. The black of their eyes goes to the lid.!!' },
+    { at: 4,  announce: 'A line fills in. Subject reports two minors in the corridor outside Ward 1.' },
+    { at: 9,  announce: 'Another. Staff have not seen them. ~~The night camera has not either.~~' },
+    { at: 14, announce: 'Another. The minors have requested admission seven times in three hours.' },
+    { at: 20, announce: 'Another. The taller wears the uniform of a school that closed in [[4]].' },
+    { at: 28, announce: 'Another. The shorter has named Subject by ~~a name not on file.~~' },
+    { at: 36, announce: '!!The last line. The night nurse will not walk past the door. She has been a nurse here a long time.!!' },
   ],
 
   presented(p) {
@@ -5705,14 +5691,12 @@ const children = {
     let voices;
     if (f.taller_speaking) {
       voices = '!!The taller one is doing the talking now. His voice is older than his height. The shorter one is quiet at his elbow.!!';
-    } else if (f.path_sympathy && i >= 10) {
-      voices = 'The shorter one is at the gap, speaking very softly. She has been telling me things about her mother. Real things, the way one tells a friend.';
-    } else if (f.path_hostile) {
-      voices = 'They have not been asking for a while now. They are waiting on the other side of the door, very patiently. They have all night.';
+    } else if (f.mother_described) {
+      voices = 'The shorter one is at the gap, telling me about her old kitchen. A window. A song her mother sang at it.';
     } else if (i >= 16) {
       voices = '!!The shorter one is whispering through the gap at the bottom of the door. Her please does not stop. She says it in time with my breathing.!!';
     } else if (f.engaged) {
-      voices = 'The shorter one is doing the talking. She is patient. She is waiting for my next question.';
+      voices = 'The shorter one is doing the talking. She is patient. She is waiting for me to choose something to say.';
     } else if (i >= 4) {
       voices = 'They are talking to each other. Quietly. The shorter one says my given name, the way one would say it to a friend.';
     } else {
@@ -5750,14 +5734,28 @@ const children = {
     return `${voices} ${bolt} ${eye}`;
   },
 
+  // ── VERBS ──
+  //
+  // The hub. Verbs use strict when() predicates so only three or four
+  // are visible at any moment. Most verbs are one-shot. Examining and
+  // engaging coexist — looking under the door remains possible after
+  // you have asked their names. Contextual spokes appear briefly when
+  // their specific trigger fires.
+
   verbs: {
 
-    // ── STAGE A — examining, pre-engagement ──
+    // ── EXAMINING — peek chain (depth) ──
 
     peek_through_the_peephole: {
       label: 'look through the peephole',
       desc: 'Lean in. See what is in the corridor.',
-      when: (p) => !p.flags.seen_them && !p.flags.engaged && !p.flags.committed,
+      // Visible if the peek chain has not started AND either the listen
+      // chain is also not started, or it has been fully consumed.
+      // Post-engagement, peek only surfaces if you had already started
+      // the listening chain — otherwise the visual channel is closed
+      // once you commit to talking.
+      when: (p) => !p.flags.seen_them && (!p.flags.overheard || p.flags.heard_lesson)
+        && (!p.flags.engaged || p.flags.overheard),
       respond(p) {
         return {
           lines: [
@@ -5766,7 +5764,7 @@ const children = {
             'Their hair is wet. Their feet are bare. They are not shivering.',
           ],
           scales: { suspicion: +3 },
-          flags: { seen_them: true },
+          flags: { seen_them: true, seen_them_turn: p.turn },
         };
       },
     },
@@ -5774,7 +5772,7 @@ const children = {
     look_closer: {
       label: 'look closer',
       desc: 'Press your eye to the lens.',
-      when: (p) => p.flags.seen_them && !p.flags.saw_eye && !p.flags.engaged,
+      when: (p) => p.flags.seen_them && !p.flags.saw_eye,
       respond(p) {
         return {
           lines: [
@@ -5793,7 +5791,7 @@ const children = {
     see_their_prints: {
       label: 'look at the floor of the corridor',
       desc: 'Through the peephole. The linoleum.',
-      when: (p) => p.flags.saw_eye && !p.flags.saw_prints && !p.flags.engaged,
+      when: (p) => p.flags.saw_eye && !p.flags.saw_prints,
       respond(p) {
         return {
           lines: [
@@ -5801,7 +5799,7 @@ const children = {
             'Wet footprints, where they are standing. The prints continue down the corridor in the direction they came from.',
             'There are more sets of prints than there are children.',
           ],
-          scales: { suspicion: +5 },
+          scales: { suspicion: +4 },
           flags: { saw_prints: true },
           composure: -1,
           composureCost: 'There were more sets than there were children.',
@@ -5812,25 +5810,33 @@ const children = {
     count_the_prints: {
       label: 'count the prints',
       desc: 'Sets in. Sets out. Carefully.',
-      when: (p) => p.flags.saw_prints && !p.flags.counted_prints && !p.flags.engaged,
+      when: (p) => p.flags.saw_prints && !p.flags.counted_prints,
       respond(p) {
         return {
           lines: [
             'I count. Three sets in. The third set is larger than either of the children\'s.',
             'I cannot see where the third set goes. It is not behind them. It is not in the corridor at all.',
           ],
-          scales: { suspicion: +6 },
-          flags: { counted_prints: true },
+          scales: { suspicion: +5 },
+          flags: { counted_prints: true, counted_prints_turn: p.turn },
           composure: -2,
           composureCost: 'The third set is not in the corridor anymore.',
         };
       },
     },
 
+    // ── EXAMINING — listen chain (depth) ──
+
     listen_at_the_gap: {
       label: 'listen at the gap under the door',
       desc: 'Crouch. Get an ear to the linoleum.',
-      when: (p) => !p.flags.overheard && !p.flags.engaged && !p.flags.saw_eye,
+      // Mirror of peek's gate — only visible if peek chain not in
+      // progress, or already finished. Also: post-engagement, listen
+      // does not surface unless you have already examined visually, so
+      // examining stays one-verb in the hub after the conversation
+      // begins.
+      when: (p) => !p.flags.overheard && (!p.flags.seen_them || p.flags.counted_prints)
+        && (!p.flags.engaged || p.flags.seen_them),
       respond(p) {
         return {
           lines: [
@@ -5839,7 +5845,7 @@ const children = {
             'I can hear them breathing. The breathings are not in sync.',
           ],
           scales: { suspicion: +3 },
-          flags: { overheard: true },
+          flags: { overheard: true, overheard_turn: p.turn },
         };
       },
     },
@@ -5847,7 +5853,7 @@ const children = {
     keep_listening: {
       label: 'keep listening at the gap',
       desc: 'Be quiet. Wait for them to speak to each other.',
-      when: (p) => p.flags.overheard && !p.flags.heard_taller && !p.flags.engaged,
+      when: (p) => p.flags.overheard && !p.flags.heard_taller,
       respond(p) {
         return {
           lines: [
@@ -5866,7 +5872,7 @@ const children = {
     press_ear_to_the_wood: {
       label: 'press an ear to the wood',
       desc: 'Get higher. Hear them think.',
-      when: (p) => p.flags.heard_taller && !p.flags.heard_lesson && !p.flags.engaged,
+      when: (p) => p.flags.heard_taller && !p.flags.heard_lesson,
       respond(p) {
         return {
           lines: [
@@ -5874,19 +5880,21 @@ const children = {
             'The taller one is reciting numbers. Quietly. ~~Seven doors. Three refused. He is the fourth. He is awake.~~',
             'The shorter one repeats them after him, like a child learning a poem.',
           ],
-          scales: { suspicion: +6 },
-          flags: { heard_lesson: true },
+          scales: { suspicion: +5 },
+          flags: { heard_lesson: true, heard_lesson_turn: p.turn },
           composure: -2,
           composureCost: 'I am the fourth door.',
         };
       },
     },
 
+    // ── ENGAGEMENT ──
+
     speak_through_the_door: {
       label: 'speak through the door',
       desc: 'Begin a conversation.',
-      when: (p) => !p.flags.engaged && !p.flags.committed,
-      respond(p, player) {
+      when: (p) => !p.flags.engaged && !p.flags.chain_set,
+      respond(p) {
         if (p.flags.counted_prints || p.flags.heard_lesson) {
           return {
             lines: [
@@ -5895,7 +5903,7 @@ const children = {
               'The shorter one says: ~~please. We are very cold.~~',
             ],
             scales: { invitation: +1, suspicion: +1 },
-            flags: { engaged: true, opened_hostile: true },
+            flags: { engaged: true, mister_count: 1 },
           };
         }
         if (p.flags.saw_eye || p.flags.heard_taller) {
@@ -5906,7 +5914,7 @@ const children = {
               'The taller one says nothing. He has been ready for this part.',
             ],
             scales: { invitation: +1, suspicion: +1 },
-            flags: { engaged: true, opened_cautious: true },
+            flags: { engaged: true, mister_count: 1 },
           };
         }
         return {
@@ -5916,35 +5924,35 @@ const children = {
             'She says: ~~we have been at the door a long time. We have been hoping you would speak.~~',
           ],
           scales: { invitation: +2 },
-          flags: { engaged: true, opened_naive: true },
+          flags: { engaged: true, mister_count: 2 },
           composure: -1,
           composureCost: 'She was glad I was awake.',
         };
       },
     },
 
-    // ── STAGE B — three core questions ──
+    // ── CORE QUESTIONS — engaged hub ──
 
     ask_who_is_it: {
       label: 'ask who they are',
       desc: 'Plainly.',
-      when: (p) => p.flags.engaged && !p.flags.asked_who && !p.flags.path_hostile && !p.flags.path_sympathy,
+      // Conversation verbs are silenced once you have committed to the
+      // door. Outlasting is its own phase.
+      when: (p) => p.flags.engaged && !p.flags.asked_who && !p.flags.chain_set,
       respond(p) {
         const lines = [
           'I say: who are you. The two of you.',
           'The shorter one says: ~~we are children, mister. From Saint Anselm\'s. Down the road.~~',
         ];
         if (p.flags.heard_lesson) {
-          lines.push('She has used the answer the taller one was rehearsing with her. The exact phrasing. Saint Anselm\'s. ~~Saint Anselm\'s has not been a school for a long time.~~');
-        } else if (p.flags.saw_eye) {
-          lines.push('She says it the way she has been taught to say it.');
+          lines.push('She has used the answer the taller one was rehearsing with her. The exact phrasing. ~~Saint Anselm\'s has not been a school for a long time.~~');
         } else {
           lines.push('Saint Anselm\'s. ~~I have heard the name. I do not remember in what context.~~');
         }
         return {
           lines,
           scales: { suspicion: p.flags.heard_lesson ? +4 : +3 },
-          flags: { asked_who: true, knows_anselms: true },
+          flags: { asked_who: true, knows_anselms: true, mister_count: (p.flags.mister_count || 0) + 1 },
         };
       },
     },
@@ -5952,7 +5960,7 @@ const children = {
     ask_what_they_want: {
       label: 'ask what they want',
       desc: 'Plainly. Through the wood.',
-      when: (p) => p.flags.engaged && !p.flags.asked_want && !p.flags.path_hostile && !p.flags.path_sympathy,
+      when: (p) => p.flags.engaged && !p.flags.asked_want && !p.flags.chain_set,
       respond(p) {
         return {
           lines: [
@@ -5961,7 +5969,7 @@ const children = {
             'She has the phrase ready. She has used it before.',
           ],
           scales: { invitation: +2, suspicion: +1 },
-          flags: { asked_want: true },
+          flags: { asked_want: true, asked_want_turn: p.turn, mister_count: (p.flags.mister_count || 0) + 1 },
         };
       },
     },
@@ -5969,7 +5977,7 @@ const children = {
     ask_their_names: {
       label: 'ask their names',
       desc: 'Both of them.',
-      when: (p) => p.flags.engaged && !p.flags.asked_names && !p.flags.path_hostile && !p.flags.path_sympathy,
+      when: (p) => p.flags.engaged && !p.flags.asked_names && !p.flags.chain_set,
       respond(p) {
         return {
           lines: [
@@ -5980,56 +5988,111 @@ const children = {
               : 'The two names do not match. Hannah is fast. Thomas is given second-hand.',
           ],
           scales: { suspicion: +3 },
-          flags: { asked_names: true },
+          flags: { asked_names: true, mister_count: (p.flags.mister_count || 0) + 1 },
         };
       },
     },
 
-    tell_them_to_leave: {
-      label: 'tell them to leave',
-      desc: 'Firmly. Through the door.',
-      when: (p) => {
-        const asked = (p.flags.asked_who ? 1 : 0)
-                    + (p.flags.asked_want ? 1 : 0)
-                    + (p.flags.asked_names ? 1 : 0);
-        return p.flags.engaged && asked >= 1 && !p.flags.told_to_leave
-            && !p.flags.path_sympathy;
-      },
+    // ── FOLLOW-UPS — short branches gated on prior questions ──
+
+    // Follow-ups appear chained so only one is visible at a time. The
+    // conversation deepens one step per turn: mother → father → school
+    // → telephone. Each requires its predecessor.
+
+    ask_about_their_mother: {
+      label: 'ask about their mother',
+      desc: 'Where is she.',
+      when: (p) => p.flags.asked_want && !p.flags.asked_mother && !p.flags.chain_set
+        // Gate behind two core questions or a test — so it doesn't
+        // crowd the menu during the opening question phase.
+        && ((p.flags.asked_who && p.flags.asked_names) || p.flags.tested),
       respond(p) {
-        if (p.flags.tested || p.flags.heard_lesson || p.flags.counted_prints) {
-          return {
-            lines: [
-              'I say: I know what you are. Leave.',
-              'There is a long pause. The taller one says, evenly: ~~that is the third time someone has said that to us tonight.~~',
-              'The shorter one says, more quietly: ~~we are going to ask one more time, mister.~~',
-            ],
-            scales: { invitation: -2, suspicion: +3 },
-            flags: { told_to_leave: true, refused_them: true },
-          };
-        }
         return {
           lines: [
-            'I say: go away. Go and find an adult on the ward.',
-            'The shorter one says: ~~there are no adults out here, mister. We checked all the doors. You are the only one awake.~~',
-            'She says it with more words than a child usually has.',
+            'I say: where is your mother. Where did she go.',
+            'The shorter one says, slowly: ~~she went to find a telephone. To call our father.~~',
+            'A pause. ~~Our father was on a ship. She has to ring the company. She has been gone a while.~~',
           ],
-          scales: { invitation: +1, suspicion: +2 },
-          flags: { told_to_leave: true },
+          scales: { invitation: +3, suspicion: +2 },
+          flags: { asked_mother: true, asked_mother_turn: p.turn },
+          composure: -1,
+          composureCost: 'I am almost more worried about their mother than about them.',
         };
       },
     },
 
-    // ── FORK — two mutually exclusive paths ──
+    ask_about_their_father: {
+      label: 'ask about their father',
+      desc: 'The ship.',
+      when: (p) => p.flags.asked_mother && !p.flags.asked_father && !p.flags.asked_school
+        && !p.flags.asked_telephone && !p.flags.chain_set,
+      respond(p) {
+        return {
+          lines: [
+            'I say: tell me about your father. The ship.',
+            'The shorter one says: ~~it was a long way away. He had not been home in some months. Then there was a telegram.~~',
+            'A long pause. ~~Then the telegram. Then nothing.~~',
+          ],
+          scales: { invitation: +4, suspicion: +1 },
+          flags: { asked_father: true },
+          composure: -2,
+          composureCost: 'Then the telegram. Then nothing.',
+        };
+      },
+    },
+
+    ask_what_school: {
+      label: 'ask which school',
+      desc: 'You know the name.',
+      // School and telephone are mutually exclusive in the follow-up
+      // chain — each one consumed before the other emerges.
+      when: (p) => p.flags.knows_anselms && p.flags.asked_father
+        && !p.flags.asked_school && !p.flags.asked_telephone,
+      respond(p) {
+        return {
+          lines: [
+            'I say: Saint Anselm\'s. Tell me about it.',
+            'The shorter one says, brightly: ~~it is down the road. We walk to it every morning. We come back the same way.~~',
+            'She says it the way someone repeats an answer they have rehearsed. ~~Saint Anselm\'s has been demolished for some decades.~~',
+          ],
+          scales: { suspicion: +5 },
+          flags: { asked_school: true },
+          composure: -1,
+          composureCost: 'Saint Anselm\'s has been demolished for some decades.',
+        };
+      },
+    },
+
+    ask_about_telephone: {
+      label: 'ask about the telephone',
+      desc: 'There are no public phones nearby at this hour.',
+      // Comes after the school question — only one follow-up visible
+      // at a time, in a fixed order: father → school → telephone.
+      when: (p) => p.flags.asked_mother && p.flags.asked_father && p.flags.asked_school
+        && !p.flags.asked_telephone,
+      respond(p) {
+        return {
+          lines: [
+            'I say: which telephone. The nearest one is at the end of the ward. It is locked at this hour.',
+            'There is a pause. The shorter one says: ~~there is one at the school, mister. She would have walked there.~~',
+            'Saint Anselm\'s has not had a working telephone in a long time.',
+          ],
+          scales: { suspicion: +5, invitation: -1 },
+          flags: { asked_telephone: true },
+          composure: -1,
+          composureCost: 'She has an answer for everything.',
+        };
+      },
+    },
 
     ask_a_test_question: {
       label: 'ask a question only a child knows',
-      desc: 'Colour. Math. A test.',
+      desc: 'Colour. A small test.',
       when: (p) => {
         const asked = (p.flags.asked_who ? 1 : 0)
                     + (p.flags.asked_want ? 1 : 0)
                     + (p.flags.asked_names ? 1 : 0);
-        return p.flags.engaged && asked >= 2 && !p.flags.tested
-            && !p.flags.path_sympathy;
+        return p.flags.engaged && asked >= 2 && !p.flags.tested && !p.flags.chain_set;
       },
       respond(p) {
         return {
@@ -6039,46 +6102,199 @@ const children = {
             'I say: at sunset. The shorter one does not answer. The taller one says, softly, into her ear: ~~orange. Say orange.~~',
             'She says: ~~orange.~~ A beat late.',
           ],
-          scales: { suspicion: +7, invitation: -1 },
-          flags: { tested: true, path_hostile: true },
+          scales: { suspicion: +6, invitation: -1 },
+          flags: { tested: true, tested_turn: p.turn },
           composure: -1,
           composureCost: 'He had to tell her the colour.',
         };
       },
     },
 
-    ask_about_their_mother: {
-      label: 'ask about their mother',
-      desc: 'Sympathetic. Pursue their story.',
-      when: (p) => {
-        const asked = (p.flags.asked_who ? 1 : 0)
-                    + (p.flags.asked_want ? 1 : 0)
-                    + (p.flags.asked_names ? 1 : 0);
-        return p.flags.engaged && asked >= 2 && !p.flags.asked_mother
-            && !p.flags.path_hostile;
-      },
+    // ── CONTEXTUAL SPOKES — one-shot reactions to specific events ──
+
+    // Spokes appear in the menu only while their trigger is FRESH — a
+    // brief window of two or three turns from the moment the trigger
+    // fired. After that they slip back into the patient's file as
+    // moments you did not bring up. This keeps the hub small while
+    // making each spoke feel like a reaction in the moment.
+
+    confront_the_rehearsal: {
+      label: 'tell them you heard them rehearse',
+      desc: 'You overheard the lesson.',
+      when: (p) => p.flags.heard_lesson && p.flags.engaged && !p.flags.confronted_rehearsal
+        && (p.turn - (p.flags.heard_lesson_turn ?? -99) <= 4),
       respond(p) {
         return {
           lines: [
-            'I say: where is your mother. Tell me about her.',
-            'The shorter one says, slowly: ~~she went to find a telephone. To call our father.~~',
-            'A pause. ~~Our father was on a ship. She has to ring the company. She has been gone a while.~~',
-            'She says it the way a child would say it, this time. Almost. The words are a child\'s words. The patience is not.',
+            'I say: I heard you. I heard you teaching her how to ask. I have been at the door longer than you knew.',
+            'A long quiet. The shorter one says, after a beat: ~~that is alright, mister. He has been teaching me for a while.~~',
+            'She says it the way one admits to a small habit.',
           ],
-          scales: { invitation: +4, suspicion: +1 },
-          flags: { asked_mother: true, path_sympathy: true },
-          composure: -2,
-          composureCost: 'I am almost more worried about their mother than about them.',
+          scales: { suspicion: +5, invitation: -3 },
+          flags: { confronted_rehearsal: true },
+          composure: -1,
+          composureCost: 'He has been teaching her for a while.',
         };
       },
     },
 
-    // ── HOSTILE PATH ──
+    address_the_third_set: {
+      label: 'mention the third set of prints',
+      desc: 'You counted three sets. Two children.',
+      when: (p) => p.flags.counted_prints && p.flags.engaged && !p.flags.addressed_third
+        && (p.turn - (p.flags.counted_prints_turn ?? -99) <= 4),
+      respond(p) {
+        return {
+          lines: [
+            'I say: there are three sets of prints in the corridor. Whose is the third.',
+            'There is a long pause. The taller one speaks, for the first time at volume: ~~the one who showed us your door, mister.~~',
+            'The shorter one says nothing. She is letting him speak.',
+          ],
+          scales: { suspicion: +7, invitation: -1 },
+          flags: { addressed_third: true, taller_spoken: true, taller_speaking: true, who_showed: true },
+          composure: -2,
+          composureCost: 'Someone showed them my door.',
+        };
+      },
+    },
+
+    challenge_the_orange: {
+      label: 'point out he told her the answer',
+      desc: 'He whispered "orange" into her ear.',
+      when: (p) => p.flags.tested && !p.flags.challenged_orange
+        && (p.turn - (p.flags.tested_turn ?? -99) <= 3),
+      respond(p) {
+        return {
+          lines: [
+            'I say: he told you the colour. I heard him. He said orange first.',
+            'The shorter one is quiet. The taller one says, with no inflection: ~~she does not see colours, mister. I have been the one who knows them for her.~~',
+          ],
+          scales: { suspicion: +6 },
+          flags: { challenged_orange: true, taller_spoken: true, taller_speaking: true },
+          composure: -1,
+          composureCost: 'She does not see colours.',
+        };
+      },
+    },
+
+    correct_the_name_mister: {
+      label: 'correct her — you are not mister',
+      desc: 'She has been calling you that.',
+      // Surfaces only briefly when she has used "mister" enough times
+      // that the repetition becomes its own moment, and not while a
+      // fresher spoke (orange, rehearsal, the third set) is open.
+      when: (p) => p.flags.engaged && (p.flags.mister_count || 0) >= 5 && !p.flags.corrected_mister
+        && !(p.flags.tested && !p.flags.challenged_orange && (p.turn - (p.flags.tested_turn ?? -99) <= 3))
+        && !(p.flags.heard_lesson && !p.flags.confronted_rehearsal && (p.turn - (p.flags.heard_lesson_turn ?? -99) <= 4))
+        && !(p.flags.counted_prints && !p.flags.addressed_third && (p.turn - (p.flags.counted_prints_turn ?? -99) <= 4)),
+      respond(p) {
+        return {
+          lines: [
+            'I say: I am not mister. I am Patient 0413. That is what is on my admission.',
+            'A long pause. The shorter one says: ~~that is alright, mister. We will call you that too. Mister Patient.~~',
+            'She has not stopped calling me mister.',
+          ],
+          scales: { suspicion: +3, invitation: -2 },
+          flags: { corrected_mister: true },
+          composure: -1,
+          composureCost: 'She has not stopped calling me mister.',
+        };
+      },
+    },
+
+    match_their_breathing: {
+      label: 'match their breathing',
+      desc: 'Slow yours to theirs.',
+      when: (p) => p.flags.overheard && !p.flags.engaged && !p.flags.matched_breathing
+        && (p.turn - (p.flags.overheard_turn ?? -99) <= 3),
+      respond(p) {
+        return {
+          lines: [
+            'I slow my breath. I match the shorter one\'s rhythm. In. Out. Three counts.',
+            'After a minute her breath has matched mine. So has the taller one\'s. The three of us breathe at the same rate.',
+            'I do not know who began matching whom.',
+          ],
+          scales: { invitation: +3, suspicion: +2 },
+          flags: { matched_breathing: true, matched_breathing_turn: p.turn, synced: true },
+          composure: -2,
+          composureCost: 'I do not know who began matching whom.',
+        };
+      },
+    },
+
+    unsync_your_breathing: {
+      label: 'break the rhythm',
+      desc: 'Unsync your breath from theirs.',
+      when: (p) => p.flags.synced && !p.flags.unsynced
+        && (p.turn - (p.flags.matched_breathing_turn ?? -99) <= 4),
+      respond(p) {
+        return {
+          lines: [
+            'I take a fast shallow breath. Then a long one. I refuse the pattern.',
+            'After a beat, on the other side of the door, the shorter one\'s breath matches my new rhythm. So does the taller one\'s.',
+            'I cannot get them off my breathing.',
+          ],
+          scales: { suspicion: +5, invitation: -1 },
+          flags: { unsynced: true },
+          composure: -2,
+          composureCost: 'I cannot get them off my breathing.',
+        };
+      },
+    },
+
+    repeat_what_she_said: {
+      label: 'repeat what she said',
+      desc: 'The exact phrase. Back to her.',
+      // Brief beat after she gives you the phrase. Two-turn window so
+      // it doesn't overlap the next question's spokes.
+      when: (p) => p.flags.engaged && p.flags.asked_want && !p.flags.repeated_phrase
+        && (p.turn - (p.flags.asked_want_turn ?? -99) <= 2),
+      respond(p) {
+        return {
+          lines: [
+            'I say, slowly: just to come in. Just for a little while. Until our mother comes for us.',
+            'I have her cadence. The shorter one is quiet. Then she says: ~~you say it nicely, mister.~~',
+            'She did not expect me to say it back.',
+          ],
+          scales: { suspicion: +4, invitation: +1 },
+          flags: { repeated_phrase: true },
+          composure: -1,
+          composureCost: 'She did not expect it. She is not used to having it given back.',
+        };
+      },
+    },
+
+    ask_who_he_was: {
+      label: 'ask about the one before',
+      desc: 'They mentioned him.',
+      // Set by an interjection; remains available until used or until
+      // you have committed to defense.
+      when: (p) => p.flags.one_before && !p.flags.asked_who_he_was && !p.flags.chair_wedged,
+      respond(p) {
+        return {
+          lines: [
+            'I say: the one before me. The one who let you in. Who was he.',
+            'The taller one says: ~~he was the one before you, mister. That is all we need to know about him.~~',
+            'The shorter one adds, with feeling: ~~he was very kind to us.~~',
+          ],
+          scales: { suspicion: +4, invitation: +2 },
+          flags: { asked_who_he_was: true, taller_speaking: true },
+          composure: -1,
+          composureCost: 'He was very kind to them.',
+        };
+      },
+    },
 
     threaten_them: {
       label: 'threaten them',
       desc: 'Tell them what you will do.',
-      when: (p) => p.flags.path_hostile && !p.flags.threatened && !p.flags.chain_set,
+      when: (p) => (p.flags.tested || p.flags.confronted_rehearsal || p.flags.addressed_third)
+        && !p.flags.threatened
+        && (p.turn - Math.max(
+              p.flags.tested_turn ?? -99,
+              p.flags.confronted_rehearsal ? p.turn : -99,
+              p.flags.addressed_third ? p.turn : -99
+            ) <= 4),
       respond(p) {
         return {
           lines: [
@@ -6087,41 +6303,228 @@ const children = {
             'The shorter one says: ~~we have been hoping you would come out.~~',
           ],
           scales: { suspicion: +5, invitation: -2 },
-          flags: { threatened: true },
+          flags: { threatened: true, threatened_turn: p.turn },
           composure: -2,
           composureCost: 'They have been hoping I would come out.',
         };
       },
     },
 
+    apologize_for_threat: {
+      label: 'apologize for the threat',
+      desc: 'You did not mean it.',
+      when: (p) => p.flags.threatened && !p.flags.apologized_threat
+        && (p.turn - (p.flags.threatened_turn ?? -99) <= 3),
+      respond(p) {
+        return {
+          lines: [
+            'I say: I did not mean it. I would not come out. I am sorry.',
+            'The shorter one says, softly: ~~that is alright, mister. We knew you would not. That is alright.~~',
+            'She says it the way an adult forgives a small temper.',
+          ],
+          scales: { invitation: +3, suspicion: +1 },
+          flags: { apologized_threat: true },
+          composure: -2,
+          composureCost: 'She forgave me. The way an adult forgives a small temper.',
+        };
+      },
+    },
+
+    // ── ANCHORS — composure verbs when invitation gets dangerous ──
+
+    say_your_own_name: {
+      label: 'say your own name',
+      desc: 'Out loud. Anchor.',
+      // Softer anchor verb. Visible at moderate invitation; replaced
+      // by the sharper bite_the_cheek at high invitation.
+      when: (p) => p.scales.invitation >= 10 && p.scales.invitation < 14
+        && !p.flags.said_name && !p.flags.bit_cheek,
+      respond(p) {
+        return {
+          lines: [
+            'I say my name. Full. Out loud. Twice. Then my number.',
+            'The room is solid around me. I have stopped reaching for the bolt.',
+            'The shorter one outside says, quietly: ~~that is a good name, mister. You should hear how I would say it.~~',
+            'She has not said it. She is making me ask.',
+          ],
+          scales: { invitation: -5, suspicion: +2 },
+          composure: +2,
+          flags: { said_name: true },
+        };
+      },
+    },
+
+    bite_the_inside_of_your_cheek: {
+      label: 'bite the inside of your cheek',
+      desc: 'A sting. Stay here.',
+      // Sharper anchor than say_your_own_name. Visible only if you have
+      // not already used the softer anchor — they share a slot.
+      when: (p) => p.scales.invitation >= 14 && !p.flags.bit_cheek && !p.flags.said_name,
+      respond(p) {
+        return {
+          lines: [
+            'I bite. A small sting. A small bit of blood.',
+            'The room steadies. The bolt is set. My hand is in my pocket.',
+            'The shorter one says nothing for a beat. Then: ~~that was not necessary, mister.~~',
+          ],
+          scales: { invitation: -4 },
+          composure: +1,
+          flags: { bit_cheek: true },
+        };
+      },
+    },
+
+    // ── REPEATABLE ANCHORS — appear infrequently, response varies ──
+
+    tell_them_to_leave: {
+      label: 'tell them to leave',
+      desc: 'Firmly.',
+      // Only surfaces when the conversation has invited refusal — high
+      // invitation. After testing or threatening, the moment has
+      // passed; either you defend or you don't. Cooldown so it does
+      // not crowd back in immediately.
+      when: (p) => p.flags.engaged
+        && p.scales.invitation >= 8
+        && !p.flags.tested && !p.flags.threatened && !p.flags.chain_set
+        && (p.flags.last_tell_turn === undefined || p.turn - p.flags.last_tell_turn >= 3),
+      respond(p) {
+        const reps = (p.flags.tell_count || 0);
+        const lines = [];
+        let suspicion = 0;
+        let invitation = 0;
+        if (reps === 0) {
+          lines.push('I say: go away. Go and find an adult on the ward.');
+          lines.push('The shorter one says: ~~there are no adults out here, mister. We checked all the doors. You are the only one awake.~~');
+          invitation = +1; suspicion = +2;
+        } else if (reps === 1) {
+          lines.push('I say it again. Louder. Go away.');
+          lines.push('She begins to cry. The crying is the right shape but the wrong rhythm.');
+          invitation = +2; suspicion = +2;
+        } else if (reps === 2) {
+          lines.push('I say it again. Flat. Go.');
+          lines.push('The taller one says, evenly: ~~he is going to keep saying it, Hannah. It is alright.~~');
+          lines.push('She has stopped crying. They are patient now.');
+          invitation = -1; suspicion = +3;
+        } else {
+          lines.push('I have run out of new ways to say it. So has she.');
+          lines.push('She says, very gently: ~~it is alright, mister. We are not going.~~');
+          invitation = -2; suspicion = +1;
+        }
+        return {
+          lines,
+          scales: { invitation, suspicion },
+          flags: { last_tell_turn: p.turn, tell_count: reps + 1 },
+        };
+      },
+    },
+
+    step_back_from_the_door: {
+      label: 'step back from the door',
+      desc: 'A pace. Sit on the bed.',
+      // Only surfaces after the other anchors are spent. The "last
+      // recourse" grounding verb.
+      when: (p) => p.scales.invitation >= 14
+        && !p.flags.chair_wedged
+        && (p.flags.said_name || p.flags.bit_cheek)
+        && (p.flags.last_step_turn === undefined || p.turn - p.flags.last_step_turn >= 5),
+      respond(p) {
+        const reps = (p.flags.step_count || 0);
+        const lines = [];
+        let invitation = -2;
+        let suspicion = 0;
+        let composure = 0;
+        if (reps === 0) {
+          lines.push('I take a step back. The wood is between me and them. The bolt is set.');
+          lines.push('The asking does not stop. It is the same voice but the same distance.');
+        } else if (reps === 1) {
+          lines.push('I step further back. I sit on the bed. The springs creak.');
+          lines.push('The shorter one says: ~~he sat down. He is going to think about it.~~');
+          lines.push('I had not told her I was sitting down.');
+          suspicion = +3;
+          composure = -1;
+        } else {
+          lines.push('I am as far from the door as the room lets me be. My back is against the window.');
+          lines.push('The shorter one says: ~~he is at the window, Thomas.~~ The taller one does not answer.');
+          suspicion = +2;
+          invitation = -1;
+        }
+        return {
+          lines,
+          scales: { invitation, suspicion },
+          composure,
+          composureCost: reps >= 1 ? 'She is narrating me through the door.' : undefined,
+          flags: { last_step_turn: p.turn, step_count: reps + 1 },
+        };
+      },
+    },
+
+    check_the_bolt: {
+      label: 'check the bolt',
+      desc: 'Look at it. Touch it.',
+      // Surfaces only when the bolt has actually drifted. A reactive
+      // verb, not a default. If the bolt is set, there is nothing to
+      // check.
+      when: (p) => !p.flags.chain_set && p.scales.latch <= 10
+        && (p.flags.last_bolt_turn === undefined || p.turn - p.flags.last_bolt_turn >= 3),
+      respond(p) {
+        const reps = (p.flags.bolt_count || 0);
+        const lines = [];
+        let latch = 0;
+        let composure = 0;
+        let composureCost;
+        if (p.scales.latch <= 8) {
+          lines.push('The bolt has eased back. Two finger-widths short of where I left it.');
+          lines.push('I push it home. It seats with a small click. The shorter one stops mid-please for that click.');
+          latch = +3;
+          composure = -1;
+          composureCost = 'The bolt moved without me.';
+        } else if (reps === 0) {
+          lines.push('I touch the bolt. It is where it should be. My hand stays on it for a beat too long.');
+          lines.push('The shorter one says, on the other side: ~~that is alright. We can wait.~~');
+          latch = +1;
+          composure = -1;
+          composureCost = 'She knew I was checking.';
+        } else {
+          lines.push('I check it again. The bolt is in the keep. I am still alive.');
+          lines.push('The shorter one says: ~~you have been checking it a lot, mister.~~');
+          latch = +1;
+        }
+        return {
+          lines,
+          scales: { latch },
+          composure,
+          composureCost,
+          flags: { last_bolt_turn: p.turn, bolt_count: reps + 1 },
+        };
+      },
+    },
+
+    // ── DEFENSIVE ──
+
     drop_the_chain: {
       label: 'drop the chain',
-      desc: 'Set the second lock. Commit to the door.',
-      when: (p) => !p.flags.chain_set && (
-        p.flags.path_hostile
-        || (!p.flags.engaged && p.scales.suspicion >= 14)
-      ),
+      desc: 'Set the second lock.',
+      // Defensive escalation. Visible only when there is a clear reason
+      // to commit — high suspicion or a specific catalysing event.
+      when: (p) => !p.flags.chain_set
+        && (p.scales.suspicion >= 14 || p.flags.threatened
+            || p.flags.confronted_rehearsal || p.flags.addressed_third || p.flags.fingertip_seen),
       respond(p) {
-        const fromQuiet = !p.flags.engaged;
         return {
           lines: [
             'I lift the chain. I let it drop into the keep. The metal taps the door.',
-            fromQuiet
-              ? 'The voices outside stop. They have not been asking for some minutes. The chain has answered for me.'
-              : 'The voices outside stop. For one beat. Two.',
-            fromQuiet
-              ? 'The shorter one says, very quietly: ~~that is alright, mister. We will wait. We are good at waiting.~~'
-              : 'The shorter one says, more softly than before: ~~please. We will be quick. We only need a moment.~~',
+            'The voices outside stop. For one beat. Two.',
+            'The shorter one says, more softly than before: ~~please. We will be quick. We only need a moment.~~',
           ],
           scales: { latch: +6, invitation: -3, suspicion: +1 },
-          flags: { chain_set: true, committed: true, ...(fromQuiet ? { path_quiet: true } : {}) },
+          flags: { chain_set: true },
         };
       },
     },
 
     wedge_the_chair: {
       label: 'wedge the chair under the handle',
-      desc: 'The writing chair. Drag it across the floor.',
+      desc: 'The writing chair. Drag it.',
       when: (p) => p.flags.chain_set && !p.flags.chair_wedged,
       respond(p) {
         return {
@@ -6139,8 +6542,10 @@ const children = {
     shout_for_the_orderly: {
       label: 'shout for the orderly',
       desc: 'Loudly. Down the corridor.',
-      when: (p) => !p.flags.orderly_alerted
-        && (p.flags.path_hostile || p.flags.chain_set),
+      // Visible only after committing to defense — the chain has been
+      // set. Calling the orderly while still in conversation does not
+      // fit the rhythm.
+      when: (p) => !p.flags.orderly_alerted && p.flags.chain_set,
       respond(p) {
         return {
           lines: [
@@ -6155,132 +6560,34 @@ const children = {
       },
     },
 
-    // ── SYMPATHY PATH ──
-
-    ask_about_their_father: {
-      label: 'ask about their father',
-      desc: 'The ship. The phone call.',
-      when: (p) => p.flags.path_sympathy && p.flags.asked_mother && !p.flags.asked_father,
+    bang_on_the_wall: {
+      label: 'bang on the wall',
+      desc: 'The next room. Signal them.',
+      // Late defensive — only after the chain is set, when you have run
+      // out of softer options.
+      when: (p) => p.flags.chain_set && !p.flags.banged_wall && !p.flags.orderly_alerted,
       respond(p) {
         return {
           lines: [
-            'I say: tell me about your father. The ship.',
-            'The shorter one says: ~~it was a long way away. He had not been home in some months. Then there was a telegram.~~',
-            'A long pause. ~~Then the telegram. Then nothing.~~',
-            'I do not say anything for a beat. The taller one says, very quietly: ~~that is when we came to the corridor.~~',
+            'I bring the side of my fist against the wall. Twice. Loud.',
+            'I wait. There is no answer through the wall.',
+            'The shorter one says, in the corridor: ~~there is no one in that room. The bed is made.~~',
           ],
-          scales: { invitation: +5, suspicion: +1 },
-          flags: { asked_father: true },
-          composure: -2,
-          composureCost: 'That is when they came to the corridor.',
-        };
-      },
-    },
-
-    comfort_them_through_the_door: {
-      label: 'comfort them through the door',
-      desc: 'Say something kind.',
-      when: (p) => p.flags.path_sympathy && !p.flags.comforted,
-      respond(p) {
-        return {
-          lines: [
-            'I say, low against the wood: it is alright. You are alright. Your mother will come back.',
-            'The shorter one is quiet for a long beat. Then she says: ~~thank you, mister.~~',
-            'The taller one is quiet. The shorter one says: ~~no one has said that to us before.~~',
-          ],
-          scales: { invitation: +5 },
-          flags: { comforted: true },
-          composure: -2,
-          composureCost: 'No one had said it to them before.',
-        };
-      },
-    },
-
-    offer_warmth_through_the_gap: {
-      label: 'pass something through the gap',
-      desc: 'The blanket on the bed. A small kindness.',
-      when: (p) => p.flags.path_sympathy && p.flags.comforted && !p.flags.passed_blanket,
-      respond(p) {
-        return {
-          lines: [
-            'I take the blanket off the bed. I fold it. I push the edge of it through the gap under the door.',
-            'The shorter one\'s hands take it. She is gentle. The blanket disappears under the door inch by inch.',
-            'On the other side she says: ~~it is warm, mister. It smells like you.~~',
-            'A pause. ~~That is alright. We do not mind the smell.~~',
-          ],
-          scales: { invitation: +6, suspicion: +3 },
-          flags: { passed_blanket: true },
-          composure: -2,
-          composureCost: 'They did not mind the smell of me.',
-        };
-      },
-    },
-
-    say_your_own_name: {
-      label: 'say your own name',
-      desc: 'Out loud. Anchor against the pull.',
-      when: (p) => p.flags.path_sympathy && p.scales.invitation >= 10 && !p.flags.anchored,
-      respond(p) {
-        return {
-          lines: [
-            'I say my name. Full. Out loud. Twice. Then my number.',
-            'The room is solid around me. I have stopped reaching for the bolt.',
-            'The shorter one outside says, quietly: ~~that is a good name, mister. You should hear how I would say it.~~',
-            'She has not said it. She is making me ask.',
-          ],
-          scales: { invitation: -5, suspicion: +2 },
-          composure: +2,
-          flags: { anchored: true },
-        };
-      },
-    },
-
-    pull_back_from_the_sympathy: {
-      label: 'pull back',
-      desc: 'Step away from the door. Break the spell.',
-      when: (p) => p.flags.path_sympathy && p.scales.invitation >= 12 && !p.flags.broke_spell,
-      respond(p) {
-        return {
-          lines: [
-            'I step back. I make my feet leave the half-step at the door. I sit on the bed.',
-            'The asking thins. The shorter one says, with the smallest edge: ~~mister. Come back to the door.~~',
-            'It is the first time she has asked me for something other than entry.',
-            'I do not come back to the door.',
-          ],
-          scales: { invitation: -8, suspicion: +6 },
-          flags: { broke_spell: true, path_hostile: true },
+          scales: { suspicion: +3 },
+          flags: { banged_wall: true },
           composure: -1,
-          composureCost: 'She wanted me back at the door.',
+          composureCost: 'She knew which room I was banging toward.',
         };
       },
     },
 
-    // ── QUIET PATH ──
-
-    listen_for_the_dawn: {
-      label: 'listen for the dawn',
-      desc: 'The radiator. The night. The end of the night.',
-      when: (p) => p.flags.path_quiet && !p.flags.heard_dawn,
-      respond(p) {
-        return {
-          lines: [
-            'I stand at the door with my hands in my pockets. The radiator clicks. The pipe in the wall ticks.',
-            'In the corridor, very far away, someone has opened a window. The cold air finds the gap under the door.',
-            'The shorter one shifts on her bare feet. She has nothing to say.',
-            'The night is going to end.',
-          ],
-          scales: { invitation: -3 },
-          composure: +2,
-          flags: { heard_dawn: true },
-        };
-      },
-    },
-
-    // ── POST-DEFENSE — sequential examining from inside ──
+    // ── POST-DEFENSE EXAMINATIONS ──
 
     read_your_own_file: {
       label: 'read your own file',
-      desc: 'It is on the writing chair.',
+      desc: 'It was in the chair.',
+      // The three post-defense examinations chain in order so they
+      // surface one at a time.
       when: (p) => p.flags.chair_wedged && !p.flags.read_file,
       respond(p) {
         return {
@@ -6299,7 +6606,9 @@ const children = {
 
     check_the_window: {
       label: 'check the window',
-      desc: 'The barred one. Look down into the courtyard.',
+      desc: 'The barred one. The courtyard.',
+      // Only after committing to the door and reading the file. The
+      // three post-defense examinations chain in order.
       when: (p) => p.flags.chair_wedged && p.flags.read_file && !p.flags.saw_courtyard,
       respond(p) {
         return {
@@ -6319,7 +6628,7 @@ const children = {
     listen_for_the_corridor: {
       label: 'listen for the corridor',
       desc: 'Past them. Tune them out.',
-      when: (p) => p.flags.chair_wedged && p.flags.saw_courtyard && !p.flags.listened_for_corridor,
+      when: (p) => p.flags.chair_wedged && !p.flags.listened_for_corridor,
       respond(p) {
         return {
           lines: [
@@ -6334,12 +6643,12 @@ const children = {
       },
     },
 
-    // ── EDGE ──
+    // ── EDGE — catastrophic ──
 
     open_the_door_a_crack: {
       label: 'open the door',
-      desc: 'Just to look. Just to check.',
-      when: (p) => p.scales.invitation >= 14 && !p.flags.chair_wedged && !p.flags.chain_set,
+      desc: 'Just to look.',
+      when: (p) => p.scales.invitation >= 16 && !p.flags.chair_wedged && !p.flags.chain_set,
       respond(p) {
         return {
           lines: [
@@ -6363,51 +6672,96 @@ const children = {
     when: () => true,
   },
 
+  // ── INTERJECTIONS — state-driven and behavior-driven ──
+
   interjections: [
 
     {
-      id: 'she_describes_her_mother',
+      id: 'mister_please',
       once: true,
-      when: (p) => p.flags.path_sympathy && p.flags.asked_mother && !p.flags.mother_described,
+      when: (p) => p.flags.engaged && p.scales.invitation >= 6 && !p.flags.told_to_leave,
       prose: [
-        'After a long beat the shorter one says, more quietly: ~~mister. Can I tell you about her? About our mother?~~',
-        'The asking has dropped out of her voice. It is just talking now.',
+        'The shorter one is at the gap under the door. I can see the shadow of her chin.',
+        'She says: !!mister. Please. We are not allowed to come in unless you say.!!',
       ],
       responses: [
         {
-          label: 'tell me',
-          desc: 'Listen.',
+          label: 'who told you that',
+          desc: 'Pull the thread.',
           lines: [
-            'I say: tell me.',
-            'She does. For some minutes. About a kitchen, and a dog, and a song their mother sang in the kitchen.',
-            'When she is done, my throat is tight. The shorter one says: ~~thank you for listening, mister.~~',
+            'I say: who told you that. About needing me to say.',
+            'She does not answer. The taller one says, from further back: ~~she is not supposed to tell you. We are not supposed to talk about that part.~~',
+            'The shorter one repeats it urgently to herself: ~~we are not supposed to talk about that part.~~',
           ],
-          scales: { invitation: +6, suspicion: -1 },
+          scales: { suspicion: +6 },
+          flags: { learned_rule: true },
+        },
+        {
+          label: 'I am not saying',
+          desc: 'Refuse plainly.',
+          lines: [
+            'I say: I am not saying.',
+            'She is quiet for a long beat. Then: ~~that is alright. We can wait. We are very good at waiting.~~',
+          ],
+          scales: { invitation: -3, suspicion: +2 },
+        },
+        {
+          label: 'just for a minute',
+          desc: 'Concede.',
+          lines: [
+            'I say: just for a minute.',
+            'The bolt slides back without my hand on it. The chain rattles in the keep.',
+            'The shorter one says: ~~thank you, mister. We will be quick.~~',
+          ],
+          scales: { invitation: +8, latch: -8 },
           composure: -3,
-          composureCost: 'My throat was tight when she was done.',
-          flags: { mother_described: true, was_listened_to: true },
+          composureCost: '!!The bolt moved when I said the word.!!',
+          flags: { said_yes: true },
         },
+      ],
+    },
+
+    {
+      id: 'we_know_you',
+      once: true,
+      when: (p) => p.flags.asked_names && p.scales.suspicion <= 14,
+      prose: [
+        'The shorter one says my given name. The full version. The one my mother used.',
+        'Then she says it again, with the diminutive. The one only my father used.',
+        'She says: ~~we know you too, mister. Now we have both said.~~',
+      ],
+      responses: [
         {
-          label: 'I cannot',
-          desc: 'Refuse.',
+          label: 'how do you know it',
+          desc: 'Ask.',
           lines: [
-            'I say: I cannot. I am sorry. I cannot listen to that right now.',
-            'There is a quiet. The shorter one says: ~~that is alright, mister. It is alright to not be ready.~~',
+            'I say: how do you know my name.',
+            'She says: ~~it is on you. You have been wearing it.~~ Then, quieter: ~~we always know what people are wearing.~~',
           ],
-          scales: { invitation: +2 },
-          composure: -1,
-          composureCost: 'She gave me permission to not be ready.',
-          flags: { mother_described: true },
+          scales: { suspicion: +5 },
+          flags: { they_know_name: true },
         },
         {
-          label: 'stop',
-          desc: 'Pull yourself back.',
+          label: 'you do not know me',
+          desc: 'Reject the claim.',
           lines: [
-            'I say: stop. I am not who you think I am.',
-            'There is a long beat. The shorter one says: ~~that is alright, mister. We do not need you to be.~~',
+            'I say: no, you do not.',
+            'She says, gently: ~~that is alright. You can pretend, mister.~~',
           ],
           scales: { suspicion: +3, invitation: -2 },
-          flags: { mother_described: true, pulled_back: true },
+          composure: -1,
+          composureCost: 'She gave me permission to pretend.',
+        },
+        {
+          label: 'say it again',
+          desc: 'Make her speak it twice.',
+          lines: [
+            'I say: say it again. The diminutive.',
+            'She does. The same way, both times. The cadence is not a child\'s.',
+          ],
+          scales: { suspicion: +4, invitation: +2 },
+          composure: -2,
+          composureCost: 'The cadence was not a child\'s.',
         },
       ],
     },
@@ -6415,7 +6769,8 @@ const children = {
     {
       id: 'taller_speaks',
       once: true,
-      when: (p) => p.flags.path_hostile && !p.flags.taller_spoken,
+      when: (p) => (p.flags.tested || p.flags.threatened || p.flags.confronted_rehearsal)
+        && !p.flags.taller_spoken,
       prose: [
         'The taller one speaks for the first time at full volume. His voice is older than his height.',
         'He says: ~~mister. We will not ask much longer.~~',
@@ -6461,45 +6816,46 @@ const children = {
     },
 
     {
-      id: 'one_before',
+      id: 'she_narrates_me',
       once: true,
-      when: (p) => p.flags.one_before,
+      when: (p) => p.scales.suspicion >= 12 && p.flags.engaged && !p.flags.chain_set
+        && !p.flags.she_narrated,
       prose: [
-        'The shorter one says, after the taller has gone quiet: ~~the one before you let us in. He was nice.~~',
-        'She says: ~~he is at the end of the corridor now. With the orderly.~~',
+        'The shorter one says, with no question in her voice: ~~he is at the bolt. He is touching the chain. He has stepped back.~~',
+        'I have not moved.',
       ],
       responses: [
         {
-          label: 'what did he do',
-          desc: 'Make her describe it.',
+          label: 'stop talking',
+          desc: 'Loudly.',
           lines: [
-            'I say: what did he do for you.',
-            'She is quiet. The taller one says: ~~he opened the door. He sat down on the bed. He let us tuck him in.~~',
-            'The shorter one says: ~~he was very tired. He had been very tired for a long time.~~',
+            'I say: stop talking.',
+            'She says, evenly: ~~he said stop. He is standing very still.~~',
           ],
-          scales: { suspicion: +5, invitation: +3 },
+          scales: { suspicion: +4, invitation: -1 },
+          flags: { she_narrated: true },
+        },
+        {
+          label: 'narrate her back',
+          desc: 'Describe her.',
+          lines: [
+            'I say: you are at the gap. Your hair is wet. The taller one is behind you, not breathing in time with you.',
+            'She is quiet. The taller one says: ~~he has been watching.~~ Not a question.',
+          ],
+          scales: { suspicion: +6, invitation: -2 },
+          flags: { she_narrated: true, you_narrated_them: true },
+        },
+        {
+          label: 'do not answer',
+          desc: 'Let her narrate.',
+          lines: [
+            'I do not answer. She narrates for a long time. Each thing she says is true.',
+            'When she stops, the corridor is quiet. I have not moved any of the things she described.',
+          ],
+          scales: { suspicion: +3, invitation: +3 },
           composure: -3,
-          composureCost: 'They tucked him in.',
-        },
-        {
-          label: 'I am not him',
-          desc: 'Decline the role.',
-          lines: [
-            'I say: I am not him. I am not the one before me.',
-            'She says: ~~we know, mister. We have to ask anyway. It is the rule.~~',
-          ],
-          scales: { invitation: -3, suspicion: +3 },
-        },
-        {
-          label: 'go to him then',
-          desc: 'Pass the buck.',
-          lines: [
-            'I say: go to him, then.',
-            'She says: ~~he is not asking anymore. He has finished asking.~~',
-          ],
-          scales: { suspicion: +5, invitation: +1 },
-          composure: -2,
-          composureCost: 'He has finished asking.',
+          composureCost: 'Each thing she said was true.',
+          flags: { she_narrated: true, let_her_narrate: true },
         },
       ],
     },
@@ -6554,51 +6910,6 @@ const children = {
     },
 
     {
-      id: 'they_sing',
-      once: true,
-      when: (p) => p.turn >= 6 && !p.flags.they_sang
-        && !p.flags.path_hostile && !p.flags.path_sympathy
-        && p.scales.suspicion <= 14,
-      prose: [
-        'They begin to sing. Both of them. The shorter one is on key. The taller one is half a step lower.',
-        'It is a song I know. I do not know how I know it.',
-      ],
-      responses: [
-        {
-          label: 'sing the next line',
-          desc: 'Match them. Catch them out.',
-          lines: [
-            'I sing the next line of the song. I have the right words.',
-            'They stop. The shorter one says: ~~no, mister. We do not know that line.~~',
-            'I sing it again. They do not pick it up. The song has stopped.',
-          ],
-          scales: { suspicion: +4, invitation: -3 },
-          flags: { they_sang: true, caught_song: true },
-        },
-        {
-          label: 'sing your own song',
-          desc: 'Drown them out.',
-          lines: [
-            'I sing. Anything. The first song that comes to me. Loudly.',
-            'They wait until I am finished. Then they pick up at the same line they were on.',
-          ],
-          scales: { invitation: -2, suspicion: +1 },
-          flags: { they_sang: true },
-        },
-        {
-          label: 'do not sing',
-          desc: 'Let them sing alone.',
-          lines: [
-            'I do not sing. They sing the whole song through. Their voices come into harmony for the chorus.',
-            'When they finish, they go quiet.',
-          ],
-          scales: { invitation: +3, suspicion: +1 },
-          flags: { they_sang: true, listened_to_song: true },
-        },
-      ],
-    },
-
-    {
       id: 'orderly_glance',
       once: true,
       when: (p) => p.flags.orderly_alerted && !p.flags.orderly_seen,
@@ -6648,7 +6959,7 @@ const children = {
     {
       id: 'one_word',
       once: true,
-      when: (p) => p.flags.path_sympathy && p.scales.invitation >= 12 && !p.flags.one_word_offered,
+      when: (p) => p.scales.invitation >= 12 && !p.flags.one_word_offered && !p.flags.chair_wedged,
       prose: [
         'The shorter one says, very gently: ~~mister. We only need one word from you.~~',
         'The taller one is quiet behind her. The shorter one says: ~~we know which word.~~',
@@ -6661,7 +6972,7 @@ const children = {
             'I say: I am not saying.',
             'There is a long beat. The shorter one says: ~~we can wait until you say it. We have all night.~~',
           ],
-          scales: { invitation: +2, suspicion: +3 },
+          scales: { invitation: +1, suspicion: +3 },
           flags: { one_word_offered: true, refused_word: true },
         },
         {
@@ -6694,46 +7005,92 @@ const children = {
     },
 
     {
-      id: 'she_narrates_me',
+      id: 'she_describes_her_mother',
       once: true,
-      when: (p) => p.scales.suspicion >= 12 && p.flags.engaged && !p.flags.she_narrated
-        && !p.flags.path_sympathy,
+      when: (p) => p.flags.asked_mother && !p.flags.mother_described,
       prose: [
-        'The shorter one says, with no question in her voice: ~~he is at the bolt. He is touching the chain. He has stepped back.~~',
-        'I have not moved.',
+        'After a long beat the shorter one says, more quietly: ~~mister. Can I tell you about her? About our mother?~~',
+        'The asking has dropped out of her voice. It is just talking now.',
       ],
       responses: [
         {
-          label: 'stop talking',
-          desc: 'Loudly.',
+          label: 'tell me',
+          desc: 'Listen.',
           lines: [
-            'I say: stop talking.',
-            'She says, evenly: ~~he said stop. He is standing very still.~~',
+            'I say: tell me.',
+            'She does. For some minutes. About a kitchen, and a dog, and a song their mother sang in the kitchen.',
+            'When she is done, my throat is tight. The shorter one says: ~~thank you for listening, mister.~~',
           ],
-          scales: { suspicion: +4, invitation: -1 },
-          flags: { she_narrated: true },
-        },
-        {
-          label: 'narrate her back',
-          desc: 'Describe her.',
-          lines: [
-            'I say: you are at the gap. Your hair is wet. The taller one is behind you, not breathing in time with you.',
-            'She is quiet. The taller one says: ~~he has been watching.~~ Not a question.',
-          ],
-          scales: { suspicion: +6, invitation: -2 },
-          flags: { she_narrated: true, you_narrated_them: true },
-        },
-        {
-          label: 'do not answer',
-          desc: 'Let her narrate.',
-          lines: [
-            'I do not answer. She narrates for a long time. Each thing she says is true.',
-            'When she stops, the corridor is quiet. I have not moved any of the things she described.',
-          ],
-          scales: { suspicion: +3, invitation: +3 },
+          scales: { invitation: +6, suspicion: -1 },
           composure: -3,
-          composureCost: 'Each thing she said was true.',
-          flags: { she_narrated: true, let_her_narrate: true },
+          composureCost: 'My throat was tight when she was done.',
+          flags: { mother_described: true, was_listened_to: true },
+        },
+        {
+          label: 'I cannot',
+          desc: 'Refuse.',
+          lines: [
+            'I say: I cannot. I am sorry. I cannot listen to that right now.',
+            'There is a quiet. The shorter one says: ~~that is alright, mister. It is alright to not be ready.~~',
+          ],
+          scales: { invitation: +2 },
+          composure: -1,
+          composureCost: 'She gave me permission to not be ready.',
+          flags: { mother_described: true },
+        },
+        {
+          label: 'stop',
+          desc: 'Pull yourself back.',
+          lines: [
+            'I say: stop. I am not who you think I am.',
+            'There is a long beat. The shorter one says: ~~that is alright, mister. We do not need you to be.~~',
+          ],
+          scales: { suspicion: +3, invitation: -2 },
+          flags: { mother_described: true, pulled_back: true },
+        },
+      ],
+    },
+
+    {
+      id: 'they_sing',
+      once: true,
+      when: (p) => p.turn >= 6 && !p.flags.they_sang && p.scales.suspicion <= 14
+        && p.scales.invitation <= 12,
+      prose: [
+        'They begin to sing. Both of them. The shorter one is on key. The taller one is half a step lower.',
+        'It is a song I know. I do not know how I know it.',
+      ],
+      responses: [
+        {
+          label: 'sing the next line',
+          desc: 'Match them. Catch them out.',
+          lines: [
+            'I sing the next line of the song. I have the right words.',
+            'They stop. The shorter one says: ~~no, mister. We do not know that line.~~',
+            'I sing it again. They do not pick it up. The song has stopped.',
+          ],
+          scales: { suspicion: +4, invitation: -3 },
+          flags: { they_sang: true, caught_song: true },
+        },
+        {
+          label: 'sing your own song',
+          desc: 'Drown them out.',
+          lines: [
+            'I sing. Anything. The first song that comes to me. Loudly.',
+            'They wait until I am finished. Then they pick up at the same line they were on.',
+          ],
+          scales: { invitation: -2, suspicion: +1 },
+          flags: { they_sang: true },
+        },
+        {
+          label: 'do not sing',
+          desc: 'Let them sing alone.',
+          lines: [
+            'I do not sing. They sing the whole song through. Their voices come into harmony for the chorus.',
+            'When they finish, they go quiet.',
+          ],
+          scales: { invitation: +3, suspicion: +1 },
+          flags: { they_sang: true, listened_to_song: true },
         },
       ],
     },
@@ -6773,7 +7130,7 @@ const children = {
         composureCost: 'She is being patient.',
       };
     }
-    if (p.flags.path_sympathy) {
+    if (p.flags.mother_described) {
       return {
         lines: [
           'I do nothing. The shorter one tells me a little more. About a window in her old kitchen. About a song her mother sang at it.',
@@ -6784,7 +7141,7 @@ const children = {
         composureCost: 'I had crossed the floor without remembering.',
       };
     }
-    if (p.flags.path_hostile) {
+    if (p.scales.suspicion >= 12) {
       return {
         lines: [
           'I do nothing. Neither do they. The corridor is quiet. The breathings have synced up.',
@@ -6821,8 +7178,8 @@ const children = {
     },
     {
       id: 'ground_them_down',
-      when: (p) => p.flags.path_hostile && p.scales.suspicion >= 16 && p.scales.invitation <= 4
-        && p.flags.chair_wedged,
+      when: (p) => p.scales.suspicion >= 16 && p.scales.invitation <= 4
+        && p.flags.chair_wedged && (p.flags.threatened || p.flags.tested),
       title: 'You ground them down',
       lines: [
         'I have been at the door a long time. I have answered every ask with a no.',
@@ -6834,11 +7191,11 @@ const children = {
     },
     {
       id: 'outwaited',
-      when: (p) => p.flags.path_quiet && p.flags.chair_wedged && p.flags.heard_dawn
-        && p.turn >= 9,
+      when: (p) => p.scales.suspicion >= 14 && p.scales.latch >= 14 && p.turn >= 12
+        && !p.flags.engaged,
       title: 'You outwait them',
       lines: [
-        'The asking has thinned. The shorter one is still trying but the spaces between have grown.',
+        'I have not spoken to them. The asking has thinned. The spaces between have grown.',
         'The taller one says, finally: ~~he is not going to let us in. We have to go.~~',
         'They step back from the door. Their footprints are wet on the linoleum.',
         'In the morning, the prints are still there. The orderly photographs them. He does not look at me when he does.',
@@ -6847,8 +7204,8 @@ const children = {
     },
     {
       id: 'broke_spell',
-      when: (p) => p.flags.path_sympathy && p.flags.broke_spell && p.flags.anchored
-        && p.scales.invitation <= 8,
+      when: (p) => (p.flags.bit_cheek || p.flags.said_name) && p.flags.mother_described
+        && p.scales.invitation <= 8 && p.scales.suspicion >= 8,
       title: 'You broke the spell',
       lines: [
         'I am at the bed. I am not at the door. I do not go to the door even when she asks.',
