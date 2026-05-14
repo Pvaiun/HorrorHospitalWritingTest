@@ -102,7 +102,10 @@ export function beginEncounter(patientDef, player) {
     _revealedFile: [],     // indices of file lines uncovered through play
     _knownBands: {},       // scale-key → last seen band index (for cross detection)
     _totalScaleMovement: 0, // running sum of |actual scale deltas| — drives file reveals
+    activeSpoke: null,     // { spokeId, nodeId } while traversing a spoke; null at hub
+    hubState: null,        // cached named hub state; recomputed on hub re-entry
   };
+  state.enc.hubState = getHubState(patient, player);
   // seed _knownBands so the first turn's cross-messages are meaningful
   for (const k of Object.keys(patient.scales)) {
     state.enc._knownBands[k] = bandIndex(patient, k);
@@ -124,39 +127,49 @@ async function runEncounterIntro() {
     pushLog({ text: l, cls: 'intro' });
     await drainLog();
   }
-  // a patient may interject immediately if their opening condition matches.
-  await maybeFireInterjection();
+  // Legacy patients may interject immediately if the opening condition
+  // matches. Spoke patients surface urgent spokes in the hub menu instead.
+  if (!enc.patient.def.spokes) {
+    await maybeFireInterjection();
+  } else {
+    enc.hubState = getHubState(enc.patient, enc.player);
+  }
   state.acting = false;
   enc.awaitingPlayer = true;
   render();
 }
 
-// ─── verb / interjection dispatch ──────────────────────────────────────
+// ─── verb / spoke / interjection dispatch ──────────────────────────────
 //
-// Verbs are no longer gated by composure cost. Composure is your run-long
-// health track; you lose it as a CONSEQUENCE of risky verbs or patient
-// reactions, never as a precondition to act.
+// Patients can declare two conversation styles. Both can coexist, but
+// a single patient is usually one or the other.
 //
-// Verbs can declare a `when(patient, player)` predicate; the UI hides
-// verbs whose predicate returns false. So the available action set shifts
-// as the patient changes state — different scales surface different
-// possibilities.
+// LEGACY (verbs + interjections): each `verb` is a one-shot hub action
+// with a single authored response; `interjections` fire automatically
+// when their `when(p, player)` matches and present one layer of choices.
 //
-// Interjections are patient-initiated turns. Each patient may declare a
-// list of interjections (`{ id, when, once?, prose: [...], responses: [...] }`).
-// When the player would normally act, we check interjections first; if
-// one fires, its responses replace the verb menu for that turn.
+// SPOKES (hub + multi-node sub-conversations): the patient declares a
+// `hubState(p, player)` that names the current scene, and a `spokes`
+// map. Each spoke has its own internal node graph; a player choice
+// can route to another node, loop back, or exit to the hub. Spokes
+// can be marked `urgent` to surface in the menu with a different style
+// (replacing the old "interjection" forced-turn behavior). Hub re-entry
+// recomputes `enc.hubState` (or a spoke's exit can force it).
 //
-// `patient.flags.lastVerb` and `patient.flags.streak` are tracked by the
-// engine so authored responses can branch when the player repeats a verb.
+// `patient.flags.lastVerb` and `patient.flags.streak` track legacy verb
+// repetition. For spokes, `lastVerb` is set to `spoke:<id>` on entry.
 
 export async function playerVerb(verbId) {
   const enc = state.enc;
   if (!enc || !enc.awaitingPlayer || state.acting) return;
   state.acting = true;
   enc.awaitingPlayer = false;
-  if (enc.activeInterjection) {
+  if (enc.activeSpoke) {
+    await runSpokeChoice(parseInt(verbId, 10));
+  } else if (enc.activeInterjection) {
     await runInterjectionResponse(parseInt(verbId, 10));
+  } else if (typeof verbId === 'string' && verbId.startsWith('spoke:')) {
+    await enterSpoke(verbId.slice(6));
   } else {
     await runPlayerVerb(verbId);
   }
@@ -231,6 +244,188 @@ async function runPlayerItem(itemId) {
   await applyResponse(resp);
 }
 
+// ─── spoke dispatch ─────────────────────────────────────────────────────
+
+export function getHubState(pat, player) {
+  if (typeof pat.def.hubState === 'function') {
+    try { return pat.def.hubState(pat, player) || 'default'; }
+    catch (e) { console.error('hubState error', pat.id, e); return 'default'; }
+  }
+  return 'default';
+}
+
+// Build a response object from a node or a choice's inline-effect bundle.
+// Each effect field — and individual entries within array/object fields —
+// may be authored as a value OR as a function of (patient, player).
+// We deep-evaluate here so node authors can interleave conditional
+// prose lines and stateful scale/flag values without scaffolding.
+function buildSpokeResponse(obj, pat, player) {
+  if (!obj) return null;
+  const callFn = (v) => {
+    try { return v(pat, player); }
+    catch (e) { console.error('spoke field eval', e); return undefined; }
+  };
+  const evalDeep = (v) => {
+    if (typeof v === 'function') v = callFn(v);
+    if (Array.isArray(v)) {
+      return v.map(item => (typeof item === 'function') ? callFn(item) : item)
+              .filter(item => item !== undefined && item !== null);
+    }
+    if (v && typeof v === 'object') {
+      const out = {};
+      for (const [k, val] of Object.entries(v)) {
+        out[k] = (typeof val === 'function') ? callFn(val) : val;
+      }
+      return out;
+    }
+    return v;
+  };
+  const out = {};
+  for (const k of ['lines', 'scales', 'flags', 'composure', 'scars',
+                   'effects', 'playerEffects']) {
+    if (obj[k] !== undefined) out[k] = evalDeep(obj[k]);
+  }
+  if (obj.composureCost) out.composureCost = obj.composureCost;
+  if (obj.callout) out.callout = obj.callout;
+  if (obj.shake) out.shake = obj.shake;
+  return out;
+}
+
+async function enterSpoke(spokeId) {
+  const enc = state.enc;
+  const pat = enc.patient;
+  const player = enc.player;
+  const spoke = (pat.def.spokes || {})[spokeId];
+  if (!spoke) {
+    pushLog({ text: 'I cannot do that here.', cls: 'flavor' });
+    await drainLog();
+    state.acting = false; enc.awaitingPlayer = true; render();
+    return;
+  }
+  const hub = enc.hubState;
+  let entryNodeId;
+  try {
+    entryNodeId = (typeof spoke.entry === 'function')
+      ? spoke.entry(pat, player, hub)
+      : spoke.entry;
+  } catch (e) {
+    console.error('spoke.entry error', spokeId, e);
+    state.acting = false; enc.awaitingPlayer = true; render();
+    return;
+  }
+  enc.activeSpoke = { spokeId, nodeId: null };
+  pat.flags.lastVerb = `spoke:${spokeId}`;
+  pat.flags.streak = 1;
+  await enterSpokeNode(entryNodeId);
+}
+
+async function enterSpokeNode(nodeId) {
+  const enc = state.enc;
+  const pat = enc.patient;
+  const player = enc.player;
+  const spoke = pat.def.spokes[enc.activeSpoke.spokeId];
+  const node = spoke.nodes[nodeId];
+  if (!node) {
+    console.error('missing spoke node', enc.activeSpoke.spokeId, nodeId);
+    await exitSpokeToHub();
+    return;
+  }
+  enc.activeSpoke.nodeId = nodeId;
+  const resp = buildSpokeResponse(node, pat, player);
+  await applyResponse(resp);
+  if (state.shownLogIdx < state.log.length - 1) await drainLog();
+
+  // Endings + collapse can fire mid-spoke if a node's effects push them.
+  const ending = checkEndings(pat, player);
+  if (ending) { await fireEnding(ending); return; }
+  if (player.composure <= 0) { await fireCollapse(); return; }
+
+  state.acting = false;
+  enc.awaitingPlayer = true;
+  render();
+}
+
+async function runSpokeChoice(idx) {
+  const enc = state.enc;
+  const pat = enc.patient;
+  const player = enc.player;
+  const spoke = pat.def.spokes[enc.activeSpoke.spokeId];
+  const node = spoke.nodes[enc.activeSpoke.nodeId];
+  const rawChoices = (typeof node.choices === 'function')
+    ? node.choices(pat, player)
+    : (node.choices || []);
+  const visible = rawChoices.filter(c => {
+    if (typeof c.when !== 'function') return true;
+    try { return !!c.when(pat, player); } catch (e) { return false; }
+  });
+  const choice = visible[idx];
+  if (!choice) {
+    state.acting = false; enc.awaitingPlayer = true; render();
+    return;
+  }
+
+  // Normalize the `goto` form. Shorthand string → object.
+  let g = choice.goto;
+  if (typeof g === 'string') g = { to: g };
+  if (!g) g = { to: 'hub' };
+
+  // Inline beat effects on the choice itself fire first.
+  const inlineResp = buildSpokeResponse(g, pat, player);
+  // strip routing fields from the response payload before applying
+  if (inlineResp) {
+    delete inlineResp.to;
+    delete inlineResp.forceState;
+    delete inlineResp.hub;
+  }
+  await applyResponse(inlineResp);
+  if (state.shownLogIdx < state.log.length - 1) await drainLog();
+
+  const ending = checkEndings(pat, player);
+  if (ending) { await fireEnding(ending); return; }
+  if (player.composure <= 0) { await fireCollapse(); return; }
+
+  if (g.to === 'hub' || g.hub === true) {
+    await exitSpokeToHub(g.forceState);
+  } else if (g.to === 'self') {
+    const hub = enc.hubState;
+    let entryNodeId;
+    try {
+      entryNodeId = (typeof spoke.entry === 'function')
+        ? spoke.entry(pat, player, hub)
+        : spoke.entry;
+    } catch (e) { entryNodeId = null; }
+    if (entryNodeId) await enterSpokeNode(entryNodeId);
+    else await exitSpokeToHub();
+  } else if (g.to) {
+    await enterSpokeNode(g.to);
+  } else {
+    await exitSpokeToHub();
+  }
+}
+
+async function exitSpokeToHub(forceState) {
+  const enc = state.enc;
+  const pat = enc.patient;
+  const player = enc.player;
+  enc.activeSpoke = null;
+  pat.turn++;
+  enc.hubState = forceState || getHubState(pat, player);
+
+  const ending = checkEndings(pat, player);
+  if (ending) { await fireEnding(ending); return; }
+  if (player.composure <= 0) { await fireCollapse(); return; }
+
+  // Spoke-based patients surface urgent spokes in the hub menu — no
+  // auto-fire interjection here. Legacy interjections only fire for
+  // patients that don't define spokes at all.
+  if (!pat.def.spokes) {
+    await maybeFireInterjection();
+  }
+  state.acting = false;
+  enc.awaitingPlayer = true;
+  render();
+}
+
 async function runInterjectionResponse(idx) {
   const enc = state.enc;
   const pat = enc.patient;
@@ -246,7 +441,9 @@ async function runInterjectionResponse(idx) {
 }
 
 // Common end-of-turn handler: check endings, then composure, then maybe
-// fire an interjection before handing back to the player.
+// fire an interjection before handing back to the player. Spoke-based
+// patients skip the auto-interjection step — their urgent spokes appear
+// in the menu directly, instead of seizing a turn.
 async function postTurn() {
   const enc = state.enc;
   const p = enc.player;
@@ -254,8 +451,11 @@ async function postTurn() {
   const ending = checkEndings(pat, p);
   if (ending) { await fireEnding(ending); return; }
   if (p.composure <= 0) { await fireCollapse(); return; }
-  // Look for an interjection to fire before the next player turn.
-  await maybeFireInterjection();
+  if (pat.def.spokes) {
+    enc.hubState = getHubState(pat, p);
+  } else {
+    await maybeFireInterjection();
+  }
   state.acting = false;
   enc.awaitingPlayer = true;
   render();
