@@ -656,10 +656,10 @@ async function checkFileReveals(pat) {
                   : (DEFAULT_REVEAL_THRESHOLDS[nextIdx] ?? 99);
   if ((enc._totalScaleMovement || 0) < threshold) return;
   enc._revealedFile.push(nextIdx);
-  // The new line appears in the patient's file panel on the next render.
-  // We play a small ding so the player notices the panel changed; no
-  // log entry, no content mirror.
-  sfx('ding');
+  // The log notifies that a line has become legible. The content itself
+  // appears in the patient's file panel above, so we don't mirror it.
+  pushLog({ text: "The patient's file becomes clearer.", cls: 'reveal' });
+  await drainLog();
 }
 
 function shiftScale(pat, key, delta) {

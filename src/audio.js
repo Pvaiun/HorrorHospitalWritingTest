@@ -35,6 +35,5 @@ export function sfx(type) {
     case 'victory': slide(440, 880, 0.18, 'sine', 0.18); setTimeout(() => slide(660, 1100, 0.22, 'sine', 0.15), 180); break;
     case 'capture': slide(330, 770, 0.22, 'triangle', 0.16); break;
     case 'levelup': slide(660, 990, 0.18, 'sine', 0.12); setTimeout(() => slide(880, 1320, 0.18, 'sine', 0.12), 160); break;
-    case 'ding':    tone(1318, 0.08, 'sine', 0.10); setTimeout(() => tone(1760, 0.5, 'sine', 0.08), 70); break;
   }
 }
