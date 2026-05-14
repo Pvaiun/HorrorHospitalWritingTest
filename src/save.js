@@ -13,7 +13,7 @@ const STARTING_WOUNDS  = ['amnesia', 'insomnia', 'split_personality'];
 // the final slot.
 const STARTING_PATIENTS = [
   'pram', 'patriarch', 'soothlick', 'glimmer', 'frostfin', 'hollow', 'mire', 'composer',
-  'roommate', 'visitor', 'surgeon', 'twin',
+  'children', 'sculpture', 'plague', 'weight',
   'choir',
 ];
 

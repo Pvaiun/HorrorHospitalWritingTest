@@ -29,7 +29,7 @@ export function startNewRun(wound, startingItem) {
   // ascending threat order — every run faces the same sequence before
   // the choir.
   const finalId = 'choir';
-  const fixedWingOrder = ['roommate', 'visitor', 'surgeon', 'twin'];
+  const fixedWingOrder = ['children', 'sculpture', 'plague', 'weight'];
   const chosenPatients = fixedWingOrder
     .filter(id => PATIENTS[id])
     .slice(0, RUN_DEPTH);
