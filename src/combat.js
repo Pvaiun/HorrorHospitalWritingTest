@@ -472,13 +472,14 @@ async function maybeFireInterjection() {
   const enc = state.enc;
   const pat = enc.patient;
   const player = enc.player;
+  const hub = enc.hubState;
   if (enc.activeSpoke) return false;
   for (const intr of pat.def.interjections || []) {
     if (intr.once && pat.flags['_fired_' + intr.id]) continue;
     const last = pat.flags._lastInterjectionTurn;
     if (!intr.allowBackToBack && last != null && pat.turn <= last + 1) continue;
     let matches = false;
-    try { matches = !!intr.when(pat, player); } catch (e) { console.error('interjection when', intr.id, e); }
+    try { matches = !!intr.when(pat, player, hub); } catch (e) { console.error('interjection when', intr.id, e); }
     if (!matches) continue;
     await fireInterjection(intr);
     return true;
