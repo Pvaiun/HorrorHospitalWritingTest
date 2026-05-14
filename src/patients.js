@@ -5554,10 +5554,15 @@ const composer = {
 // Folklore: the Black-Eyed Children. Two of them are in the corridor. They
 // want to be let in. They knock politely. They use words a child would
 // know. The pressure is on the door, not on you — until the door gives.
-// Three paths:
+// The encounter is mostly conversation through the wood: politeness from
+// them, doubts from you, the bolt sliding without your hand on it.
+//
+// Paths:
 //   - Shout the orderly down: the corridor wakes up; they fade back.
-//   - Bolt the door and outwait: you don't have to be brave to refuse.
+//   - Bolt and chain, then outlast: you don't have to be brave to refuse.
 //     You only have to not open it.
+//   - Catch them: ask the question they cannot answer, see the wrong
+//     thing through the peephole. They abandon the door when seen.
 //   - Let them in: it does not take long after that.
 
 const children = {
@@ -5570,82 +5575,100 @@ const children = {
     'Subject reports two minors in the corridor outside Ward 1, both barefoot.',
     'Staff have not seen them. The night camera ~~has~~ has not.',
     'The minors have requested admission [[7]] times in three hours. !!They have not been let in.!!',
+    'Taller minor wears a uniform consistent with St. Anselm\'s. ~~St. Anselm\'s was demolished in [[1947]].~~',
+    'Shorter minor has referred to Subject by ~~a given name not on the admission card.~~',
+    'Night nurse declines to walk past the door. !!She has been a nurse here for [[31]] years.!!',
   ],
   intro: [
     'The door is closed. The bolt is set. There is a small brass peephole.',
-    'Two voices in the corridor. One taller. One shorter.',
-    'The shorter one knocks. Three taps. Then: !!mister. Please. Can we come in?!!',
+    'I have been listening to them for a long time. Longer than the hour I have been awake.',
+    'Two voices in the corridor. One taller. One shorter. The shorter one does the talking.',
+    'She knocks. Three taps. Even pressure. The way a child is taught to knock.',
+    'She says: !!mister. Please. Can we come in?!!',
   ],
 
   scales: {
     invitation: {
-      initial: 2, min: 0, max: 10, label: 'invitation', kind: 'negative',
+      initial: 4, min: 0, max: 20, label: 'invitation', kind: 'negative',
       bands: [
         { at: 0, word: 'refused' },
-        { at: 3, word: 'asked again' },
-        { at: 5, word: 'considered' },
-        { at: 7, word: 'almost yes' },
-        { at: 9, word: 'spoken' },
+        { at: 4, word: 'asked again' },
+        { at: 8, word: 'considered' },
+        { at: 12, word: 'leaning yes' },
+        { at: 16, word: 'almost spoken' },
+        { at: 19, word: 'said' },
       ],
       crossUp: {
-        2: 'The taller one has stopped asking. The shorter one is asking.',
+        2: 'The shorter one has changed how she asks.',
         3: 'I have caught myself reaching for the bolt.',
         4: '!!My hand is on the bolt. I do not remember putting it there.!!',
+        5: '!!The word is in my mouth. I have not bitten down on it yet.!!',
       },
       crossDown: {
-        1: 'My hand has come back from the bolt.',
-        0: 'I have stepped away from the door.',
+        2: 'My hand has come back from the bolt.',
+        1: 'I have stepped away from the door.',
+        0: 'I have stopped considering it.',
       },
     },
     latch: {
-      initial: 7, min: 0, max: 10, label: 'the bolt', kind: 'positive',
+      initial: 14, min: 0, max: 20, label: 'the bolt', kind: 'positive',
       bands: [
         { at: 0, word: 'turning' },
-        { at: 3, word: 'loose' },
-        { at: 5, word: 'set' },
-        { at: 7, word: 'dropped' },
-        { at: 9, word: 'doubled' },
+        { at: 4, word: 'past the keep' },
+        { at: 8, word: 'loose' },
+        { at: 12, word: 'set' },
+        { at: 16, word: 'dropped' },
+        { at: 19, word: 'chained' },
       ],
       crossUp: {
         3: 'The bolt is fully dropped. Both of my hands are off it.',
+        4: '!!The chain is across. The door is doubled.!!',
       },
       crossDown: {
-        3: 'The bolt has eased back by a quarter turn.',
-        2: 'The bolt is loose in its housing.',
-        1: 'The bolt is barely catching.',
-        0: '!!The bolt has turned itself the rest of the way.!!',
+        4: 'The bolt has eased back by a quarter turn.',
+        3: 'The bolt is loose in its housing.',
+        2: 'The bolt is barely catching.',
+        1: '!!The bolt has turned itself the rest of the way.!!',
+        0: 'The door is held by the frame alone.',
       },
     },
     suspicion: {
-      initial: 1, min: 0, max: 10, label: 'suspicion', kind: 'positive',
+      initial: 2, min: 0, max: 20, label: 'suspicion', kind: 'positive',
       bands: [
         { at: 0, word: 'none' },
-        { at: 2, word: 'noticing' },
-        { at: 5, word: 'wrong' },
-        { at: 7, word: 'sure' },
-        { at: 9, word: 'not children' },
+        { at: 4, word: 'noticing' },
+        { at: 8, word: 'wrong' },
+        { at: 12, word: 'sure' },
+        { at: 16, word: 'certain' },
+        { at: 19, word: 'not children' },
       ],
       crossUp: {
         2: 'Something about the cadence is off. I cannot name it.',
         3: 'They are using a phrase a child would not put together.',
         4: '!!They are not children. I do not know what they are.!!',
+        5: 'Whatever they are, they have been here a long time. The corridor remembers them.',
       },
       crossDown: { 1: 'I have talked myself out of what I noticed.' },
     },
   },
 
   initialize(p, player) {
-    p.scales.invitation = 2;
-    p.scales.latch = 7;
-    p.scales.suspicion = 1;
-    if (player.scars?.includes('named')) p.scales.invitation = 3;
-    if (player.wound === 'amnesia') p.scales.latch -= 1;
+    p.scales.invitation = 4;
+    p.scales.latch = 14;
+    p.scales.suspicion = 2;
+    if (player.scars?.includes('named')) p.scales.invitation = 6;
+    if (player.scars?.includes('abandoned')) p.scales.latch = 12;
+    if (player.wound === 'amnesia') p.scales.latch -= 2;
+    if (player.wound === 'insomnia') p.scales.suspicion = 4;
   },
 
   fileReveals: [
-    { announce: 'A line fills in. The minors have asked at three doors before mine. ~~All three refused.~~ All three.' },
-    { announce: 'Another. The shorter one knows my given name. ~~The given name is not on my admission card.~~' },
-    { announce: 'The last line. !!The black of their eyes goes to the lid.!!' },
+    { at: 4,  announce: 'A line fills in. The minors have asked at three doors before mine. ~~All three refused.~~ All three.' },
+    { at: 9,  announce: 'Another. The shorter one knows my given name. ~~The given name is not on my admission card.~~' },
+    { at: 14, announce: 'Another. The taller one is wearing the uniform of a school that closed in [[1947]].' },
+    { at: 20, announce: 'Another. The night camera at the end of this corridor has been recording static for [[31]] years.' },
+    { at: 28, announce: 'Another. The night nurse declines to walk past this door. ~~She has been a nurse here her whole working life.~~' },
+    { at: 36, announce: '!!The last line. The black of their eyes goes to the lid.!!' },
   ],
 
   presented(p) {
@@ -5654,22 +5677,25 @@ const children = {
     const s = p.scales.suspicion;
 
     let voices;
-    if (i >= 7)      voices = '!!The shorter one is whispering through the gap at the bottom of the door. She has been getting closer.!!';
-    else if (i >= 4) voices = 'The taller one is silent. The shorter one is keeping at it. Please. Please mister.';
-    else if (i >= 1) voices = 'They are talking to each other. Quietly. The shorter one says my given name.';
-    else             voices = 'They have gone quiet. I can hear them breathing.';
+    if (i >= 16)      voices = '!!The shorter one is whispering through the gap at the bottom of the door. She has shaped a please that does not stop. She says it in time with my breathing.!!';
+    else if (i >= 12) voices = 'The shorter one is at the gap under the door, asking softly. She has lowered her voice to the way one talks to a frightened animal. She has been asking for some time.';
+    else if (i >= 8)  voices = 'The taller one has gone quiet. The shorter one is keeping at it. Please. Please mister. She says it in long even spacings, the way a child would not.';
+    else if (i >= 4)  voices = 'They are talking to each other. Quietly. The shorter one says my given name, the way one would say it to a friend. The taller one corrects something in her ear.';
+    else              voices = 'They have gone quiet. I can hear them breathing. Two breathings. Out of sync.';
 
     let bolt;
-    if (l >= 7)      bolt = 'The bolt is dropped all the way. The chain is across.';
-    else if (l >= 4) bolt = 'The bolt is set. My hand is not on it.';
-    else if (l >= 1) bolt = 'The bolt is barely catching. It has eased back without me.';
-    else             bolt = '!!The bolt is past the keep. The door is held by the frame alone.!!';
+    if (l >= 16)      bolt = 'The bolt is dropped all the way. The chain is across the keep. The door is doubled. Both hands are clear of it.';
+    else if (l >= 12) bolt = 'The bolt is set. My hand is not on it. The chain is hanging loose against the frame.';
+    else if (l >= 8)  bolt = 'The bolt is set but not all the way. It has been catching but not seated.';
+    else if (l >= 4)  bolt = 'The bolt is barely catching. It has eased back without me. I have been watching it without meaning to.';
+    else              bolt = '!!The bolt is past the keep. The door is held by the frame alone. I cannot remember when it turned.!!';
 
     let eye;
-    if (s >= 7)      eye = 'Through the peephole their eyes have no whites. They go to the lid.';
-    else if (s >= 4) eye = 'Through the peephole they are looking up at the lens. They have been the whole time.';
-    else if (s >= 1) eye = 'Through the peephole they look like two cold children. Wet hair. Bare feet.';
-    else             eye = 'Through the peephole the corridor looks like a corridor.';
+    if (s >= 16)      eye = 'Through the peephole their eyes have no whites. They go to the lid. The pupil is the whole of the visible eye. The taller one has been looking up at the lens the entire time I have been at it.';
+    else if (s >= 12) eye = 'Through the peephole I can see the texture of their hair. It is wet. The taller one has his hand on the shorter one\'s shoulder. The hand is not the right size.';
+    else if (s >= 8)  eye = 'Through the peephole they are looking up at the lens. They have been the whole time. They do not flinch when I press my eye to it.';
+    else if (s >= 4)  eye = 'Through the peephole they look like two cold children. Wet hair. Bare feet. They are standing very close together. They are not shivering.';
+    else              eye = 'Through the peephole the corridor looks like a corridor. Two children. The taller one is behind the shorter one.';
 
     return `${voices} ${bolt} ${eye}`;
   },
@@ -5681,23 +5707,98 @@ const children = {
       desc: 'Lean in. See what is in the corridor.',
       respond(p) {
         const reps = streakCount(p, 'look_through_the_peephole');
+        if (reps >= 2) {
+          return {
+            lines: [
+              'I lean in again. The shorter one\'s eye is pressed against the lens from the other side. It is the whole of the brass circle.',
+              'The eye does not blink. It is not the right kind of eye to blink with.',
+              'I step back. The lens is wet on the inside.',
+            ],
+            scales: { suspicion: +5, invitation: +1 },
+            composure: -2,
+            composureCost: 'The peephole was wet on my side.',
+          };
+        }
         if (reps >= 1) {
           return {
             lines: [
               'I look again. The shorter one is closer to the lens. Her face fills it.',
-              'Her eyes are the whole of her eyes. No white anywhere.',
+              'Her eyes are the whole of her eyes. No white anywhere. The lashes are bone-pale.',
+              'The taller one is behind her, watching the shorter one watch me.',
             ],
-            scales: { suspicion: +3, invitation: +1 },
+            scales: { suspicion: +4, invitation: +1 },
             composure: -1,
-            composureCost: 'She is taller than the peephole. She has bent to reach it.',
+            composureCost: 'She is taller than the peephole. She has bent herself to reach it.',
           };
         }
         return {
           lines: [
-            'I lean in. Two children in the hall. One taller, one shorter.',
-            'They are looking up at the lens. They have been looking up at it the whole time.',
+            'I lean in. Two children in the corridor. One taller, one shorter.',
+            'They are looking up at the lens. They have been looking up at it the whole time I have been at the door.',
+            'They are wearing what looks like school clothes. Soaked through. Their feet are bare.',
           ],
-          scales: { suspicion: +2 },
+          scales: { suspicion: +3 },
+        };
+      },
+    },
+
+    listen_at_the_gap: {
+      label: 'listen at the gap under the door',
+      desc: 'Crouch. Get an ear to the linoleum.',
+      respond(p) {
+        const reps = streakCount(p, 'listen_at_the_gap');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I crouch again. Their feet are still there. I can see the wet outline of the shorter one\'s toes against the strip of light.',
+              'She has lowered her face to the gap. She is breathing onto the floor on my side.',
+              'I do not feel the breath. I see the wet print of it on the linoleum.',
+            ],
+            scales: { suspicion: +4, invitation: +2 },
+            composure: -2,
+            composureCost: 'I saw the print of her breath on my side of the floor.',
+          };
+        }
+        return {
+          lines: [
+            'I crouch down. I press my cheek to the floor and look under the door.',
+            'Two pairs of feet. Bare. The taller one\'s feet are very still. The shorter one\'s feet have lifted, then settled, then lifted again. She is on her toes.',
+            'I can hear her breathing through the gap. It is the breathing of someone holding very still.',
+          ],
+          scales: { suspicion: +3, invitation: +1 },
+          composure: -1,
+          composureCost: 'I have been close enough to see the calluses on her heels.',
+        };
+      },
+    },
+
+    press_an_ear_to_the_door: {
+      label: 'press an ear to the door',
+      desc: 'Listen for what they say between asks.',
+      when: (p) => p.turn >= 1,
+      respond(p) {
+        const reps = streakCount(p, 'press_an_ear_to_the_door');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I keep my ear there. They have stopped talking to me. They are talking to each other.',
+              'The taller one says: ~~he is going to. Be patient.~~ The shorter one says: ~~I am being patient. I am being so patient.~~',
+              'They are not whispering. They are speaking at the volume of two people who think the wood is thick enough.',
+            ],
+            scales: { suspicion: +5 },
+            composure: -2,
+            composureCost: 'They are talking to each other about me.',
+          };
+        }
+        return {
+          lines: [
+            'I lean against the wood. I can hear their voices clearer this way.',
+            'The taller one is saying something low. Something patient. He is teaching her how to ask.',
+            'The shorter one says: ~~okay. Like this?~~ The taller one says: ~~yes. Like that.~~',
+          ],
+          scales: { suspicion: +4, invitation: +1 },
+          composure: -1,
+          composureCost: 'He is teaching her.',
         };
       },
     },
@@ -5710,20 +5811,91 @@ const children = {
         if (reps >= 1) {
           return {
             lines: [
-              'I ask again. The taller one answers this time. The name he gives is the name of a hospital.',
-              'I have been a patient there. ~~I do not remember that.~~ I have.',
+              'I ask again. The taller one answers this time. He says: ~~Thomas. She is Hannah. We have been at the door for three hours.~~',
+              'The name he gave the shorter one is the name she gave herself. The name he gave himself is a name I am almost sure I have heard.',
+              'I have been a patient at the hospital he is from. ~~I do not remember being a patient there. I have been.~~',
             ],
-            scales: { suspicion: +2, invitation: +1 },
+            scales: { suspicion: +4, invitation: +1 },
             composure: -2,
             composureCost: 'He named a place he could not know.',
           };
         }
         return {
           lines: [
-            'I ask their names. The shorter one says: ~~Hannah.~~ Hannah.',
-            'The taller one does not answer. The shorter one says: please.',
+            'I say: tell me your names.',
+            'The shorter one says: ~~Hannah.~~ Right away. As if she had been waiting for me to ask.',
+            'The taller one does not give a name. The shorter one says: ~~he is shy.~~',
           ],
-          scales: { suspicion: +1, invitation: +1 },
+          scales: { suspicion: +2, invitation: +1 },
+        };
+      },
+    },
+
+    ask_what_they_want: {
+      label: 'ask what they want',
+      desc: 'Plainly. Through the wood.',
+      when: (p) => p.turn >= 1,
+      respond(p) {
+        const reps = streakCount(p, 'ask_what_they_want');
+        if (reps >= 2) {
+          return {
+            lines: [
+              'I ask a third time. They have not changed the answer.',
+              'The shorter one says: ~~to come in. Just to come in. Just for a little while. Until our mother comes.~~',
+              'The taller one has not spoken. The shorter one says all of the words. She says them as if she is choosing them, one at a time.',
+            ],
+            scales: { invitation: +3, suspicion: +2 },
+            composure: -1,
+            composureCost: 'She had the answer ready. She has had it ready every time.',
+          };
+        }
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I ask again. The shorter one says: ~~to come in. We told you.~~',
+              'A pause. Then she says: ~~please. We have been at the door a long time.~~',
+            ],
+            scales: { invitation: +2, suspicion: +1 },
+          };
+        }
+        return {
+          lines: [
+            'I say: what do you want.',
+            'She says: ~~to come in.~~ Without hesitating. Without any other words around it.',
+            'I say: why. She says: ~~it is cold. We are cold. There is no one in the corridor.~~',
+          ],
+          scales: { invitation: +1, suspicion: +1 },
+        };
+      },
+    },
+
+    ask_a_test_question: {
+      label: 'ask them a question only a child knows',
+      desc: 'Math. Color. The name of a teacher.',
+      when: (p) => p.scales.suspicion >= 4,
+      respond(p) {
+        const reps = streakCount(p, 'ask_a_test_question');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I try another. I say: what is six plus seven.',
+              'There is a long pause. Then the shorter one says: ~~thirteen.~~ Correct. But she said it the way someone reads a number off a card.',
+              'I say: who is your teacher. There is no pause this time. She says: ~~Mister Allen.~~ I have known a Mister Allen. ~~He has been dead some years.~~',
+            ],
+            scales: { suspicion: +4, invitation: -1 },
+            composure: -1,
+            composureCost: 'She named a man who has been dead some years.',
+            flags: { failed_test: true },
+          };
+        }
+        return {
+          lines: [
+            'I say: what colour is the sky in the afternoon.',
+            'There is a pause. Long enough to count to four. Then the shorter one says: ~~blue.~~',
+            'I say: what colour at sunset. She does not answer. The taller one says, softly, into her ear: ~~orange. Say orange.~~ She says: ~~orange.~~',
+          ],
+          scales: { suspicion: +5, invitation: -1 },
+          flags: { failed_test: true },
         };
       },
     },
@@ -5733,23 +5905,63 @@ const children = {
       desc: 'Firmly. Through the door.',
       respond(p) {
         const reps = streakCount(p, 'tell_them_to_leave');
+        if (reps >= 2) {
+          return {
+            lines: [
+              'I say it again. The third time is the same word as the first.',
+              'The shorter one begins to cry. The crying is the right shape but the wrong rhythm.',
+              'The taller one says, evenly: ~~he does not mean it. He will say yes.~~ He has spoken loud enough to make sure I would hear it.',
+            ],
+            scales: { invitation: +3, suspicion: +3 },
+            composure: -2,
+            composureCost: 'He spoke loud enough for me. He knew I was listening.',
+          };
+        }
         if (reps >= 1) {
           return {
             lines: [
-              'I say it again. Louder. Go away.',
-              'The shorter one begins to cry. The taller one does not.',
+              'I say it again. Louder. Go away. Find someone else.',
+              'The shorter one begins to cry. The crying does not have any breath in it.',
             ],
             scales: { invitation: +2, suspicion: +2 },
             composure: -1,
-            composureCost: 'She is crying. ~~The taller one is watching me through the peephole.~~ The taller one is not.',
+            composureCost: 'She is crying. The crying does not have any breath in it.',
           };
         }
         return {
           lines: [
             'I say: go away. Find an adult on the ward.',
-            'The shorter one says: ~~there are no adults out here. We checked.~~',
+            'The shorter one says: ~~there are no adults out here. We checked all of the doors. You are the only one awake.~~',
+            'She says it with more words than a child usually has.',
           ],
-          scales: { suspicion: +1, invitation: +1 },
+          scales: { suspicion: +2, invitation: +1 },
+        };
+      },
+    },
+
+    step_away_from_the_door: {
+      label: 'step away from the door',
+      desc: 'A pace back. Sit on the bed.',
+      respond(p) {
+        const reps = streakCount(p, 'step_away_from_the_door');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I step further back. I sit on the bed. The springs creak.',
+              'The shorter one says: ~~he sat down. He is going to think about it.~~',
+              'I had not told her I was sitting down.',
+            ],
+            scales: { invitation: -1, suspicion: +3 },
+            composure: -2,
+            composureCost: 'She narrated me sitting down.',
+          };
+        }
+        return {
+          lines: [
+            'I take a step back. The wood is between me and them. The bolt is set.',
+            'The asking does not stop. It is the same voice but the same distance.',
+          ],
+          scales: { invitation: -2, latch: +1 },
         };
       },
     },
@@ -5758,22 +5970,36 @@ const children = {
       label: 'check the bolt',
       desc: 'Look at it. Touch it.',
       respond(p) {
-        if (p.scales.latch <= 4) {
+        const reps = streakCount(p, 'check_the_bolt');
+        if (p.scales.latch <= 8) {
           return {
             lines: [
               'I look at the bolt. It is two finger-widths short of where I left it.',
-              'I push it home. It does not click.',
+              'I push it home. It does not click into the keep. The brass is cold to the touch.',
+              'I push it harder. It seats. I leave my hand on it.',
             ],
-            scales: { latch: +2 },
+            scales: { latch: +4 },
             composure: -1,
             composureCost: 'The bolt moved without me.',
           };
         }
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I touch the bolt. It is where it should be. My hand stays on it longer than it needs to.',
+              'I count to ten. The bolt does not move. I count to ten again. The bolt does not move.',
+            ],
+            scales: { latch: +2 },
+          };
+        }
         return {
           lines: [
-            'I touch the bolt. It is where it should be. My hand stays on it for a beat too long.',
+            'I touch the bolt. It is set. My hand stays on it for a beat too long.',
+            'The shorter one says, on the other side: ~~that is alright. We can wait.~~',
           ],
-          scales: { latch: +1 },
+          scales: { latch: +2, suspicion: +1 },
+          composure: -1,
+          composureCost: 'She knew I was checking.',
         };
       },
     },
@@ -5781,15 +6007,45 @@ const children = {
     drop_the_chain: {
       label: 'drop the chain',
       desc: 'Set the second lock. The one above the bolt.',
-      when: (p) => p.scales.suspicion >= 2,
+      when: (p) => p.scales.suspicion >= 4,
+      respond(p) {
+        if (p.flags.chain_set) {
+          return {
+            lines: [
+              'The chain is already across. I touch it. It is solid.',
+              'I do not take it off.',
+            ],
+            scales: { latch: +1 },
+          };
+        }
+        return {
+          lines: [
+            'I lift the chain into the keep. I let it drop. The metal taps the door.',
+            'The voices outside stop. For one beat. Two.',
+            'Then the shorter one says, more softly than before: ~~please. Just for a minute. Just to use the phone.~~',
+            'She has not used the word phone before this.',
+          ],
+          scales: { latch: +5, invitation: -2, suspicion: +2 },
+          flags: { chain_set: true },
+        };
+      },
+    },
+
+    wedge_the_chair: {
+      label: 'wedge the chair under the handle',
+      desc: 'The writing chair. Drag it across the floor.',
+      when: (p) => p.scales.suspicion >= 6,
       respond(p) {
         return {
           lines: [
-            'I lift the chain into the keep. I let it drop.',
-            'The voices outside stop for a beat. Then the shorter one says: ~~please. Just for a minute.~~',
+            'I take the chair from the writing desk. I drag it. The legs squeal against the linoleum.',
+            'I tilt it. The back of the chair goes under the handle. I push the seat down until it stops.',
+            'The voices outside have gone quiet. The shorter one says, after a long moment: ~~that was loud.~~',
           ],
-          scales: { latch: +3, invitation: -1, suspicion: +1 },
-          flags: { chain_set: true },
+          scales: { latch: +4, suspicion: +2, invitation: -1 },
+          composure: -1,
+          composureCost: 'She heard the chair scrape from the corridor.',
+          flags: { chair_wedged: true },
         };
       },
     },
@@ -5800,24 +6056,146 @@ const children = {
       when: (p) => p.scales.suspicion >= 3 || p.turn >= 2,
       respond(p) {
         const reps = streakCount(p, 'shout_for_the_orderly');
+        if (reps >= 2) {
+          return {
+            lines: [
+              'I shout a third time. The third door down has opened.',
+              'The orderly is at it. He is looking at my door. He starts walking.',
+              'The corridor outside my door has gone very quiet. I cannot hear the shorter one anymore.',
+              'The taller one is somewhere closer to the wall beside my frame. I can hear him breathing.',
+            ],
+            scales: { invitation: -5, suspicion: +2 },
+            flags: { orderly_alerted: true },
+          };
+        }
         if (reps >= 1) {
           return {
             lines: [
-              'I shout again. The third door down opens. The orderly is at it. He looks at my door.',
-              'The corridor outside my door has gone quiet. ~~They are pressed against the wall beside the frame.~~',
+              'I shout again. Louder.',
+              'A long way down the corridor, a door opens. A voice answers. I cannot make it out.',
+              'The shorter one says, on the other side of mine: ~~he heard you.~~ She does not sound disappointed.',
             ],
-            scales: { invitation: -3, suspicion: +1 },
-            flags: { orderly_alerted: true },
+            scales: { invitation: -2, suspicion: +1 },
+            composure: -1,
+            composureCost: 'She did not sound disappointed.',
           };
         }
         return {
           lines: [
             'I shout for the orderly. The voices outside go very quiet.',
-            'The shorter one says, very softly: ~~he won\'t hear you from here.~~',
+            'The shorter one says, very softly: ~~he won\'t hear you from here. He is at the end of the hall. With his tea.~~',
+            'I have not seen the orderly tonight. I do not know if he is at the end of the hall. I do not know if he has tea.',
           ],
-          scales: { suspicion: +2 },
+          scales: { suspicion: +3 },
           composure: -1,
-          composureCost: 'She knew which door the orderly was at.',
+          composureCost: 'She knew which door the orderly was at. She knew about his tea.',
+        };
+      },
+    },
+
+    bang_on_the_wall: {
+      label: 'bang on the wall',
+      desc: 'The wall to Room 0414. Signal the next patient.',
+      when: (p) => p.turn >= 2,
+      respond(p) {
+        const reps = streakCount(p, 'bang_on_the_wall');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I bang harder. Three slow. Three fast. Three slow.',
+              'There is no answer through the wall.',
+              'The shorter one says, in the corridor: ~~there is no one in that room. The bed is made.~~',
+            ],
+            scales: { suspicion: +3 },
+            composure: -1,
+            composureCost: 'She knew which room I was banging toward.',
+          };
+        }
+        return {
+          lines: [
+            'I bring the side of my fist against the wall. Twice. Loud.',
+            'I wait. There is no answer.',
+          ],
+          scales: { invitation: -1 },
+          composure: -1,
+          composureCost: 'There was no answer from the next room.',
+        };
+      },
+    },
+
+    check_the_window: {
+      label: 'check the window',
+      desc: 'The barred one. Look through it.',
+      when: (p) => p.turn >= 1,
+      respond(p) {
+        const reps = streakCount(p, 'check_the_window');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I press my face to the glass. Four stories down, a courtyard.',
+              'There are two children in the courtyard, looking up at my window. They wave.',
+              'They look like the children at the door.',
+              'The voices at the door have not stopped while I have been at the window.',
+            ],
+            scales: { suspicion: +5 },
+            composure: -2,
+            composureCost: '!!There are two children in the courtyard. They are looking up.!!',
+            flags: { saw_courtyard: true },
+          };
+        }
+        return {
+          lines: [
+            'I cross to the window. The bars are spaced narrow. The courtyard is dark. The lamps are out.',
+            'I look down. I cannot see the corridor entrance from here.',
+            'I look back at the door. The door is the same as it was.',
+          ],
+          scales: { suspicion: +1 },
+        };
+      },
+    },
+
+    read_your_own_file: {
+      label: 'read your own file',
+      desc: 'It is on the chair. It has been on the chair.',
+      when: (p) => !p.flags.chair_wedged && p.turn >= 1,
+      respond(p) {
+        return {
+          lines: [
+            'I lift the file from the writing chair. The cover is warm. The pages are still warm.',
+            'My given name is not on the cover. The number is. The page beneath the cover has been written on this evening.',
+            'The shorter one outside says: ~~he is reading. Good. He should know what he is doing.~~',
+          ],
+          scales: { suspicion: +3, invitation: -1 },
+          composure: -1,
+          composureCost: 'The file was warm. She narrated my reading.',
+          flags: { _revealAllFile: true },
+        };
+      },
+    },
+
+    say_your_own_name: {
+      label: 'say your own name',
+      desc: 'Out loud. To anchor.',
+      respond(p) {
+        const reps = streakCount(p, 'say_your_own_name');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I say it again. My full given name. Spoken into the room.',
+              'The shorter one outside says: ~~that is a nice name. You should hear how I would say it.~~',
+              'She has not said it. She is making me ask.',
+            ],
+            scales: { suspicion: +3, invitation: +1 },
+            composure: -1,
+            composureCost: 'She has not said it yet. She is making me ask.',
+          };
+        }
+        return {
+          lines: [
+            'I say my name out loud. Twice. Then my number. Then my name again.',
+            'The room is solid around me. I sit on the bed. I keep my hand off the door.',
+          ],
+          scales: { invitation: -2 },
         };
       },
     },
@@ -5825,18 +6203,20 @@ const children = {
     open_the_door_a_crack: {
       label: 'open the door a crack',
       desc: 'Just look. Just check.',
-      when: (p) => p.scales.latch <= 5,
+      when: (p) => p.scales.latch <= 12 && !p.flags.chair_wedged,
       respond(p) {
         return {
           lines: [
-            'I slide the bolt back. I open the door three fingers.',
-            'The shorter one has her hand on the edge. ~~She had been waiting for it.~~',
-            'The taller one is past the frame already.',
+            'I slide the bolt back. The chain is not across. I open the door three fingers.',
+            'The shorter one\'s hand is on the edge of the door. Her fingers are inside the gap before the gap exists.',
+            'She is looking up at me. The whites of her eyes are not there.',
+            'The taller one is past the frame already. I do not remember him moving.',
           ],
-          scales: { latch: -6, invitation: +5 },
-          composure: -3,
+          scales: { latch: -10, invitation: +12 },
+          composure: -4,
           composureCost: '!!I gave them the gap. They were ready for it.!!',
           flags: { opened: true },
+          shake: true,
         };
       },
     },
@@ -5852,10 +6232,11 @@ const children = {
     {
       id: 'mister_please',
       once: true,
-      when: (p) => p.scales.invitation >= 3,
+      when: (p) => p.scales.invitation >= 5,
       prose: [
-        'The shorter one is at the gap under the door. I can see the shadow of her chin.',
+        'The shorter one is at the gap under the door. I can see the shadow of her chin from where I am standing.',
         'She says: !!mister. Please. We are not allowed to come in unless you say.!!',
+        'She says the word say with extra care. As if it is a word she had to learn for tonight.',
       ],
       responses: [
         {
@@ -5863,40 +6244,55 @@ const children = {
           desc: 'Refuse plainly.',
           lines: [
             'I say: I am not saying.',
-            'She is quiet for a long beat. Then she says: ~~that is alright. We can wait.~~',
+            'She is quiet for a long beat. Then she says: ~~that is alright. We can wait. We are very good at waiting.~~',
           ],
-          scales: { invitation: -2, suspicion: +2 },
+          scales: { invitation: -3, suspicion: +3 },
         },
         {
           label: 'who said that',
           desc: 'Pull the thread.',
           lines: [
             'I say: who said that. That you needed to be invited.',
-            'She does not answer. The taller one says, from further back: ~~she is not supposed to tell you.~~',
+            'She does not answer. The taller one says, from further back: ~~she is not supposed to tell you. We are not supposed to talk about that part.~~',
+            'The shorter one says, to him, urgently: ~~we are not supposed to talk about that part.~~ She is repeating it back to him to be sure.',
           ],
-          scales: { suspicion: +4, invitation: -1 },
+          scales: { suspicion: +6, invitation: -2 },
         },
         {
           label: 'just for a minute',
           desc: 'Concede.',
           lines: [
             'I say: just for a minute.',
-            'The bolt slides back without my hand on it.',
+            'The bolt slides back without my hand on it. The chain rattles in the keep.',
+            'The shorter one says: ~~thank you, mister. We will be quick.~~',
           ],
-          scales: { invitation: +5, latch: -4 },
+          scales: { invitation: +8, latch: -6 },
           composure: -3,
           composureCost: '!!The bolt moved when I said the word.!!',
           flags: { said_yes: true },
+        },
+        {
+          label: 'who are you really',
+          desc: 'Ask the question they came here to be asked.',
+          lines: [
+            'I say: who are you. Really. Both of you.',
+            'There is a long pause. The taller one finally answers. He says: ~~we are who you are letting in.~~',
+            'It is the first sentence he has spoken loud enough for the corridor to hear.',
+          ],
+          scales: { suspicion: +7, invitation: +2 },
+          composure: -2,
+          composureCost: 'He spoke. The corridor heard him.',
+          flags: { taller_spoke: true },
         },
       ],
     },
     {
       id: 'we_are_cold',
       once: true,
-      when: (p) => p.turn >= 2 && p.scales.suspicion <= 6,
+      when: (p) => p.turn >= 2 && p.scales.suspicion <= 10,
       prose: [
-        'The shorter one says: ~~mister. We are cold. The corridor is cold.~~',
-        'The taller one does not say anything.',
+        'The shorter one says: ~~mister. We are cold. The corridor is cold. The corridor has always been cold.~~',
+        'The taller one does not say anything. He has not been saying anything.',
       ],
       responses: [
         {
@@ -5904,9 +6300,10 @@ const children = {
           desc: 'Point them away.',
           lines: [
             'I say: so try another door.',
-            'She says: ~~the other doors said no. You have not said yet.~~',
+            'She says: ~~the other doors said no. You have not said yet. You are not finished saying yet.~~',
+            'She does not say which doors. She speaks of them as if they are a thing that has happened to her many times.',
           ],
-          scales: { suspicion: +2, invitation: +1 },
+          scales: { suspicion: +3, invitation: +1 },
         },
         {
           label: 'you are not cold',
@@ -5914,8 +6311,9 @@ const children = {
           lines: [
             'I say: you are not cold.',
             'She is quiet. The taller one says: ~~you can tell.~~ Then they both go quiet.',
+            'It is the longest stretch of quiet there has been on the other side of the door tonight.',
           ],
-          scales: { suspicion: +3, invitation: -2 },
+          scales: { suspicion: +5, invitation: -3 },
         },
         {
           label: 'I am sorry',
@@ -5923,33 +6321,314 @@ const children = {
           lines: [
             'I say: I am sorry. I cannot let you in.',
             'She says: ~~that is alright. I forgive you.~~ She has not moved from the gap.',
+            'She says it the way an adult says it to a child who has refused something small. She has it backwards.',
           ],
-          scales: { invitation: +2 },
+          scales: { invitation: +2, suspicion: +2 },
           composure: -2,
-          composureCost: 'She forgave me through the door.',
+          composureCost: 'She forgave me through the door. She had it backwards.',
+        },
+        {
+          label: 'I will turn on the radiator for you',
+          desc: 'Misdirect with kindness.',
+          lines: [
+            'I say: I will turn on the radiator. The one in the corridor. You can sit by it.',
+            'She says: ~~the radiator does not work, mister. It has not worked since you came in.~~',
+            'I had not told her I had come in tonight.',
+          ],
+          scales: { suspicion: +4 },
+          composure: -1,
+          composureCost: 'She knew the radiator. She knew when I had arrived.',
+        },
+      ],
+    },
+    {
+      id: 'we_know_you',
+      once: true,
+      when: (p) => p.scales.suspicion >= 6 || p.scales.invitation >= 8,
+      prose: [
+        'The shorter one says my given name. The full version. The one my mother used.',
+        'Then she says it again, with the diminutive. The one only my father used.',
+        'She says: ~~we know you, mister. We have always known you.~~',
+      ],
+      responses: [
+        {
+          label: 'no you do not',
+          desc: 'Reject the claim.',
+          lines: [
+            'I say: no, you do not.',
+            'She says, gently: ~~that is alright. You can pretend.~~',
+          ],
+          scales: { suspicion: +3, invitation: -2 },
+          composure: -1,
+          composureCost: 'She gave me permission to pretend.',
+        },
+        {
+          label: 'how do you know my name',
+          desc: 'Ask.',
+          lines: [
+            'I say: how do you know my name.',
+            'She says: ~~it is on you. You have been wearing it.~~ Then, quieter: ~~we always know what people are wearing.~~',
+          ],
+          scales: { suspicion: +5, invitation: -1 },
+        },
+        {
+          label: 'say it again',
+          desc: 'Make her speak it twice.',
+          lines: [
+            'I say: say it again.',
+            'She does. The same way, both times. The voice is hers but the cadence is not a child\'s.',
+          ],
+          scales: { suspicion: +4, invitation: +2 },
+          composure: -2,
+          composureCost: 'The cadence was not a child\'s.',
+        },
+        {
+          label: '[amnesia] then tell me my address',
+          desc: 'Test the claim.',
+          when: (_, player) => player.wound === 'amnesia',
+          lines: [
+            'I say: then tell me my address.',
+            'There is a long pause. Then she says: ~~you do not have one tonight. You came in without one.~~',
+            'She has read my file. ~~Or she has read me.~~',
+          ],
+          scales: { suspicion: +6, invitation: -1 },
+          composure: -2,
+          composureCost: 'She knew the file. She knew the part about the address.',
+        },
+      ],
+    },
+    {
+      id: 'taller_speaks',
+      once: true,
+      when: (p) => p.scales.suspicion >= 8 && !p.flags.taller_spoke,
+      prose: [
+        'The taller one speaks for the first time. The voice is older than the body should be.',
+        'He says: ~~mister. We will not ask much longer.~~',
+        'The shorter one is quiet beside him. Her face has gone solemn.',
+      ],
+      responses: [
+        {
+          label: 'good',
+          desc: 'Take the offer.',
+          lines: [
+            'I say: good.',
+            'He is quiet for a long beat. Then he says, slower than before: ~~we will not ask much longer.~~',
+            'He has said the same words again. Differently this time.',
+          ],
+          scales: { suspicion: +4, invitation: +2 },
+          composure: -2,
+          composureCost: 'The same words. Differently.',
+        },
+        {
+          label: 'what happens when you stop asking',
+          desc: 'Pull the thread.',
+          lines: [
+            'I say: what happens when you stop asking.',
+            'He says: ~~you will not need to be asked.~~',
+          ],
+          scales: { suspicion: +7, invitation: +3 },
+          composure: -3,
+          composureCost: 'He answered without thinking about it.',
+        },
+        {
+          label: 'stop asking now',
+          desc: 'Tell him to stop.',
+          lines: [
+            'I say: stop asking now. Then leave.',
+            'He is quiet. The shorter one says, softly, to him: ~~he said stop. We have to ask one more time.~~',
+            'He says, evenly: ~~one more time.~~',
+          ],
+          scales: { invitation: +1, suspicion: +5 },
+        },
+        {
+          label: 'who taught you to do this',
+          desc: 'Ask who sent them.',
+          lines: [
+            'I say: who taught you to do this. The asking.',
+            'He is quiet for a very long time. Long enough that I begin to think he is not going to answer.',
+            'Then he says: ~~the one before you.~~',
+          ],
+          scales: { suspicion: +8 },
+          composure: -3,
+          composureCost: 'The one before me.',
+          flags: { one_before: true },
+        },
+      ],
+    },
+    {
+      id: 'fingertip',
+      once: true,
+      when: (p) => p.scales.invitation >= 10,
+      prose: [
+        'A small fingertip has appeared at the gap under the door. Pale. Wet.',
+        'It is moving. Slowly. Side to side. The way one tests a surface.',
+      ],
+      responses: [
+        {
+          label: 'step on it',
+          desc: 'Pin the finger.',
+          lines: [
+            'I bring my heel down on it. There is no give. There is no flinch.',
+            'The finger stays where it is. The shorter one says, evenly: ~~that did not hurt, mister.~~',
+            'I lift my foot. The finger withdraws. Slowly.',
+          ],
+          scales: { suspicion: +6, invitation: -3 },
+          composure: -3,
+          composureCost: 'There was no give. There was no flinch.',
+        },
+        {
+          label: 'kick the door',
+          desc: 'Drive them back.',
+          lines: [
+            'I kick the door. The finger pulls back. The shorter one cries out. The crying is the right shape but the wrong rhythm.',
+            'The taller one says, away from the door: ~~he kicked.~~',
+          ],
+          scales: { suspicion: +3, invitation: -4 },
+          composure: -1,
+          composureCost: 'The crying was the wrong rhythm.',
+        },
+        {
+          label: 'leave it alone',
+          desc: 'Step back.',
+          lines: [
+            'I step back. The finger continues for a long time. Then it withdraws.',
+            'There is a wet line on the linoleum where it had been.',
+          ],
+          scales: { invitation: +4, suspicion: +2 },
+          composure: -2,
+          composureCost: 'A wet line on the linoleum.',
+        },
+      ],
+    },
+    {
+      id: 'they_sing',
+      once: true,
+      when: (p) => p.turn >= 5 && p.scales.suspicion >= 4,
+      prose: [
+        'They begin to sing. Both of them. The shorter one is on key. The taller one is half a step lower.',
+        'It is a song I know. I do not know how I know it.',
+      ],
+      responses: [
+        {
+          label: 'sing back',
+          desc: 'Match them. Throw it off.',
+          lines: [
+            'I sing the next line back. Out of the song. I have the wrong words.',
+            'They stop. The shorter one says: ~~no, mister. Not that line. We do not know that line.~~',
+            'I sing the line again. They do not pick it up.',
+          ],
+          scales: { suspicion: +4, invitation: -3 },
+          composure: -1,
+          composureCost: 'They did not know the line.',
+        },
+        {
+          label: 'cover your ears',
+          desc: 'Block them out.',
+          lines: [
+            'I put my hands over my ears. I can still hear them. The singing is not coming from the corridor only.',
+            'It is inside the wall. It is inside my room.',
+          ],
+          scales: { invitation: +4, suspicion: +3 },
+          composure: -3,
+          composureCost: '!!The singing is inside the room.!!',
+        },
+        {
+          label: 'sing your own song',
+          desc: 'Drown them out.',
+          lines: [
+            'I sing. Anything. The first song that comes to me. Loudly.',
+            'They stop. They wait for me to finish. Then they start again at the same line they were on.',
+          ],
+          scales: { invitation: -2, suspicion: +2 },
+        },
+      ],
+    },
+    {
+      id: 'one_before',
+      once: true,
+      when: (p) => p.flags.one_before,
+      prose: [
+        'The shorter one says, after the taller has gone quiet again: ~~the one before you let us in. He was nice.~~',
+        'She says: ~~he is at the end of the corridor now. With the orderly.~~',
+        'I had not heard the orderly speak yet tonight.',
+      ],
+      responses: [
+        {
+          label: 'go to him then',
+          desc: 'Pass the buck.',
+          lines: [
+            'I say: go to him, then.',
+            'She says: ~~he is not asking anymore. He has finished asking.~~',
+          ],
+          scales: { suspicion: +5, invitation: +1 },
+          composure: -2,
+          composureCost: 'He has finished asking.',
+        },
+        {
+          label: 'what did he do for you',
+          desc: 'Make her describe it.',
+          lines: [
+            'I say: what did he do for you.',
+            'She is quiet. The taller one says: ~~he opened the door. He sat down on the bed. He let us tuck him in.~~',
+            'The shorter one says: ~~he was very tired. He had been very tired for a long time.~~',
+          ],
+          scales: { suspicion: +6, invitation: +4 },
+          composure: -3,
+          composureCost: 'They tucked him in.',
+        },
+        {
+          label: 'I am not the one before',
+          desc: 'Decline the role.',
+          lines: [
+            'I say: I am not him. I am not letting you in.',
+            'She says: ~~we know, mister. We have to ask anyway. It is the rule.~~',
+          ],
+          scales: { invitation: -3, suspicion: +3 },
         },
       ],
     },
   ],
 
   drift(p) {
-    if (p.scales.latch <= 3) {
+    if (p.scales.latch <= 6) {
       return {
         lines: [
           'I do nothing. The bolt eases another quarter turn. I am watching it.',
-          'The shorter one says: ~~thank you.~~',
+          'The shorter one says: ~~thank you. You are doing very well, mister.~~',
         ],
-        scales: { latch: -2, invitation: +2 },
+        scales: { latch: -3, invitation: +3 },
+        composure: -3,
+        composureCost: 'She thanked me. I had not done anything.',
+      };
+    }
+    if (p.scales.invitation >= 14) {
+      return {
+        lines: [
+          'I do nothing. The shorter one says, gently: ~~it is alright. The word is small. Just one word.~~',
+          'I feel the word in my mouth without putting it there. ~~I have not bitten down on it.~~',
+        ],
+        scales: { invitation: +3, latch: -2 },
+        composure: -3,
+        composureCost: 'The word was in my mouth without my putting it there.',
+      };
+    }
+    if (p.scales.suspicion >= 12) {
+      return {
+        lines: [
+          'I do nothing. Neither do they. The asking has stopped for a beat.',
+          'In the silence I can hear them breathing. The breathings have synced up.',
+        ],
+        scales: { invitation: +1, suspicion: +1 },
         composure: -2,
-        composureCost: 'She thanked me. I did not do anything.',
+        composureCost: 'The breathings had synced.',
       };
     }
     return {
       lines: [
-        'I do nothing. The shorter one taps the door. Once. Twice. Three times.',
-        'Then quiet.',
+        'I do nothing. The shorter one taps the door. Three taps. Even pressure. Same as the start.',
+        'Then quiet for a beat. Then please. Then quiet.',
       ],
-      scales: { invitation: +1 },
+      scales: { invitation: +2 },
       composure: -1,
       composureCost: 'I have been listening to her knock for too long.',
     };
@@ -5958,25 +6637,63 @@ const children = {
   endings: [
     {
       id: 'orderly_came',
-      when: (p) => p.flags.orderly_alerted && p.scales.suspicion >= 5 && p.scales.latch >= 4,
+      when: (p) => p.flags.orderly_alerted && p.scales.suspicion >= 8 && p.scales.latch >= 8,
       title: 'You shouted. He came.',
       lines: [
-        'The orderly is at my door. He knocks. I open it for him.',
-        'The corridor is empty behind him. There is a wet print on the floor where they were standing.',
-        'He says: !!I have been at the end of the hall an hour. There has been no one in this corridor.!!',
+        'The orderly is at my door. He knocks. I unbolt it. I let him in.',
+        'The corridor is empty behind him. The fluorescent tubes are off. The bulbs are warm.',
+        'There is a wet print on the linoleum where the two had been standing. Two pairs of small feet.',
+        'He says: !!I have been at the end of the hall for an hour. There has been no one in this corridor.!!',
+        'He looks at the prints for a long beat. Then he says: !!I will sit in the chair by your door tonight.!!',
       ],
       item: 'handkerchief',
     },
     {
       id: 'outwaited',
-      when: (p) => p.scales.suspicion >= 7 && p.scales.latch >= 7 && p.turn >= 5,
+      when: (p) => p.scales.suspicion >= 14 && p.scales.latch >= 14 && p.turn >= 9,
       title: 'You outwait them',
       lines: [
-        'The taller one says, finally: ~~he is not going to let us in.~~',
+        'The asking has thinned. The shorter one is still trying but the spaces between her tries have grown.',
+        'The taller one says, finally: ~~he is not going to let us in. We have to go.~~',
         'They step back from the door. Their footprints are wet on the linoleum.',
-        'In the morning, the prints are still there.',
+        'In the morning, the prints are still there. They have not dried. The orderly photographs them.',
+        'The orderly does not look at me when he photographs them.',
       ],
       item: 'sliver_of_glass',
+    },
+    {
+      id: 'chain_held',
+      when: (p) => p.flags.chain_set && p.flags.chair_wedged && p.turn >= 8 && p.scales.suspicion >= 12,
+      title: 'The chain held',
+      lines: [
+        'The bolt has been trying to turn for some hours. The chair has shifted against it. The chain has been across the keep the whole night.',
+        'In the morning the chain is on the floor. The bolt is set. The chair is upright by the writing desk.',
+        'I do not remember moving the chair back. The corridor outside is empty. The night nurse is at the door, knocking, very softly.',
+      ],
+      item: 'pocket_watch',
+    },
+    {
+      id: 'ground_them_down',
+      when: (p) => p.scales.suspicion >= 18 && p.scales.invitation <= 6,
+      title: 'You ground them down',
+      lines: [
+        'I have been at the door a long time. I have answered every ask with a no. I have called the things they are by other names.',
+        'The shorter one says, after the longest silence yet: ~~that is enough. We have asked enough.~~',
+        'They are gone before the taller one speaks again. There is no sound to their going.',
+        'The fluorescent tube above my door flickers once and steadies.',
+      ],
+      item: 'small_bell',
+    },
+    {
+      id: 'window',
+      when: (p) => p.flags.saw_courtyard && p.scales.suspicion >= 12 && p.scales.latch >= 8,
+      title: 'You stayed away from the door',
+      lines: [
+        'I have been at the window for a long time. The two in the courtyard are still looking up. The two at my door are still asking.',
+        'I do not answer either of them. I stand at the window until the sky gets pale.',
+        'When I turn back to the door, the corridor is quiet. The peephole is light.',
+      ],
+      item: 'worn_ribbon',
     },
     {
       id: 'opened',
@@ -5984,7 +6701,9 @@ const children = {
       title: 'You opened it a crack',
       lines: [
         'She has the door. The taller one is past me before I have time to push back.',
-        'She looks up at me, very politely. !!Thank you for letting us in.!!',
+        'They are in the room. They are small in here. They are very polite.',
+        'She looks up at me, very politely. !!Thank you for letting us in, mister. We will be very quiet.!!',
+        'The taller one closes the door behind them. He sets the chain. ~~Not for me.~~ Not for me.',
       ],
       item: null,
       scars: ['collapsed'],
@@ -5994,9 +6713,9 @@ const children = {
       when: (p) => p.flags.said_yes,
       title: 'You said yes',
       lines: [
-        'The bolt is on the floor. They are in the room.',
-        'The taller one closes the door behind them. He sets the chain.',
-        '~~Not for me.~~ Not for me.',
+        'The bolt is on the floor. They are in the room. They have not moved past the threshold yet.',
+        'The taller one closes the door behind them. He sets the chain. He drops the bolt. He turns the chair so it faces the bed.',
+        'The shorter one says, settling onto the bed beside me: ~~it has been a long time, mister. You can sleep now.~~',
       ],
       item: null,
       scars: ['collapsed', 'named'],
@@ -6004,10 +6723,11 @@ const children = {
     {
       id: 'abandoned',
       when: (p) => p.flags.left,
-      title: 'You walk out',
+      title: 'You leave through the bathroom',
       lines: [
-        'I go through the bathroom door. The window is wide enough.',
-        'The corridor is at the bottom of the wall. They are waiting at the end of it. ~~Patiently.~~',
+        'I go through the bathroom door. The window over the basin is wide enough for me to fit through.',
+        'I am in the courtyard. The two children are at the end of it, looking up at my window.',
+        'When they see me at ground level they begin to walk toward me. ~~They have a lot of time.~~',
       ],
       item: null,
       scars: ['abandoned'],
@@ -6024,9 +6744,15 @@ const children = {
 // SCP-173. A small concrete figure with rebar in the mouth. Does not move
 // while under direct line of sight. Moves the instant you blink. Has been
 // known to break the neck. The door has been bolted from the outside.
-// Three paths:
-//   - Back to the door without losing the gaze.
-//   - Force a final stare-down: name what it is, force its mouth shut.
+// The verbs split sharply: things that hold gaze cost strain but keep it
+// still; things that break gaze move it. Doing nothing is doing the
+// worst thing — your eyelid is on its own schedule.
+//
+// Paths:
+//   - Back to the door without losing the gaze. Pound until the orderly
+//     opens the bolt from the outside.
+//   - Force a final stare-down: name what you see, place a hand on it,
+//     make eye contact at near-zero distance and outlast.
 //   - Blink one too many times.
 
 const sculpture = {
@@ -6038,60 +6764,71 @@ const sculpture = {
   file: [
     'Containment item is concrete, humanoid proportions, approximately child-sized. Rebar fixture at the mouth.',
     'Item is stationary under continuous line of sight. ~~Frequency of containment breach is correlated with staff blink rate.~~',
-    'Standard protocol: ~~two-person observation, alternating blinks.~~ Subject is alone in the room. The door has been bolted from the outside.',
+    'Standard protocol: two-person observation, alternating blinks. ~~Subject is one person.~~',
+    'The door has been bolted from the outside. The override is on the wall in the corridor.',
+    'Item has been observed to make sounds while no one is in the room. ~~Scraping. Wet noises.~~',
+    'The light fixture is on a flicker schedule. ~~The schedule is unpredictable.~~ The schedule is the item\'s.',
   ],
   intro: [
-    'The room is white. The floor is poured concrete. There is no furniture.',
+    'The room is small. White. The floor is poured concrete. The walls are poured concrete.',
+    'There is no furniture. There is no window. There is a single door, behind me, bolted from outside.',
+    'A strip light along one wall, recessed behind frosted glass. It flickers and steadies.',
     'There is a figure in the far corner. The size of a child. The color of cement.',
-    'It is facing me. I do not look away.',
+    'It is facing me. I do not look away. I have not looked away since the door closed.',
   ],
 
   scales: {
     distance: {
-      initial: 8, min: 0, max: 10, label: 'distance', kind: 'positive',
+      initial: 16, min: 0, max: 20, label: 'distance', kind: 'positive',
       bands: [
         { at: 0, word: 'at my throat' },
-        { at: 2, word: 'within reach' },
-        { at: 4, word: 'a step away' },
-        { at: 6, word: 'across the room' },
-        { at: 8, word: 'in the corner' },
+        { at: 4, word: 'within arm' },
+        { at: 8, word: 'a step away' },
+        { at: 12, word: 'mid-room' },
+        { at: 16, word: 'in the corner' },
+        { at: 19, word: 'against the far wall' },
       ],
       crossDown: {
         4: 'It has crossed half the room.',
         3: 'It is a step closer than the wall.',
-        2: '!!It is within reach. Its hands are at its sides.!!',
+        2: '!!It is within arm. Its hands are at its sides.!!',
         1: '!!It is within arm. Its mouth is open.!!',
         0: '!!It is at my throat. The rebar is in its open mouth.!!',
       },
       crossUp: {
         3: 'I have backed up a step. It has not moved.',
+        4: 'I have backed up another. The far corner is empty behind it.',
       },
     },
     strain: {
-      initial: 0, min: 0, max: 10, label: 'eye strain', kind: 'negative',
+      initial: 0, min: 0, max: 20, label: 'eye strain', kind: 'negative',
       bands: [
         { at: 0, word: 'clear' },
-        { at: 3, word: 'dry' },
-        { at: 5, word: 'burning' },
-        { at: 7, word: 'watering' },
-        { at: 9, word: 'closing on its own' },
+        { at: 4, word: 'dry' },
+        { at: 8, word: 'burning' },
+        { at: 12, word: 'watering' },
+        { at: 16, word: 'closing on its own' },
+        { at: 19, word: 'shut' },
       ],
       crossUp: {
         3: 'My eyes have begun to water. The figure is blurred at the edges.',
         4: '!!I cannot keep them open much longer.!!',
+        5: '!!The room is going dark at the rim. My eyes are closing on me.!!',
       },
       crossDown: {
         2: 'My eyes have rested. The figure is sharper.',
+        1: 'The burning has eased.',
       },
     },
     door: {
-      initial: 0, min: 0, max: 10, label: 'door', kind: 'positive',
+      initial: 0, min: 0, max: 20, label: 'door', kind: 'positive',
       bands: [
         { at: 0, word: 'far' },
-        { at: 3, word: 'a few steps' },
-        { at: 5, word: 'within reach behind me' },
-        { at: 7, word: 'at my back' },
-        { at: 9, word: 'in my hand' },
+        { at: 4, word: 'a few steps' },
+        { at: 8, word: 'within reach behind me' },
+        { at: 12, word: 'at my back' },
+        { at: 16, word: 'in my hand' },
+        { at: 19, word: 'pounding' },
       ],
       crossUp: {
         3: 'My back is against the door.',
@@ -6101,16 +6838,21 @@ const sculpture = {
   },
 
   initialize(p, player) {
-    p.scales.distance = 8;
+    p.scales.distance = 16;
     p.scales.strain = 0;
     p.scales.door = 0;
-    if (player.scars?.includes('witnessed')) p.scales.strain = 2;
+    if (player.scars?.includes('witnessed')) p.scales.strain = 3;
+    if (player.scars?.includes('collapsed')) p.scales.distance = 14;
+    if (player.wound === 'insomnia') p.scales.strain = 4;
   },
 
   fileReveals: [
-    { announce: 'A line fills in. Containment breaches average 4.2 seconds. Subject\'s blink rate is 16/minute.' },
-    { announce: 'Another. Item has been observed to make sounds while no one is in the room. ~~Scraping.~~' },
-    { announce: 'The last line. !!The door was bolted from the outside at the start of the test.!!' },
+    { at: 5,  announce: 'A line fills in. Containment breaches average 4.2 seconds. Subject\'s blink rate is logged at 16 per minute.' },
+    { at: 10, announce: 'Another. Item has been observed to make sounds while no one is in the room. ~~Scraping. Wet noises.~~' },
+    { at: 16, announce: 'Another. The bolt on this door is on the corridor wall. ~~There is no override on the inside.~~' },
+    { at: 24, announce: 'Another. Item has not been moved from this cell since [[1973]]. ~~The cell was built around it.~~' },
+    { at: 32, announce: 'Another. The strip light flickers on a schedule. ~~The schedule is the item\'s.~~' },
+    { at: 42, announce: '!!The last line. Two researchers in this room have not been recovered.!!' },
   ],
 
   presented(p) {
@@ -6119,21 +6861,26 @@ const sculpture = {
     const dr = p.scales.door;
 
     let it;
-    if (d <= 1)      it = '!!It is at my throat. Its hands have come up. I am looking past the rebar.!!';
-    else if (d <= 3) it = '!!It is within reach. I can see the chip on its left elbow.!!';
-    else if (d <= 5) it = 'It has crossed the floor. It is between me and the corner. Its hands are open.';
-    else             it = 'It is in the corner where it started. Its hands are at its sides.';
+    if (d <= 1)      it = '!!It is at my throat. Its hands have come up to either side of my jaw. I am looking past the rebar. The mouth is open wide.!!';
+    else if (d <= 4) it = '!!It is within reach. I can see the chip on its left elbow. I can count the lines in the rebar.!!';
+    else if (d <= 8) it = 'It has crossed the floor. It is between me and the corner. Its hands are open. Its head is tilted forward by maybe two degrees.';
+    else if (d <= 12)it = 'It has come halfway across the room. It is on the seam where two concrete pours meet.';
+    else if (d <= 16)it = 'It is in the corner where it started. Its hands are at its sides. Its mouth is closed.';
+    else             it = 'It is against the far wall. Its back is in the corner. It has not moved from where it started.';
 
     let eye;
-    if (s >= 7)      eye = '!!My eyes are watering. The room is blurred. I am holding them open with the muscles of my forehead.!!';
-    else if (s >= 4) eye = 'My eyes are dry. The figure has a halo at its edges.';
-    else if (s >= 1) eye = 'My eyes are beginning to burn.';
-    else             eye = 'My eyes are clear.';
+    if (s >= 16)     eye = '!!My eyes are at the limit. The room is going dark at the rim. I am holding them open with the muscles of my forehead. They will close.!!';
+    else if (s >= 12)eye = '!!My eyes are watering. The room is blurred. I am holding them open with the muscles of my forehead.!!';
+    else if (s >= 8) eye = 'My eyes are burning. The figure has a halo at its edges. I have begun to count to keep from blinking.';
+    else if (s >= 4) eye = 'My eyes are dry. The figure has a soft outline against the wall behind it.';
+    else             eye = 'My eyes are clear. The figure is sharp at the edges.';
 
     let back;
-    if (dr >= 7)      back = 'My back is against the door. The handle is at my hip.';
-    else if (dr >= 4) back = 'I have backed across half the room.';
-    else if (dr >= 1) back = 'I have backed a step toward the door.';
+    if (dr >= 16)    back = 'My back is against the door. The handle is at my hip. The door is bolted from the outside.';
+    else if (dr >= 12)back = 'My back is against the door. Both of my hands are at my sides, near the handle.';
+    else if (dr >= 8) back = 'I have backed across most of the room. The wall is a few steps behind me.';
+    else if (dr >= 4) back = 'I have backed a few steps toward the door.';
+    else if (dr >= 1) back = 'I have backed a step. One step.';
     else              back = 'I have not moved.';
 
     return `${it} ${eye} ${back}`;
@@ -6146,23 +6893,47 @@ const sculpture = {
       desc: 'Do not blink. Hold the line of sight.',
       respond(p) {
         const reps = streakCount(p, 'stare');
+        if (reps >= 3) {
+          return {
+            lines: [
+              'I keep staring. My eyes are watering badly. The figure is doubled at the edges.',
+              'It has not moved. It has not moved. It has not moved.',
+              'The strip light flickers. I do not blink. The figure has not moved.',
+            ],
+            scales: { strain: +5 },
+            composure: -3,
+            composureCost: 'I have been holding my eyes open against my body.',
+          };
+        }
         if (reps >= 2) {
           return {
             lines: [
-              'I keep staring. The figure does not move. My eyes do not.',
-              'I am very aware of the wall behind me.',
+              'I keep staring. The figure does not move. The room does not move.',
+              'I count my heartbeats. I count past sixty.',
+              'My eyes are very dry.',
             ],
-            scales: { strain: +2 },
+            scales: { strain: +4 },
             composure: -2,
+            composureCost: 'My eyes have been open longer than they want to be.',
+          };
+        }
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I keep staring. The figure does not move. My eyes are beginning to water.',
+              'I am very aware of the wall behind me. I do not look at it.',
+            ],
+            scales: { strain: +3 },
+            composure: -1,
             composureCost: 'I have been holding my eyes open for a long time.',
           };
         }
         return {
           lines: [
             'I do not blink. The figure does not move.',
-            'The room is very quiet.',
+            'The room is very quiet. I can hear the strip light hum.',
           ],
-          scales: { strain: +1 },
+          scales: { strain: +2 },
         };
       },
     },
@@ -6172,20 +6943,31 @@ const sculpture = {
       desc: 'Step backward. Eyes forward.',
       respond(p) {
         const reps = streakCount(p, 'back_toward_the_door');
-        if (reps >= 1) {
+        if (reps >= 2) {
           return {
             lines: [
-              'I take another step backward. My heel finds the wall, then the door.',
-              'The figure has not moved. My eyes are watering badly.',
+              'I take another step backward. My heel finds the door. The handle is at my hip.',
+              'The figure has not moved. My eyes are watering. The figure is blurred but it is in the same place.',
             ],
-            scales: { door: +3, strain: +2 },
+            scales: { door: +4, strain: +3 },
             composure: -1,
             composureCost: 'I cannot see the floor behind me. I have to trust it.',
           };
         }
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I take another step backward. The wall is behind me. I find it with the back of my calf.',
+              'The figure has not moved. My eyes are dry.',
+            ],
+            scales: { door: +3, strain: +2 },
+            composure: -1,
+            composureCost: 'I am most of the way to the door.',
+          };
+        }
         return {
           lines: [
-            'I step backward. I do not turn my head.',
+            'I step backward. I do not turn my head. I keep my eyes on the figure.',
             'The figure does not move. The wall is closer than I thought.',
           ],
           scales: { door: +2, strain: +1 },
@@ -6193,19 +6975,65 @@ const sculpture = {
       },
     },
 
-    glance_at_the_floor: {
-      label: 'glance at the floor',
-      desc: 'Just for a second. Find your footing.',
+    side_step_toward_the_door: {
+      label: 'side-step toward the door',
+      desc: 'Laterally. Eyes still on it.',
+      when: (p) => p.scales.door <= 12,
       respond(p) {
         return {
           lines: [
-            'I look down. Just for a second.',
-            'When I look up the figure is two paces closer than it was. Its hands have come up.',
+            'I shift my weight onto one leg. I bring the other across the floor. Quietly.',
+            'I do not turn my head. The figure does not move. My foot finds the seam in the floor.',
           ],
-          scales: { distance: -3, strain: -1 },
+          scales: { door: +2, strain: +1 },
+          composure: -1,
+          composureCost: 'I had to feel for the seam with my foot. I could not look.',
+        };
+      },
+    },
+
+    two_step_retreat: {
+      label: 'two-step retreat',
+      desc: 'Fast. Eyes open. Risky.',
+      when: (p) => p.scales.door <= 14,
+      respond(p) {
+        return {
+          lines: [
+            'I take two steps backward in quick succession. My eyes water badly.',
+            'For a moment the figure is doubled. I cannot tell where it is.',
+            'When my eyes resettle, the figure is in the same place. My back is closer to the wall.',
+          ],
+          scales: { door: +5, strain: +4 },
           composure: -2,
-          composureCost: '!!It moved while I was looking at my feet.!!',
-          shake: true,
+          composureCost: 'For a moment I did not know where it was.',
+        };
+      },
+    },
+
+    count: {
+      label: 'count to thirty',
+      desc: 'Hold the stare. Pass the time.',
+      respond(p) {
+        const reps = streakCount(p, 'count');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I begin again at one. I get to thirty. I do not blink.',
+              'The strip light has flickered twice during the count. I did not flinch.',
+            ],
+            scales: { strain: +4 },
+            composure: -2,
+            composureCost: 'The light flickered. I did not flinch.',
+          };
+        }
+        return {
+          lines: [
+            'I count to thirty in my head. The figure does not move. I do not blink.',
+            'On twenty-seven the strip light flickers. I do not flinch.',
+          ],
+          scales: { strain: +3 },
+          composure: -1,
+          composureCost: 'My eyes are heavier than they were at one.',
         };
       },
     },
@@ -6216,16 +7044,57 @@ const sculpture = {
       respond(p) {
         const reps = streakCount(p, 'name_what_you_see');
         const obs = [
-          ['I say: there is rebar in its mouth. The rebar is bent.', 'The rebar is exactly the same shape.'],
-          ['I say: there is a brown stain on its left shoulder. The stain is dry.', 'The stain is exactly the same.'],
-          ['I say: there is a chip on the inside of its right elbow. About a centimeter.', 'The chip is exactly the same.'],
+          [
+            'I say: there is rebar in its mouth. The rebar is bent. There are two pieces, like fangs, twisted past each other.',
+            'I say: the bend in the rebar is exactly the same as it was a minute ago.',
+          ],
+          [
+            'I say: there is a brown stain on its left shoulder. The stain is dry. It is the size of a thumbprint.',
+            'I say: the stain has not changed shape.',
+          ],
+          [
+            'I say: there is a chip on the inside of its right elbow. About a centimeter. The chip has gray inside the gray.',
+            'I say: the chip is exactly the same. The chip has not chipped further.',
+          ],
+          [
+            'I say: there is dust on its left shoe. The dust is the same color as the floor. It has been here longer than I have.',
+            'I say: the dust has not moved.',
+          ],
         ];
         const idx = Math.min(reps, obs.length - 1);
         return {
           lines: obs[idx],
-          scales: { strain: +2 },
+          scales: { strain: +3 },
           composure: -1,
           composureCost: 'Saying it out loud keeps my eyes on it.',
+        };
+      },
+    },
+
+    focus_on_a_detail: {
+      label: 'focus on its mouth',
+      desc: 'The rebar. Lock on it.',
+      when: (p) => p.scales.distance <= 12,
+      respond(p) {
+        const reps = streakCount(p, 'focus_on_a_detail');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I keep on the rebar. The bend is the same. The angle is the same.',
+              'The angle has changed by maybe a degree. I cannot be sure.',
+              'I am not sure.',
+            ],
+            scales: { strain: +4 },
+            composure: -2,
+            composureCost: 'I am not sure if the angle has changed.',
+          };
+        }
+        return {
+          lines: [
+            'I narrow my gaze to its mouth. The rebar is two pieces. They are bent past each other.',
+            'I count the angles. There are four bends. I memorize them.',
+          ],
+          scales: { strain: +2 },
         };
       },
     },
@@ -6233,16 +7102,117 @@ const sculpture = {
     close_one_eye: {
       label: 'close one eye',
       desc: 'Rest it. Keep the other open.',
-      when: (p) => p.scales.strain >= 4,
+      when: (p) => p.scales.strain >= 5,
       respond(p) {
+        const reps = streakCount(p, 'close_one_eye');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I switch eyes. The other one rests. The first one floods.',
+              'For a beat the figure is on both walls. Then it is on only one.',
+            ],
+            scales: { strain: -4, distance: -1 },
+            composure: -2,
+            composureCost: 'For a beat the figure was on both walls.',
+          };
+        }
         return {
           lines: [
             'I close my left eye. I keep my right on the figure.',
             'My right eye floods. The figure has a second outline against the wall now.',
           ],
-          scales: { strain: -3, distance: -1 },
+          scales: { strain: -4, distance: -1 },
           composure: -1,
           composureCost: 'For a beat I could not be sure of what I was looking at.',
+        };
+      },
+    },
+
+    blink_fast: {
+      label: 'blink fast',
+      desc: 'A controlled blink. Quarter-second.',
+      respond(p) {
+        return {
+          lines: [
+            'I blink. As fast as my body can. A quarter of a second.',
+            'The figure is one pace closer than it was. Its hands have not come up.',
+          ],
+          scales: { strain: -3, distance: -2 },
+          composure: -2,
+          composureCost: 'It used the quarter second.',
+        };
+      },
+    },
+
+    recite_an_address: {
+      label: 'recite an address',
+      desc: 'Anything. Yours. Your mother\'s. Anchor.',
+      respond(p) {
+        const reps = streakCount(p, 'recite_an_address');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I say the address again. Slower. The street, then the city, then the postal code.',
+              'My eyes are wet but they are open. The figure has not moved.',
+            ],
+            scales: { strain: -2 },
+            composure: +1,
+          };
+        }
+        return {
+          lines: [
+            'I say an address out loud. A street. A city. A postal code.',
+            'It is mine. Or it was mine. The figure has not moved.',
+          ],
+          scales: { strain: -2 },
+          composure: +1,
+        };
+      },
+    },
+
+    glance_at_the_floor: {
+      label: 'glance at the floor',
+      desc: 'Just for a second. Find your footing.',
+      respond(p) {
+        return {
+          lines: [
+            'I look down. Just for a second. My foot was about to find the seam.',
+            'When I look up the figure is two paces closer than it was. Its hands have come up.',
+          ],
+          scales: { distance: -5, strain: -1 },
+          composure: -3,
+          composureCost: '!!It moved while I was looking at my feet.!!',
+          shake: true,
+        };
+      },
+    },
+
+    look_at_its_eyes: {
+      label: 'look at its eyes',
+      desc: 'The sockets. Specifically.',
+      when: (p) => p.scales.distance <= 12 && p.scales.strain <= 10,
+      respond(p) {
+        const reps = streakCount(p, 'look_at_its_eyes');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I look again. The sockets are not empty. There is something at the back of them.',
+              'It is wet. It is small. It moves when my eye moves.',
+            ],
+            scales: { strain: +4 },
+            composure: -3,
+            composureCost: 'There is something at the back of its sockets.',
+            flags: { saw_eyes: true },
+          };
+        }
+        return {
+          lines: [
+            'I focus on the sockets. They are deep. They are not empty.',
+            'I cannot see what is in them. The light is poor.',
+          ],
+          scales: { strain: +3 },
+          composure: -1,
+          composureCost: 'The sockets were not empty.',
         };
       },
     },
@@ -6250,12 +7220,24 @@ const sculpture = {
     reach_for_the_handle: {
       label: 'reach for the handle',
       desc: 'Behind you. Eyes still forward.',
-      when: (p) => p.scales.door >= 5,
+      when: (p) => p.scales.door >= 12,
       respond(p) {
+        const reps = streakCount(p, 'reach_for_the_handle');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I find the handle again. It is the same handle. The lock is the same lock.',
+              'I twist hard. Nothing.',
+            ],
+            scales: { strain: +1 },
+            composure: -1,
+            composureCost: 'It is the same lock.',
+          };
+        }
         return {
           lines: [
-            'I reach behind me. My fingers find the handle. The door is locked from the outside.',
-            'I twist it anyway. Nothing.',
+            'I reach behind me. My fingers find the handle. The handle is cold.',
+            'I twist it. Nothing. The door is bolted from the outside.',
           ],
           scales: { strain: +1 },
           composure: -2,
@@ -6268,17 +7250,40 @@ const sculpture = {
     pound_on_the_door: {
       label: 'pound on the door',
       desc: 'For the orderly. Eyes still forward.',
-      when: (p) => p.scales.door >= 6,
+      when: (p) => p.scales.door >= 14,
       respond(p) {
         const reps = streakCount(p, 'pound_on_the_door');
-        if (reps >= 2) {
+        if (reps >= 3) {
           return {
             lines: [
-              'I pound again. There are footsteps in the corridor. Slow. Patient.',
-              'I hear the bolt slide.',
+              'I pound a fourth time. There are footsteps in the corridor. Faster.',
+              'A voice calls through the door. ~~Hold on. I am coming.~~',
+              'The bolt slides on the other side.',
             ],
             scales: { strain: +1 },
             flags: { orderly_coming: true },
+          };
+        }
+        if (reps >= 2) {
+          return {
+            lines: [
+              'I pound again. There are footsteps in the corridor. Slow. They have stopped.',
+              'I do not know if they are coming closer.',
+            ],
+            scales: { strain: +1 },
+            composure: -1,
+            composureCost: 'The footsteps stopped. I do not know where.',
+          };
+        }
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I pound the heel of my fist against the door. Harder.',
+              'A footstep. Distant. Then nothing.',
+            ],
+            scales: { strain: +1 },
+            composure: -1,
+            composureCost: 'One footstep. Then nothing.',
           };
         }
         return {
@@ -6287,8 +7292,27 @@ const sculpture = {
             'No one answers.',
           ],
           scales: { strain: +1 },
-          composure: -1,
+          composure: -2,
           composureCost: 'No one answered.',
+        };
+      },
+    },
+
+    scream: {
+      label: 'scream',
+      desc: 'All of it. Eyes open.',
+      when: (p) => p.scales.door >= 12 || p.scales.strain >= 12,
+      respond(p) {
+        return {
+          lines: [
+            'I scream. The note is high and ragged and it leaves me.',
+            'The figure does not move. The strip light flickers and steadies.',
+            'In the corridor, a door opens. Footsteps. Faster than the orderly\'s.',
+          ],
+          scales: { strain: +2 },
+          composure: -3,
+          composureCost: 'I gave the whole of my breath to one note.',
+          flags: { screamed: true },
         };
       },
     },
@@ -6304,20 +7328,20 @@ const sculpture = {
     {
       id: 'forced_blink',
       once: true,
-      when: (p) => p.scales.strain >= 7,
+      when: (p) => p.scales.strain >= 12,
       prose: [
-        'My eyes are watering badly. I can feel them wanting to shut.',
-        'They are going to shut. ~~I can choose how.~~',
+        'My eyes are watering badly. They want to shut. They have already shut once or twice in fractions of a second I cannot account for.',
+        'They are going to shut for longer. ~~I can choose how.~~',
       ],
       responses: [
         {
           label: 'hold one open',
           desc: 'Sacrifice the left. Keep the right.',
           lines: [
-            'I let my left eye close. I hold the right one open with my fingers.',
+            'I let my left eye close. I hold the right one open with the tips of my fingers.',
             'It feels obscene. The figure does not move.',
           ],
-          scales: { strain: -4, distance: -1 },
+          scales: { strain: -6, distance: -1 },
           composure: -2,
           composureCost: 'I am keeping my eye open with my hand.',
         },
@@ -6326,9 +7350,9 @@ const sculpture = {
           desc: 'A quarter of a second. Hope.',
           lines: [
             'I blink. Very fast. As fast as my body can.',
-            'The figure is one pace closer. Its head is tilted.',
+            'The figure is one pace closer. Its head is tilted by a degree.',
           ],
-          scales: { distance: -2, strain: -3 },
+          scales: { distance: -3, strain: -5 },
           composure: -2,
           composureCost: '!!It used the quarter second.!!',
         },
@@ -6336,23 +7360,161 @@ const sculpture = {
           label: 'let them close',
           desc: 'Eyes shut. Long.',
           lines: [
-            'I let my eyes close. ~~A breath. Two.~~',
+            'I let my eyes close. ~~A breath. Two.~~ Three.',
             'When I open them the figure has its hand on my chest.',
           ],
-          scales: { distance: -7, strain: -10 },
-          composure: -3,
+          scales: { distance: -10, strain: -14 },
+          composure: -4,
           composureCost: '!!Its hand is on my chest.!!',
           shake: true,
+        },
+        {
+          label: 'press your eyes with your palms',
+          desc: 'Drive the tears back.',
+          lines: [
+            'I press both palms against my eye sockets without closing my eyes. The pressure forces the tears back.',
+            'I open my hands. The figure has not moved. My vision is doubled but it is open.',
+          ],
+          scales: { strain: -4, distance: -1 },
+          composure: -1,
+          composureCost: 'My vision is doubled.',
+        },
+      ],
+    },
+    {
+      id: 'light_flicker',
+      once: true,
+      when: (p) => p.turn >= 3,
+      prose: [
+        'The strip light flickers. Long. Three flickers in succession.',
+        'In the third flicker the figure is in a different posture than it was in the second.',
+        'I am not sure of that. ~~I am sure of that.~~',
+      ],
+      responses: [
+        {
+          label: 'do not flinch',
+          desc: 'Hold the gaze through it.',
+          lines: [
+            'I do not flinch. The fourth flicker comes. The fifth does not.',
+            'The figure is in its original posture again. I am not sure if it ever was not.',
+          ],
+          scales: { strain: +4 },
+          composure: -2,
+          composureCost: 'I am not sure if it ever was not.',
+        },
+        {
+          label: 'close one eye through it',
+          desc: 'Hedge.',
+          lines: [
+            'I close my left eye for the duration of the flicker. The right is still on the figure.',
+            'When the light steadies I open the left. The figure is in the same place. I think.',
+          ],
+          scales: { strain: -2, distance: -1 },
+        },
+        {
+          label: 'name the strip light',
+          desc: 'Anchor the room.',
+          lines: [
+            'I say: strip light. Fluorescent. Recessed. Frosted glass.',
+            'I say it the way I would describe a thing to someone else. The flickers stop.',
+          ],
+          scales: { strain: +1 },
+          composure: +1,
+        },
+      ],
+    },
+    {
+      id: 'sound_behind_you',
+      once: true,
+      when: (p) => p.scales.door >= 6 && p.turn >= 4,
+      prose: [
+        'A sound behind me. Concrete on concrete. Small.',
+        'My eyes want to dart. The figure is in front of me.',
+      ],
+      responses: [
+        {
+          label: 'do not turn',
+          desc: 'Eyes forward.',
+          lines: [
+            'I do not turn. The sound does not come again.',
+            'The figure has not moved.',
+          ],
+          scales: { strain: +3 },
+          composure: -2,
+          composureCost: 'I do not know what the sound was.',
+        },
+        {
+          label: 'turn your head',
+          desc: 'Just briefly.',
+          lines: [
+            'I turn my head. Just a beat.',
+            'When I look back the figure is three paces closer than it was. Its mouth is open.',
+          ],
+          scales: { distance: -6, strain: -1 },
+          composure: -3,
+          composureCost: '!!Its mouth is open.!!',
+          shake: true,
+        },
+        {
+          label: 'ask through the door',
+          desc: 'Out loud. Without turning.',
+          lines: [
+            'I say: who is there.',
+            'There is no answer. The sound does not come again. The figure has not moved.',
+          ],
+          scales: { strain: +1 },
+        },
+      ],
+    },
+    {
+      id: 'it_tilts',
+      once: true,
+      when: (p) => p.scales.distance <= 12 && p.scales.strain <= 12,
+      prose: [
+        'I am sure the figure\'s head has tilted by a degree while I have been watching it.',
+        'I am sure. I have not blinked. ~~I have not blinked.~~',
+      ],
+      responses: [
+        {
+          label: 'measure against the wall',
+          desc: 'Use the seam behind it as a reference.',
+          lines: [
+            'I use the corner seam behind it as a reference. The head is at one angle to the seam.',
+            'A beat. The head is at the same angle. I was wrong. ~~I was right.~~',
+          ],
+          scales: { strain: +3 },
+          composure: -2,
+          composureCost: 'I was right. I was wrong. I do not know which.',
+        },
+        {
+          label: 'speak its name',
+          desc: 'It does not have one.',
+          lines: [
+            'I say the containment number out loud. Slowly. As a question.',
+            'The figure does not respond. The figure does not move. ~~I have not blinked.~~',
+          ],
+          scales: { strain: +2 },
+        },
+        {
+          label: 'ignore it',
+          desc: 'Eyes forward. Move on.',
+          lines: [
+            'I do not give it the moment. I keep my eyes on it. I do not check.',
+            'I will not know. I do not need to know.',
+          ],
+          scales: { strain: +2 },
+          composure: -1,
+          composureCost: 'I do not need to know. I want to know.',
         },
       ],
     },
     {
       id: 'final_stare',
       once: true,
-      when: (p) => p.scales.distance <= 3 && p.scales.strain <= 6,
+      when: (p) => p.scales.distance <= 4 && p.scales.strain <= 14,
       prose: [
         'It is within reach. Its open mouth is at the level of my chest.',
-        'It is waiting for me to blink.',
+        'It is waiting for me to blink. I have not blinked. I am very close to blinking.',
       ],
       responses: [
         {
@@ -6362,8 +7524,8 @@ const sculpture = {
             'I do not blink. I do not breathe in for a long time.',
             'The figure does not move.',
           ],
-          scales: { strain: +3 },
-          composure: -1,
+          scales: { strain: +4 },
+          composure: -2,
           composureCost: 'My eyes are open. They have stopped wanting to close.',
         },
         {
@@ -6371,10 +7533,10 @@ const sculpture = {
           desc: 'Aloud.',
           lines: [
             'I say: that is rebar. From a building. Bent.',
-            'I say: it has been wedged in for a long time.',
+            'I say: it has been wedged in for a long time. The bend is old.',
             'The figure has not moved. ~~Its mouth has closed by a degree.~~',
           ],
-          scales: { strain: +2, distance: +1 },
+          scales: { strain: +3, distance: +2 },
           flags: { named_mouth: true },
         },
         {
@@ -6384,47 +7546,146 @@ const sculpture = {
             'I lower my hand onto the top of its head. It is rough. It is the temperature of the room.',
             'It does not move. ~~My eyes have not closed.~~',
           ],
-          scales: { strain: +1, distance: +1 },
+          scales: { strain: +2, distance: +2 },
           flags: { touched_it: true },
           composure: -2,
           composureCost: 'I touched it.',
+        },
+        {
+          label: 'put a hand over its mouth',
+          desc: 'Cover the rebar.',
+          lines: [
+            'I bring my palm down over the rebar. The metal is room-temperature.',
+            'My fingers wrap the back of its skull. It does not move under my hand.',
+            'I am the one closer to it now.',
+          ],
+          scales: { strain: +3, distance: +1 },
+          flags: { covered_mouth: true },
+          composure: -3,
+          composureCost: 'My fingers wrapped the back of its skull.',
+        },
+      ],
+    },
+    {
+      id: 'corridor_voice',
+      once: true,
+      when: (p) => p.flags.handle_tried,
+      prose: [
+        'A voice on the other side of the door. Faint. The orderly\'s.',
+        'He says: ~~hold on. There is a — give me a minute. The override has — hold on.~~',
+      ],
+      responses: [
+        {
+          label: 'hold on',
+          desc: 'Tell him to keep working.',
+          lines: [
+            'I say: hold on. I am not blinking. I will not blink.',
+            'He does not answer. There is a sound of metal on metal.',
+          ],
+          scales: { strain: +2 },
+        },
+        {
+          label: 'hurry',
+          desc: 'Loudly. Through the door.',
+          lines: [
+            'I say: hurry. Please.',
+            'He does not answer. He is still working.',
+          ],
+          scales: { strain: +2 },
+          composure: -1,
+          composureCost: 'He has been working on the override longer than he should have to.',
+        },
+        {
+          label: 'describe what you see',
+          desc: 'So he knows.',
+          lines: [
+            'I say: it is two paces from me. Its mouth is open. I have not blinked in some minutes.',
+            'He says: ~~understood. Hold on.~~',
+          ],
+          scales: { strain: +3 },
         },
       ],
     },
   ],
 
   drift(p) {
+    if (p.scales.strain >= 14) {
+      return {
+        lines: [
+          'I do nothing. My eyes close on their own. Not for long. Half a second.',
+          'When I open them the figure is two paces closer than it was. Its head has tilted.',
+        ],
+        scales: { distance: -2, strain: -2 },
+        composure: -2,
+        composureCost: 'I blinked. I did not mean to.',
+      };
+    }
+    if (p.scales.strain >= 8) {
+      return {
+        lines: [
+          'I do nothing. My eyes water. A blink slips through. A quarter of a second.',
+          'When I open them the figure is one pace closer than it was.',
+        ],
+        scales: { distance: -1, strain: -1 },
+        composure: -1,
+        composureCost: 'I blinked. I did not mean to.',
+      };
+    }
     return {
       lines: [
-        'I do nothing. My eyes close on their own. A quarter of a second.',
-        'When I open them the figure is one pace closer than it was.',
+        'I do nothing. My eyes close on their own. A small blink.',
+        'The figure has moved a small amount.',
       ],
       scales: { distance: -1, strain: -1 },
       composure: -1,
-      composureCost: 'I blinked. I did not mean to.',
+      composureCost: 'A small blink. A small movement.',
     };
   },
 
   endings: [
     {
       id: 'backed_out',
-      when: (p) => p.flags.orderly_coming && p.scales.distance >= 3,
+      when: (p) => p.flags.orderly_coming && p.scales.distance >= 4,
       title: 'The bolt slides',
       lines: [
         'The bolt slides. The door opens behind me.',
         'I back out without looking away. The orderly catches me by the elbow.',
-        'He shuts the door. The room is the figure\'s again.',
+        'He shuts the door. He sets the override. The room is the figure\'s again.',
+        'He says: !!I am sorry. I am very sorry. The override was — the override was sticking.!!',
       ],
       item: 'handkerchief',
     },
     {
+      id: 'screamed_in',
+      when: (p) => p.flags.screamed && p.scales.distance >= 4,
+      title: 'You screamed. He came.',
+      lines: [
+        'The bolt slides. Faster than the orderly would have moved.',
+        'A night nurse is at the door. She pulls me by the wrist into the corridor.',
+        'She does not look into the room before she closes it.',
+        'She says: !!do not scream like that again. I was on the other side of the building.!!',
+      ],
+      item: 'small_bell',
+    },
+    {
       id: 'final_stare_won',
-      when: (p) => (p.flags.named_mouth || p.flags.touched_it) && p.scales.distance >= 2 && p.scales.strain <= 7,
+      when: (p) => (p.flags.named_mouth || p.flags.touched_it || p.flags.covered_mouth) && p.scales.distance >= 2 && p.scales.strain <= 14,
       title: 'You hold the stare',
       lines: [
         'It does not move. I do not blink. The room steadies.',
         'After a long beat, a sound from the corridor. The bolt slides. The door opens.',
-        'The figure has not moved. Its mouth has closed by a degree.',
+        'The figure has not moved. Its mouth has closed by a degree. I am almost sure of that.',
+      ],
+      item: 'sliver_of_glass',
+    },
+    {
+      id: 'it_let_you_go',
+      when: (p) => p.flags.covered_mouth && p.flags.saw_eyes && p.scales.strain <= 16,
+      title: 'You hold its mouth',
+      lines: [
+        'My palm is over the rebar. My fingers are at the back of its skull. The figure does not move.',
+        'I take my hand away. I back to the door, slowly. The figure does not move.',
+        'The bolt slides on the other side. I leave it where I found it.',
       ],
       item: 'sliver_of_glass',
     },
@@ -6434,18 +7695,19 @@ const sculpture = {
       title: 'It is at your throat',
       lines: [
         'I blink. The figure is at my throat. Its open mouth is at my collarbone.',
-        'The rebar is the last thing in the room.',
+        'The rebar is the last thing in the room. The rebar is the last thing.',
       ],
       item: null,
       scars: ['collapsed'],
     },
     {
       id: 'closed_eyes',
-      when: (p) => p.scales.strain >= 10,
+      when: (p) => p.scales.strain >= 20,
       title: 'Your eyes close',
       lines: [
-        'My eyes shut. I cannot make them open. The figure has been waiting for this.',
-        'I do not feel it cross the room. I only feel the rebar.',
+        'My eyes shut. I cannot make them open. I count my heartbeats. I count past three.',
+        'The figure has been waiting for this. I do not feel it cross the room.',
+        'I only feel the rebar.',
       ],
       item: null,
       scars: ['collapsed'],
@@ -6470,15 +7732,18 @@ const sculpture = {
 // THE PLAGUE DOCTOR — Containment object 049
 // ════════════════════════════════════════════════════════════════════════
 //
-// SCP-049. A figure in a 17th-century pestilence costume. Polite, fluent
+// SCP-049. A figure in 17th-century plague-doctor regalia. Polite, fluent
 // in Latin, civilized. He believes he can perceive a "Pestilence" inside
-// every patient and that his touch will administer the cure. The cure is
-// fatal. He bows. He explains. He approaches.
-// Three paths:
-//   - Convince him the diagnosis is wrong: refute the pestilence with a
-//     specific symptom he has not accounted for.
-//   - Break the rite: knock the case, expose the implements, force him
-//     to begin again.
+// every patient he attends, and that his touch will administer the cure.
+// The cure is fatal. He bows. He explains. He approaches. He addresses
+// the player as "miser" (Latin: wretch, sick one).
+//
+// Paths:
+//   - Sow doubt: refute the diagnosis with a specific symptom he has not
+//     accounted for; catch him in the Latin; name the date his license
+//     was struck from the register.
+//   - Break the rite: knock the case, defile the camphor, refuse the
+//     gown. The ritual is brittle if you make it visible.
 //   - The cure.
 
 const plague = {
@@ -6490,23 +7755,29 @@ const plague = {
   file: [
     'Subject reports a Visitor in the dress of a 17th-century plague physician.',
     'Visitor carries a leather case. ~~Brass implements within.~~ Implements within.',
-    'Visitor speaks chiefly in Latin. He has identified Subject as a carrier. !!He intends to administer.!!',
+    'Visitor speaks chiefly in Latin. ~~Subject does not have Latin. The Visitor is being understood anyway.~~',
+    'Visitor has identified Subject as a carrier of the Pestilence. !!He intends to administer.!!',
+    'The room smells of camphor and vinegar of the four thieves. The window has been closed.',
+    'Four other patients on this ward were attended last night. ~~None were present at roll call.~~',
   ],
   intro: [
-    'He is standing at the foot of the bed. The beak is dark and curved. The hat is wide. The robe is ash grey.',
+    'He is standing at the foot of the bed. The beak is dark and curved. The hat is wide and black and low-crowned. The robe is ash grey, ankle-length, gathered at the throat.',
+    'His gloves are dark leather. He has not taken them off. He has not taken the beak off either.',
     'He bows from the waist. He says, in even Latin: !!Salve. Sum medicus. Veni curare.!!',
-    'He sets the leather case on the writing table. He unbuckles the first strap.',
+    'He sets the leather case on the writing table. He unbuckles the first strap. He has done this before.',
+    'He says: ~~the pestilence in you is well-advanced. We shall begin with the lesser instruments.~~',
   ],
 
   scales: {
     proximity: {
-      initial: 6, min: 0, max: 10, label: 'proximity', kind: 'positive',
+      initial: 14, min: 0, max: 20, label: 'proximity', kind: 'positive',
       bands: [
-        { at: 0, word: 'gloved hand on me' },
-        { at: 2, word: 'at the bedside' },
-        { at: 4, word: 'at arm' },
-        { at: 6, word: 'at the table' },
-        { at: 8, word: 'at the foot' },
+        { at: 0, word: 'gloved thumb on throat' },
+        { at: 4, word: 'at the bedside' },
+        { at: 8, word: 'at arm' },
+        { at: 12, word: 'at the table' },
+        { at: 16, word: 'at the foot' },
+        { at: 19, word: 'in the doorway' },
       ],
       crossDown: {
         4: 'He has stepped around the table.',
@@ -6518,55 +7789,66 @@ const plague = {
       crossUp: {
         3: 'He has stepped back to the table.',
         4: 'He has returned to the foot of the bed.',
+        5: 'He has stepped into the doorway. He has not left the room.',
       },
     },
     cure: {
-      initial: 1, min: 0, max: 10, label: 'the rite', kind: 'negative',
+      initial: 2, min: 0, max: 20, label: 'the rite', kind: 'negative',
       bands: [
         { at: 0, word: 'unbegun' },
-        { at: 3, word: 'first phase' },
-        { at: 5, word: 'second phase' },
-        { at: 7, word: 'third phase' },
-        { at: 9, word: 'about to administer' },
+        { at: 4, word: 'first invocation' },
+        { at: 8, word: 'second invocation' },
+        { at: 12, word: 'implements laid' },
+        { at: 16, word: 'lance in hand' },
+        { at: 19, word: 'about to begin' },
       ],
       crossUp: {
         2: 'He has set out the first instrument. ~~A small brass tube.~~',
         3: '!!He has finished the second invocation. The room smells of camphor.!!',
         4: '!!He has the lance. He has begun to peel his glove back.!!',
+        5: '!!He has the lance over the wrist. He is reciting the final verse.!!',
       },
       crossDown: {
         3: 'He has set the instrument back. He is reviewing the case.',
         2: 'He has folded one of the cloths.',
+        1: 'He has gone back to the case.',
       },
     },
     doubt: {
-      initial: 0, min: 0, max: 10, label: 'his doubt', kind: 'positive',
+      initial: 0, min: 0, max: 20, label: 'his doubt', kind: 'positive',
       bands: [
         { at: 0, word: 'unshaken' },
-        { at: 2, word: 'consulting' },
-        { at: 5, word: 'uncertain' },
-        { at: 7, word: 'reconsidering' },
-        { at: 9, word: 'misdiagnosed' },
+        { at: 4, word: 'consulting' },
+        { at: 8, word: 'uncertain' },
+        { at: 12, word: 'reconsidering' },
+        { at: 16, word: 'misdiagnosed' },
+        { at: 19, word: 'kneeling' },
       ],
       crossUp: {
         3: 'He has paused. He is reading his own notes from the case.',
         4: '!!He has closed the case.!!',
+        5: '!!He has set the beak on the writing chair. He has not removed it.!!',
       },
       crossDown: { 1: 'He has resolved his doubt. He is sure again.' },
     },
   },
 
   initialize(p, player) {
-    p.scales.proximity = 6;
-    p.scales.cure = 1;
+    p.scales.proximity = 14;
+    p.scales.cure = 2;
     p.scales.doubt = 0;
-    if (player.scars?.includes('witnessed')) p.scales.cure = 2;
+    if (player.scars?.includes('witnessed')) p.scales.cure = 4;
+    if (player.scars?.includes('collapsed')) p.scales.proximity = 12;
+    if (player.wound === 'amnesia') p.scales.cure = 4;
   },
 
   fileReveals: [
-    { announce: 'A line fills in. Visitor has been on the ward for [[3]] days. ~~He has cured four others.~~ He has attended four others.' },
-    { announce: 'Another. The implements in his case are not period. They are sharpened.' },
-    { announce: 'The last line. !!The Latin he is speaking is a funeral office.!!' },
+    { at: 5,  announce: 'A line fills in. Visitor has been on the ward for [[3]] days. ~~He has attended four others.~~' },
+    { at: 10, announce: 'Another. The implements in his case are not period. ~~They are sharpened to a modern edge.~~' },
+    { at: 16, announce: 'Another. The Latin he is speaking is a funeral office. Specifically, the office for one who has died of plague.' },
+    { at: 24, announce: 'Another. His credentials are signed by a board that was disbanded in [[1721]].' },
+    { at: 32, announce: 'Another. The four others he attended are in the basement morgue. ~~They are not noted in the day log.~~' },
+    { at: 42, announce: '!!The last line. He has been struck from the medical register on the same date his credentials were signed.!!' },
   ],
 
   presented(p) {
@@ -6575,22 +7857,26 @@ const plague = {
     const d = p.scales.doubt;
 
     let where;
-    if (px <= 1)      where = '!!His glove is on my throat. He is taking a pulse he does not need.!!';
-    else if (px <= 3) where = '!!He is at the bedside. He has set his beak against the lapel of his robe.!!';
-    else if (px <= 5) where = 'He has come around the table. He is standing over the writing chair.';
-    else              where = 'He is at the foot of the bed. The case is open behind him.';
+    if (px <= 1)      where = '!!His glove is on my throat. The thumb is below my jaw. He is taking a pulse he does not need. He has been taking it for some seconds.!!';
+    else if (px <= 4) where = '!!He is at the bedside. He has set his beak against the lapel of his robe. He is leaning slightly forward.!!';
+    else if (px <= 8) where = 'He has come around the table. He is standing over the writing chair. He has the lance in one hand and the cloth in the other.';
+    else if (px <= 12)where = 'He is at the writing table. He has both gloves on the case. He is selecting.';
+    else if (px <= 16)where = 'He is at the foot of the bed. The case is open behind him. His weight is on his back foot.';
+    else              where = 'He is in the doorway. The case is open on the table. He has not picked anything up yet.';
 
     let rite;
-    if (c >= 8)      rite = '!!He has the lance in his right hand. His left glove is half off.!!';
-    else if (c >= 5) rite = 'He has the brass tube. He has the cloths laid out. He is reading the third invocation.';
-    else if (c >= 2) rite = 'He has the first implement out. He is reciting in Latin. The room smells of vinegar.';
-    else             rite = 'The case is open. He has not lifted anything out.';
+    if (c >= 16)      rite = '!!He has the lance in his right hand. His left glove is half off. He is reciting the final verse of the rite. The Latin is sharp at the consonants.!!';
+    else if (c >= 12) rite = 'He has the brass tube. He has the cloths laid out. He has the lance ready. He is reading the third invocation.';
+    else if (c >= 8)  rite = 'He has the first implement out. He is reciting the second verse in Latin. The room smells of vinegar.';
+    else if (c >= 4)  rite = 'He has begun reciting. The first verse is shorter than I expected. He has begun unrolling a cloth.';
+    else              rite = 'The case is open. He has not lifted anything out. He has been reading the notes.';
 
     let mind;
-    if (d >= 7)      mind = '!!He has closed the case. He is reading his own notes again.!!';
-    else if (d >= 4) mind = 'His head has tilted. He has paused mid-recitation.';
-    else if (d >= 1) mind = 'He has glanced at the case twice in a row. He had not before.';
-    else             mind = 'He is certain. His movements are exact.';
+    if (d >= 16)      mind = '!!He has closed the case. He has set the beak on the writing chair. He is reading his own notes by hand.!!';
+    else if (d >= 12) mind = '!!He has paused mid-verse. He is reading his own notes from the case for the third time.!!';
+    else if (d >= 8)  mind = 'His head has tilted. He has paused mid-recitation. He is consulting the chart.';
+    else if (d >= 4)  mind = 'He has glanced at the case twice in a row. He had not before.';
+    else              mind = 'He is certain. His movements are exact. The bow is the same depth every time.';
 
     return `${where} ${rite} ${mind}`;
   },
@@ -6602,13 +7888,25 @@ const plague = {
       desc: 'You do not have the pestilence.',
       respond(p, player) {
         const reps = streakCount(p, 'object_to_the_diagnosis');
+        if (reps >= 2) {
+          return {
+            lines: [
+              'I object a third time. The same words. ~~I do not have the pestilence.~~',
+              'He inclines the beak. He says, with no impatience: !!Miser. The pestilence is the kindest illness. It does not let its host know it is there.!!',
+              'He turns to the case. He selects another implement.',
+            ],
+            scales: { cure: +3, doubt: +1 },
+            composure: -2,
+            composureCost: 'He found my objection charming.',
+          };
+        }
         if (reps >= 1) {
           return {
             lines: [
               'I say it again. I do not have the pestilence.',
-              'He bows. He says, gently: !!miser. The pestilence does not announce itself. That is its first kindness.!!',
+              'He bows. He says, gently: !!Miser. The pestilence does not announce itself. That is its first kindness. The second is brief.!!',
             ],
-            scales: { cure: +1, doubt: +1 },
+            scales: { cure: +2, doubt: +1 },
             composure: -1,
             composureCost: 'He is sure. He is kind about it.',
           };
@@ -6616,35 +7914,48 @@ const plague = {
         return {
           lines: [
             'I say: I do not have what you think I have.',
-            'He inclines his head. He says: !!ah. They do say that.!! He returns to the case.',
+            'He inclines his head. He says: !!Ah. They do say that.!! He returns to the case.',
           ],
-          scales: { doubt: +1 },
+          scales: { doubt: +2 },
         };
       },
     },
 
     name_a_missing_symptom: {
       label: 'name a symptom he misses',
-      desc: 'No buboes. No fever. Nothing on the tongue.',
+      desc: 'No buboes. No fever. No rose on the chest.',
       respond(p) {
         const reps = streakCount(p, 'name_a_missing_symptom');
+        if (reps >= 2) {
+          return {
+            lines: [
+              'I name a third. My eyes are not yellow. My tongue is not coated. My lymph is not swollen at the throat or under the arm.',
+              'He has been listening. The bird-beak has been still for some seconds.',
+              'He turns to the case. He reads. He does not turn back to me for a long beat.',
+            ],
+            scales: { doubt: +5, cure: -2 },
+            composure: -1,
+            composureCost: 'He listened to all three.',
+            flags: { three_symptoms: true },
+          };
+        }
         if (reps >= 1) {
           return {
             lines: [
-              'I name another. My tongue is clean. There is no rose on my chest.',
+              'I name another. My tongue is clean. My breath is not foul. The hollow at my throat is not warm to the back of my hand.',
               'He pauses. He turns to the case. He reads. The bird-beak nods, once.',
             ],
-            scales: { doubt: +3, cure: -1 },
+            scales: { doubt: +4, cure: -1 },
             composure: -1,
             composureCost: 'He listened. That has its own cost.',
           };
         }
         return {
           lines: [
-            'I say: I have no buboes. No fever. No swelling at the lymph.',
-            'He inclines his head. He has heard me. He says: ~~the pestilence wears many faces, miser.~~',
+            'I say: I have no buboes. No fever. No swelling at the lymph. No rose on my chest. No vomit on my breath.',
+            'He inclines his head. He has heard me. He says: ~~the pestilence wears many faces, miser. The face it wears for you is the absence of all of these.~~',
           ],
-          scales: { doubt: +2 },
+          scales: { doubt: +3 },
         };
       },
     },
@@ -6653,16 +7964,99 @@ const plague = {
       label: 'demand his credentials',
       desc: 'A letter. A seal. A name.',
       respond(p) {
+        const reps = streakCount(p, 'demand_his_credentials');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I say: I want to see them again. The seal.',
+              'He hands the paper back to me. The seal is broken at a different place than before. ~~The wax has moved.~~',
+              'I look up at him. He has not moved. The seal has moved.',
+            ],
+            scales: { doubt: +4, cure: -1 },
+          };
+        }
         return {
           lines: [
             'I say: by whose order are you here.',
-            'He produces a folded paper from inside the robe. The seal is broken. The hand is not the seal\'s.',
-            'I show him. He looks at it for a long beat. He puts the paper back inside the robe.',
+            'He produces a folded paper from inside the robe. The seal is broken. The hand of the writing is not the same as the hand on the seal.',
+            'I show him the discrepancy. He looks at it for a long beat. He puts the paper back inside the robe.',
+            'He says: ~~the seal is from the Board, miser. The Board issued it to me before I was a physician.~~',
           ],
-          scales: { doubt: +3, proximity: +1 },
+          scales: { doubt: +4, proximity: +1 },
           composure: -1,
-          composureCost: 'The seal was not his.',
+          composureCost: 'The seal was not in the hand of its writing.',
           flags: { credentials_questioned: true },
+        };
+      },
+    },
+
+    ask_what_year_he_thinks_it_is: {
+      label: 'ask what year he thinks it is',
+      desc: 'Plainly. Make him date himself.',
+      when: (p) => p.turn >= 1,
+      respond(p) {
+        return {
+          lines: [
+            'I say: what year do you think it is.',
+            'He answers without thinking. He gives a year in the seventeenth century. Specifically. He gives the month as well.',
+            'A beat. He says, more slowly: ~~no. That is. I beg your pardon. Let me consult.~~ He does not consult.',
+            'He says, after a pause: ~~it is the year of the Lord. Let us not concern ourselves with the number.~~',
+          ],
+          scales: { doubt: +5 },
+          composure: -1,
+          composureCost: 'He named a month from a century I have not lived in.',
+          flags: { caught_year: true },
+        };
+      },
+    },
+
+    ask_his_given_name: {
+      label: 'ask his given name',
+      desc: 'Not his title. His name.',
+      when: (p) => p.turn >= 1,
+      respond(p) {
+        return {
+          lines: [
+            'I say: what is your given name.',
+            'He inclines the beak. He says: ~~it has been many years. I am called Medicus. I have not had a given name for some time.~~',
+            'He says it the way someone says a thing they have made peace with.',
+          ],
+          scales: { doubt: +3, cure: -1 },
+          composure: -1,
+          composureCost: 'He has not had a given name for some time.',
+        };
+      },
+    },
+
+    describe_your_actual_wound: {
+      label: 'describe your actual wound',
+      desc: 'What you were admitted for. Plainly.',
+      when: (p) => p.turn >= 1,
+      respond(p, player) {
+        const w = player.wound;
+        let lines;
+        if (w === 'amnesia') lines = [
+          'I say: I was admitted because I cannot remember my address. That is what is wrong with me. It is not the pestilence.',
+          'He says: ~~ah. The pestilence settles in the memory first, miser. The buboes follow.~~',
+          'He says it the way a teacher corrects a child who has the wrong answer.',
+        ];
+        else if (w === 'insomnia') lines = [
+          'I say: I cannot sleep. That is what was on my admission. It is not the pestilence.',
+          'He says: ~~the wakefulness is the pestilence speaking, miser. It does not let the body close its eyes lest it be discovered.~~',
+        ];
+        else if (w === 'split_personality') lines = [
+          'I say: I left another version of myself at home. That is what is on my file. Not the pestilence.',
+          'He says: ~~ah. The doubling. The pestilence has its preferred shapes. The doubling is one. The cure is the same.~~',
+        ];
+        else lines = [
+          'I say: I have a different complaint. Not the pestilence.',
+          'He says: ~~there is no complaint, miser, that is not the pestilence in disguise.~~',
+        ];
+        return {
+          lines,
+          scales: { doubt: +3, cure: +1 },
+          composure: -1,
+          composureCost: 'He had an answer for it. He has an answer for everything.',
         };
       },
     },
@@ -6670,33 +8064,147 @@ const plague = {
     cover_your_face: {
       label: 'cover your face',
       desc: 'Deny him the breath. The pestilence travels through breath.',
-      when: (p) => p.scales.proximity <= 5,
+      when: (p) => p.scales.proximity <= 12,
       respond(p) {
+        const reps = streakCount(p, 'cover_your_face');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I keep the sheet up. I press it against my nose. I breathe through the linen.',
+              'He has stopped his recitation. He says: ~~you have done this before, miser. Were you a physician?~~',
+            ],
+            scales: { proximity: +3, cure: -3 },
+            composure: -1,
+            composureCost: 'He asked if I had been a physician.',
+          };
+        }
         return {
           lines: [
             'I draw the sheet up across my nose and mouth.',
-            'He stops. He looks at me. He says: !!ah. You know the bridge of it.!! He steps back a half pace.',
+            'He stops. He looks at me. He says: !!Ah. You know the bridge of it.!! He steps back a half pace.',
+            'He says, conversationally: ~~few of the unschooled know the bridge of breath, miser.~~',
           ],
-          scales: { proximity: +2, cure: -2 },
+          scales: { proximity: +3, cure: -2 },
           composure: -1,
           composureCost: 'I admitted I know how it travels.',
         };
       },
     },
 
-    knock_the_case: {
-      label: 'knock the case',
-      desc: 'Off the table. Onto the floor.',
-      when: (p) => p.scales.proximity >= 4,
+    demand_open_window: {
+      label: 'demand he open the window',
+      desc: 'The pestilence stagnates in closed air.',
+      when: (p) => p.turn >= 1,
       respond(p) {
-        if (p.scales.doubt >= 3) {
+        if (p.scales.doubt >= 6) {
+          return {
+            lines: [
+              'I say: the window. Open it.',
+              'He pauses. He says, after a beat: ~~that is correct, miser. The air must move.~~',
+              'He crosses to the window. He unfastens it. The night air comes in. The camphor smell thins.',
+              'He turns back to me. He looks at me differently. ~~You know more than your file says.~~',
+            ],
+            scales: { doubt: +3, cure: -3, proximity: +2 },
+            flags: { window_open: true },
+          };
+        }
+        return {
+          lines: [
+            'I say: the window. Open it. The room has gone close.',
+            'He does not move. He says: ~~the pestilence is in the air outside as well, miser. The window remains closed.~~',
+          ],
+          scales: { doubt: +1, cure: +1 },
+          composure: -1,
+          composureCost: 'He refused without consulting the case.',
+        };
+      },
+    },
+
+    demand_he_remove_the_beak: {
+      label: 'demand he remove the beak',
+      desc: 'Take it off. Let me see your face.',
+      when: (p) => p.scales.doubt >= 4,
+      respond(p) {
+        return {
+          lines: [
+            'I say: take the beak off. I would like to see your face.',
+            'He goes very still. He says: ~~the beak is part of the order, miser. The order has not authorized its removal.~~',
+            'A long pause. He says: ~~there is nothing under it that would help you.~~',
+          ],
+          scales: { doubt: +4, cure: -1 },
+          composure: -2,
+          composureCost: 'Nothing under the beak that would help me.',
+        };
+      },
+    },
+
+    ask_about_the_others_he_cured: {
+      label: 'ask about the others he cured',
+      desc: 'Their condition afterward.',
+      when: (p) => p.turn >= 2,
+      respond(p) {
+        return {
+          lines: [
+            'I say: the others you have attended. Where are they.',
+            'He bows. He says: ~~at rest, miser. The cure is brief. The rest is permanent.~~',
+            'He says it the way someone announces good news. He does not see what is wrong with the sentence.',
+          ],
+          scales: { doubt: +5, cure: -1 },
+          composure: -2,
+          composureCost: 'He did not see what was wrong with the sentence.',
+        };
+      },
+    },
+
+    quote_him_back: {
+      label: 'quote the rite back to him',
+      desc: 'In Latin. The exact phrase he misspoke.',
+      when: (p) => p.scales.doubt >= 6,
+      respond(p) {
+        return {
+          lines: [
+            'I quote the line. I correct the verb tense. I correct the case ending.',
+            'He goes very still. The beak does not move. He says: ~~you are not a physician. You are not from the Board.~~ It is not a question.',
+            'He closes the case. Slowly. He does not look at the case as he closes it.',
+          ],
+          scales: { doubt: +6, cure: -4, proximity: +1 },
+          flags: { quoted_him: true },
+        };
+      },
+    },
+
+    name_the_register: {
+      label: 'name the date he was struck',
+      desc: 'From the medical register. Out loud.',
+      when: (p) => p.scales.doubt >= 8,
+      respond(p) {
+        return {
+          lines: [
+            'I say a date. I do not know how I know it. It is the date his license was struck.',
+            'He goes very still. He says, after some seconds: ~~that is correct.~~',
+            'He sets the beak on the writing chair. He sets the lance back into the case. He folds his hands.',
+          ],
+          scales: { doubt: +7, cure: -6, proximity: +2 },
+          composure: -2,
+          composureCost: 'I named a date that was not in my file.',
+          flags: { register_named: true },
+        };
+      },
+    },
+
+    knock_the_case: {
+      label: 'knock the case off the table',
+      desc: 'Physical. Direct.',
+      when: (p) => p.scales.proximity >= 6,
+      respond(p) {
+        if (p.scales.doubt >= 4) {
           return {
             lines: [
               'I swing my arm across the table. The case clatters onto the floor.',
-              'Brass implements scatter. He does not bend for them. He looks at the open case for a long beat.',
-              'He says, quietly: !!that was unnecessary.!! He has not stepped forward.',
+              'Brass implements scatter. One of them — the lance — rolls under the bed. He does not bend for them.',
+              'He looks at the open case for a long beat. He says, quietly: ~~that was unnecessary, miser.~~ He has not stepped forward.',
             ],
-            scales: { cure: -5, doubt: +3, proximity: +2 },
+            scales: { cure: -7, doubt: +4, proximity: +2 },
             composure: -2,
             composureCost: 'I am out of the bed. He is not stopping me.',
             shake: true,
@@ -6705,29 +8213,78 @@ const plague = {
         }
         return {
           lines: [
-            'I swing my arm. The case rocks. He steadies it with one gloved hand.',
-            'He says: !!miser. Please.!! The rite continues around me.',
+            'I swing my arm. The case rocks. He steadies it with one gloved hand. He has not even looked.',
+            'He says: !!Miser. Please.!! The rite continues around me.',
           ],
-          scales: { cure: +2, proximity: -1 },
+          scales: { cure: +3, proximity: -1 },
           composure: -2,
           composureCost: 'He steadied the case without looking at me.',
         };
       },
     },
 
-    quote_him_back: {
-      label: 'quote the rite back to him',
-      desc: 'In Latin. The exact phrase he misspoke.',
-      when: (p) => p.scales.doubt >= 3,
+    spit_in_the_camphor: {
+      label: 'spit into the camphor dish',
+      desc: 'Defile the ritual.',
+      when: (p) => p.scales.proximity >= 8,
       respond(p) {
         return {
           lines: [
-            'I quote the line. I correct the verb tense.',
-            'He goes very still. He says: ~~you are not a physician.~~ It is not a question.',
-            'He closes the case.',
+            'I sit up. I lean across. I spit into the camphor dish on the writing table.',
+            'He pauses. He looks at the dish. He says: ~~that was not necessary either, miser.~~',
+            'But the smell of camphor has dropped by a degree. The room is more like a room.',
           ],
-          scales: { doubt: +4, cure: -3, proximity: +1 },
-          flags: { quoted_him: true },
+          scales: { cure: -3, doubt: +2 },
+          composure: -2,
+          composureCost: 'I spat at his rite. He was patient about it.',
+          flags: { camphor_defiled: true },
+        };
+      },
+    },
+
+    show_admission_card: {
+      label: 'show him your admission card',
+      desc: 'You are a Subject. Not a carrier.',
+      when: (p) => p.turn >= 1,
+      respond(p) {
+        return {
+          lines: [
+            'I take the card from my coat. I hold it up so the beak can read it.',
+            'He looks at the card. He says: ~~the number is yours. But you have been listed as a carrier on the day log.~~',
+            '~~He has access to the day log.~~ He has access to the day log.',
+          ],
+          scales: { doubt: +2, cure: +1 },
+          composure: -1,
+          composureCost: 'He has access to the day log.',
+        };
+      },
+    },
+
+    step_off_the_bed: {
+      label: 'step off the bed',
+      desc: 'Stand. Take a step. He cannot operate on you upright.',
+      when: (p) => !p.flags.gowned && p.scales.proximity >= 6,
+      respond(p) {
+        if (p.scales.proximity <= 8) {
+          return {
+            lines: [
+              'I sit up. I swing my legs off the bed. He puts a gloved hand on my shoulder.',
+              'He says, gently: ~~miser. Please. The cure requires that you be supine.~~',
+              'He does not press down. He waits.',
+            ],
+            scales: { cure: +2 },
+            composure: -2,
+            composureCost: 'His glove was on my shoulder.',
+          };
+        }
+        return {
+          lines: [
+            'I get off the bed. The floor is cold under my feet.',
+            'He bows. He says: ~~miser. I will resume when you have returned to the bed.~~',
+            'He returns to the case. He turns his back.',
+          ],
+          scales: { cure: -3, proximity: +2 },
+          flags: { stood_up: true },
         };
       },
     },
@@ -6735,15 +8292,15 @@ const plague = {
     submit: {
       label: 'submit to the cure',
       desc: 'Lay back. Bare the wrist.',
-      when: (p) => p.scales.proximity <= 4,
+      when: (p) => p.scales.proximity <= 6,
       respond(p) {
         return {
           lines: [
-            'I lay back. I draw my sleeve up.',
-            'He bows. He says: !!miser. You will not feel it long.!!',
-            'He takes the lance from the case.',
+            'I lay back. I draw my sleeve up. The vein at the wrist is close to the skin.',
+            'He bows. He says: !!Miser. You will not feel it long.!!',
+            'He takes the lance from the case. He lays it across the wrist. He recites the final verse.',
           ],
-          scales: { cure: +5, proximity: -3 },
+          scales: { cure: +6, proximity: -3 },
           composure: -3,
           composureCost: 'I have bared the wrist.',
           flags: { submitted: true },
@@ -6765,7 +8322,7 @@ const plague = {
       when: (p) => p.turn >= 1,
       prose: [
         'He has finished the first invocation. He turns toward the bed.',
-        'He says: ~~salve, miser. The pestilence is in the second intercostal. I shall begin there.~~',
+        'He says: ~~salve, miser. The pestilence is in the second intercostal. I shall begin there. The lesser instruments first, then the lance. You will be at peace before the third bell.~~',
       ],
       responses: [
         {
@@ -6773,38 +8330,51 @@ const plague = {
           desc: 'Plain.',
           lines: [
             'I say: no.',
-            'He bows. He says: ~~as you wish, miser. The pestilence does not negotiate.~~',
+            'He bows. He says: ~~as you wish, miser. The pestilence does not negotiate. We shall continue.~~',
           ],
-          scales: { cure: +1, doubt: +1 },
+          scales: { cure: +2, doubt: +1 },
         },
         {
           label: 'show me where',
           desc: 'Make him put a finger on it.',
           lines: [
             'I say: show me where.',
-            'He points, through the glove. The place is empty. There is no swelling, no heat.',
-            'He says: ~~it is beneath. It does not show.~~',
+            'He points, through the glove, at a place on my chest. The place is empty. There is no swelling, no heat, no tenderness.',
+            'He says: ~~it is beneath. It does not show. It does not need to show.~~',
           ],
-          scales: { doubt: +3, cure: -1 },
+          scales: { doubt: +4, cure: -1 },
         },
         {
           label: 'how did you find it',
           desc: 'Make him explain.',
           lines: [
             'I say: how did you find it.',
-            'He pauses. He says: !!the smell.!! He inclines the beak. ~~He cannot smell through it.~~',
+            'He pauses. He says: !!The smell.!! He inclines the beak.',
+            '~~He cannot smell through the beak. The beak is full of dried herbs.~~',
           ],
-          scales: { doubt: +4, cure: -2 },
+          scales: { doubt: +5, cure: -2 },
           flags: { caught_smell: true },
+        },
+        {
+          label: 'I will need a second opinion',
+          desc: 'Procedural delay.',
+          lines: [
+            'I say: I would like a second physician to look. Before the cure.',
+            'He inclines the beak. He says: ~~there is no second physician on this ward tonight, miser. The Board has not seen fit to send one.~~',
+            'He says it the way a man says a thing that has worked out for him.',
+          ],
+          scales: { doubt: +2 },
+          composure: -1,
+          composureCost: 'No second physician on the ward tonight.',
         },
       ],
     },
     {
       id: 'the_lance',
       once: true,
-      when: (p) => p.scales.cure >= 6,
+      when: (p) => p.scales.cure >= 12,
       prose: [
-        'He has the lance out. It is brass. It is longer than a lance has any reason to be.',
+        'He has the lance out. It is brass. It is longer than a lance has any reason to be. The handle is wrapped in linen that has been changed many times.',
         'He says: ~~the cure is brief. Three drops. Less than a moment of attention.~~',
       ],
       responses: [
@@ -6814,54 +8384,274 @@ const plague = {
           lines: [
             'I say: put it down.',
             'He looks at the lance. He sets it on the cloth. He does not pick it back up.',
+            'A long beat. He picks up the brass tube instead. He continues.',
           ],
-          scales: { cure: -3, doubt: +1 },
+          scales: { cure: -4, doubt: +2 },
         },
         {
           label: 'three drops of what',
           desc: 'Make him say it.',
           lines: [
             'I say: three drops of what.',
-            'He says, gently: ~~of you, miser. The pestilence is in the humour.~~',
+            'He says, gently: ~~of you, miser. The pestilence is in the humour. The cure releases it.~~',
           ],
-          scales: { cure: +2, doubt: +2 },
+          scales: { cure: +3, doubt: +3 },
           composure: -1,
           composureCost: 'He said it out loud.',
+        },
+        {
+          label: 'where does it go after',
+          desc: 'Where do the drops go.',
+          lines: [
+            'I say: the three drops. Where do they go.',
+            'He produces a small glass vial from the case. It is half full. The fluid inside does not catch the light.',
+            'He says: ~~they go into here, miser. With the others. The Board collects them.~~',
+          ],
+          scales: { doubt: +5 },
+          composure: -3,
+          composureCost: 'The vial was half full.',
+          flags: { saw_vial: true },
         },
         {
           label: 'I am ready',
           desc: 'Yield.',
           lines: [
             'I say: I am ready.',
-            'He bows. He approaches.',
+            'He bows. He approaches. He has the lance. He has the cloth. He has the vial.',
           ],
-          scales: { cure: +5, proximity: -3 },
-          composure: -2,
+          scales: { cure: +6, proximity: -3 },
+          composure: -3,
           composureCost: 'I said the word he needed.',
           flags: { said_ready: true },
+        },
+      ],
+    },
+    {
+      id: 'orderly_at_door',
+      once: true,
+      when: (p) => p.turn >= 3 && p.scales.cure <= 14,
+      prose: [
+        'There is a knock at the door. The orderly. He says, through the door: ~~Subject. Vitals check.~~',
+        'The plague doctor turns his head a degree toward the door. He says, in Latin, evenly: ~~Adlecit hic. Mors moratur.~~',
+        'The orderly\'s footsteps recede. He has not opened the door.',
+      ],
+      responses: [
+        {
+          label: 'call out to him',
+          desc: 'In English. Loudly.',
+          lines: [
+            'I shout: I do not consent. There is a man here who is not a physician.',
+            'The footsteps stop. A pause. They resume. They do not come back.',
+            'The plague doctor inclines the beak. He says: ~~the orderly does not have Latin, miser. But he has been told who to listen to.~~',
+          ],
+          scales: { doubt: +3, cure: +1 },
+          composure: -3,
+          composureCost: '!!The orderly was told who to listen to.!!',
+        },
+        {
+          label: 'ask him what he said',
+          desc: 'In Latin. To his face.',
+          lines: [
+            'I say: what did you tell him.',
+            'He says: ~~that you are with me. That the cure is in progress. That mortality is delayed.~~',
+            'He says delayed with a small smile, audible through the beak.',
+          ],
+          scales: { doubt: +3, cure: +1 },
+          composure: -2,
+          composureCost: 'He smiled when he said delayed.',
+        },
+        {
+          label: 'pound on the wall',
+          desc: 'Signal the next room.',
+          lines: [
+            'I throw my hand against the wall. Twice.',
+            'There is no answer through the wall. The doctor continues his recitation.',
+            'He says, conversationally: ~~the next room was attended last night, miser.~~',
+          ],
+          scales: { doubt: +2 },
+          composure: -3,
+          composureCost: 'The next room was attended last night.',
+        },
+      ],
+    },
+    {
+      id: 'final_confession',
+      once: true,
+      when: (p) => p.scales.cure >= 8,
+      prose: [
+        'He sets the lance back in the case. He brings a small folded paper from the inside of his robe. He unfolds it.',
+        'He says: ~~it is customary, miser, that the patient writes a final letter. You may dictate. I shall write it for you.~~',
+        'He has a pencil in his other glove. The pencil has been recently sharpened.',
+      ],
+      responses: [
+        {
+          label: 'I will not dictate',
+          desc: 'Refuse.',
+          lines: [
+            'I say: I will not dictate.',
+            'He folds the paper. He puts it back inside the robe. He says: ~~that is your right, miser. The cure proceeds without the letter.~~',
+          ],
+          scales: { cure: +2, doubt: +1 },
+        },
+        {
+          label: 'I am not going to die',
+          desc: 'Refuse the premise.',
+          lines: [
+            'I say: I am not going to die. There is no letter to write.',
+            'He inclines the beak. He says: ~~the cure ends the carriage, miser. The carriage is what would die. The patient does not.~~',
+            'He pauses. He says: ~~the patient is at rest. There is a difference.~~',
+          ],
+          scales: { doubt: +4, cure: -1 },
+          composure: -2,
+          composureCost: 'There is a difference between rest and death.',
+        },
+        {
+          label: 'who has been getting these letters',
+          desc: 'Make him say.',
+          lines: [
+            'I say: the four others. Their letters. Where did they go.',
+            'He says: ~~into the case, miser. With the vials. The Board collects them.~~',
+            'He does not see what is wrong with the sentence.',
+          ],
+          scales: { doubt: +5 },
+          composure: -2,
+          composureCost: 'Into the case with the vials.',
+        },
+        {
+          label: 'I will dictate',
+          desc: 'Stall by talking.',
+          lines: [
+            'I begin to dictate. Slowly. To my mother, who is no longer living. The doctor writes. The pencil scratches.',
+            'I dictate for some minutes. He waits patiently for each word. He does not hurry me.',
+            'When I stop, he folds the paper. He puts it inside the robe. He says: ~~thank you, miser. We may continue.~~',
+          ],
+          scales: { cure: +3 },
+          composure: -1,
+          composureCost: 'I dictated a letter he was patient with.',
+        },
+      ],
+    },
+    {
+      id: 'beak_on_forehead',
+      once: true,
+      when: (p) => p.scales.proximity <= 4,
+      prose: [
+        'He bends over me. He brings the tip of the beak down. He sets it against my forehead.',
+        'He says: ~~it is the laying-on of the beak, miser. It is the herbs that do the curing.~~',
+        'The beak is heavier than it looks. It smells of camphor and something underneath.',
+      ],
+      responses: [
+        {
+          label: 'do not move',
+          desc: 'Endure.',
+          lines: [
+            'I do not move. The beak stays on my forehead. He says nothing.',
+            'After a long minute he straightens. He says: ~~good. The herbs are taking.~~',
+          ],
+          scales: { cure: +4 },
+          composure: -3,
+          composureCost: 'The beak stayed there for a long minute.',
+        },
+        {
+          label: 'turn your head',
+          desc: 'Slide out from under it.',
+          lines: [
+            'I turn my head. The beak slides across my forehead. He lets it.',
+            'He says: ~~the herbs are imprecise, miser. They will still take.~~',
+          ],
+          scales: { cure: +2, proximity: +1 },
+          composure: -1,
+          composureCost: 'He let me slide. He had a plan for it.',
+        },
+        {
+          label: 'push it off',
+          desc: 'With your hand.',
+          lines: [
+            'I bring my hand up. I push the beak away from my forehead.',
+            'He straightens. He says, with surprise: ~~miser. That is the first time someone has put hands on the beak.~~',
+            'He sets the beak back at his belt. He returns to the case.',
+          ],
+          scales: { cure: -3, doubt: +3, proximity: +2 },
+          flags: { pushed_beak: true },
+        },
+      ],
+    },
+    {
+      id: 'mirror_glimpse',
+      once: true,
+      when: (p) => p.turn >= 4 && p.scales.doubt >= 4,
+      prose: [
+        'There is a small mirror on the writing table, behind the case. The angle is wrong for me to see most of the room.',
+        'I can see the plague doctor in it. There is a second figure standing beside him. Hooded. Smaller.',
+        'When I look up directly, there is no second figure.',
+      ],
+      responses: [
+        {
+          label: 'look at the mirror again',
+          desc: 'Test it.',
+          lines: [
+            'I look at the mirror. The second figure is there. It is standing beside him, holding something on a tray.',
+            'I look up. There is nothing.',
+            'I look at the mirror again. The figure is gone.',
+          ],
+          scales: { doubt: +3 },
+          composure: -3,
+          composureCost: 'The figure was holding something on a tray.',
+        },
+        {
+          label: 'ask who the assistant is',
+          desc: 'Out loud.',
+          lines: [
+            'I say: the assistant. The one in the mirror.',
+            'He goes very still. He says: ~~there is no assistant on this ward, miser. The Board has not authorized one.~~',
+            'He says it the way someone answers a question they have been waiting to be asked.',
+          ],
+          scales: { doubt: +4, cure: -1 },
+        },
+        {
+          label: 'take the mirror off the table',
+          desc: 'Move it. Break the angle.',
+          lines: [
+            'I sit up. I take the mirror off the table. I lay it face-down on the bed beside me.',
+            'He does not stop me. He says: ~~the mirror is not part of the case, miser. You may keep it.~~',
+            'I have a mirror on the bed. It is face-down. ~~I will not turn it back over.~~',
+          ],
+          scales: { doubt: +2, cure: -1 },
+          flags: { mirror_down: true },
         },
       ],
     },
   ],
 
   drift(p) {
-    if (p.scales.cure >= 5) {
+    if (p.scales.cure >= 12) {
       return {
         lines: [
-          'I do nothing. He turns to the case. He selects another implement. He recites another line.',
-          'The room is heavier with camphor than it was.',
+          'I do nothing. He turns to the case. He selects another implement. He recites another verse. The Latin is sharper than it was.',
+          'The room is heavier with camphor than it was. The radiator has gone louder.',
         ],
-        scales: { cure: +2, proximity: -1 },
+        scales: { cure: +3, proximity: -1 },
+        composure: -3,
+        composureCost: 'I let him do another verse of the rite.',
+      };
+    }
+    if (p.scales.cure >= 6) {
+      return {
+        lines: [
+          'I do nothing. He recites a verse in Latin. He selects an implement. He returns the implement.',
+          'He hums beneath the beak. The hum is a funeral piece. I do not have Latin but I have the melody.',
+        ],
+        scales: { cure: +2 },
         composure: -2,
-        composureCost: 'I let him do another line of the rite.',
+        composureCost: 'I knew the melody.',
       };
     }
     return {
       lines: [
         'I do nothing. He continues his preparations. He does not need me to participate.',
-        'He hums beneath the beak. A funeral piece.',
+        'He hums beneath the beak. A funeral piece. Short. He has hummed it before.',
       ],
-      scales: { cure: +1 },
+      scales: { cure: +2 },
       composure: -1,
       composureCost: 'He has finished another verse.',
     };
@@ -6869,44 +8659,71 @@ const plague = {
 
   endings: [
     {
-      id: 'doubted',
-      when: (p) => p.flags.quoted_him && p.scales.doubt >= 7,
+      id: 'quoted',
+      when: (p) => p.flags.quoted_him && p.scales.doubt >= 12,
       title: 'You quote the rite',
       lines: [
         'He closes the case. He buckles the first strap. He buckles the second.',
-        'He bows. He says: !!miser. I have erred.!! He does not look up from the case.',
-        'He leaves through the door I came in through.',
+        'He bows. He says: !!Miser. I have erred. The Board will be informed.!! He does not look up from the case as he speaks.',
+        'He leaves through the door I came in through. The orderly does not stop him in the corridor.',
+        'The leather case stays on the writing table.',
       ],
       item: 'pocket_watch',
     },
     {
+      id: 'register_named',
+      when: (p) => p.flags.register_named && p.scales.doubt >= 16,
+      title: 'You name the date',
+      lines: [
+        'He sets the beak on the writing chair. He kneels beside the bed.',
+        'He says: ~~I have erred for some hundred years, miser. I beg your pardon.~~',
+        'He says it the way one prays. He does not look up.',
+        'I leave the room. The beak is on the chair. The case is open on the table. The lance is in his hand and he has not moved.',
+      ],
+      item: 'small_bell',
+    },
+    {
       id: 'misdiagnosed',
-      when: (p) => p.scales.doubt >= 7 && p.scales.cure <= 3,
+      when: (p) => p.flags.three_symptoms && p.scales.doubt >= 10 && p.scales.cure <= 8,
       title: 'You break the diagnosis',
       lines: [
         'He has paused. He has been reading the case. He has closed it.',
-        'He bows. He says: !!miser. I have come to the wrong room.!!',
-        'He leaves the implements. He takes only the beak.',
+        'He bows. He says: !!Miser. I have come to the wrong room. I shall make my apologies to the Board.!!',
+        'He leaves the implements. He takes only the beak and the case.',
+        'The brass tube is still on the cloth on the writing table. I keep it.',
       ],
       item: 'sliver_of_glass',
     },
     {
       id: 'case_knocked',
-      when: (p) => p.flags.case_knocked && p.scales.doubt >= 4 && p.scales.cure <= 5,
+      when: (p) => p.flags.case_knocked && p.scales.doubt >= 8 && p.scales.cure <= 10,
       title: 'You knock the case',
       lines: [
-        'The implements are on the floor. He does not bend for them.',
-        'He stands at the foot of the bed for a long time. He bows. He leaves them.',
+        'The implements are on the floor. He does not bend for them. He stands at the foot of the bed for a long time.',
+        'He says, finally: ~~that was unnecessary, miser. The Board will be informed.~~',
+        'He leaves. He does not take the case. The implements stay on the floor.',
         'In the morning the implements are gone. The robe is still folded on the writing chair.',
       ],
       item: 'handkerchief',
     },
     {
+      id: 'pushed_beak',
+      when: (p) => p.flags.pushed_beak && p.scales.doubt >= 8,
+      title: 'You pushed the beak',
+      lines: [
+        'He has been writing in the case for some time. He has not spoken.',
+        'He stands. He bows. He says: !!Miser. The cure cannot be administered to one who lays hands on the beak. It is an old rule.!!',
+        'He leaves. He takes the case. He does not take the beak. The beak is on the writing chair.',
+        'I put the beak in my coat pocket. I do not look inside it.',
+      ],
+      item: 'ink_bottle',
+    },
+    {
       id: 'cured',
-      when: (p) => p.scales.cure >= 10,
+      when: (p) => p.scales.cure >= 20,
       title: 'He administers the cure',
       lines: [
-        'He has the lance. He bows. He says: ~~vade in pace, miser.~~',
+        'He has the lance. He bows. He says: ~~vade in pace, miser. The Pestilence is leaving you. The Pestilence is left.~~',
         'The lance is colder than the room. Then it is warmer than the room.',
         'I do not feel the second drop.',
       ],
@@ -6915,11 +8732,12 @@ const plague = {
     },
     {
       id: 'submitted',
-      when: (p) => p.flags.submitted && p.scales.cure >= 6,
+      when: (p) => p.flags.submitted && p.scales.cure >= 10,
       title: 'You bared the wrist',
       lines: [
-        'I held the wrist out. He worked quickly. He bowed afterward.',
-        'He says: !!the pestilence has left you, miser.!! ~~So has most of the rest.~~',
+        'I held the wrist out. He worked quickly. He hummed under the beak.',
+        'When he had what he needed, he bowed. He sealed the vial. He set it in the case beside the others.',
+        'He says: !!The pestilence has left you, miser.!! ~~So has most of the rest.~~',
       ],
       item: null,
       scars: ['collapsed', 'named'],
@@ -6929,8 +8747,8 @@ const plague = {
       when: (p) => p.flags.left,
       title: 'You walk out',
       lines: [
-        'I leave through the door. He bows as I go. He says: !!miser. I shall wait. The pestilence is patient.!!',
-        '~~He is at the next room when I come back.~~',
+        'I leave through the door. He bows as I go. He says: !!Miser. I shall wait. The pestilence is patient. So am I.!!',
+        '~~He is at the next room when I come back.~~ He is at the next room.',
       ],
       item: null,
       scars: ['abandoned', 'failed'],
@@ -6939,19 +8757,20 @@ const plague = {
 };
 
 // ════════════════════════════════════════════════════════════════════════
-
-// ════════════════════════════════════════════════════════════════════════
 // THE WEIGHT — Patient 0413 (sleep paralysis)
 // ════════════════════════════════════════════════════════════════════════
 //
-// The Old Hag. Sleep paralysis demon. Mara. Night-mare. You are in your
+// The Old Hag. Sleep paralysis. Mara. Night-mare. You are in your
 // assigned ward bed. You are awake. You cannot move. She is on your
 // chest. Her hands are at your collarbones. She is heavier each turn.
-// The verbs are small physical efforts: a finger, a breath, an ankle.
-// Three paths:
+// The verbs are small physical efforts: a finger, a breath, an ankle,
+// an eyelid. The interior voice is the only motion left.
+//
+// Paths:
 //   - Move enough that the orderly hears: scream, kick the bedframe, get
-//     a hand off the bed.
-//   - Outlast her: the night is long. So is she. Do not look at her.
+//     a hand off the bed, knock the headboard, pull the call cord.
+//   - Outlast her: do not look at her, breathe shallow, accept that
+//     this is a long night and the night ends.
 //   - Let her have it.
 
 const weight = {
@@ -6964,22 +8783,28 @@ const weight = {
     'Subject is in bed. Time [[02:14]]. Subject is asleep. ~~Subject is unable to indicate distress.~~ Subject is awake.',
     'Night nurse has passed the door twice. !!The door has not been opened.!!',
     'The mattress is wet under Subject. The mattress was dry at admission.',
+    'Subject\'s eyes are open. Subject\'s pupils are responsive. Subject is not responding to verbal address.',
+    'Pulse rate 142 and rising. Logged as ~~normal sleep.~~ Normal sleep.',
+    'The bedside lamp is off. The call cord above the bed has been pulled. ~~The bell at the nurse\'s station did not ring.~~',
   ],
   intro: [
-    'I am in my bed. The ceiling is wrong above me. The corridor light is under the door.',
-    'There is something on my chest. Small. Heavy. Her hands are on my collarbones.',
-    'I am awake. !!I cannot move.!!',
+    'I am in my bed. The ceiling is wrong above me. The corridor light is a thin line under the door.',
+    'There is something on my chest. Small. The size of a child but heavier than a child. Heavier than the bed should let her be.',
+    'Her hands are at my collarbones. Her hair is on the pillow on either side of my face.',
+    'I am awake. My eyes are open. The room is the room I was admitted to.',
+    '!!I cannot move.!!',
   ],
 
   scales: {
     air: {
-      initial: 7, min: 0, max: 10, label: 'air', kind: 'positive',
+      initial: 14, min: 0, max: 20, label: 'air', kind: 'positive',
       bands: [
         { at: 0, word: 'none' },
-        { at: 2, word: 'thin' },
-        { at: 5, word: 'shallow' },
-        { at: 7, word: 'a breath' },
-        { at: 9, word: 'a lungful' },
+        { at: 4, word: 'thin' },
+        { at: 8, word: 'shallow' },
+        { at: 12, word: 'a breath' },
+        { at: 16, word: 'a lungful' },
+        { at: 19, word: 'open' },
       ],
       crossDown: {
         4: 'My breath has gone shallow. I am breathing across the top of my lungs.',
@@ -6994,53 +8819,62 @@ const weight = {
       },
     },
     pressure: {
-      initial: 5, min: 0, max: 10, label: 'her weight', kind: 'negative',
+      initial: 10, min: 0, max: 20, label: 'her weight', kind: 'negative',
       bands: [
         { at: 0, word: 'gone' },
-        { at: 3, word: 'present' },
-        { at: 5, word: 'pressing' },
-        { at: 7, word: 'crushing' },
-        { at: 9, word: 'unbearable' },
+        { at: 4, word: 'present' },
+        { at: 8, word: 'pressing' },
+        { at: 12, word: 'crushing' },
+        { at: 16, word: 'unbearable' },
+        { at: 19, word: 'more than the bed' },
       ],
       crossUp: {
         3: 'Her weight has settled further. The mattress has bowed.',
-        4: '!!The mattress has bowed to the floor. She is heavier than the bed.!!',
+        4: '!!The mattress is on the floor under me. She is heavier than the bed.!!',
+        5: '!!My ribs are giving in increments. The bed is gone under us.!!',
       },
       crossDown: {
         3: 'Her weight has eased. I can feel my ribs again.',
-        1: 'Her weight is gone from me. ~~Only from me.~~',
+        2: 'Her weight is gone from me. ~~Only from me.~~',
+        1: 'I can feel the mattress against my back. The mattress is mine again.',
       },
     },
     movement: {
-      initial: 0, min: 0, max: 10, label: 'movement', kind: 'positive',
+      initial: 0, min: 0, max: 20, label: 'movement', kind: 'positive',
       bands: [
         { at: 0, word: 'stone' },
-        { at: 2, word: 'a finger' },
-        { at: 4, word: 'a hand' },
-        { at: 6, word: 'a foot' },
-        { at: 8, word: 'a side' },
-        { at: 9, word: 'free' },
+        { at: 4, word: 'a finger' },
+        { at: 8, word: 'a hand' },
+        { at: 12, word: 'a foot' },
+        { at: 16, word: 'a side' },
+        { at: 19, word: 'free' },
       ],
       crossUp: {
         2: 'My index finger has moved against the sheet.',
         3: 'My hand has come off the mattress.',
         4: '!!My ankle has cleared the bed. My heel has found the floor.!!',
+        5: '!!My side has rolled. The weight has come off my chest.!!',
       },
     },
   },
 
   initialize(p, player) {
-    p.scales.air = 7;
-    p.scales.pressure = 5;
+    p.scales.air = 14;
+    p.scales.pressure = 10;
     p.scales.movement = 0;
-    if (player.wound === 'insomnia') p.scales.air = 6;
-    if (player.scars?.includes('collapsed')) p.scales.pressure = 6;
+    if (player.wound === 'insomnia') p.scales.air = 12;
+    if (player.wound === 'split_personality') p.scales.pressure = 12;
+    if (player.scars?.includes('collapsed')) p.scales.pressure = 12;
+    if (player.scars?.includes('witnessed')) p.scales.air = 12;
   },
 
   fileReveals: [
-    { announce: 'A line fills in. The night nurse has passed the door at 02:14 and 02:46.' },
-    { announce: 'Another. Subject\'s heart rate is 142 and rising. Subject is logged as asleep.' },
-    { announce: 'The last line. !!Her weight is logged on the bed. Not on Subject.!!' },
+    { at: 5,  announce: 'A line fills in. The night nurse passes this door at 02:14 and 02:46. She does not stop.' },
+    { at: 10, announce: 'Another. The pulse trace at the station is flat. Subject\'s actual pulse is at one hundred forty-two.' },
+    { at: 16, announce: 'Another. The call cord above the bed is wired through. ~~The bell does not ring at the station.~~' },
+    { at: 24, announce: 'Another. The patient in the bed before me was admitted with insomnia. ~~The bed has held three.~~' },
+    { at: 32, announce: 'Another. Subject\'s file notes a pattern of paralysis in this bed. ~~The pattern was not investigated.~~' },
+    { at: 42, announce: '!!The last line. Her weight is logged on the bed. Not on Subject.!!' },
   ],
 
   presented(p) {
@@ -7049,22 +8883,26 @@ const weight = {
     const m = p.scales.movement;
 
     let breath;
-    if (a <= 1)      breath = '!!My next breath does not start. My ribs are not moving.!!';
-    else if (a <= 3) breath = '!!The breath I have is the size of a coin. I am breathing across the top of my lungs.!!';
-    else if (a <= 5) breath = 'My breath is shallow. The room has narrowed to it.';
-    else             breath = 'I am breathing. Carefully.';
+    if (a <= 1)      breath = '!!My next breath does not start. My ribs are not moving. The pillow under my head is wet.!!';
+    else if (a <= 4) breath = '!!The breath I have is the size of a coin. I am breathing across the top of my lungs. My fingers are cold.!!';
+    else if (a <= 8) breath = 'My breath is shallow. The room has narrowed to it. I am counting it without meaning to.';
+    else if (a <= 12)breath = 'My breath is small. Even. Careful. The intake is two seconds. The hold is one. The release is three.';
+    else             breath = 'I am breathing. Carefully. The intake is a full breath. The release is longer than the intake.';
 
     let her;
-    if (w >= 8)      her = '!!Her face is close to mine. Her hair is on my cheek. Her weight is greater than the bed.!!';
-    else if (w >= 5) her = 'Her hands are at my collarbones. Her hair is on the pillow.';
-    else if (w >= 2) her = 'She is on my chest. She is small. She is heavier than she should be.';
-    else             her = '~~She has lifted.~~ She has lifted off my chest. Mostly.';
+    if (w >= 16)     her = '!!Her face is on top of my face. Her hair is in my mouth. Her weight is greater than the bed. The bed is on the floor.!!';
+    else if (w >= 12)her = '!!Her face is close to mine. Her hair is on my cheek. Her hands are pressing down through my collarbones. Her weight is enormous.!!';
+    else if (w >= 8) her = 'Her hands are at my collarbones. Her hair is on the pillow on either side of my face. Her face is above mine.';
+    else if (w >= 4) her = 'She is on my chest. She is small. She is heavier than she should be. Her hands are flat on my collarbones.';
+    else             her = '~~She has lifted.~~ She has lifted off my chest. Mostly. Her hand is still on my left collarbone.';
 
     let me;
-    if (m >= 8)      me = '!!My side has rolled. My foot has the floor.!!';
-    else if (m >= 4) me = 'My hand has come off the mattress. My fingers are open.';
-    else if (m >= 2) me = 'My index finger has moved. The sheet is loose under it.';
-    else             me = 'I cannot move. My eyes are the only thing.';
+    if (m >= 16)     me = '!!My side has rolled. My foot has the floor. My hand has the rail of the bed.!!';
+    else if (m >= 12)me = '!!My right ankle has cleared the bed. My heel is on the floor. My hand is at the edge of the mattress.!!';
+    else if (m >= 8) me = 'My hand has come off the mattress. My fingers are open. My right ankle is at the edge of the bed.';
+    else if (m >= 4) me = 'My index finger has moved. The sheet is loose under it. My middle finger has begun to follow.';
+    else if (m >= 1) me = 'My index finger has twitched. The sheet has not moved with it. Yet.';
+    else             me = 'I cannot move. My eyes are the only part of me that moves. They are tired.';
 
     return `${breath} ${her} ${me}`;
   },
@@ -7076,11 +8914,21 @@ const weight = {
       desc: 'The index. The smallest motion.',
       respond(p) {
         const reps = streakCount(p, 'move_a_finger');
+        if (reps >= 3) {
+          return {
+            lines: [
+              'My middle finger has come off the sheet. The ring finger is moving.',
+              'My hand is half open. The weight on my chest has not noticed.',
+              'I do not stop. I am being very small about it.',
+            ],
+            scales: { movement: +4, pressure: -1 },
+          };
+        }
         if (reps >= 2) {
           return {
             lines: [
-              'My index has come off the sheet. My middle finger is moving.',
-              'The hand is half open. The weight on my chest has not noticed.',
+              'My index is off the sheet. My middle finger is moving with it.',
+              'The hand is half open.',
             ],
             scales: { movement: +3, pressure: -1 },
           };
@@ -7097,7 +8945,7 @@ const weight = {
         return {
           lines: [
             'I try the index. Nothing for a long moment. Then a twitch.',
-            'It costs everything I have.',
+            'It costs everything I have. The pulse in my temple is louder than the room.',
           ],
           scales: { movement: +1 },
           composure: -1,
@@ -7110,23 +8958,48 @@ const weight = {
       label: 'shift a breath',
       desc: 'Get the lung past the weight.',
       respond(p) {
-        if (p.scales.pressure >= 6) {
+        const reps = streakCount(p, 'shift_a_breath');
+        if (p.scales.pressure >= 14) {
           return {
             lines: [
               'I push the air up under her weight. I get a quarter of an inhale.',
-              'The rest does not come.',
+              'The rest does not come. The intake catches at the top of my chest. I do not get the rest.',
             ],
             scales: { air: +1, pressure: +1 },
             composure: -1,
             composureCost: 'The air I got is small.',
           };
         }
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I get another breath through. Larger than the last.',
+              'My chest rises a centimeter under her. She does not seem to notice.',
+            ],
+            scales: { air: +3 },
+          };
+        }
         return {
           lines: [
             'I get a breath through. Most of it.',
-            'My chest rises a centimeter under her.',
+            'My chest rises a centimeter under her. The mattress creaks under us.',
           ],
           scales: { air: +2 },
+        };
+      },
+    },
+
+    move_an_eyelid: {
+      label: 'move an eyelid',
+      desc: 'Close one. Just to count.',
+      respond(p) {
+        return {
+          lines: [
+            'I close one eye. Just the right. I count to ten under it.',
+            'I open it. The room is the same. The weight is the same. Some part of me is calmer for the count.',
+          ],
+          composure: +1,
+          scales: { movement: +1 },
         };
       },
     },
@@ -7139,22 +9012,23 @@ const weight = {
         if (reps >= 1) {
           return {
             lines: [
-              'I look again. She is the same. She is closer. Her mouth is open.',
-              'There is nothing inside her mouth.',
+              'I look at her again. She is closer. Her face is the size of a small hand above my own.',
+              'Her mouth is open. There is nothing inside her mouth.',
+              'I should not have looked again.',
             ],
-            scales: { pressure: +3, air: -1 },
-            composure: -2,
-            composureCost: 'I should not have looked again.',
+            scales: { pressure: +4, air: -1 },
+            composure: -3,
+            composureCost: 'There was nothing inside her mouth.',
           };
         }
         return {
           lines: [
-            'I look down past my chin. She is small. Her hair is wet. Her hands are on my collarbones.',
+            'I look down past my chin. She is small. Her hair is wet at the ends. Her hands are on my collarbones.',
             'She is looking at me. She has been the whole time.',
           ],
-          scales: { pressure: +2, air: -1 },
+          scales: { pressure: +3, air: -1 },
           composure: -2,
-          composureCost: 'Her eyes are open.',
+          composureCost: 'Her eyes are open. They have been open the whole time.',
         };
       },
     },
@@ -7162,24 +9036,25 @@ const weight = {
     press_an_ankle_off_the_bed: {
       label: 'press an ankle off the bed',
       desc: 'Roll a heel. Find the floor.',
-      when: (p) => p.scales.movement >= 3,
+      when: (p) => p.scales.movement >= 6,
       respond(p) {
-        if (p.scales.movement >= 6) {
+        if (p.scales.movement >= 12) {
           return {
             lines: [
               'My right ankle clears the bed. My heel finds the floor.',
               'Her weight slips. Her hands are still at my collarbones, but they are not the whole of her now.',
+              'The bed is mostly mine again. My side has begun to roll.',
             ],
-            scales: { movement: +3, pressure: -3, air: +1 },
+            scales: { movement: +4, pressure: -4, air: +2 },
             flags: { ankle_out: true },
           };
         }
         return {
           lines: [
-            'I work the ankle. It moves an inch toward the side of the bed.',
-            'She has not noticed.',
+            'I work the ankle. It moves an inch toward the side of the bed. Then another.',
+            'She has not noticed. Her weight has not shifted.',
           ],
-          scales: { movement: +2 },
+          scales: { movement: +3 },
           composure: -1,
           composureCost: 'The ankle is heavier than it should be.',
         };
@@ -7187,12 +9062,24 @@ const weight = {
     },
 
     bite_the_tongue: {
-      label: 'bite your tongue',
+      label: 'bite the inside of your cheek',
       desc: 'Hard. To wake.',
       respond(p) {
+        const reps = streakCount(p, 'bite_the_tongue');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I bite again. Harder. The blood is warm in my mouth.',
+              'The room is sharper for a moment. My fingers find their edges.',
+            ],
+            scales: { movement: +4, air: -1 },
+            composure: -2,
+            composureCost: 'Blood in my mouth. A real amount.',
+          };
+        }
         return {
           lines: [
-            'I bite the inside of my cheek. The pain is sharp.',
+            'I bite the inside of my cheek. The pain is sharp. A small amount of blood.',
             'For a beat the room is sharper too. My fingers are mine again.',
           ],
           scales: { movement: +3, air: -1 },
@@ -7202,15 +9089,29 @@ const weight = {
       },
     },
 
+    press_tongue_to_teeth: {
+      label: 'press your tongue to your teeth',
+      desc: 'Try to swallow.',
+      respond(p) {
+        return {
+          lines: [
+            'I press the tip of my tongue against the back of my front teeth. The swallow comes after a beat.',
+            'The motion lifts something in my throat. The motion was real. The motion was mine.',
+          ],
+          scales: { movement: +2 },
+        };
+      },
+    },
+
     try_a_syllable: {
       label: 'try a syllable',
       desc: 'Through the teeth. A word, half formed.',
-      when: (p) => p.scales.movement >= 2,
+      when: (p) => p.scales.movement >= 4,
       respond(p) {
-        if (p.scales.movement >= 5) {
+        if (p.scales.movement >= 8) {
           return {
             lines: [
-              'I get half a syllable past my teeth. Not a word. Enough.',
+              'I get half a syllable past my teeth. Not a word. A vowel.',
               'Down the corridor, a chair scrapes. The night nurse has stood.',
             ],
             scales: { movement: +1 },
@@ -7220,7 +9121,7 @@ const weight = {
         return {
           lines: [
             'I try the word. Nothing leaves my mouth. My jaw is the only part of me that moved.',
-            'She has not noticed.',
+            'She has not noticed. The corridor has not noticed.',
           ],
           scales: { movement: +1, air: -1 },
           composure: -1,
@@ -7229,10 +9130,195 @@ const weight = {
       },
     },
 
+    push_thumb_against_her_hand: {
+      label: 'push your thumb against her hand',
+      desc: 'The hand on your right collarbone. The thumb against it.',
+      when: (p) => p.scales.movement >= 4,
+      respond(p) {
+        return {
+          lines: [
+            'My right thumb finds the back of her hand. Her skin is cold. The cold is wrong for a body.',
+            'I press up against her. She does not yield. But for the first time my hand is on her instead of her on me.',
+          ],
+          scales: { movement: +3, pressure: -2 },
+          composure: -2,
+          composureCost: 'Her skin was cold. The cold was wrong.',
+          flags: { touched_her: true },
+        };
+      },
+    },
+
+    reach_for_the_call_cord: {
+      label: 'reach for the call cord',
+      desc: 'Above the bed. To the right of the headboard.',
+      when: (p) => p.scales.movement >= 8,
+      respond(p) {
+        if (p.scales.movement >= 14) {
+          return {
+            lines: [
+              'I get my hand above my head. My fingers find the cord. The cord is the wrong texture.',
+              'I pull. The cord comes loose. The end of it is frayed. The bell at the station does not ring.',
+              'I let the cord fall. I have her attention now. She is closer.',
+            ],
+            scales: { pressure: +3, movement: -1 },
+            composure: -3,
+            composureCost: 'The cord was cut. The bell did not ring.',
+            flags: { cord_pulled: true },
+          };
+        }
+        return {
+          lines: [
+            'I work my hand up the side of my head. My fingers find the rail above the pillow. They have not found the cord yet.',
+            'I am closer to it than I was.',
+          ],
+          scales: { movement: +2 },
+          composure: -1,
+          composureCost: 'I have not found the cord yet.',
+        };
+      },
+    },
+
+    reach_for_the_lamp: {
+      label: 'reach for the bedside lamp',
+      desc: 'The pull chain. To the left of the bed.',
+      when: (p) => p.scales.movement >= 6,
+      respond(p) {
+        if (p.scales.movement >= 14) {
+          return {
+            lines: [
+              'My left hand finds the lamp. I get a finger around the chain. I pull.',
+              'The bulb comes on. The light is yellow. The light is on her.',
+              'She is small under it. She is not what I had thought.',
+            ],
+            scales: { pressure: -4, movement: +2, air: +2 },
+            composure: -2,
+            composureCost: 'She is not what I had thought.',
+            flags: { lamp_on: true },
+          };
+        }
+        return {
+          lines: [
+            'I work my left hand off the mattress. I get it to the edge of the bed. The lamp is closer than the cord.',
+            'I have not got the chain yet.',
+          ],
+          scales: { movement: +2 },
+        };
+      },
+    },
+
+    knock_with_a_knuckle: {
+      label: 'knock the headboard',
+      desc: 'Side of the fist. The wall behind the bed.',
+      when: (p) => p.scales.movement >= 8,
+      respond(p) {
+        const reps = streakCount(p, 'knock_with_a_knuckle');
+        if (reps >= 2) {
+          return {
+            lines: [
+              'I knock a third time. There is an answer through the wall. Three knocks.',
+              'A door opens in the corridor. Footsteps. Slow but coming.',
+            ],
+            scales: { pressure: -2 },
+            flags: { neighbor_knocked: true },
+          };
+        }
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I knock again. Three. Three more. The pattern someone in distress would knock.',
+              'A pause. A knock back. Three. Three. The next room is awake.',
+            ],
+            scales: { movement: +1 },
+            flags: { neighbor_aware: true },
+          };
+        }
+        return {
+          lines: [
+            'I bring the side of my fist against the headboard. Three knocks. As loud as my arm will go.',
+            'I wait. There is no answer through the wall yet.',
+          ],
+          scales: { movement: +1 },
+        };
+      },
+    },
+
+    listen_for_the_corridor: {
+      label: 'listen for the corridor',
+      desc: 'The floor outside. The far door.',
+      respond(p) {
+        return {
+          lines: [
+            'I listen. The corridor is the corridor. The night nurse\'s chair creaks. The radiator in the hall ticks. A door, somewhere, two floors down.',
+            'The sounds are still real. The corridor is still doing its work.',
+          ],
+          composure: +1,
+        };
+      },
+    },
+
+    count_her_exhales: {
+      label: 'count her exhales',
+      desc: 'Hers. Not yours.',
+      respond(p) {
+        const reps = streakCount(p, 'count_her_exhales');
+        if (reps >= 1) {
+          return {
+            lines: [
+              'I count again. Ten exhales. They are the same length. The same warmth.',
+              'She is not breathing the way I am. She is breathing the way someone who has been doing this a long time breathes.',
+            ],
+            scales: { movement: +1 },
+            composure: -1,
+            composureCost: 'She has been doing this a long time.',
+          };
+        }
+        return {
+          lines: [
+            'I count her exhales. Hers are slow. Slower than mine. Steady. Even.',
+            'After ten of them my own breathing has steadied.',
+          ],
+          scales: { air: +1, movement: +1 },
+          composure: +1,
+        };
+      },
+    },
+
+    say_your_own_name: {
+      label: 'say your own name',
+      desc: 'In your head. Slowly. To anchor.',
+      respond(p) {
+        return {
+          lines: [
+            'I say my name. Inside my head. The full version. The diminutive. My number.',
+            'I am here. I am in this body. I am the one in the bed.',
+          ],
+          composure: +2,
+          scales: { movement: +1 },
+        };
+      },
+    },
+
+    let_a_tear_fall: {
+      label: 'let a tear fall',
+      desc: 'Stop holding it back.',
+      when: (p) => p.scales.movement >= 2,
+      respond(p) {
+        return {
+          lines: [
+            'I let the corner of my eye release the thing it had been holding. A tear falls. Sideways. Into my hairline.',
+            'She has lifted her face a degree. She is watching where the tear went.',
+          ],
+          scales: { movement: +1, pressure: +1 },
+          composure: -1,
+          composureCost: 'She watched where the tear went.',
+        };
+      },
+    },
+
     scream: {
       label: 'scream',
       desc: 'All of it. Once.',
-      when: (p) => p.scales.movement >= 5 || p.flags.nurse_stood,
+      when: (p) => p.scales.movement >= 10 || p.flags.nurse_stood,
       respond(p) {
         return {
           lines: [
@@ -7240,8 +9326,8 @@ const weight = {
             'The weight on my chest jerks. The hair lifts from my face.',
             'A door opens in the corridor. Footsteps. Fast.',
           ],
-          scales: { pressure: -5, air: +3, movement: +3 },
-          composure: -2,
+          scales: { pressure: -8, air: +5, movement: +4 },
+          composure: -3,
           composureCost: 'I gave everything to one note.',
           flags: { screamed: true },
         };
@@ -7276,10 +9362,10 @@ const weight = {
     {
       id: 'she_speaks',
       once: true,
-      when: (p) => p.scales.pressure >= 7,
+      when: (p) => p.scales.pressure >= 12,
       prose: [
-        'Her mouth is against my ear. Her breath is colder than the room.',
-        'She says: ~~stop trying. It is easier if you stop trying.~~',
+        'Her mouth is against my ear. Her breath is colder than the room. Her hair is on my cheek.',
+        'She says: ~~stop trying. It is easier if you stop trying. The morning is hours away. You will be tired.~~',
       ],
       responses: [
         {
@@ -7288,8 +9374,9 @@ const weight = {
           lines: [
             'I say it through my teeth. I am not stopping.',
             'She presses harder for a beat. Then less. ~~She heard me.~~',
+            'She has not moved her mouth from my ear.',
           ],
-          scales: { pressure: -1, movement: +2, air: -1 },
+          scales: { pressure: -2, movement: +3, air: -1 },
           composure: -1,
           composureCost: 'I spent a breath I needed to say it.',
         },
@@ -7300,9 +9387,9 @@ const weight = {
             'I say: get off.',
             'She does not. Her weight settles back. But she has heard.',
           ],
-          scales: { pressure: +1, movement: +1 },
+          scales: { pressure: +1, movement: +2 },
           composure: -1,
-          composureCost: 'She is heavier than she was, briefly.',
+          composureCost: 'She was heavier for a beat.',
         },
         {
           label: 'who are you',
@@ -7310,10 +9397,24 @@ const weight = {
           lines: [
             'I get the question out, mostly.',
             'She says: ~~I have been on you a long time. You did not notice until tonight.~~',
+            'She says it conversationally. As if she is making a small confession.',
           ],
           scales: { pressure: +2, air: -1 },
           composure: -2,
           composureCost: 'She has been on me for longer than tonight.',
+        },
+        {
+          label: 'what would happen if I stopped',
+          desc: 'Ask the bad question.',
+          lines: [
+            'I say: what would happen.',
+            'She says: ~~you would sleep. I would still be here. Tomorrow you would be tired in a way you have been tired before.~~',
+            'She says it as if she has said it many times.',
+          ],
+          scales: { pressure: +3 },
+          composure: -2,
+          composureCost: 'She has said it before.',
+          flags: { offered_stop: true },
         },
       ],
     },
@@ -7323,50 +9424,295 @@ const weight = {
       when: (p) => p.flags.nurse_stood && !p.flags.screamed,
       prose: [
         'The night nurse is at the door. She has not opened it. She is listening.',
-        'She is waiting for a sound. ~~Anything.~~',
+        'She is waiting for a sound. ~~Anything.~~ She has heard this kind of quiet before.',
       ],
       responses: [
         {
           label: 'kick the bedframe',
           desc: 'With the ankle that moves.',
-          when: (p) => p.scales.movement >= 4,
+          when: (p) => p.scales.movement >= 6,
           lines: [
-            'I get the heel down. The bedframe rings.',
+            'I get the heel down. The bedframe rings against the wall.',
             'The door opens. The corridor light is on me.',
+            'The nurse has the file in one hand and the wrist of the other in her teeth.',
           ],
-          scales: { pressure: -3, movement: +2 },
+          scales: { pressure: -4, movement: +3 },
           flags: { framed_kicked: true },
         },
         {
           label: 'try a word',
           desc: 'Whatever you can.',
           lines: [
-            'I get half a word past my teeth.',
+            'I get half a word past my teeth. A vowel. Loud as a vowel can be.',
             'The handle turns. The door eases open. The nurse is in the doorway.',
           ],
-          scales: { movement: +2 },
+          scales: { movement: +3 },
           flags: { door_opened: true },
         },
         {
           label: 'do not call her',
           desc: 'Outwait alone.',
           lines: [
-            'I do not make a sound. The nurse waits at the door. Then her footsteps go on down the corridor.',
-            'She is gone.',
+            'I do not make a sound. The nurse waits at the door for a long time. Then her footsteps go on down the corridor.',
+            'She is gone. The next room\'s door does not open.',
           ],
-          scales: { pressure: +2, air: -1 },
+          scales: { pressure: +3, air: -1 },
           composure: -2,
           composureCost: 'I let the nurse leave.',
+        },
+        {
+          label: 'rap on the wall',
+          desc: 'With your hand.',
+          when: (p) => p.scales.movement >= 5,
+          lines: [
+            'I bring my hand against the wall behind the bed. Twice. Then twice more.',
+            'The nurse is still at the door. The knocking has been heard. She knocks back. Once. ~~Hold on.~~',
+            'The handle turns.',
+          ],
+          scales: { movement: +1 },
+          flags: { door_opened: true },
+        },
+      ],
+    },
+    {
+      id: 'her_hair_in_your_mouth',
+      once: true,
+      when: (p) => p.scales.pressure >= 14,
+      prose: [
+        'Her face has lowered. Her hair is in my mouth. It is wet. It is the wrong texture for hair.',
+        'I cannot turn my head.',
+      ],
+      responses: [
+        {
+          label: 'bite down',
+          desc: 'On the hair.',
+          lines: [
+            'I close my teeth on the hair. I get my mouth around it. I bite.',
+            'She lifts a degree. Her hair pulls free. The taste in my mouth is salt and old water.',
+          ],
+          scales: { pressure: -3, movement: +3, air: +1 },
+          composure: -2,
+          composureCost: 'The taste was salt and old water.',
+          flags: { bit_hair: true },
+        },
+        {
+          label: 'spit it out',
+          desc: 'Sideways.',
+          lines: [
+            'I press it out of my mouth with my tongue. It does not move easily. There is a lot of it.',
+            'Some of it stays. I cannot get all of it.',
+          ],
+          scales: { air: -1, movement: +1 },
+          composure: -2,
+          composureCost: 'I could not get all of it.',
+        },
+        {
+          label: 'do not move',
+          desc: 'Wait it out.',
+          lines: [
+            'I do not move. I breathe through my nose. The hair is in my mouth for a long time.',
+            'When she lifts again, my mouth is clear. The taste stays.',
+          ],
+          scales: { pressure: +1, air: -2 },
+          composure: -2,
+          composureCost: 'The taste stayed.',
+        },
+      ],
+    },
+    {
+      id: 'second_figure',
+      once: true,
+      when: (p) => p.turn >= 5,
+      prose: [
+        'There is a figure at the foot of the bed. I cannot see it directly. I see it at the edge of my vision.',
+        'It is taller than the woman on my chest. It is standing very still. It has been standing very still.',
+      ],
+      responses: [
+        {
+          label: 'look at it directly',
+          desc: 'Eyes that way.',
+          lines: [
+            'I move my eyes to the foot of the bed. There is nothing there.',
+            'I move my eyes back. The figure is back at the edge of my vision.',
+          ],
+          scales: { pressure: +2 },
+          composure: -3,
+          composureCost: 'It was at the edge of my vision again.',
+        },
+        {
+          label: 'ignore it',
+          desc: 'Eyes on the ceiling.',
+          lines: [
+            'I look at the ceiling. The figure remains where it is. I do not need to look at it.',
+            'I can still feel it.',
+          ],
+          scales: { movement: +1 },
+          composure: -1,
+          composureCost: 'I could still feel it.',
+        },
+        {
+          label: 'speak to it',
+          desc: 'Aloud. Mostly.',
+          lines: [
+            'I get a sound out. Half a word. Addressed to the foot of the bed.',
+            'The woman on my chest lifts. She turns her head toward the foot of the bed. She nods to it.',
+            'The figure inclines its head back.',
+          ],
+          scales: { pressure: -2, movement: +2 },
+          composure: -3,
+          composureCost: 'They nodded to each other.',
+          flags: { addressed_figure: true },
+        },
+      ],
+    },
+    {
+      id: 'lamp_clicks',
+      once: true,
+      when: (p) => p.turn >= 4 && !p.flags.lamp_on,
+      prose: [
+        'The bedside lamp clicks. The chain has moved. The bulb does not come on.',
+        'The chain swings for a beat. It stops at an angle.',
+      ],
+      responses: [
+        {
+          label: 'reach for it again',
+          desc: 'The pull chain.',
+          when: (p) => p.scales.movement >= 4,
+          lines: [
+            'I work my left hand toward it. The chain is closer than the call cord.',
+            'I get a finger around the chain. I pull.',
+            'The bulb does not come on. The chain has been disconnected from the lamp.',
+          ],
+          scales: { movement: +2 },
+          composure: -2,
+          composureCost: 'The chain was disconnected.',
+        },
+        {
+          label: 'watch the chain',
+          desc: 'See if it moves again.',
+          lines: [
+            'I watch the chain. It stays where it is. The bulb does not come on.',
+            'After a long beat the chain moves a degree. Then it stops.',
+          ],
+          scales: { pressure: +1 },
+          composure: -2,
+          composureCost: 'The chain moved a degree on its own.',
+        },
+        {
+          label: 'ignore the lamp',
+          desc: 'Eyes elsewhere.',
+          lines: [
+            'I look at the door instead. The lamp is not going to help.',
+          ],
+          composure: +1,
+        },
+      ],
+    },
+    {
+      id: 'she_says_your_name',
+      once: true,
+      when: (p) => p.scales.pressure >= 10 && p.turn >= 3,
+      prose: [
+        'She says my given name. The way one says it to a friend.',
+        'Then she says my given name with the diminutive. The way only one person has.',
+      ],
+      responses: [
+        {
+          label: 'do not answer',
+          desc: 'Stay quiet.',
+          lines: [
+            'I do not answer. She says it again. She is patient.',
+            'My eyes are wet. The wet is going sideways.',
+          ],
+          scales: { pressure: +2 },
+          composure: -2,
+          composureCost: 'She is patient.',
+        },
+        {
+          label: 'ask how she knows it',
+          desc: 'Inside your head.',
+          lines: [
+            'I think the question at her. She answers as if she heard it.',
+            'She says: ~~you have been calling yourself that in your sleep. For some weeks.~~',
+            'I have not been calling myself that in my sleep.',
+          ],
+          scales: { pressure: +1 },
+          composure: -3,
+          composureCost: 'She heard the question I had not said.',
+        },
+        {
+          label: 'refuse the name',
+          desc: 'That is not who I am tonight.',
+          lines: [
+            'I get a word out. Not. Just not.',
+            'She is quiet. After a beat she says: ~~alright. Then I will wait.~~',
+          ],
+          scales: { pressure: -1, movement: +2 },
+        },
+      ],
+    },
+    {
+      id: 'corridor_dark',
+      once: true,
+      when: (p) => p.turn >= 6,
+      prose: [
+        'The line of corridor light under the door has gone out.',
+        'A second later it has come back on. Dimmer. The corridor light has been switched.',
+      ],
+      responses: [
+        {
+          label: 'wait for it to come back fully',
+          desc: 'Do not assume.',
+          lines: [
+            'I wait. The line of light comes back to full brightness after some seconds.',
+            'I do not know why it dimmed.',
+          ],
+          composure: -1,
+          composureCost: 'I do not know why the corridor dimmed.',
+        },
+        {
+          label: 'look at her shadow',
+          desc: 'Against the wall.',
+          lines: [
+            'I look past her. There is no shadow against the wall. There is only my own.',
+            'The line of light steadies. I keep my eyes on the wall.',
+          ],
+          scales: { pressure: -2, movement: +2 },
+          composure: -2,
+          composureCost: 'There was no shadow but mine.',
+          flags: { saw_no_shadow: true },
         },
       ],
     },
   ],
 
   drift(p) {
+    if (p.scales.pressure >= 14) {
+      return {
+        lines: [
+          'I do nothing. Her weight settles further. The mattress has bowed under us.',
+          'My next breath is smaller than the last. I have to choose to take it.',
+        ],
+        scales: { pressure: +2, air: -2 },
+        composure: -2,
+        composureCost: 'I had to choose to take the breath.',
+      };
+    }
+    if (p.scales.air <= 6) {
+      return {
+        lines: [
+          'I do nothing. My breath is small. The room has narrowed. I cannot feel my fingers.',
+          'I do not get the next inhale all the way in.',
+        ],
+        scales: { air: -2, pressure: +1 },
+        composure: -2,
+        composureCost: 'The inhale did not finish.',
+      };
+    }
     return {
       lines: [
-        'I do nothing. Her weight settles a little further.',
-        'The breath I had is smaller. The breath I will have next will be smaller.',
+        'I do nothing. Her weight settles a little further. The breath I had is smaller.',
+        'The corridor light is the same. The room is the room. I am still in it.',
       ],
       scales: { pressure: +1, air: -1 },
       composure: -1,
@@ -7377,12 +9723,13 @@ const weight = {
   endings: [
     {
       id: 'screamed',
-      when: (p) => p.flags.screamed && p.scales.movement >= 5,
+      when: (p) => p.flags.screamed && p.scales.movement >= 8,
       title: 'You scream the night nurse in',
       lines: [
         'The door is open. The nurse is at the bed. She takes my hand and finds my wrist.',
         'The weight is gone. The mattress is wet. The room is bright.',
-        'She does not ask what was on me. She is writing it down.',
+        'She does not ask what was on me. She is writing it down. She is writing very fast.',
+        'When she leaves she leaves the corridor door propped open. The light from outside reaches all the way to my pillow.',
       ],
       item: 'small_bell',
     },
@@ -7393,18 +9740,64 @@ const weight = {
       lines: [
         'The bedframe rings against the wall. The nurse comes in fast.',
         'She lifts the sheet. The weight is gone. My ankle is bruised where it caught the rail.',
+        'She holds my wrist for a long time. Her own pulse is not steady either.',
       ],
       item: 'sliver_of_glass',
     },
     {
+      id: 'door_opened',
+      when: (p) => p.flags.door_opened,
+      title: 'The door eases open',
+      lines: [
+        'The nurse is in the doorway. The corridor light is across my pillow.',
+        'She does not come in right away. She watches the room for a beat. Then she comes in.',
+        'When she touches the sheet to lift it she is very gentle.',
+      ],
+      item: 'handkerchief',
+    },
+    {
       id: 'ankle_out',
-      when: (p) => p.flags.ankle_out && p.scales.movement >= 7,
+      when: (p) => p.flags.ankle_out && p.scales.movement >= 14,
       title: 'You get the ankle down',
       lines: [
         'My heel is on the floor. My side rolls. Her weight slides off into the mattress.',
         'I am sitting up. The room is mine. The sheet is wet under where I was.',
+        'I do not look at the bed. I cross to the door. The door opens.',
       ],
       item: 'handkerchief',
+    },
+    {
+      id: 'cord_pulled',
+      when: (p) => p.flags.cord_pulled && p.scales.movement >= 10,
+      title: 'You pull the cord',
+      lines: [
+        'The cord is in my hand. The bell does not ring. The frayed end is in my palm.',
+        'But the cord has come down from above the bed. The motion was loud against the headboard.',
+        'A door opens in the next room. A patient there is at her door. She has heard. She calls the nurse.',
+      ],
+      item: 'small_bell',
+    },
+    {
+      id: 'lamp_on',
+      when: (p) => p.flags.lamp_on && p.scales.movement >= 8,
+      title: 'You turn the lamp on',
+      lines: [
+        'The bulb comes on. The light is yellow. She is small under it.',
+        'She is not the shape she was a moment ago. The lamp is too direct for her.',
+        'She is gone before the bulb is warm. The mattress is wet where she was. The lamp is the only light.',
+      ],
+      item: 'small_bell',
+    },
+    {
+      id: 'neighbor_knocked',
+      when: (p) => p.flags.neighbor_knocked && p.scales.movement >= 10,
+      title: 'The next room hears you',
+      lines: [
+        'There is a knocking through the wall. Then voices in the corridor. Then footsteps to my door.',
+        'The next patient and the night nurse are in the doorway together.',
+        'The weight is gone. The mattress is wet. The next patient does not ask. She has been on the wall side of this before.',
+      ],
+      item: 'sliver_of_glass',
     },
     {
       id: 'suffocated',
@@ -7412,18 +9805,18 @@ const weight = {
       title: 'The breath does not finish',
       lines: [
         'The inhale starts. It does not finish.',
-        'She is the last thing on my chest.',
+        'She is the last thing on my chest. The pillow under me is wet. My eyes are open.',
       ],
       item: null,
       scars: ['collapsed'],
     },
     {
       id: 'crushed',
-      when: (p) => p.scales.pressure >= 10,
+      when: (p) => p.scales.pressure >= 20,
       title: 'She is heavier than the bed',
       lines: [
         'The mattress is touching the floor. She is above me. Her hair is in my mouth.',
-        'I cannot make any of the parts of me move.',
+        'I cannot make any of the parts of me move. The corridor light is gone under the door.',
       ],
       item: null,
       scars: ['collapsed'],
