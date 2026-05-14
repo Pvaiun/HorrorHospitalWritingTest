@@ -118,22 +118,23 @@ export function beginEncounter(patientDef, player) {
 
 async function runEncounterIntro() {
   const enc = state.enc;
+  const pat = enc.patient;
   state.acting = true;
   render();
   await sleep(180);
-  const intro = enc.patient.def.intro;
+  const intro = pat.def.intro;
   const lines = Array.isArray(intro) ? intro : [intro || 'a door.'];
   for (const l of lines) {
     pushLog({ text: l, cls: 'intro' });
     await drainLog();
   }
-  // Legacy patients may interject immediately if the opening condition
-  // matches. Spoke patients surface urgent spokes in the hub menu instead.
-  if (!enc.patient.def.spokes) {
-    await maybeFireInterjection();
-  } else {
-    enc.hubState = getHubState(enc.patient, enc.player);
+  if (pat.def.spokes) {
+    enc.hubState = getHubState(pat, enc.player);
+    // The intro itself sets the opening scene — don't repeat it as a
+    // hub-shift line. Future transitions get announced normally.
+    pat.flags._lastAnnouncedHub = enc.hubState;
   }
+  await announceHubBeats();
   state.acting = false;
   enc.awaitingPlayer = true;
   render();
@@ -141,20 +142,25 @@ async function runEncounterIntro() {
 
 // ─── verb / spoke / interjection dispatch ──────────────────────────────
 //
-// Patients can declare two conversation styles. Both can coexist, but
-// a single patient is usually one or the other.
+// Patients can mix three conversation primitives:
 //
-// LEGACY (verbs + interjections): each `verb` is a one-shot hub action
-// with a single authored response; `interjections` fire automatically
-// when their `when(p, player)` matches and present one layer of choices.
+// VERBS — one-shot hub actions with a single authored response. The
+// engine resolves a verb, applies its effect, increments the turn.
 //
-// SPOKES (hub + multi-node sub-conversations): the patient declares a
-// `hubState(p, player)` that names the current scene, and a `spokes`
-// map. Each spoke has its own internal node graph; a player choice
-// can route to another node, loop back, or exit to the hub. Spokes
-// can be marked `urgent` to surface in the menu with a different style
-// (replacing the old "interjection" forced-turn behavior). Hub re-entry
-// recomputes `enc.hubState` (or a spoke's exit can force it).
+// SPOKES — multi-node sub-conversations. The patient declares a
+// `hubState(p, player)` that names the current scene and a `spokes` map.
+// Each spoke has an internal node graph; a player choice can route to
+// another node, loop back, or exit to the hub. A spoke can post a
+// `surfaceNote` (a soft message that appears the first time the spoke
+// becomes reachable, so the player understands what just shifted in
+// the world without having to click the action to find out).
+//
+// INTERJECTIONS — pressure beats that seize a turn. They fire from the
+// hub-idle moment between actions (never mid-spoke), present a forced
+// response menu, and apply effects on response. A one-turn cooldown
+// prevents back-to-back fires unless the interjection sets
+// `allowBackToBack: true` or a spoke choice explicitly chains one with
+// `goto: { to: 'hub', triggerInterjection: 'id' }`.
 //
 // `patient.flags.lastVerb` and `patient.flags.streak` track legacy verb
 // repetition. For spokes, `lastVerb` is set to `spoke:<id>` on entry.
@@ -386,7 +392,7 @@ async function runSpokeChoice(idx) {
   if (player.composure <= 0) { await fireCollapse(); return; }
 
   if (g.to === 'hub' || g.hub === true) {
-    await exitSpokeToHub(g.forceState);
+    await exitSpokeToHub(g.forceState, { forceInterjection: g.triggerInterjection });
   } else if (g.to === 'self') {
     const hub = enc.hubState;
     let entryNodeId;
@@ -404,7 +410,7 @@ async function runSpokeChoice(idx) {
   }
 }
 
-async function exitSpokeToHub(forceState) {
+async function exitSpokeToHub(forceState, opts = {}) {
   const enc = state.enc;
   const pat = enc.patient;
   const player = enc.player;
@@ -416,12 +422,7 @@ async function exitSpokeToHub(forceState) {
   if (ending) { await fireEnding(ending); return; }
   if (player.composure <= 0) { await fireCollapse(); return; }
 
-  // Spoke-based patients surface urgent spokes in the hub menu — no
-  // auto-fire interjection here. Legacy interjections only fire for
-  // patients that don't define spokes at all.
-  if (!pat.def.spokes) {
-    await maybeFireInterjection();
-  }
+  await announceHubBeats({ forceInterjection: opts.forceInterjection });
   state.acting = false;
   enc.awaitingPlayer = true;
   render();
@@ -441,10 +442,10 @@ async function runInterjectionResponse(idx) {
   await postTurn();
 }
 
-// Common end-of-turn handler: check endings, then composure, then maybe
-// fire an interjection before handing back to the player. Spoke-based
-// patients skip the auto-interjection step — their urgent spokes appear
-// in the menu directly, instead of seizing a turn.
+// Common end-of-turn handler: check endings, then composure, then run
+// the hub-beat sequence (flavor line on transition, interjection if
+// eligible, surface notes for newly-available soft reacts) before
+// handing back to the player.
 async function postTurn() {
   const enc = state.enc;
   const p = enc.player;
@@ -454,33 +455,116 @@ async function postTurn() {
   if (p.composure <= 0) { await fireCollapse(); return; }
   if (pat.def.spokes) {
     enc.hubState = getHubState(pat, p);
-  } else {
-    await maybeFireInterjection();
   }
+  await announceHubBeats();
   state.acting = false;
   enc.awaitingPlayer = true;
   render();
 }
 
+// Hard interjections seize a turn. They can fire from three places: encounter
+// intro, end of any non-spoke action, or spoke exit. Two rules keep them from
+// taking over the conversation: (a) they never fire while a spoke is active,
+// (b) a single-turn cooldown gates back-to-back fires unless the interjection
+// opts in with allowBackToBack. An author can also force a specific one from
+// inside a spoke by routing with goto: { to: 'hub', triggerInterjection: 'id' }.
 async function maybeFireInterjection() {
   const enc = state.enc;
   const pat = enc.patient;
   const player = enc.player;
+  if (enc.activeSpoke) return false;
   for (const intr of pat.def.interjections || []) {
     if (intr.once && pat.flags['_fired_' + intr.id]) continue;
+    const last = pat.flags._lastInterjectionTurn;
+    if (!intr.allowBackToBack && last != null && pat.turn <= last + 1) continue;
     let matches = false;
     try { matches = !!intr.when(pat, player); } catch (e) { console.error('interjection when', intr.id, e); }
     if (!matches) continue;
-    enc.activeInterjection = intr;
-    pat.flags['_fired_' + intr.id] = true;
-    const proseLines = Array.isArray(intr.prose) ? intr.prose : (intr.prose ? [intr.prose] : []);
-    for (const l of proseLines) {
-      pushLog({ text: l, cls: 'interjection' });
-      await drainLog();
-    }
+    await fireInterjection(intr);
     return true;
   }
   return false;
+}
+
+async function fireInterjection(intr) {
+  const enc = state.enc;
+  const pat = enc.patient;
+  enc.activeInterjection = intr;
+  pat.flags['_fired_' + intr.id] = true;
+  pat.flags._lastInterjectionTurn = pat.turn;
+  const proseLines = Array.isArray(intr.prose) ? intr.prose : (intr.prose ? [intr.prose] : []);
+  for (const l of proseLines) {
+    pushLog({ text: l, cls: 'interjection' });
+    await drainLog();
+  }
+}
+
+// Soft surface notes — a one-line tell that something has shifted in the
+// world and a new soft react option is now reachable in the hub menu. Each
+// spoke that declares `surfaceNote` posts it exactly once, the first time
+// its when() becomes true. The note never seizes a turn; the player can
+// still pick anything from the menu.
+async function flushSurfaceNotes() {
+  const enc = state.enc;
+  const pat = enc.patient;
+  const player = enc.player;
+  const hub = enc.hubState;
+  for (const [id, sp] of Object.entries(pat.def.spokes || {})) {
+    if (!sp.surfaceNote) continue;
+    if (pat.flags['_surfaced_' + id]) continue;
+    if (typeof sp.when === 'function') {
+      let ok = false;
+      try { ok = !!sp.when(pat, player, hub); } catch (e) { ok = false; }
+      if (!ok) continue;
+    }
+    pat.flags['_surfaced_' + id] = true;
+    const note = (typeof sp.surfaceNote === 'function')
+      ? sp.surfaceNote(pat, player)
+      : sp.surfaceNote;
+    if (!note) continue;
+    pushLog({ text: note, cls: 'surface-note' });
+    await drainLog();
+  }
+}
+
+// Hub flavor — a short scene-setting line posted once on each transition
+// between hub states. Patients declare lines via `hubFlavor: { state: line }`.
+async function announceHubFlavor() {
+  const enc = state.enc;
+  const pat = enc.patient;
+  const player = enc.player;
+  const hub = enc.hubState;
+  if (!hub) return;
+  if (pat.flags._lastAnnouncedHub === hub) return;
+  pat.flags._lastAnnouncedHub = hub;
+  const flavorMap = pat.def.hubFlavor;
+  if (!flavorMap) return;
+  const entry = flavorMap[hub];
+  const line = (typeof entry === 'function') ? entry(pat, player) : entry;
+  if (!line) return;
+  pushLog({ text: line, cls: 'hub-shift' });
+  await drainLog();
+}
+
+// Combined sequence: hub shift line first (scene resets), then a hard
+// interjection if one is eligible (it seizes the turn — surface notes are
+// deferred), otherwise surface any newly-available soft reactions. Called
+// at every hub-idle moment: intro complete, post-turn, spoke exit.
+async function announceHubBeats(opts = {}) {
+  const enc = state.enc;
+  if (!enc || !enc.patient) return;
+  await announceHubFlavor();
+  if (opts.forceInterjection) {
+    const intr = (enc.patient.def.interjections || [])
+      .find(i => i.id === opts.forceInterjection);
+    if (intr) {
+      await fireInterjection(intr);
+      return;
+    }
+  }
+  const fired = await maybeFireInterjection();
+  if (fired) return;
+  await flushSurfaceNotes();
 }
 
 function callDrift(pat, player) {

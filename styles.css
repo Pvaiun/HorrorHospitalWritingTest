@@ -1242,6 +1242,17 @@
   .enc-narr-line.tick   { color: var(--ink-60); }
   .enc-narr-line.fatal  { color: var(--doc-blood); border-left-color: var(--doc-blood); }
   .enc-narr-line.mend   { color: var(--ink-100); border-left-color: var(--ink-100); }
+  .enc-narr-line.hub-shift {
+    color: var(--ink-60);
+    border-left-color: var(--ink-40);
+    font-style: italic;
+    font-size: var(--fs-body-tight);
+  }
+  .enc-narr-line.surface-note {
+    color: var(--ink-80);
+    border-left-color: var(--doc-gold);
+    font-style: italic;
+  }
   .enc-narr-text { flex: 1; min-width: 0; }
   .enc-narr-dmg  { color: var(--doc-blood); flex-shrink: 0; padding-left: var(--space-3); font-size: 16px; }
   .enc-narr-heal { color: var(--ink-100); flex-shrink: 0; padding-left: var(--space-3); font-size: 14px; }

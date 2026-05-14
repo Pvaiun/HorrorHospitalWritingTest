@@ -5776,6 +5776,29 @@ const children = {
   },
 
   // ─────────────────────────────────────────────────────────────────────
+  //  HUB FLAVOR — fires once when the scene transitions into this hub
+  //  state. Short, present-tense, document-horror tone. The `presented`
+  //  block already paints the standing scene; these lines mark the shift.
+  // ─────────────────────────────────────────────────────────────────────
+
+  hubFlavor: {
+    engaged: 'The conversation has begun. She is at the gap, asking through the wood. I am still on this side of it.',
+    tense: 'I have caught them at something. The asking has not stopped. It has only gone quieter.',
+    pressing: '!!The bolt is loose. My hand is going to it. The word is in my mouth.!!',
+    mother_story: 'The asking has dropped out of her voice. She is telling me about a kitchen.',
+    screaming: '!!The asking has stopped. They are throwing themselves at the door and screaming.!!',
+    self_harm: '!!The asking has stopped. There is a wet sound at the gap. She is hurting herself.!!',
+    tricking: 'The voice on the other side has changed. It is a voice I have heard before, but not in this corridor.',
+    more_arrive: '!!The corridor has filled with voices. Different ages. Different accents. They are taking turns.!!',
+    silence: 'The corridor has gone completely quiet. I cannot tell if they have left or if they are waiting.',
+    recognized: '!!The shorter one has said something only my mother knew. The taller one is satisfied behind her.!!',
+    power_out: '!!The line of light under the door is gone. The corridor is black. The voices continue without interruption.!!',
+    barricaded: 'The chain is across. The chair is wedged. The door is doubled. They are willing to wait.',
+    orderly_present: 'An orderly has come down the corridor. He is at my door. The children have gone quiet for him.',
+    in_the_room: '!!The door is open. They are inside. The page ends in a way it should not.!!',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────
   //  SPOKES
   // ─────────────────────────────────────────────────────────────────────
 
@@ -7952,9 +7975,9 @@ const children = {
             'Footsteps. Slow. Coming.',
           ],
           scales: { invitation: -3, suspicion: +1 },
-          flags: { orderly_alerted: true, orderly_present: true },
+          flags: { orderly_alerted: true },
           choices: [
-            { label: 'wait', goto: { to: 'hub', forceState: 'orderly_present' } },
+            { label: 'wait', goto: { to: 'hub', triggerInterjection: 'orderly_at_door' } },
           ],
         },
       },
@@ -8047,9 +8070,9 @@ const children = {
             'A pause. Then footsteps in the corridor. Slow. Coming.',
           ],
           scales: { invitation: -3, suspicion: +1 },
-          flags: { orderly_alerted: true, orderly_present: true },
+          flags: { orderly_alerted: true },
           choices: [
-            { label: 'wait', goto: { to: 'hub', forceState: 'orderly_present' } },
+            { label: 'wait', goto: { to: 'hub', triggerInterjection: 'orderly_at_door' } },
           ],
         },
       },
@@ -8175,21 +8198,27 @@ const children = {
     },
 
     // ═════════════════════════════════════════════════════════════════
-    //  URGENT SPOKES — appear in the hub menu when triggered, with red
-    //  styling. Most expire after a few turns; some persist.
+    //  SOFT REACTS — appear in the hub menu like any other action when
+    //  their `when` matches. Each declares a `surfaceNote` that posts as
+    //  a one-line scene-shift the first time the option becomes reachable,
+    //  so the player understands what just happened in the world without
+    //  having to click the action to find out. The hard pressure beats
+    //  (a fingertip at the gap, the screaming, the orderly arriving, the
+    //  lights going out, the self-harm) are instead authored as forced
+    //  `interjections` below.
     // ═════════════════════════════════════════════════════════════════
 
-    react_to_mister_please: {
-      label: 'react — she said please at the gap',
-      desc: 'You are not allowed in unless I say.',
-      urgent: true,
+    she_is_at_the_gap: {
+      label: 'answer her at the gap',
+      desc: 'She has come close to the wood.',
+      surfaceNote: 'She is at the gap. She says: !!mister. Please. We are not allowed to come in unless you say.!!',
       when: (p, _pl, hub) => (hub === 'engaged' || hub === 'tense') && p.scales.invitation >= 6
         && !p.flags.reacted_mister_please && !p.flags.told_to_leave,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'She is at the gap. I can see the shadow of her chin. She says: !!mister. Please. We are not allowed to come in unless you say.!!',
+            'I lean toward the door. Her voice is very close to the wood now. ~~Mister. Please. We are not allowed to come in unless you say.~~',
           ],
           flags: { reacted_mister_please: true },
           choices: [
@@ -8235,18 +8264,17 @@ const children = {
       },
     },
 
-    react_to_taller_speaks: {
-      label: 'react — the taller one has spoken',
-      desc: 'His voice was older than his height.',
-      urgent: true,
+    address_the_taller: {
+      label: 'address the taller one',
+      desc: 'He has spoken. He is waiting.',
+      surfaceNote: 'The taller one has spoken at full volume for the first time. His voice is older than his height. He says: ~~mister. We will not ask much longer.~~',
       when: (p, _pl, hub) => (hub === 'tense' || hub === 'engaged') && (p.flags.tested || p.flags.confronted_rehearsal || p.flags.threatened || false)
         && !p.flags.reacted_taller_speaks && p.flags.taller_spoken !== true && p.flags.taller_speaking !== true,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'The taller one speaks for the first time at full volume. His voice is older than his height.',
-            'He says: ~~mister. We will not ask much longer.~~',
+            'I turn my ear to the door. The taller one is still at full volume. He is still waiting.',
           ],
           flags: { reacted_taller_speaks: true, taller_spoken: true },
           choices: [
@@ -8295,18 +8323,17 @@ const children = {
       },
     },
 
-    react_to_she_narrates: {
-      label: 'react — she is narrating you',
-      desc: 'She is describing your movements.',
-      urgent: true,
+    answer_her_narration: {
+      label: 'answer her narration',
+      desc: 'She is describing what you are doing.',
+      surfaceNote: 'The shorter one has begun describing me, with no question in her voice. ~~He is at the bolt. He is touching the chain. He has stepped back.~~ I have not moved.',
       when: (p, _pl, hub) => (hub === 'tense' || hub === 'pressing') && p.scales.suspicion >= 12
         && !p.flags.reacted_narration && !p.flags.chain_set,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'The shorter one says, with no question in her voice: ~~he is at the bolt. He is touching the chain. He has stepped back.~~',
-            'I have not moved.',
+            'She continues, evenly, as if reading. ~~He is listening to me. He is deciding what to say.~~',
           ],
           flags: { reacted_narration: true },
           choices: [
@@ -8352,18 +8379,17 @@ const children = {
       },
     },
 
-    react_to_one_word: {
-      label: 'react — she only needs one word',
+    answer_the_one_word: {
+      label: 'answer the one word',
       desc: 'She knows which word.',
-      urgent: true,
+      surfaceNote: 'The shorter one has lowered her voice almost to nothing. ~~Mister. We only need one word from you. We know which word.~~',
       when: (p, _pl, hub) => hub === 'pressing' && p.scales.invitation >= 14
         && !p.flags.reacted_one_word && !p.flags.chair_wedged,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'The shorter one says, very gently: ~~mister. We only need one word from you.~~',
-            'The taller one is quiet behind her. The shorter one says: ~~we know which word.~~',
+            'My mouth is dry. The word is sitting on my tongue the way a coin sits in a pocket.',
           ],
           flags: { reacted_one_word: true },
           choices: [
@@ -8410,17 +8436,16 @@ const children = {
       },
     },
 
-    react_to_mother_offer: {
-      label: 'react — she wants to tell you about her mother',
+    take_her_mother_offer: {
+      label: 'meet her mother offer',
       desc: 'The asking has dropped out of her voice.',
-      urgent: true,
+      surfaceNote: 'The asking has dropped out of her voice. After a long beat she says, more quietly: ~~mister. Can I tell you about her? About our mother?~~',
       when: (p, _pl, hub) => hub === 'engaged' && p.flags.asked_mother && !p.flags.reacted_mother_offer,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'After a long beat the shorter one says, more quietly: ~~mister. Can I tell you about her? About our mother?~~',
-            'The asking has dropped out of her voice. It is just talking now.',
+            'It is just talking now, with the asking gone. She is waiting on me.',
           ],
           flags: { reacted_mother_offer: true },
           choices: [
@@ -8467,18 +8492,17 @@ const children = {
       },
     },
 
-    react_to_they_sing: {
-      label: 'react — they have begun to sing',
+    answer_their_song: {
+      label: 'answer their song',
       desc: 'A song you know.',
-      urgent: true,
+      surfaceNote: 'They have begun to sing, both of them. The shorter one is on key, the taller half a step lower. It is a song I know. I do not know how I know it.',
       when: (p, _pl, hub) => (hub === 'engaged' || hub === 'mother_story') && p.turn >= 5
         && !p.flags.reacted_song && p.scales.suspicion <= 14 && p.scales.invitation <= 12,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'They begin to sing. Both of them. The shorter one is on key. The taller one is half a step lower.',
-            'It is a song I know. I do not know how I know it.',
+            'They are still singing. They will keep going until I do something.',
           ],
           flags: { reacted_song: true },
           choices: [
@@ -8523,151 +8547,67 @@ const children = {
       },
     },
 
-    react_to_fingertip: {
-      label: 'react — a finger is at the gap',
-      desc: 'Pale. Wet. Moving.',
-      urgent: true,
-      when: (p, _pl, hub) => hub === 'barricaded' && p.flags.chain_set && !p.flags.reacted_fingertip,
-      entry: 'open',
-      nodes: {
-        open: {
-          lines: [
-            'A small fingertip has appeared at the gap under the door. Pale. Wet.',
-            'It is moving. Slowly. Side to side. The way one tests a surface.',
-          ],
-          flags: { reacted_fingertip: true },
-          choices: [
-            { label: 'step on it', goto: 'step' },
-            { label: 'kick the door', goto: 'kick' },
-            { label: 'leave it alone', goto: 'leave' },
-          ],
-        },
-        step: {
-          lines: [
-            'I bring my heel down on it. There is no give. There is no flinch.',
-            'The finger stays where it is. The shorter one says, evenly: ~~that did not hurt, mister.~~',
-            'I lift my foot. The finger withdraws. Slowly.',
-          ],
-          scales: { suspicion: +6, invitation: -3 },
-          composure: -3,
-          composureCost: 'No give. No flinch.',
-          flags: { stamped: true },
-          choices: [
-            { label: 'step back', goto: { to: 'hub' } },
-          ],
-        },
-        kick: {
-          lines: [
-            'I kick the door. The finger pulls back. The shorter one cries out. The cry is the right shape but the wrong rhythm.',
-            'The taller one says, away from the door: ~~he kicked.~~ The way one notes a weather change.',
-          ],
-          scales: { suspicion: +3, invitation: -2, latch: +1 },
-          composure: -1,
-          composureCost: 'The cry was the wrong rhythm.',
-          choices: [
-            { label: 'step back', goto: { to: 'hub' } },
-          ],
-        },
-        leave: {
-          lines: [
-            'I step back from the door. The finger continues for a long time. Then it withdraws.',
-            'There is a wet line on the linoleum where it had been.',
-          ],
-          scales: { invitation: +4, suspicion: +2 },
-          composure: -2,
-          composureCost: 'A wet line on the linoleum.',
-          choices: [
-            { label: 'go on', goto: { to: 'hub' } },
-          ],
-        },
-      },
-    },
-
-    react_to_they_provoke_screaming: {
-      label: 'react — they have begun screaming',
-      desc: 'They are throwing themselves at the door.',
-      urgent: true,
-      when: (p, _pl, hub) => hub !== 'screaming' && hub !== 'barricaded' && hub !== 'orderly_present'
-        && p.scales.suspicion >= 14 && p.scales.invitation >= 6
-        && !p.flags.reacted_screaming_trigger && (p.flags.threatened || p.flags.confronted_anything || p.flags.told_what_you_know),
-      entry: 'open',
-      nodes: {
-        open: {
-          lines: [
-            'Something changes. The asking stops. The shorter one steps back. A pause.',
-            '!!Then the banging starts. Then the screaming. Both of them. The door does not move but the frame does.!!',
-          ],
-          scales: { suspicion: +3 },
-          flags: { reacted_screaming_trigger: true, they_are_screaming: true },
-          composure: -2,
-          composureCost: 'The frame moved.',
-          choices: [
-            { label: 'meet it', goto: { to: 'hub', forceState: 'screaming' } },
-          ],
-        },
-      },
-    },
-
-    react_to_self_harm_starts: {
-      label: 'react — she has started hurting herself',
-      desc: 'You can hear her teeth.',
-      urgent: true,
-      when: (p, _pl, hub) => (hub === 'pressing' || hub === 'tense') && p.flags.refused_word
-        && !p.flags.reacted_self_harm_trigger,
-      entry: 'open',
-      nodes: {
-        open: {
-          lines: [
-            'There is a wet sound at the gap. The shorter one has begun to bite herself. I can hear her teeth on her own arm.',
-            'The taller one is not stopping her.',
-          ],
-          scales: { suspicion: +4 },
-          flags: { reacted_self_harm_trigger: true, they_are_self_harming: true },
-          composure: -3,
-          composureCost: 'He was not stopping her.',
-          choices: [
-            { label: 'face it', goto: { to: 'hub', forceState: 'self_harm' } },
-          ],
-        },
-      },
-    },
-
-    react_to_trick_begins: {
-      label: 'react — the voice has changed',
+    answer_the_changed_voice: {
+      label: 'answer the changed voice',
       desc: 'It is not the shorter one anymore.',
-      urgent: true,
+      surfaceNote: 'The voice on the other side has changed mid-sentence. It is not the shorter one anymore. ~~My nurse\'s, but younger. My mother\'s, but older. Something has split the difference.~~',
       when: (p, _pl, hub) => hub === 'tense' && p.flags.confronted_anything
         && !p.flags.reacted_trick_trigger && p.scales.suspicion >= 12,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'The voice on the other side changes mid-sentence. It is not the shorter one anymore.',
-            'It is a voice I have heard before. Recently. ~~My nurse\'s, but younger. My mother\'s, but older. Something has split the difference.~~',
+            'It is still going. The new voice is using the same phrases. The cadence is hers. The timbre is not.',
+            'I have a choice to make about who I am talking to.',
           ],
           scales: { suspicion: +4 },
           flags: { reacted_trick_trigger: true, trick_active: true },
           composure: -3,
           composureCost: 'Something split the difference.',
           choices: [
+            { label: 'name the voice', goto: 'name_it' },
+            { label: 'pretend not to notice', goto: 'pretend' },
             { label: 'face it', goto: { to: 'hub', forceState: 'tricking' } },
+          ],
+        },
+        name_it: {
+          lines: [
+            'I say: that is my nurse\'s voice. Younger. You should not have it.',
+            'The voice stops mid-word. The shorter one returns, quieter than before: ~~we are sorry, mister. We were practicing.~~',
+          ],
+          scales: { suspicion: +5, invitation: -3 },
+          flags: { named_voice: true },
+          choices: [
+            { label: 'step back', goto: { to: 'hub', forceState: 'tricking' } },
+          ],
+        },
+        pretend: {
+          lines: [
+            'I do not name it. I answer as if it were still her.',
+            'A long pause. The new voice tries again. It is closer this time. The vowels almost belong.',
+          ],
+          scales: { invitation: +3, suspicion: +2 },
+          composure: -2,
+          composureCost: 'I let it be hers.',
+          flags: { let_trick_continue: true },
+          choices: [
+            { label: 'go on', goto: { to: 'hub', forceState: 'tricking' } },
           ],
         },
       },
     },
 
-    react_to_more_arrive: {
-      label: 'react — more voices in the corridor',
+    answer_more_voices: {
+      label: 'answer the new voices',
       desc: 'More than two now.',
-      urgent: true,
+      surfaceNote: 'Soft footsteps in the corridor. A third pair, slow. Then a fourth. New voices begin to join the asking. Different ages. Different accents.',
       when: (p, _pl, hub) => (hub === 'tense' || hub === 'pressing' || hub === 'barricaded')
         && p.turn >= 8 && !p.flags.reacted_more_arrive,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'Soft footsteps in the corridor. More than two. A third pair, slow. Then a fourth.',
-            'New voices begin to join the asks. Different ages. Different accents.',
+            'They are still arriving. The asking rotates between them. They have practiced this.',
           ],
           scales: { suspicion: +5 },
           flags: { reacted_more_arrive: true, more_have_arrived: true },
@@ -8680,18 +8620,17 @@ const children = {
       },
     },
 
-    react_to_recognition: {
-      label: 'react — she said something only she would know',
-      desc: 'A pet name. A turn of phrase. Something specific.',
-      urgent: true,
+    answer_the_pet_name: {
+      label: 'answer the pet name',
+      desc: 'She said something only she would know.',
+      surfaceNote: 'The shorter one has just called me something. The way my mother used to. The same diminutive. The same cadence. I have not spoken my given name out loud since I came onto this ward.',
       when: (p, _pl, hub) => (hub === 'engaged' || hub === 'tense' || hub === 'mother_story')
         && p.turn >= 6 && !p.flags.reacted_recognition && p.scales.invitation >= 8,
       entry: 'open',
       nodes: {
         open: {
           lines: [
-            'The shorter one calls me something. The way my mother used to. The same diminutive. The same cadence.',
-            'I have not spoken my given name out loud since I came onto this ward.',
+            'She is using it again. Softer the second time. As if checking that I noticed.',
           ],
           flags: { reacted_recognition: true, they_have_recognized: true },
           composure: -3,
@@ -8703,52 +8642,263 @@ const children = {
       },
     },
 
-    react_to_power_out: {
-      label: 'react — the lights have gone out',
-      desc: 'The corridor is black.',
-      urgent: true,
-      when: (p, _pl, hub) => (hub === 'tense' || hub === 'pressing' || hub === 'barricaded' || hub === 'screaming')
-        && p.turn >= 10 && !p.flags.reacted_power_out,
-      entry: 'open',
-      nodes: {
-        open: {
-          lines: [
-            'The fluorescent above my door buzzes once. The line of light under the door darkens to black.',
-            'The voices outside do not change. They have not been relying on the lights.',
-          ],
-          scales: { suspicion: +4 },
-          flags: { reacted_power_out: true, power_out: true },
-          composure: -2,
-          composureCost: 'They had not been relying on the lights.',
-          choices: [
-            { label: 'face the dark', goto: { to: 'hub', forceState: 'power_out' } },
-          ],
-        },
-      },
-    },
-
-    react_to_orderly_arrives: {
-      label: 'react — the orderly is at your door',
-      desc: 'He is speaking.',
-      urgent: true,
-      when: (p, _pl, hub) => p.flags.orderly_alerted && !p.flags.reacted_orderly_arrived
-        && hub !== 'orderly_present',
-      entry: 'open',
-      nodes: {
-        open: {
-          lines: [
-            'An orderly\'s footsteps come down the corridor. The voices outside have gone very quiet.',
-            'He stops outside my door. He says, through the wood: ~~Patient. Was that you who called.~~',
-          ],
-          flags: { reacted_orderly_arrived: true, orderly_present: true },
-          choices: [
-            { label: 'face him', goto: { to: 'hub', forceState: 'orderly_present' } },
-          ],
-        },
-      },
-    },
-
   },
+
+  // ─────────────────────────────────────────────────────────────────────
+  //  INTERJECTIONS — the pressure beats. The patient (or the world)
+  //  acts first; the player picks one of a short menu of responses; the
+  //  turn advances. They never fire mid-spoke. The engine enforces a
+  //  one-turn cooldown between fires unless a fire is explicitly chained
+  //  with `allowBackToBack` or routed in from a spoke choice's
+  //  `goto: { to: 'hub', triggerInterjection: 'id' }`.
+  // ─────────────────────────────────────────────────────────────────────
+
+  interjections: [
+    {
+      id: 'fingertip_at_gap',
+      once: true,
+      when: (p, _pl, hub) => hub === 'barricaded' && p.flags.chain_set,
+      prose: [
+        'A small fingertip has appeared at the gap under the door. Pale. Wet.',
+        'It is moving. Slowly. Side to side. The way one tests a surface.',
+      ],
+      responses: [
+        {
+          label: 'step on it',
+          desc: 'Bring your heel down.',
+          lines: [
+            'I bring my heel down on it. There is no give. There is no flinch.',
+            'The finger stays where it is. The shorter one says, evenly: ~~that did not hurt, mister.~~',
+            'I lift my foot. The finger withdraws. Slowly.',
+          ],
+          scales: { suspicion: +6, invitation: -3 },
+          composure: -3,
+          composureCost: 'No give. No flinch.',
+          flags: { stamped: true },
+        },
+        {
+          label: 'kick the door',
+          desc: 'Drive it back. Loud.',
+          lines: [
+            'I kick the door. The finger pulls back. The shorter one cries out. The cry is the right shape but the wrong rhythm.',
+            'The taller one says, away from the door: ~~he kicked.~~ The way one notes a weather change.',
+          ],
+          scales: { suspicion: +3, invitation: -2, latch: +1 },
+          composure: -1,
+          composureCost: 'The cry was the wrong rhythm.',
+        },
+        {
+          label: 'leave it alone',
+          desc: 'Step back from the gap.',
+          lines: [
+            'I step back from the door. The finger continues for a long time. Then it withdraws.',
+            'There is a wet line on the linoleum where it had been.',
+          ],
+          scales: { invitation: +4, suspicion: +2 },
+          composure: -2,
+          composureCost: 'A wet line on the linoleum.',
+        },
+      ],
+    },
+
+    {
+      id: 'they_begin_screaming',
+      once: true,
+      when: (p, _pl, hub) => hub !== 'screaming' && hub !== 'barricaded' && hub !== 'orderly_present'
+        && p.scales.suspicion >= 14 && p.scales.invitation >= 6
+        && (p.flags.threatened || p.flags.confronted_anything || p.flags.told_what_you_know),
+      prose: [
+        'Something changes. The asking stops. The shorter one steps back. A pause.',
+        '!!Then the banging starts. Then the screaming. Both of them. The door does not move but the frame does.!!',
+      ],
+      responses: [
+        {
+          label: 'put your shoulder to the door',
+          desc: 'Hold the wood. Be the second hinge.',
+          lines: [
+            'I put my shoulder to the door. The wood is shaking. My ribs absorb each impact.',
+            'They cannot get the door to give. They go on for a long time anyway. My breathing is the same as theirs by the end.',
+          ],
+          scales: { latch: +2, suspicion: +2 },
+          composure: -2,
+          composureCost: 'My breathing matched theirs.',
+          flags: { they_are_screaming: true, held_door: true },
+        },
+        {
+          label: 'scream back',
+          desc: 'Match them. Meet noise with noise.',
+          lines: [
+            'I scream back. As loud as I can. Through the wood.',
+            'They go quiet immediately. The shorter one says, very small: ~~we did not know you could do that, mister.~~',
+            'The asking does not resume.',
+          ],
+          scales: { suspicion: +3, invitation: -4 },
+          composure: -3,
+          composureCost: 'They went quiet for it.',
+          flags: { they_are_screaming: true, screamed_back: true },
+        },
+        {
+          label: 'cover your ears and wait',
+          desc: 'Take it. Let the noise pass through you.',
+          lines: [
+            'I cover my ears. I stand very still in the middle of the room and let it happen.',
+            'It does not stop for a long time. When it does stop, the corridor is the same kind of quiet as before.',
+          ],
+          scales: { invitation: +2, suspicion: +1 },
+          composure: -3,
+          composureCost: 'I lost time inside the noise.',
+          flags: { they_are_screaming: true, endured_screams: true },
+        },
+      ],
+    },
+
+    {
+      id: 'she_hurts_herself',
+      once: true,
+      when: (p, _pl, hub) => (hub === 'pressing' || hub === 'tense') && p.flags.refused_word,
+      prose: [
+        'There is a wet sound at the gap. The shorter one has begun to bite herself. I can hear her teeth on her own arm.',
+        'The taller one is not stopping her. He says, quiet: ~~she will keep going, mister. Until you say.~~',
+      ],
+      responses: [
+        {
+          label: 'tell her to stop',
+          desc: 'Speak through the wood. Make her hear you.',
+          lines: [
+            'I say: stop. You do not have to do that. Please stop.',
+            'She does not stop. The taller one says: ~~she cannot hear no, mister. She has only ever heard yes.~~',
+          ],
+          scales: { suspicion: +3, invitation: +2 },
+          composure: -3,
+          composureCost: 'She cannot hear no.',
+          flags: { they_are_self_harming: true, told_her_to_stop: true },
+        },
+        {
+          label: 'cover your ears',
+          desc: 'Refuse the bait. Wait it out.',
+          lines: [
+            'I cover my ears. I sit on the floor with my back to the door.',
+            'The wet sound continues. I cannot tell when it stops because I am not listening.',
+            'When I take my hands off, the corridor is silent. There is a small smear on the linoleum at the gap.',
+          ],
+          scales: { invitation: -2, suspicion: +2 },
+          composure: -3,
+          composureCost: 'A small smear at the gap.',
+          flags: { they_are_self_harming: true, refused_to_listen: true },
+        },
+        {
+          label: 'say yes',
+          desc: 'End it. Open the door.',
+          lines: [
+            'I say: yes.',
+            'The wet sound stops at once. The bolt slides back without my hand on it.',
+          ],
+          scales: { invitation: +10, latch: -10 },
+          composure: -4,
+          composureCost: '!!I said it because she was bleeding.!!',
+          flags: { said_yes: true, in_the_room: true },
+        },
+      ],
+    },
+
+    {
+      id: 'lights_go_out',
+      once: true,
+      when: (p, _pl, hub) => (hub === 'tense' || hub === 'pressing' || hub === 'barricaded' || hub === 'screaming')
+        && p.turn >= 10,
+      prose: [
+        'The fluorescent above my door buzzes once. The line of light under the door darkens to black.',
+        'The voices outside do not change. They have not been relying on the lights.',
+      ],
+      responses: [
+        {
+          label: 'stand still and listen',
+          desc: 'Let your eyes do nothing. Hear what is there.',
+          lines: [
+            'I stand very still. I close my eyes against the dark. I listen.',
+            'There are more of them than I had heard. Many more. Spaced along the corridor in both directions.',
+          ],
+          scales: { suspicion: +6 },
+          composure: -3,
+          composureCost: 'There were more than I had heard.',
+          flags: { power_out: true, counted_them: true },
+        },
+        {
+          label: 'find the chain by touch',
+          desc: 'Reach for the metal. Verify the door.',
+          lines: [
+            'I run my hand up the door until I find the chain. It is still across.',
+            'I hold onto it. The metal is colder than the air.',
+          ],
+          scales: { latch: +1 },
+          composure: -1,
+          composureCost: 'Colder than the air.',
+          flags: { power_out: true, holding_chain: true },
+        },
+        {
+          label: 'call out to the orderly',
+          desc: 'Make noise. Bring someone.',
+          lines: [
+            'I shout for the orderly. The shorter one, very close to the gap, says: ~~the orderly is not coming, mister. He has stopped at a different door.~~',
+            'My shout dies in the dark of the corridor.',
+          ],
+          scales: { suspicion: +3, invitation: +1 },
+          composure: -2,
+          composureCost: 'He stopped at a different door.',
+          flags: { power_out: true, orderly_alerted: true },
+        },
+      ],
+    },
+
+    {
+      id: 'orderly_at_door',
+      once: true,
+      when: (p, _pl, hub) => p.flags.orderly_alerted && !p.flags.orderly_present
+        && hub !== 'orderly_present',
+      prose: [
+        'An orderly\'s footsteps come down the corridor. The voices outside have gone very quiet.',
+        'He stops outside my door. He says, through the wood: ~~Patient. Was that you who called.~~',
+      ],
+      responses: [
+        {
+          label: 'answer him',
+          desc: 'It was you. Tell him about the corridor.',
+          lines: [
+            'I say: yes. It was me. I called. There are children in the corridor.',
+            'A long beat. The orderly says: ~~There are no children on this ward, sir. I am opening the door.~~',
+          ],
+          flags: { orderly_present: true, called_orderly_in: true },
+          composure: +1,
+          composureGain: 'A voice that is not theirs.',
+        },
+        {
+          label: 'stay silent',
+          desc: 'Do not draw him to the door.',
+          lines: [
+            'I do not answer. The orderly waits. Then he says, softer: ~~Patient. I can hear you breathing.~~',
+            'I do not answer that either. After a long time he walks away. The asking resumes the instant his footsteps stop.',
+          ],
+          scales: { suspicion: +3, invitation: +1 },
+          composure: -2,
+          composureCost: 'He could hear me breathing.',
+          flags: { ignored_orderly: true },
+        },
+        {
+          label: 'tell him to go away',
+          desc: 'Send him off. Keep him out of it.',
+          lines: [
+            'I say: I am fine. Go away. I am fine.',
+            'The orderly says: ~~Alright, sir. I will check on you in the morning.~~ His footsteps go back the way they came.',
+            'The shorter one whispers, very close to the gap: ~~thank you, mister. He did not need to be here.~~',
+          ],
+          scales: { suspicion: +4, invitation: +3 },
+          composure: -3,
+          composureCost: 'They thanked me.',
+          flags: { dismissed_orderly: true, sent_orderly_away: true },
+        },
+      ],
+    },
+  ],
 
   // ─────────────────────────────────────────────────────────────────────
   //  ENDINGS — fire on flags/scales as soon as their `when` matches.
