@@ -5818,7 +5818,7 @@ const children = {
           choices: [
             { label: 'hold the look', goto: 'hold_look' },
             { label: 'tilt to the floor', goto: 'floor' },
-            { label: 'pull back', goto: { lines: ['I pull back. The brass goes dark. I have my own room around me again.'], composure: +1, flags: { peephole_examined: true }, to: 'hub' } },
+            { label: 'pull back', goto: { lines: ['I pull back. The brass goes dark.'], composure: +1, composureGain: 'I have my own room around me again.', flags: { peephole_examined: true }, to: 'hub' } },
           ],
         },
         hold_look: {
@@ -5859,7 +5859,7 @@ const children = {
           composure: -2,
           composureCost: 'The third set is not in the corridor anymore.',
           choices: [
-            { label: 'pull back from the door', goto: { lines: ['I straighten. The lens goes dark. I have what I went there for. I do not need to look again.'], composure: +1, to: 'hub', forceState: 'tense' } },
+            { label: 'pull back from the door', goto: { lines: ['I straighten. The lens goes dark.'], composure: +1, composureGain: 'I have what I went there for. I do not need to look again.', to: 'hub', forceState: 'tense' } },
           ],
         },
       },
@@ -5911,7 +5911,7 @@ const children = {
           composure: -2,
           composureCost: 'I am the fourth door.',
           choices: [
-            { label: 'pull away from the wood', goto: { lines: ['I take my ear off the wood. I know the shape of the thing now. Knowing it is steadier than not knowing it.'], composure: +1, to: 'hub', forceState: 'tense' } },
+            { label: 'pull away from the wood', goto: { lines: ['I take my ear off the wood.'], composure: +1, composureGain: 'Knowing the shape of the thing is steadier than not knowing it.', to: 'hub', forceState: 'tense' } },
           ],
         },
       },
@@ -5987,11 +5987,12 @@ const children = {
         back: {
           lines: [
             'I take three steps backward. The bed creaks behind my calves. I sit on it.',
-            'The asking has not stopped. It is the same volume across the room. The room is mine for a moment.',
+            'The asking has not stopped. It is the same volume across the room.',
           ],
           scales: { invitation: -2 },
           flags: { stepped_back: true },
           composure: +1,
+          composureGain: 'The room is mine for a moment.',
           choices: [
             { label: 'listen for the pattern', goto: 'pattern' },
             { label: 'listen for what else is in the corridor', goto: 'corridor' },
@@ -6089,8 +6090,8 @@ const children = {
           ],
           flags: { chain_in_hand: true },
           choices: [
-            { label: 'drop it in the keep now', goto: { lines: ['I let it drop. The metal taps the door. The voices outside stop for one beat. Two.', 'The shorter one says, more softly than before: ~~please. We will be quick.~~', 'The chain is across. I am steadier for it.'], scales: { latch: +6, invitation: -3, suspicion: +1 }, composure: +1, flags: { chain_set: true }, to: 'hub' } },
-            { label: 'hang it back, gently', goto: { lines: ['I let the chain back onto the hook. The links settle without sound. I have not panicked.'], composure: +1, scales: { suspicion: +1 }, to: 'hub' } },
+            { label: 'drop it in the keep now', goto: { lines: ['I let it drop. The metal taps the door. The voices outside stop for one beat. Two.', 'The shorter one says, more softly than before: ~~please. We will be quick.~~'], scales: { latch: +6, invitation: -3, suspicion: +1 }, composure: +1, composureGain: 'The chain is across. I am steadier for it.', flags: { chain_set: true }, to: 'hub' } },
+            { label: 'hang it back, gently', goto: { lines: ['I let the chain back onto the hook. The links settle without sound.'], composure: +1, composureGain: 'I have not panicked.', scales: { suspicion: +1 }, to: 'hub' } },
           ],
         },
       },
@@ -6126,11 +6127,12 @@ const children = {
           lines: [
             'I say: there are two Saint Anselm\'s within a mile of here. Which.',
             'There is a pause. The taller one murmurs something into her ear. The shorter one says: ~~the one with the red roof, mister.~~',
-            'Neither of them has a red roof. ~~Neither of them has had a roof for some years.~~ I have caught them at a thing.',
+            'Neither of them has a red roof. ~~Neither of them has had a roof for some years.~~',
           ],
           scales: { suspicion: +5, invitation: -1 },
           flags: { caught_anselm_lie: true, caught_them_out: true },
           composure: +1,
+          composureGain: 'I have caught them at a thing.',
           choices: [
             { label: 'let it go', goto: { to: 'hub' } },
           ],
@@ -6460,6 +6462,7 @@ const children = {
           ],
           scales: { invitation: -2, suspicion: +2 },
           composure: +1,
+          composureGain: 'My hand is mine again.',
           choices: [
             { label: 'go on', goto: { to: 'hub' } },
           ],
@@ -6486,6 +6489,7 @@ const children = {
           scales: { invitation: -3 },
           composure: +1,
           flags: { in_mother_story: false },
+          composureGain: 'She does not need me at the door for this.',
           choices: [
             { label: 'go on', goto: { to: 'hub' } },
           ],
@@ -6516,11 +6520,12 @@ const children = {
           lines: [
             'I say: which is it. The ship or the office.',
             'A longer pause. The taller one says, finally: ~~the ship, mister. The office was a guess.~~',
-            'The shorter one says nothing. She is letting him take it. I have a small breath back.',
+            'The shorter one says nothing. She is letting him take it.',
           ],
           scales: { suspicion: +6, invitation: -3 },
           flags: { caught_them_out: true, taller_spoken: true },
           composure: +1,
+          composureGain: 'I have a small breath back.',
           choices: [
             { label: 'let it go', goto: { to: 'hub', forceState: 'tense' } },
           ],
@@ -6551,11 +6556,12 @@ const children = {
           lines: [
             'I say, out loud: I am being made to sympathize. This is what that feels like.',
             'There is a long pause. The shorter one says: ~~it is alright, mister. It is alright to feel that.~~',
-            'She did not deny it. She gave me permission. The room is mine again.',
+            'She did not deny it. She gave me permission.',
           ],
           scales: { suspicion: +4, invitation: -2 },
           flags: { named_feeling: true },
           composure: +2,
+          composureGain: 'The room is mine again.',
           choices: [
             { label: 'press on', goto: 'press' },
             { label: 'go on', goto: { to: 'hub' } },
@@ -6587,11 +6593,12 @@ const children = {
           lines: [
             'I say, louder than I mean to: stop. Stop talking about the kitchen.',
             'There is a long quiet. The shorter one says, very softly: ~~alright, mister. I am sorry.~~',
-            'She sounds like she is about to cry. The crying does not come. I have my own breathing back.',
+            'She sounds like she is about to cry. The crying does not come.',
           ],
           scales: { suspicion: +3, invitation: -3 },
           flags: { pulled_back_abruptly: true, in_mother_story: false },
           composure: +1,
+          composureGain: 'I have my own breathing back.',
           choices: [
             { label: 'step back', goto: { to: 'hub' } },
           ],
@@ -6629,11 +6636,12 @@ const children = {
           lines: [
             'I say: I heard you. I heard you teaching her how to ask.',
             'A long quiet. The shorter one says, after a beat: ~~that is alright, mister. He has been teaching me for a while.~~',
-            'She says it the way one admits to a small habit. My breath is steadier for having said it.',
+            'She says it the way one admits to a small habit.',
           ],
           scales: { suspicion: +5, invitation: -3 },
           flags: { confronted_anything: true, confronted_rehearsal: true },
           composure: +1,
+          composureGain: 'My breath is steadier for having said it.',
           choices: [
             { label: 'press on', goto: { to: 'hub' } },
           ],
@@ -6642,11 +6650,12 @@ const children = {
           lines: [
             'I say: there are three sets of prints in the corridor. Whose is the third.',
             'A long pause. The taller one speaks for the first time at volume: ~~the one who showed us your door, mister.~~',
-            'The shorter one is letting him answer. Naming the third set out loud has put my feet under me.',
+            'The shorter one is letting him answer.',
           ],
           scales: { suspicion: +7, invitation: -1 },
           flags: { confronted_anything: true, addressed_third: true, taller_speaking: true, who_showed: true },
           composure: +2,
+          composureGain: 'Naming the third set out loud has put my feet under me.',
           choices: [
             { label: 'press on', goto: { to: 'hub' } },
           ],
@@ -6655,11 +6664,12 @@ const children = {
           lines: [
             'I say: you contradicted yourself. You are not who you said you were.',
             'A pause. The shorter one says, gently: ~~we are who we say we are, mister. We are who you let us be.~~',
-            'Whatever they are, I have named one of their seams.',
+            'Whatever they are,',
           ],
           scales: { suspicion: +5, invitation: -2 },
           flags: { confronted_anything: true, confronted_contradiction: true },
           composure: +1,
+          composureGain: 'I have named one of their seams.',
           choices: [
             { label: 'press on', goto: { to: 'hub' } },
           ],
@@ -6754,6 +6764,7 @@ const children = {
           scales: { suspicion: +6 },
           flags: { challenged_orange: true, taller_speaking: true },
           composure: +1,
+          composureGain: 'I have the worst answer he could have given.',
           choices: [
             { label: 'let it go', goto: { to: 'hub' } },
           ],
@@ -6781,11 +6792,11 @@ const children = {
             'I let the chain drop into the keep. The metal taps the door.',
             'The voices outside stop. For one beat. Two.',
             'The shorter one says, more softly than before: ~~please. We will be quick. We only need a moment.~~',
-            'The door is doubled. I am steadier for it.',
           ],
           scales: { latch: +6, invitation: -3, suspicion: +1 },
           flags: { chain_set: true },
           composure: +1,
+          composureGain: 'The door is doubled. I am steadier for it.',
           choices: [
             { label: 'step back', goto: { to: 'hub', forceState: 'barricaded' } },
           ],
@@ -6868,11 +6879,11 @@ const children = {
             'I say: I know what you are. I know you cannot come in unless I say. I know there is one of you I have not heard yet.',
             'There is a long quiet. The taller one says, evenly: ~~we have known you know, mister. We did not need to be told.~~',
             'The shorter one says: ~~it is alright. We can wait.~~',
-            'The naming has put me back in my body.',
           ],
           scales: { suspicion: +3, invitation: -3 },
           flags: { told_what_you_know: true },
           composure: +2,
+          composureGain: 'The naming has put me back in my body.',
           choices: [
             { label: 'step back', goto: { to: 'hub' } },
           ],
@@ -6899,6 +6910,7 @@ const children = {
           scales: { invitation: -5, suspicion: +2 },
           flags: { said_name: true },
           composure: +2,
+          composureGain: 'I have my own name in the room.',
           choices: [
             { label: 'say it again', goto: 'again' },
             { label: 'step back', goto: { to: 'hub' } },
@@ -6908,10 +6920,10 @@ const children = {
           lines: [
             'I say it again. Slower. The shape of every syllable.',
             'The shorter one is quiet. The taller one says: ~~that is enough for now, mister.~~',
-            'I take my hand off the wall.',
           ],
           scales: { invitation: -3 },
           composure: +1,
+          composureGain: 'I take my hand off the wall.',
           choices: [
             { label: 'go on', goto: { to: 'hub' } },
           ],
@@ -6934,6 +6946,7 @@ const children = {
           scales: { invitation: -4 },
           flags: { bit_cheek: true },
           composure: +1,
+          composureGain: 'The room is solid. So am I.',
           choices: [
             { label: 'step back', goto: { to: 'hub' } },
           ],
@@ -6950,11 +6963,12 @@ const children = {
         say: {
           lines: [
             'I say an address out loud. A street. A city. A postal code.',
-            'It is mine. Or it was mine. The walls go where they should be.',
+            'It is mine. Or it was mine.',
           ],
           scales: { invitation: -3 },
           flags: { recited_address: true },
           composure: +1,
+          composureGain: 'The walls go where they should be.',
           choices: [
             { label: 'say another one', goto: 'another' },
             { label: 'step back', goto: { to: 'hub' } },
@@ -6985,11 +6999,12 @@ const children = {
           lines: [
             'I say: no. The answer is no. I am not letting you in.',
             'A pause. The shorter one says: ~~that is alright, mister. We have all night.~~',
-            'The asking does not stop. It does not speed up either. I have given a thing a name.',
+            'The asking does not stop. It does not speed up either.',
           ],
           scales: { invitation: -3, suspicion: +2 },
           flags: { refused_word: true },
           composure: +1,
+          composureGain: 'I have given a thing a name.',
           choices: [
             { label: 'say it again, louder', goto: 'louder' },
             { label: 'step back', goto: { to: 'hub' } },
@@ -6999,10 +7014,10 @@ const children = {
           lines: [
             'I say it louder. NO.',
             'The shorter one is quiet for one beat. Then she says, more softly: ~~you do not have to shout, mister. We can hear you.~~',
-            'I am still here.',
           ],
           scales: { invitation: -4, suspicion: +1 },
           composure: +1,
+          composureGain: 'I am still here.',
           choices: [
             { label: 'step back', goto: { to: 'hub' } },
           ],
@@ -7112,6 +7127,7 @@ const children = {
           scales: { invitation: -3 },
           flags: { stepped_far_back: true },
           composure: +1,
+          composureGain: 'The distance is mine.',
           choices: [
             { label: 'lie down', goto: 'lie' },
             { label: 'stand again', goto: { to: 'hub' } },
@@ -7171,11 +7187,12 @@ const children = {
           lines: [
             'I lift the chain. My hand is shaking. I let it drop into the keep.',
             'The metal taps the door. Under the screaming, the tap is the loudest sound in the room.',
-            'The screaming does not stop. It quiets a degree. I have done a thing in the middle of it.',
+            'The screaming does not stop. It quiets a degree.',
           ],
           scales: { latch: +6, invitation: -4, suspicion: +1 },
           flags: { chain_set: true },
           composure: +2,
+          composureGain: 'I have done a thing in the middle of it.',
           choices: [
             { label: 'step back', goto: { to: 'hub', forceState: 'barricaded' } },
           ],
@@ -7193,11 +7210,12 @@ const children = {
           lines: [
             'I take the chair. I drag it. The legs squeal against the linoleum.',
             'I tilt it. The back goes under the handle. I press the seat down until it stops.',
-            'The screaming continues. The door does not move. Neither do I.',
+            'The screaming continues. The door does not move.',
           ],
           scales: { latch: +6, invitation: -3, suspicion: +1 },
           flags: { chair_wedged: true },
           composure: +1,
+          composureGain: 'Neither do I.',
           choices: [
             { label: 'step back', goto: { to: 'hub', forceState: 'barricaded' } },
           ],
@@ -7242,6 +7260,7 @@ const children = {
           scales: { invitation: -4, suspicion: +3 },
           flags: { held_still_in_screaming: true, they_are_screaming: false, they_have_gone_silent: true, silence_start: p => p.turn },
           composure: +1,
+          composureGain: 'She named me not afraid. I will hold that.',
           choices: [
             { label: 'breathe', goto: { to: 'hub', forceState: 'silence' } },
           ],
@@ -7332,11 +7351,12 @@ const children = {
             'I say: you. Thomas. You are letting her do that. Stop her.',
             'A long pause. The biting stops.',
             'The taller one says, evenly: ~~she stops when you let us in, mister. She does not stop for me.~~',
-            'The biting has stopped. The reason has named itself. Either of those is something to have done.',
+            ' Either of those is something to have done.',
           ],
           scales: { invitation: +1, suspicion: +5 },
           flags: { addressed_taller_sh: true, taller_speaking: true, they_are_self_harming: false },
           composure: +1,
+          composureGain: 'The biting has stopped. The reason has named itself.',
           choices: [
             { label: 'step back', goto: { to: 'hub', forceState: 'tense' } },
           ],
@@ -7403,11 +7423,12 @@ const children = {
           lines: [
             'I say: that is not who you sound like. That is someone you are pretending to be.',
             'A long pause. The voice on the other side returns to the shorter one\'s. She says: ~~we wanted to see if you would notice, mister.~~',
-            'She does not sound disappointed. I have my own voice back in my head.',
+            'She does not sound disappointed.',
           ],
           scales: { suspicion: +5, invitation: -3 },
           flags: { called_trick: true, trick_active: false },
           composure: +2,
+          composureGain: 'I have my own voice back in my head.',
           choices: [
             { label: 'step back', goto: { to: 'hub', forceState: 'tense' } },
           ],
@@ -7445,6 +7466,7 @@ const children = {
           scales: { suspicion: +6, invitation: -2 },
           flags: { caught_pronoun_slip: true, trick_active: false },
           composure: +1,
+          composureGain: 'The pronoun slipped. I have one.',
           choices: [
             { label: 'pull all the way back', goto: { to: 'hub', forceState: 'tense' } },
           ],
@@ -7478,6 +7500,7 @@ const children = {
           scales: { suspicion: +6, invitation: -4 },
           flags: { asked_specific_test: true, trick_active: false },
           composure: +1,
+          composureGain: 'There was one dog. I have one.',
           choices: [
             { label: 'pull back', goto: { to: 'hub', forceState: 'tense' } },
           ],
@@ -7499,6 +7522,7 @@ const children = {
           scales: { suspicion: +3, invitation: -4 },
           flags: { refused_trick: true, trick_active: false },
           composure: +1,
+          composureGain: 'I have named the line.',
           choices: [
             { label: 'step back', goto: { to: 'hub' } },
           ],
@@ -7784,11 +7808,12 @@ const children = {
           lines: [
             'I say: you are wrong. That is not my name. That is not what she called me.',
             'The shorter one says, with no surprise: ~~that is alright, mister. You do not have to admit it.~~',
-            'She did not believe me. She did not need to. I needed to say it.',
+            'She did not believe me. She did not need to.',
           ],
           scales: { invitation: -3, suspicion: +2 },
           flags: { denied_recognition: true, recognition_resolved: true },
           composure: +1,
+          composureGain: 'I needed to say it.',
           choices: [
             { label: 'step back', goto: { to: 'hub' } },
           ],
@@ -7806,11 +7831,12 @@ const children = {
           lines: [
             'I say: you are not a child. You are not the shorter one of two children. You are something else, and you have been at this door for years.',
             'A pause. The shorter one says, very softly: ~~that is alright. I have been called worse.~~',
-            'The pet name is gone from the door. I have my mother\'s back.',
+            'The pet name is gone from the door.',
           ],
           scales: { suspicion: +4, invitation: -2 },
           flags: { named_what_she_is: true, recognition_resolved: true },
           composure: +2,
+          composureGain: 'I have my mother\'s back.',
           choices: [
             { label: 'step back', goto: { to: 'hub' } },
           ],
@@ -7994,11 +8020,12 @@ const children = {
           lines: [
             'I stand at the door. I tune them out and listen past them.',
             'The radiator. A pipe somewhere. A door, two floors down. The night nurse\'s chair, faintly, very far away.',
-            'The corridor is still real. The night is still real. The night ends.',
+            'The corridor is still real. The night is still real.',
           ],
           scales: { invitation: -2 },
           composure: +2,
           flags: { listened_for_corridor: true },
+          composureGain: 'The night ends.',
           choices: [
             { label: 'step back', goto: { to: 'hub' } },
           ],
@@ -8066,11 +8093,11 @@ const children = {
             'I say: there are two children in the corridor outside my door. They have been asking to come in for an hour.',
             'There is a pause. The orderly says, slowly: ~~there is no one in the corridor.~~',
             'A beat. He says: ~~I am opening the door.~~',
-            'I have said the true thing to a person on the other side of all of this. My breath comes back.',
           ],
           scales: { invitation: -6 },
           flags: { told_orderly: true, orderly_opening: true },
           composure: +2,
+          composureGain: 'I have said the true thing. My breath comes back.',
           choices: [
             { label: 'wait', goto: { to: 'hub' } },
           ],
@@ -8089,11 +8116,11 @@ const children = {
             'I say: do not open the door. Look first. Through the peephole if you have to.',
             'There is a pause. He says: ~~understood.~~ I hear him lean in.',
             'A long pause. He says, very evenly: ~~I do not see anyone.~~',
-            'He believes me. Or he is acting as if he does. Either way I am not alone with this anymore.',
           ],
           scales: { invitation: -3, suspicion: +2 },
           flags: { warned_orderly: true, orderly_cautious: true },
           composure: +1,
+          composureGain: 'There is someone else here who knows.',
           choices: [
             { label: 'wait', goto: { to: 'hub' } },
           ],
@@ -8139,6 +8166,7 @@ const children = {
           scales: { invitation: -4, suspicion: +1 },
           flags: { described_to_orderly: true, orderly_will_sit: true },
           composure: +1,
+          composureGain: 'He will sit by the door tonight.',
           choices: [
             { label: 'breathe', goto: { to: 'hub' } },
           ],

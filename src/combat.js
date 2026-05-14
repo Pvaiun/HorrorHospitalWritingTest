@@ -656,8 +656,10 @@ async function checkFileReveals(pat) {
                   : (DEFAULT_REVEAL_THRESHOLDS[nextIdx] ?? 99);
   if ((enc._totalScaleMovement || 0) < threshold) return;
   enc._revealedFile.push(nextIdx);
-  const announce = fr.announce || 'A line of the file fills itself in. ~~Where I can read it.~~';
-  pushLog({ text: `The patient's file becomes clearer. ${announce}`, cls: 'reveal' });
+  // The log notifies that a file line has come into focus without
+  // mirroring its content — the content itself appears in the patient's
+  // file panel above, so duplicating it in the log adds noise.
+  pushLog({ text: 'A line of the file has come into focus.', cls: 'reveal' });
   await drainLog();
 }
 
