@@ -656,11 +656,10 @@ async function checkFileReveals(pat) {
                   : (DEFAULT_REVEAL_THRESHOLDS[nextIdx] ?? 99);
   if ((enc._totalScaleMovement || 0) < threshold) return;
   enc._revealedFile.push(nextIdx);
-  // The log notifies that a file line has come into focus without
-  // mirroring its content — the content itself appears in the patient's
-  // file panel above, so duplicating it in the log adds noise.
-  pushLog({ text: 'A line of the file has come into focus.', cls: 'reveal' });
-  await drainLog();
+  // The new line appears in the patient's file panel on the next render.
+  // We play a small ding so the player notices the panel changed; no
+  // log entry, no content mirror.
+  sfx('ding');
 }
 
 function shiftScale(pat, key, delta) {
