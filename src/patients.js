@@ -84,26 +84,26 @@ const POLONIUS_ROOMS = ['library', 'parlor', 'gallery', 'clock_hall', 'dining'];
 // When the tour is done, hand off to CONFIDENCE.
 function poloniusPickRoom(p) {
   const remaining = POLONIUS_ROOMS.filter(r => !p.flags['_been_' + r]);
-  if (!remaining.length) return poloniusMaybeIntrude(p, 'c_long_time');
+  if (!remaining.length) return 'c_long_time';
   const i = Math.floor(Math.random() * remaining.length);
-  return poloniusMaybeIntrude(p, 'r_' + remaining[i]);
+  return 'r_' + remaining[i];
 }
 
 // Selector. After WELCOME ends or the player declines tour, pick a
 // natural next cluster based on the player's current state.
 function poloniusAfterWelcome(p) {
   if (p.scales.unease >= 10 && !p.flags._mask_cracked_once) return 'm_first_crack';
-  if (p.scales.intimacy >= 6) return poloniusMaybeIntrude(p, 'c_long_time');
-  return poloniusMaybeIntrude(p, 'r_lead');
+  if (p.scales.intimacy >= 6) return 'c_long_time';
+  return 'r_lead';
 }
 
 // Selector. After the player has discovered the truth, where do we
 // go next? Polonius's mood pivots here.
 function poloniusAfterReveal(p) {
   if (p.scales.tiredness >= 8) return 'l_offered_bed';
-  if (p.scales.intimacy >= 10) return poloniusMaybeIntrude(p, 'h_pleads');
-  if (p.scales.unease >= 14) return poloniusMaybeIntrude(p, 'h_threatens');
-  return poloniusMaybeIntrude(p, 'h_vulnerability');
+  if (p.scales.intimacy >= 10) return 'h_pleads';
+  if (p.scales.unease >= 14) return 'h_threatens';
+  return 'h_vulnerability';
 }
 
 // Selector. During REACH, route based on player resistance and his mood.
@@ -120,13 +120,13 @@ function poloniusReachNext(p) {
   if (!p.flags._reach_mourn)       options.push('h_mournful');
   if (!p.flags._reach_close)       options.push('h_close');
   if (!options.length) return 'm_first_crack';
-  return poloniusMaybeIntrude(p, options[Math.floor(Math.random() * options.length)]);
+  return options[Math.floor(Math.random() * options.length)];
 }
 
 // Selector. After TURN beats, route to RECKONING.
 function poloniusAfterTurn(p) {
   if (p.scales.tiredness >= 12) return 'l_drift';
-  return poloniusMaybeIntrude(p, 'e_for_door');
+  return 'e_for_door';
 }
 
 // Has the player earned a clean walk-out? They need to have witnessed
@@ -152,25 +152,28 @@ function poloniusDoorGate(p) {
   return 'e_door_in_reach';
 }
 
-// At a cluster-transition selector, roll for an intrusion beat instead
-// of the natural next beat. Intrusions are once-each and respect a
-// one-turn cooldown so they don't fire back to back. The chosen
-// intrusion stashes the original destination in `_intrusion_resume`
-// so its choices can route back into the flow.
+// Intrusion catalogue. Each entry has the id of an intrusion-beat in
+// the spoke graph and a when() that decides eligibility from player state.
+// Intrusion-beats themselves set `_fired_<bare id>` (without the `i_`
+// prefix) so authors can read it more naturally elsewhere.
 const POLONIUS_INTRUSIONS = [
-  { id: 'i_maid_in_doorway',    when: (p) => p.turn >= 4  && p.flags.room !== 'foyer' },
-  { id: 'i_butler_appears',     when: (p) => p.turn >= 8  && !p.flags._heard_truth },
-  { id: 'i_clock_chimes',       when: (p) => p.turn >= 6 },
-  { id: 'i_glimpse_of_him',     when: (p) => p.turn >= 10 && p.flags._mask_on !== false },
-  { id: 'i_sleepiness_strikes', when: (p) => p.scales.tiredness >= 10 },
+  { id: 'i_maid_in_doorway',    fired: '_fired_maid_in_doorway',    when: (p) => p.turn >= 3 },
+  { id: 'i_butler_appears',     fired: '_fired_butler_appears',     when: (p) => p.turn >= 6 && !p.flags._heard_truth },
+  { id: 'i_clock_chimes',       fired: '_fired_clock_chimes',       when: (p) => p.turn >= 5 },
+  { id: 'i_glimpse_of_him',     fired: '_fired_glimpse_of_him',     when: (p) => p.turn >= 8 && p.flags._mask_on !== false },
+  { id: 'i_sleepiness_strikes', fired: '_fired_sleepiness_strikes', when: (p) => p.scales.tiredness >= 8 },
 ];
 
+// Roll for an intrusion at a beat boundary. The chosen intrusion stashes
+// the original destination in `_intrusion_resume` so its choices can
+// route back into the flow. Once-each (via `fired` flag) and a one-turn
+// cooldown gate the rolls so the player doesn't get hammered.
 function poloniusMaybeIntrude(p, defaultBeat) {
   const last = p.flags._last_intrusion_turn;
   if (last != null && p.turn <= last + 1) return defaultBeat;
-  if (Math.random() > 0.28) return defaultBeat;
+  if (Math.random() > 0.30) return defaultBeat;
   const eligible = POLONIUS_INTRUSIONS.filter(i => {
-    if (p.flags['_fired_' + i.id]) return false;
+    if (p.flags[i.fired]) return false;
     try { return i.when(p); } catch (e) { return false; }
   });
   if (!eligible.length) return defaultBeat;
@@ -311,6 +314,17 @@ const polonius = {
   },
 
   startSpoke: 'main',
+
+  // Engine hook. Called by the engine on every beat entry; gets to
+  // redirect the player to a different beat. Polonius uses it to roll
+  // for an intrusion-beat in place of the natural next beat — keeps
+  // the intrusion check out of the per-cluster selectors and means
+  // any non-intrusion beat entry is a potential intrusion point.
+  maybeDivert(pat, player, nodeId) {
+    if (typeof nodeId !== 'string' || nodeId.startsWith('i_')) return null;
+    if (nodeId.startsWith('end_')) return null;
+    return poloniusMaybeIntrude(pat, nodeId);
+  },
 
   // ─────────────────────────────────────────────────────────────────────
   //  THE BEAT GRAPH

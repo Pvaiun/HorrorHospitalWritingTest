@@ -343,6 +343,18 @@ async function enterSpokeNode(nodeId) {
   const pat = enc.patient;
   const player = enc.player;
   const spoke = pat.def.spokes[enc.activeSpoke.spokeId];
+  // Pre-entry divert. Beat-graph patients may want to intercept a beat
+  // entry and route to an intrusion beat instead. The patient's hook
+  // returns either an alternative node id or null/undefined for no
+  // change. Returning the same id is also a no-op.
+  if (typeof pat.def.maybeDivert === 'function') {
+    try {
+      const diverted = pat.def.maybeDivert(pat, player, nodeId);
+      if (diverted && diverted !== nodeId && spoke.nodes[diverted]) {
+        nodeId = diverted;
+      }
+    } catch (e) { console.error('maybeDivert error', e); }
+  }
   const node = spoke.nodes[nodeId];
   if (!node) {
     console.error('missing spoke node', enc.activeSpoke.spokeId, nodeId);
@@ -406,6 +418,12 @@ async function runSpokeChoice(idx) {
   }
   if (typeof g === 'string') g = { to: g };
   if (!g) g = { to: 'hub' };
+  // A function-valued `to` (used by intrusion-beat choices to read a
+  // resume-destination from a flag) resolves at click time.
+  if (typeof g.to === 'function') {
+    try { g.to = g.to(pat, player); }
+    catch (e) { console.error('goto.to fn error', e); g.to = 'hub'; }
+  }
 
   // Inline beat effects on the choice itself fire first.
   const inlineResp = buildSpokeResponse(g, pat, player);
