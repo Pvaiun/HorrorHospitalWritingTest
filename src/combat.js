@@ -470,6 +470,22 @@ async function runInterjectionResponse(idx) {
   if (resp) await applyResponse(resp);
   if (state.shownLogIdx < state.log.length - 1) await drainLog();
   pat.turn++;
+  // If the interjection interrupted an active spoke, re-display the last
+  // patient line of that beat so the player has the context restored
+  // before answering the pending choices. Without this they're staring
+  // at a menu whose options answer something the interjection bumped
+  // off the visible narrative.
+  if (enc.activeSpoke) {
+    const spoke = pat.def.spokes?.[enc.activeSpoke.spokeId];
+    const node = spoke?.nodes?.[enc.activeSpoke.nodeId];
+    const rawLines = node && (typeof node.lines === 'function' ? node.lines(pat, enc.player) : node.lines);
+    const lines = Array.isArray(rawLines) ? rawLines : (rawLines ? [rawLines] : []);
+    const last = lines[lines.length - 1];
+    if (last) {
+      pushLog({ text: last, cls: 'resumption' });
+      await drainLog();
+    }
+  }
   await postTurn();
 }
 
