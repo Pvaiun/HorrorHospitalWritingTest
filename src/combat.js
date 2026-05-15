@@ -406,6 +406,12 @@ async function runSpokeChoice(idx) {
   }
   if (typeof g === 'string') g = { to: g };
   if (!g) g = { to: 'hub' };
+  // A function-valued `to` (used by intrusion-beat choices to read a
+  // resume-destination from a flag) resolves at click time.
+  if (typeof g.to === 'function') {
+    try { g.to = g.to(pat, player); }
+    catch (e) { console.error('goto.to fn error', e); g.to = 'hub'; }
+  }
 
   // Inline beat effects on the choice itself fire first.
   const inlineResp = buildSpokeResponse(g, pat, player);
@@ -470,6 +476,22 @@ async function runInterjectionResponse(idx) {
   if (resp) await applyResponse(resp);
   if (state.shownLogIdx < state.log.length - 1) await drainLog();
   pat.turn++;
+  // If the interjection interrupted an active spoke, re-display the last
+  // patient line of that beat so the player has the context restored
+  // before answering the pending choices. Without this they're staring
+  // at a menu whose options answer something the interjection bumped
+  // off the visible narrative.
+  if (enc.activeSpoke) {
+    const spoke = pat.def.spokes?.[enc.activeSpoke.spokeId];
+    const node = spoke?.nodes?.[enc.activeSpoke.nodeId];
+    const rawLines = node && (typeof node.lines === 'function' ? node.lines(pat, enc.player) : node.lines);
+    const lines = Array.isArray(rawLines) ? rawLines : (rawLines ? [rawLines] : []);
+    const last = lines[lines.length - 1];
+    if (last) {
+      pushLog({ text: last, cls: 'resumption' });
+      await drainLog();
+    }
+  }
   await postTurn();
 }
 
@@ -681,7 +703,14 @@ async function applyResponse(resp) {
   if (resp.shake) shakeStage();
 
   for (const l of lines) {
-    pushLog({ text: l, cls: 'narr' });
+    // A line may be a plain string or an object { text, cls, ... } when
+    // the author wants a specific style on that line (e.g. the menacing
+    // opening of an intrusion beat).
+    if (l && typeof l === 'object') {
+      pushLog({ cls: 'narr', ...l });
+    } else {
+      pushLog({ text: l, cls: 'narr' });
+    }
     await drainLog();
   }
 

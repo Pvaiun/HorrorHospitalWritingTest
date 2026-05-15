@@ -95,11 +95,7 @@ function patientColEl(patient) {
     col.appendChild(el('div', { class: 'enc-presented', html: parseProse(presented) }));
   }
 
-  // scale names (always shown). Values are hidden unless revealed.
-  col.appendChild(scaleListEl(patient));
-
-  // effects on the patient herself (named, not numeric, e.g. nothing yet)
-  // — left out by default; patients can flag specific effects via prose.
+  // scales are background plumbing now — used by selectors, not displayed.
 
   return col;
 }

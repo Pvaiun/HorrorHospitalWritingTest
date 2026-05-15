@@ -94,7 +94,7 @@ function poloniusPickRoom(p) {
 function poloniusAfterWelcome(p) {
   if (p.scales.unease >= 10 && !p.flags._mask_cracked_once) return 'm_first_crack';
   if (p.scales.intimacy >= 6) return 'c_long_time';
-  return 'r_lead';   // start the tour
+  return 'r_lead';
 }
 
 // Selector. After the player has discovered the truth, where do we
@@ -329,7 +329,7 @@ const polonius = {
         t_door_behind_you: {
           lines: [
             'I look back. The corridor I came through is gone. There is wallpaper where there was a doorway. The wallpaper has the same dust on it as the rest of the room.',
-            'The grandfather clock against the wall does not tick.',
+            { text: 'The grandfather clock against the wall does not tick.', cls: 'interjection' },
             '~~That is not where the door was a moment ago.~~',
           ],
           flags: { _saw_door_gone: true },
@@ -887,7 +887,33 @@ const polonius = {
             },
             {
               label: 'leave it alone',
-              goto: (p) => poloniusPickRoom(p),
+              // Sometimes the shelf does not let us leave so easily.
+              goto: (p) => (Math.random() < 0.22 && !p.flags._saw_book_move)
+                ? 'r_library_book_moves'
+                : poloniusPickRoom(p),
+            },
+          ],
+        },
+
+        // Low-chance follow-up to r_library_books — a book slides out on its own.
+        r_library_book_moves: {
+          lines: [
+            'I step back from the shelf. A book at eye level slides forward an inch. The shelf is level. There is no hand on it.',
+            { text: 'It does not slide all the way out. It waits a quarter of the way clear of the others, as if presenting itself.', cls: 'interjection' },
+            'Polonius is at the doorway. He has not turned to look at the shelf. He is, I think, smiling.',
+          ],
+          flags: { _saw_book_move: true },
+          scales: { unease: +4 },
+          composure: -2,
+          composureCost: 'There was no hand on it.',
+          choices: [
+            {
+              label: 'take the book out',
+              goto: { to: 'r_library_untitled', lines: ['I take it out. The cover is plain and bound in something dark. It is, of course, untitled.', '~~The shelf wanted me to find this one.~~'], scales: { unease: +2 } },
+            },
+            {
+              label: 'push it back into the shelf',
+              goto: { to: (p) => poloniusPickRoom(p), lines: ['I push the book back, flush with the others. It does not resist. It does not slide back out while I am watching it.'], composure: +1, composureGain: 'I did not take what the shelf offered.' },
             },
           ],
         },
@@ -1021,7 +1047,34 @@ const polonius = {
             },
             {
               label: 'keep moving',
-              goto: (p) => poloniusPickRoom(p),
+              // Roughly one in four passes, the clock starts chiming while
+              // we're still in front of it. Otherwise the player moves on.
+              goto: (p) => (Math.random() < 0.25 && !p.flags._saw_clock_chime)
+                ? 'r_clock_chimes_now'
+                : poloniusPickRoom(p),
+            },
+          ],
+        },
+
+        // Low-chance follow-up to r_clock_hall — the clock chimes mid-look.
+        r_clock_chimes_now: {
+          lines: [
+            'I turn to leave. The clock chimes. It chimes once, then twice, then more times than a clock with no hands should know to chime.',
+            { text: 'The pendulum has not changed its rhythm. The chiming is not from the clock.', cls: 'interjection' },
+            'Polonius does not react. He is watching me as if listening to me listen.',
+          ],
+          flags: { _saw_clock_chime: true },
+          scales: { unease: +4 },
+          composure: -2,
+          composureCost: 'The chiming was not from the clock.',
+          choices: [
+            {
+              label: 'ask him where the chiming is coming from',
+              goto: { to: (p) => poloniusPickRoom(p), lines: ['I say: where is that coming from.', 'He smiles. From elsewhere in the house, sir. The chimes do travel.', '~~He has not located it any more precisely than that.~~'], scales: { unease: +1, intimacy: +1 } },
+            },
+            {
+              label: 'pretend not to hear it',
+              goto: { to: (p) => poloniusPickRoom(p), lines: ['I do not name the sound. I walk past the clock toward the next room. The chiming follows me out of the hall.'], scales: { unease: +2 }, composure: -1, composureCost: 'It followed me out.' },
             },
           ],
         },
@@ -1276,7 +1329,7 @@ const polonius = {
           lines: [
             'He stops. He folds his hands in front of himself. The hands fold the wrong way for an instant — the thumbs on the inside — and then correct.',
             'Sir. Allow me to be plain. It is a thing I have not been in a long time. I would like to be plain for a moment.',
-            'The house is cursed. It has been cursed for longer than I have memory of. I am bound to it. I cannot leave it.',
+            { text: 'The house is cursed. It has been cursed for longer than I have memory of. I am bound to it. I cannot leave it.', cls: 'interjection' },
             'I am asking you to understand only that. Not yet what follows from it.',
           ],
           scales: { unease: +4, intimacy: +2 },
@@ -1303,7 +1356,7 @@ const polonius = {
           lines: [
             'He smiles. It is small. It is the most honest expression I have seen on him.',
             'The house demands a tenant. If I were to walk out while only one other person remained inside — only one, alive or otherwise — the curse would pass to them. To you.',
-            'You walked into a house I have been waiting to leave for nine hundred and seventy-two years.',
+            { text: 'You walked into a house I have been waiting to leave for nine hundred and seventy-two years.', cls: 'interjection' },
           ],
           scales: { unease: +6 },
           composure: -3,
@@ -1417,11 +1470,38 @@ const polonius = {
           choices: [
             {
               label: 'keep eating',
-              goto: { to: 'l_wine', lines: ['I keep eating. The food is warm and good and I am hungrier than I had realised.'], scales: { tiredness: +3 } },
+              // Roughly one in four meals, the player catches the cook in
+              // the doorway behaving very wrongly. Otherwise the wine arrives.
+              goto: (p) => (Math.random() < 0.25 && !p.flags._saw_cook_in_doorway)
+                ? 'l_cook_in_doorway'
+                : { to: 'l_wine', lines: ['I keep eating. The food is warm and good and I am hungrier than I had realised.'], scales: { tiredness: +3 } },
             },
             {
               label: 'set down the cutlery',
               goto: { to: 'h_pleads', lines: ['I set the knife and fork down. The cook, in the doorway, makes a small, unhappy sound.'], scales: { tiredness: -1, intimacy: -1 } },
+            },
+          ],
+        },
+
+        // Low-chance follow-up to l_dinner — you catch the cook watching.
+        l_cook_in_doorway: {
+          lines: [
+            'I lift my eyes from the plate. The cook is in the doorway. He has been there for some time. He is not moving. He is watching me chew.',
+            { text: 'His mouth is open the way a man\'s mouth opens to taste something he is being told about.', cls: 'interjection' },
+            'When he sees me see him, he bows, smoothly, and is gone. I do not hear him leave the boards.',
+          ],
+          flags: { _saw_cook_in_doorway: true },
+          scales: { unease: +4, tiredness: +1 },
+          composure: -2,
+          composureCost: 'His mouth had been open.',
+          choices: [
+            {
+              label: 'set the fork down; refuse the rest',
+              goto: { to: 'h_pleads', lines: ['I push the plate away. Polonius looks at the plate, then at me. He says nothing.', '~~He had wanted me to keep eating.~~'], scales: { intimacy: -1 }, composure: +1, composureGain: 'I stopped eating.' },
+            },
+            {
+              label: 'keep eating anyway',
+              goto: { to: 'l_wine', lines: ['I keep eating. The food is the same warmth. The cook is in the doorway again when I look up. He is watching, again. He does not bow this time.'], scales: { tiredness: +4, unease: +1 } },
             },
           ],
         },
@@ -1767,7 +1847,7 @@ const polonius = {
           lines: [
             'He laughs. It is a small laugh and it is not a Victorian laugh. It is a sound from much further back. The vowels do not belong in the building.',
             'His face holds the smile but the smile sits on his face the way a mask sits on a face it has never quite fit.',
-            '!!Καλά. Πολύ καλά.!! he says, quietly, to himself.',
+            { text: '!!Καλά. Πολύ καλά.!! he says, quietly, to himself.', cls: 'interjection' },
           ],
           flags: { _mask_cracked_once: true, _mask_on: false, _mood: 'predatory' },
           scales: { unease: +5 },
@@ -2245,7 +2325,7 @@ const polonius = {
           lines: [
             'I pick up the poker. The iron is heavy. The shaft is warmer than iron should be — the fire has been against it.',
             'He does not move. He says, quietly: Make it clean. Please. I have done it untidily and the morning is harder.',
-            'I bring the poker down on the side of his head. The first blow is the worst, in that it is the only one I have to commit to. The skull gives the way old wood gives.',
+            { text: 'I bring the poker down on the side of his head. The first blow is the worst, in that it is the only one I have to commit to. The skull gives the way old wood gives.', cls: 'interjection' },
             '!!The second blow is mechanical. The third I do not remember.!!',
             'His body lies on the rug. The blood is the wrong colour — too dark, with a sheen of something metallic.',
             'The staff are gone. They were here. They are not here. The clock without hands has stopped swinging.',
@@ -2303,198 +2383,6 @@ const polonius = {
       },  // end nodes
     },  // end main spoke
   },  // end spokes
-
-  // ─────────────────────────────────────────────────────────────────────
-  //  INTERJECTIONS — uninvited beats that interrupt the conversation.
-  //  They fire on probabilistic timers tied to turn count / state and
-  //  shove the player into a beat they didn't choose. The one-turn
-  //  cooldown plus the spoke-active guard mean they only land between
-  //  beats, never mid-scene.
-  // ─────────────────────────────────────────────────────────────────────
-  interjections: [
-    {
-      id: 'maid_in_doorway',
-      once: true,
-      when: (p) => p.turn >= 4 && !p.flags._walked_free && p.flags.room !== 'foyer' && Math.random() < 0.75,
-      prose: [
-        'The maid is in the doorway. She did not come through it. She was just suddenly in it.',
-        'She is smiling. She is carrying a small silver tray. The tray is empty.',
-        'Will sir be staying for dinner, she says, although it is not a question.',
-      ],
-      responses: [
-        {
-          label: 'I won\'t be staying',
-          desc: 'Decline. Plainly.',
-          lines: [
-            'I say: I will not be staying.',
-            'She smiles. She does not move from the doorway. Of course, sir. The cook will be very sorry to hear it.',
-            'She does not leave the doorway.',
-          ],
-          scales: { unease: +2, intimacy: -1 },
-          flags: { _refused_dinner: true },
-        },
-        {
-          label: 'I might',
-          desc: 'Hedge. Buy time.',
-          lines: [
-            'I say: I might. I haven\'t decided.',
-            'She brightens. Very good, sir. The cook will be hopeful.',
-            'She steps aside, but only by a foot.',
-          ],
-          scales: { tiredness: +1, intimacy: +1 },
-        },
-        {
-          label: 'is the front door this way',
-          desc: 'Ask directly.',
-          lines: [
-            'I say: is the front door behind you.',
-            'She tilts her head. The tilt is too far. It is, sir. Would you care to be shown out?',
-            'She does not move from the doorway.',
-          ],
-          scales: { unease: +3 },
-          flags: { _asked_door: true },
-        },
-      ],
-    },
-
-    {
-      id: 'butler_appears',
-      once: true,
-      when: (p) => p.turn >= 8 && !p.flags._walked_free && p.flags._heard_truth !== true && Math.random() < 0.7,
-      prose: [
-        'The butler is at my shoulder. He arrived without my noticing.',
-        'The master would prefer you not leave the wing without finishing your tea, sir, he says, gently.',
-        'His hand is on a tray. The tray has a fresh cup on it.',
-      ],
-      responses: [
-        {
-          label: 'thank him and continue',
-          desc: 'Take the cup.',
-          lines: [
-            'I take the cup. The cup is warm. The butler nods and is gone, again, without my noticing.',
-            'I drink. The tea is sweeter than the last.',
-          ],
-          scales: { tiredness: +3, intimacy: +1 },
-        },
-        {
-          label: 'who is the master, exactly',
-          desc: 'Press him.',
-          lines: [
-            'I say: who is the master.',
-            'The butler\'s face does not change. Mr. Polonius, sir. The master of the house. He has been here a long time.',
-            'He has not blinked.',
-          ],
-          scales: { unease: +3 },
-        },
-        {
-          label: 'no. Step around him',
-          desc: 'Refuse and keep moving.',
-          lines: [
-            'I step around him. He turns smoothly to keep his face toward me. He does not follow. The tray is still in his hand. He stands there, holding it, when I look back.',
-          ],
-          scales: { unease: +2, intimacy: -1 },
-        },
-      ],
-    },
-
-    {
-      id: 'clock_chimes',
-      once: true,
-      when: (p) => p.turn >= 6 && !p.flags._walked_free && Math.random() < 0.65,
-      prose: [
-        'The clock without hands chimes. It chimes a number I do not count. It chimes for longer than a clock should.',
-        'Polonius cocks his head, as if listening for an old friend.',
-        'Late. Later than I thought. Sir — we have less time than I had imagined.',
-      ],
-      responses: [
-        {
-          label: 'I should leave then',
-          desc: 'Take the warning.',
-          lines: [
-            'I say: I should go.',
-            'He looks at me with a small, gentle disappointment. Indeed, sir. The hour is late. Do, please. The corridor is just there.',
-          ],
-          scales: { unease: +1 },
-        },
-        {
-          label: 'what happens at midnight',
-          desc: 'Press him.',
-          lines: [
-            'I say: what happens at midnight.',
-            'He smiles. A great deal, sir. A great deal happens. I would not like to spoil it.',
-          ],
-          scales: { unease: +3 },
-          flags: { _heard_midnight: true },
-        },
-      ],
-    },
-
-    {
-      id: 'glimpse_of_him',
-      once: true,
-      when: (p) => p.turn >= 10 && !p.flags._walked_free && p.flags._mask_on !== false && Math.random() < 0.7,
-      prose: [
-        'I catch his reflection in the polished side of a silver bowl. The reflection is not quite Polonius. The face is older. The face does not have all of its features in their accustomed places.',
-        'When I look up, he is in the position he was before. He has not moved. The reflection has.',
-      ],
-      responses: [
-        {
-          label: 'look back at the bowl',
-          desc: 'Verify.',
-          lines: [
-            'I look back at the bowl. The reflection is just him now. The features are in their accustomed places. The face is smiling.',
-            'The face was not smiling a moment ago, when I looked away.',
-          ],
-          scales: { unease: +4 },
-          composure: -2,
-          composureCost: 'The face was not smiling a moment ago.',
-        },
-        {
-          label: 'pretend not to have seen',
-          desc: 'Walk on.',
-          lines: [
-            'I keep walking. He keeps pace. The reflection in the bowl, when I pass, is what I would expect a reflection to be.',
-            'I do not look at the bowl again.',
-          ],
-          scales: { unease: +3 },
-        },
-      ],
-    },
-
-    {
-      id: 'sleepiness_strikes',
-      once: true,
-      when: (p) => p.scales.tiredness >= 10 && !p.flags._walked_free && Math.random() < 0.85,
-      prose: [
-        'The room slides. The lamps double, then resolve. My eyes were closed. I do not remember closing them.',
-        'Polonius is closer than he was. His head is at the angle of someone who has been studying me for some moments.',
-        'Are you well, sir? You look very tired.',
-      ],
-      responses: [
-        {
-          label: 'I\'m fine',
-          desc: 'Force yourself upright.',
-          lines: [
-            'I say: I\'m fine.',
-            'I push myself upright. My limbs are where I left them, more or less.',
-          ],
-          scales: { tiredness: -2 },
-          composure: -1,
-          composureCost: 'My limbs were not all the way where I left them.',
-        },
-        {
-          label: 'I think I need to sit',
-          desc: 'Concede.',
-          lines: [
-            'I say: I think I need to sit.',
-            'He is delighted. The delight is real. Of course. Of course. Mrs. Halliwell. The chair by the fire.',
-            'The chair is suddenly closer to me than it was.',
-          ],
-          scales: { tiredness: +3, intimacy: +2 },
-        },
-      ],
-    },
-  ],
 
   // ─────────────────────────────────────────────────────────────────────
   //  ENDINGS — fire when their `when` matches at end of beat.
