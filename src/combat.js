@@ -343,18 +343,6 @@ async function enterSpokeNode(nodeId) {
   const pat = enc.patient;
   const player = enc.player;
   const spoke = pat.def.spokes[enc.activeSpoke.spokeId];
-  // Pre-entry divert. Beat-graph patients may want to intercept a beat
-  // entry and route to an intrusion beat instead. The patient's hook
-  // returns either an alternative node id or null/undefined for no
-  // change. Returning the same id is also a no-op.
-  if (typeof pat.def.maybeDivert === 'function') {
-    try {
-      const diverted = pat.def.maybeDivert(pat, player, nodeId);
-      if (diverted && diverted !== nodeId && spoke.nodes[diverted]) {
-        nodeId = diverted;
-      }
-    } catch (e) { console.error('maybeDivert error', e); }
-  }
   const node = spoke.nodes[nodeId];
   if (!node) {
     console.error('missing spoke node', enc.activeSpoke.spokeId, nodeId);
