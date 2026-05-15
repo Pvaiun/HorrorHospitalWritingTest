@@ -178,10 +178,14 @@ export async function playerVerb(verbId) {
   if (!enc || !enc.awaitingPlayer || state.acting) return;
   state.acting = true;
   enc.awaitingPlayer = false;
-  if (enc.activeSpoke) {
-    await runSpokeChoice(parseInt(verbId, 10));
-  } else if (enc.activeInterjection) {
+  // Dispatch precedence must mirror the UI: an active interjection wins
+  // over an active spoke. The interjection menu is shown when both are
+  // set, so the click index refers to the interjection's responses, not
+  // the spoke node's choices.
+  if (enc.activeInterjection) {
     await runInterjectionResponse(parseInt(verbId, 10));
+  } else if (enc.activeSpoke) {
+    await runSpokeChoice(parseInt(verbId, 10));
   } else if (typeof verbId === 'string' && verbId.startsWith('spoke:')) {
     await enterSpoke(verbId.slice(6));
   } else {
