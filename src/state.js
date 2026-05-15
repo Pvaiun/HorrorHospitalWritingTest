@@ -50,7 +50,13 @@ export function pushLog(text, opts) {
   entry.damage = entry.damage || 0;
   entry.heal   = entry.heal   || 0;
   state.log.push(entry);
-  if (state.log.length > 80) state.log.shift();
+  // capped buffer — when shifting the front off, slide the read indices in
+  // step so absolute indices keep pointing at the same logical entries.
+  while (state.log.length > 80) {
+    state.log.shift();
+    if (state.shownLogIdx >= 0) state.shownLogIdx--;
+    if (state.typingIdx   >= 0) state.typingIdx--;
+  }
 }
 
 export function clearLog() {
