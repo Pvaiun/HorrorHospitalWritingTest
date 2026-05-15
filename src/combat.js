@@ -134,6 +134,14 @@ async function runEncounterIntro() {
     // hub-shift line. Future transitions get announced normally.
     pat.flags._lastAnnouncedHub = enc.hubState;
   }
+  // Some patients are built as a single beat-graph (one mega-spoke that
+  // the player traverses without ever returning to a hub). They declare
+  // a `startSpoke` and the engine drops the player into it immediately
+  // after the intro, bypassing the hub menu.
+  if (pat.def.startSpoke) {
+    await enterSpoke(pat.def.startSpoke);
+    return;
+  }
   await announceHubBeats();
   state.acting = false;
   enc.awaitingPlayer = true;
@@ -371,8 +379,15 @@ async function runSpokeChoice(idx) {
     return;
   }
 
-  // Normalize the `goto` form. Shorthand string → object.
+  // Normalize the `goto` form. A `goto` may be a function (a selector
+  // that computes the destination from current state — used to route
+  // between clusters in beat-graph patients), a string shorthand, or an
+  // object. After evaluation the result is shaped into { to, ... }.
   let g = choice.goto;
+  if (typeof g === 'function') {
+    try { g = g(pat, player); }
+    catch (e) { console.error('goto fn error', e); g = { to: 'hub' }; }
+  }
   if (typeof g === 'string') g = { to: g };
   if (!g) g = { to: 'hub' };
 

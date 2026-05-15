@@ -46,8 +46,2210 @@ function streakCount(p, verbId) { return p.flags.lastVerb === verbId ? (p.flags.
 
 
 // ════════════════════════════════════════════════════════════════════════
-// THE PRAM — Patient 0028
+// POLONIUS — Patient ??? (the Greek Wing)
 // ════════════════════════════════════════════════════════════════════════
+//
+// A cursed Victorian house, annexed into a wing of the hospital, holds
+// one tenant: Polonius, who was born in ancient Greece and has been
+// trapped here for nearly a thousand years. Three staff (the butler,
+// the cook, the maid) live in the house on a single perpetual day —
+// they do not remember. Polonius does. He remembers every loop.
+//
+// The curse demands one bound tenant. The cursed person resets each
+// morning with the house. If the cursed person walks out while only
+// one other living thing remains inside, the curse transfers and the
+// remaining one becomes the new tenant.
+//
+// The player wandered in from the corridor. They are not cursed.
+// Polonius has been waiting centuries for this. He will host them
+// graciously. He will let them grow tired. If they fall asleep under
+// his roof they become bound. If he can get them maneuvered into the
+// final-one-inside position and walk out a step ahead, they are bound.
+// If he can kill them and walk out, they are bound. He is frail and
+// raving, but very, very patient.
+//
+// This patient is authored as a beat-graph: one mega-spoke `main` with
+// roughly sixty hand-routed beats organised in clusters (THRESHOLD,
+// WELCOME, TOUR, CONFIDENCE, REVEAL, LULL, REACH, TURN, RECKONING).
+// Selectors decide cluster transitions based on hidden mood and
+// player state. Intrusions fire on probabilistic timers and shove the
+// player into a cluster they weren't heading toward.
+// ════════════════════════════════════════════════════════════════════════
+
+// ─── helpers used only by polonius ─────────────────────────────────────
+
+const POLONIUS_ROOMS = ['library', 'parlor', 'gallery', 'clock_hall', 'dining'];
+
+// Selector. Picks the next room beat the player hasn't visited yet.
+// When the tour is done, hand off to CONFIDENCE.
+function poloniusPickRoom(p) {
+  const remaining = POLONIUS_ROOMS.filter(r => !p.flags['_been_' + r]);
+  if (!remaining.length) return 'c_long_time';
+  const i = Math.floor(Math.random() * remaining.length);
+  return 'r_' + remaining[i];
+}
+
+// Selector. After WELCOME ends or the player declines tour, pick a
+// natural next cluster based on the player's current state.
+function poloniusAfterWelcome(p) {
+  if (p.scales.unease >= 10 && !p.flags._mask_cracked_once) return 'm_first_crack';
+  if (p.scales.intimacy >= 6) return 'c_long_time';
+  return 'r_lead';   // start the tour
+}
+
+// Selector. After the player has discovered the truth, where do we
+// go next? Polonius's mood pivots here.
+function poloniusAfterReveal(p) {
+  if (p.scales.tiredness >= 8) return 'l_offered_bed';
+  if (p.scales.intimacy >= 10) return 'h_pleads';
+  if (p.scales.unease >= 14) return 'h_threatens';
+  return 'h_vulnerability';
+}
+
+// Selector. During REACH, route based on player resistance and his mood.
+function poloniusReachNext(p) {
+  const tried = ['_reach_plead', '_reach_offer', '_reach_threat', '_reach_kill_staff',
+                 '_reach_mourn', '_reach_close']
+    .filter(k => p.flags[k]);
+  if (tried.length >= 3) return 'm_first_crack';
+  const options = [];
+  if (!p.flags._reach_plead)       options.push('h_pleads');
+  if (!p.flags._reach_offer)       options.push('h_offers_everything');
+  if (!p.flags._reach_threat)      options.push('h_threatens');
+  if (!p.flags._reach_kill_staff)  options.push('h_kill_staff_offer');
+  if (!p.flags._reach_mourn)       options.push('h_mournful');
+  if (!p.flags._reach_close)       options.push('h_close');
+  if (!options.length) return 'm_first_crack';
+  return options[Math.floor(Math.random() * options.length)];
+}
+
+// Selector. After TURN beats, route to RECKONING.
+function poloniusAfterTurn(p) {
+  if (p.scales.tiredness >= 12) return 'l_drift';
+  return 'e_for_door';
+}
+
+const polonius = {
+  id: 'polonius',
+  name: 'Polonius',
+  glyph: 'Hollowoak',
+  subtitle: 'A young man, indoors. He has been here a very long time.',
+  role: 'wing', tier: 1,
+
+  file: [
+    'Subject was added to the ward register on [[?]], the same day the Greek Wing was annexed to the south of the hospital.',
+    'He is the sole declared tenant. The house staff are not on the payroll. !!They are not on any payroll.!!',
+    'Staff who have entered the wing in pairs return with no memory of the visit. They cannot account for the hours.',
+    'Staff who have entered alone ~~have not returned~~ have not returned the same.',
+    'Subject answers to Polonius. He has answered to ~~other names in other languages~~ many other names.',
+    'Standing order: no patient is to enter the Greek Wing for any reason. !!You should not be here.!!',
+  ],
+
+  intro: [
+    'I follow a corridor I have not walked before. The hospital lights end at a doorway I do not remember seeing.',
+    'Past the door, a hall lit by oil lamps. The wallpaper is dark green velvet. The smell is wax and old wood.',
+    'A young man is standing in the foyer. He has the posture of someone who has been standing there a long time.',
+    'He turns his head. His face takes a moment to resolve into a smile.',
+  ],
+
+  scales: {
+    tiredness: {
+      initial: 2, min: 0, max: 20, label: 'tiredness', kind: 'positive',
+      bands: [
+        { at: 0,  word: 'awake' },
+        { at: 4,  word: 'comfortable' },
+        { at: 8,  word: 'drowsy' },
+        { at: 12, word: 'heavy' },
+        { at: 16, word: 'sliding' },
+        { at: 19, word: 'falling' },
+      ],
+      crossUp: {
+        2: 'My shoulders have dropped without my deciding to drop them.',
+        3: 'I rub my eyes. They want to stay shut.',
+        4: '!!I can hear my own pulse. It is slower than it should be.!!',
+        5: '!!I am losing the thread of this. The room is going dim at the edges.!!',
+      },
+      crossDown: {
+        4: 'I shake my head clear.',
+        3: 'My eyes open all the way.',
+        2: 'I am awake. I am awake.',
+      },
+    },
+    intimacy: {
+      initial: 0, min: 0, max: 20, label: 'his attention', kind: 'positive',
+      bands: [
+        { at: 0,  word: 'a guest' },
+        { at: 4,  word: 'noticed' },
+        { at: 8,  word: 'engaged' },
+        { at: 12, word: 'studied' },
+        { at: 16, word: 'preferred' },
+        { at: 19, word: 'chosen' },
+      ],
+      crossUp: {
+        2: 'He is watching me a little longer than feels right.',
+        3: 'He has not looked away in some time.',
+        4: '!!He knows the shape of my breathing.!!',
+        5: '!!He is reading me.!!',
+      },
+    },
+    unease: {
+      initial: 2, min: 0, max: 20, label: 'the wrongness', kind: 'negative',
+      bands: [
+        { at: 0,  word: 'nothing' },
+        { at: 4,  word: 'noticing' },
+        { at: 8,  word: 'sure' },
+        { at: 12, word: 'certain' },
+        { at: 16, word: 'animal' },
+        { at: 19, word: 'fleeing' },
+      ],
+      crossUp: {
+        2: 'Something about him does not move quite the way it should.',
+        3: 'I have caught two things now. The third would not surprise me.',
+        4: '!!This is not a young man. Not entirely.!!',
+        5: '!!Whatever he is, he is older than the room.!!',
+      },
+    },
+  },
+
+  initialize(p, player) {
+    p.scales.tiredness = 2;
+    p.scales.intimacy  = 0;
+    p.scales.unease    = 2;
+    p.flags.room = 'foyer';
+    // Hidden state — drives selectors. Player never sees these.
+    p.flags._mood = 'charming';
+    p.flags._mask_on = true;
+  },
+
+  fileReveals: [
+    { at: 6,  announce: 'A line fills in. Subject was added to the register the day the Greek Wing was annexed.' },
+    { at: 14, announce: 'Another. The house staff are on no payroll.' },
+    { at: 22, announce: '~~Staff who have entered alone have not returned the same.~~' },
+    { at: 32, announce: '!!You should not be here.!!' },
+  ],
+
+  // The whole encounter takes place inside a single beat-graph. The hub
+  // state never changes; presented() varies by current room flag.
+  hubState() { return 'inside'; },
+
+  presented(p, hub) {
+    const room = p.flags.room || 'foyer';
+    const desc = {
+      foyer:      'The foyer is panelled in dark wood. A coat-tree, empty. A grandfather clock against the wall. He stands in the centre of the rug as if it had been marked for him.',
+      parlor:     'The parlor is small, hot. A fire that has been burning for some time. Two armchairs facing it. A decanter on a side table.',
+      library:    'Floor to ceiling shelves. Books bound in calf, in cloth, in something darker. A reading lamp is lit, but no one was reading.',
+      gallery:    'A narrow hall of portraits. Men and women in clothes from every century. All of them looking at the same point in the air.',
+      clock_hall: 'A hall with a tall clock at its end. The pendulum is swinging. The face has no hands.',
+      dining:     'A long table set for two. The places are already arranged. The candles are already burning.',
+      hall:       'A corridor lined with closed doors. The doors do not have handles on the outside.',
+      bedroom:    'A guest room. The bed is turned down. The window is bricked, but painted to look like a window.',
+      kitchen:    'The kitchen. The chef is at the range. He is preparing something that smells like a memory.',
+    }[room] || 'A room in the house.';
+
+    let tail = '';
+    if (p.flags._mask_on === false) {
+      tail = ' !!He has stopped pretending.!!';
+    } else if (p.scales.unease >= 12) {
+      tail = ' Something about the way he is standing is wrong, and I cannot stop seeing it.';
+    } else if (p.scales.unease >= 4) {
+      tail = ' He is watching me without seeming to.';
+    } else {
+      tail = ' He is being unfailingly polite.';
+    }
+    return desc + tail;
+  },
+
+  startSpoke: 'main',
+
+  // ─────────────────────────────────────────────────────────────────────
+  //  THE BEAT GRAPH
+  // ─────────────────────────────────────────────────────────────────────
+  spokes: {
+    main: {
+      label: 'in the house',
+      entry: 't_arrival',
+      nodes: {
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: THRESHOLD — the foyer, the meeting
+        // ═════════════════════════════════════════════════════════════
+
+        t_arrival: {
+          lines: [
+            'He has not blinked since I came in. Not once.',
+            'He says, when the silence has lasted just long enough to be wrong: ~~Ah. A guest. Welcome.~~',
+            'His mouth moves the words a fraction before the sound arrives.',
+          ],
+          scales: { unease: +1 },
+          choices: [
+            {
+              label: 'greet him back',
+              goto: { to: 't_invitation', lines: ['I say: hello. I think I have come the wrong way.'], scales: { intimacy: +1 } },
+            },
+            {
+              label: 'turn to leave',
+              goto: { to: 't_turn_to_leave', lines: ['I turn back toward the doorway I came through.'] },
+            },
+            {
+              label: 'say nothing',
+              goto: { to: 't_silent', lines: ['I do not answer. I look at him.'], scales: { unease: +1 } },
+            },
+          ],
+        },
+
+        t_invitation: {
+          lines: [
+            'He inclines his head. The motion is too smooth.',
+            '~~There is no wrong way to come to a door, sir. Only doors one is meant to find. Come in. The hour grows short and the corridor is cold.~~',
+          ],
+          choices: [
+            {
+              label: 'step inside',
+              goto: { to: 'w_chair', lines: ['I take a step in. The wallpaper hushes my footsteps.'], scales: { intimacy: +1 } },
+            },
+            {
+              label: 'I really shouldn\'t',
+              goto: { to: 't_polite_decline', lines: ['I say: I really shouldn\'t. I should get back.'] },
+            },
+            {
+              label: 'where am I',
+              goto: { to: 't_where_am_i', lines: ['I say: what wing is this. I don\'t know this corridor.'] },
+            },
+          ],
+        },
+
+        t_turn_to_leave: {
+          lines: [
+            'He does not move. He simply says, behind me: ~~Of course. I would not detain. I would only ask, before you go — did the corridor seem familiar to you, on the way in?~~',
+            'I stop with my hand on the threshold.',
+          ],
+          choices: [
+            {
+              label: 'leave anyway',
+              goto: { to: 'end_walked_out_immediately', lines: ['I step back through the doorway. The lights of the hospital meet me. The air is colder than I remember.'], flags: { _walked_out_clean: true } },
+            },
+            {
+              label: 'turn back',
+              goto: { to: 't_invitation', lines: ['I turn back to him. He has not moved.'], scales: { intimacy: +1, unease: +1 } },
+            },
+          ],
+        },
+
+        t_silent: {
+          lines: [
+            'He waits. The clock against the wall does not tick.',
+            'After a length of silence I cannot quite measure, he says: ~~You came in. The corridor opened for you. That is enough of an introduction, I think.~~',
+            'He has still not blinked.',
+          ],
+          scales: { unease: +2 },
+          choices: [
+            {
+              label: 'finally speak',
+              goto: { to: 't_invitation', lines: ['I say: I think I am lost.'], scales: { intimacy: +1 } },
+            },
+            {
+              label: 'turn to leave',
+              goto: { to: 't_turn_to_leave', lines: ['I take a step back toward the threshold.'] },
+            },
+          ],
+        },
+
+        t_polite_decline: {
+          lines: [
+            'His face does a thing. The smile widens but the eyes do not move with it.',
+            '~~Of course. Of course. I should not press. Only — the cook has prepared the evening meal. He has prepared it every evening. It would be a great kindness to him for someone to come to the table.~~',
+            'The way he says ~~someone~~ has a small weight to it.',
+          ],
+          scales: { unease: +1, intimacy: +1 },
+          choices: [
+            {
+              label: 'one minute only',
+              goto: { to: 'w_chair', lines: ['I say: one minute only.'] },
+            },
+            {
+              label: 'sorry. I should go',
+              goto: { to: 'end_walked_out_immediately', lines: ['I say: I\'m sorry. I should go.', 'I step backwards through the threshold. The hospital corridor is behind me. He does not follow.'], flags: { _walked_out_clean: true } },
+            },
+          ],
+        },
+
+        t_where_am_i: {
+          lines: [
+            '~~The Greek Wing, sir. Most of you do not realise it has been added. It is one of the newer wings. Newer to the hospital, I should say. The house itself is older.~~',
+            'He smiles. The smile does not reach his eyes; it reaches some other place a little behind them.',
+          ],
+          scales: { unease: +2, intimacy: +1 },
+          choices: [
+            {
+              label: 'step inside',
+              goto: { to: 'w_chair', lines: ['I step in. The wallpaper presses the sound out of my footsteps.'] },
+            },
+            {
+              label: 'this is a hospital',
+              goto: { to: 't_correct_him', lines: ['I say: this is a hospital. There isn\'t a wing like this here.'] },
+            },
+          ],
+        },
+
+        t_correct_him: {
+          lines: [
+            'He laughs once. A short, fond, indulgent sound, as if I had told him a joke he had heard before.',
+            '~~Indeed it is. Indeed it is. Come in regardless. The kettle is already on.~~',
+          ],
+          scales: { unease: +1 },
+          choices: [
+            { label: 'step inside, briefly', goto: { to: 'w_chair', lines: ['I step in. Briefly.'] } },
+            { label: 'leave', goto: { to: 'end_walked_out_immediately', lines: ['I step back into the corridor. The lights of the hospital are too bright after the oil lamps.'], flags: { _walked_out_clean: true } } },
+          ],
+        },
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: WELCOME — the gracious host
+        // ═════════════════════════════════════════════════════════════
+
+        w_chair: {
+          lines: [
+            'He gestures to a wing-backed chair by the foyer fire. ~~Please. Do sit. The seat has been warmed.~~',
+            'The seat has been warmed. The fire is small. There is no one else in the room.',
+          ],
+          flags: { room: 'foyer' },
+          scales: { tiredness: +1 },
+          choices: [
+            {
+              label: 'sit',
+              goto: { to: 'w_coat', lines: ['I sit. The cushion gives the wrong amount.'], scales: { tiredness: +1, intimacy: +1 } },
+            },
+            {
+              label: 'stand by the fire instead',
+              goto: { to: 'w_coat', lines: ['I do not sit. I stand by the fire. He watches this choice with a small interest.'], scales: { intimacy: +1 } },
+            },
+            {
+              label: 'who warmed it',
+              goto: { to: 'w_who_warmed', lines: ['I say: who warmed it.'], scales: { unease: +2 } },
+            },
+          ],
+        },
+
+        w_who_warmed: {
+          lines: [
+            'He smiles. ~~Mrs. Halliwell. The maid. She is very thorough. She warms all the seats at this hour.~~',
+            'He pauses. ~~Every hour, in point of fact. She has been thorough for a long time.~~',
+          ],
+          scales: { unease: +2 },
+          choices: [
+            { label: 'sit anyway', goto: { to: 'w_coat', lines: ['I sit. The warmth is the wrong temperature for a body.'], scales: { tiredness: +1 } } },
+            { label: 'do not sit', goto: { to: 'w_coat', lines: ['I remain standing.'], scales: { intimacy: +1 } } },
+          ],
+        },
+
+        w_coat: {
+          lines: [
+            'A young woman appears in the doorway behind me without my having heard the door. She is smiling. She is carrying nothing.',
+            '~~The maid will take your coat,~~ he says, before she has spoken. ~~To the cloakroom. It will be safe there.~~',
+            'My coat is on. She is reaching for it.',
+          ],
+          flags: { _coat_being_taken: true },
+          choices: [
+            {
+              label: 'let her take it',
+              goto: { to: 'w_tea', lines: ['I let her take it. Her hands are cold through the lining.'], scales: { intimacy: +2 }, flags: { _coat_taken: true } },
+            },
+            {
+              label: 'I\'ll keep my coat, thank you',
+              goto: { to: 'w_coat_refused', lines: ['I say: I\'ll keep my coat, thank you.'], scales: { intimacy: -1 } },
+            },
+          ],
+        },
+
+        w_coat_refused: {
+          lines: [
+            'The maid\'s hand stops at the cuff. She does not retract it for a beat too long. Then she does retract it, smoothly.',
+            'Polonius nods. ~~Of course. The cloakroom is at the back of the house and one\'s coat is sometimes a comfort. Quite right.~~',
+            'The maid stays in the doorway. She is still smiling.',
+          ],
+          scales: { unease: +2 },
+          choices: [
+            { label: 'go on', goto: 'w_tea' },
+          ],
+        },
+
+        w_tea: {
+          lines: [
+            'A tray appears on the side table. The butler is bowing as he sets it down. I did not see him come in.',
+            'Two cups. Two saucers. ~~Tea,~~ Polonius says. ~~It is already poured. I anticipated.~~',
+          ],
+          scales: { tiredness: +1 },
+          choices: [
+            {
+              label: 'drink',
+              goto: { to: 'w_smalltalk', lines: ['I drink. The tea is hot and slightly sweet and tastes of bergamot and something I cannot name.'], scales: { tiredness: +2, intimacy: +1 } },
+            },
+            {
+              label: 'do not drink',
+              goto: { to: 'w_smalltalk', lines: ['I do not drink. The cup sits in my hands. He notices.'], scales: { intimacy: +1, unease: +1 } },
+            },
+            {
+              label: 'is there something in this',
+              goto: { to: 'w_tea_suspicion', lines: ['I say: is there something in this.'], scales: { unease: +2 } },
+            },
+          ],
+        },
+
+        w_tea_suspicion: {
+          lines: [
+            'He looks genuinely sad for an instant. Then composes himself with a small movement of the jaw.',
+            '~~Bergamot, sir. And a leaf one cannot buy now. Mrs. Halliwell grows it in the conservatory. It is harmless.~~',
+            'He drinks from his own cup. He drinks slowly. He does not appear to swallow.',
+          ],
+          scales: { unease: +2 },
+          choices: [
+            { label: 'drink', goto: { to: 'w_smalltalk', lines: ['I drink. It is sweet and slightly strange.'], scales: { tiredness: +2 } } },
+            { label: 'set the cup down', goto: { to: 'w_smalltalk', lines: ['I set the cup down on the saucer. He notices this too.'], scales: { unease: +1 } } },
+          ],
+        },
+
+        w_smalltalk: {
+          lines: [
+            'He sets his cup on his knee. He has not actually drunk anything. The level in his cup is the same.',
+            '~~Tell me. What brings you onto this corridor. We do not have many guests. It is a pleasure to have one.~~',
+          ],
+          scales: { intimacy: +1, unease: +1 },
+          choices: [
+            {
+              label: 'I was looking for the bathroom',
+              goto: { to: 'w_smalltalk_response', lines: ['I say: I was looking for the bathroom. I think I took a wrong turn.'] },
+            },
+            {
+              label: 'I work here',
+              goto: { to: 'w_smalltalk_response', lines: ['I say: I work here. I\'ve never seen this wing.'], flags: { _claimed_staff: true } },
+            },
+            {
+              label: 'I don\'t know',
+              goto: { to: 'w_smalltalk_response', lines: ['I say: I don\'t know. I just walked.'], scales: { unease: +1 } },
+            },
+            {
+              label: 'who are you',
+              goto: { to: 'w_who_are_you', lines: ['I say: who are you.'], scales: { unease: +1 } },
+            },
+          ],
+        },
+
+        w_smalltalk_response: {
+          lines: [
+            'He nods, slowly, considering my answer as if it were the first time he had heard one like it.',
+            '~~People often come to the wing without having decided to. It is a quality of the house. It draws.~~',
+            'He looks at me for a beat too long. I have the impression he is committing me to memory.',
+          ],
+          scales: { intimacy: +2, unease: +1 },
+          choices: [
+            { label: 'go on', goto: 'w_observation' },
+          ],
+        },
+
+        w_who_are_you: {
+          lines: [
+            'He smiles, fond. ~~Polonius. The name has held up for a long time. The rest is less interesting than the name. Some things hold and some do not.~~',
+            'He waits. He has not asked mine.',
+          ],
+          scales: { intimacy: +1, unease: +2 },
+          choices: [
+            { label: 'give your name', goto: { to: 'w_observation', lines: ['I give my name. He repeats it back. He pronounces it as if testing the weight of a coin.'], scales: { intimacy: +2 } } },
+            { label: 'do not give your name', goto: { to: 'w_observation', lines: ['I do not give my name. He notices but says nothing.'], scales: { intimacy: +1, unease: +1 } } },
+          ],
+        },
+
+        w_observation: {
+          lines: [
+            'I notice his hands. They are folded in his lap. They have not changed position since I came in. They are not the colour hands should be near a fire.',
+            'He sees me see them. He places one hand over the other, slowly, as if the gesture had just been taught to him.',
+          ],
+          scales: { unease: +2 },
+          choices: [
+            {
+              label: 'comment on it',
+              goto: { to: 'w_observation_comment', lines: ['I say: your hands.'] },
+            },
+            {
+              label: 'pretend not to have noticed',
+              goto: { to: 'w_offer_tour', lines: ['I look away. He smiles, indulgent, as if I had said something polite.'], scales: { intimacy: +1 } },
+            },
+          ],
+        },
+
+        w_observation_comment: {
+          lines: [
+            'He looks down at them himself, as if surprised that they had been noticed.',
+            '~~Ah, yes. The fire is not what it once was. Cold hands in a warm room. The house gets its quirks after some time.~~',
+            'He says ~~quirks~~ with a small, fond emphasis. As if the word were a small ornament he keeps on a shelf and dusts often.',
+          ],
+          scales: { unease: +2, intimacy: +1 },
+          choices: [
+            { label: 'go on', goto: 'w_offer_tour' },
+          ],
+        },
+
+        w_offer_tour: {
+          lines: [
+            'He rises. He rises in one continuous movement, without leverage from his hands.',
+            '~~Come. Allow me to show you the house. It is rude to keep a guest in the foyer.~~',
+            'He is at the inner doorway before he has finished the sentence.',
+          ],
+          choices: [
+            {
+              label: 'follow',
+              goto: { to: 'r_lead', lines: ['I follow him through.'], scales: { intimacy: +1 }, flags: { room: 'hall' } },
+            },
+            {
+              label: 'I should stay where I am',
+              goto: { to: 'w_stay_foyer', lines: ['I say: I\'m alright here. Thank you.'] },
+            },
+            {
+              label: 'I should be going, actually',
+              goto: { to: 'w_polite_exit_attempt', lines: ['I say: I should be going.'] },
+            },
+          ],
+        },
+
+        w_stay_foyer: {
+          lines: [
+            'He pauses in the inner doorway. The pause is too long. Then he comes back, smoothly.',
+            '~~Quite right. The foyer is the heart of any house. Perhaps another cup of tea, then.~~',
+            'The butler is already there with the pot. He had not gone away.',
+          ],
+          scales: { tiredness: +2, unease: +1 },
+          choices: [
+            {
+              label: 'accept the tea',
+              goto: { to: 'c_long_time', lines: ['I let him pour again. I sit back into the chair.'], scales: { tiredness: +2, intimacy: +1 } },
+            },
+            {
+              label: 'follow him after all',
+              goto: { to: 'r_lead', lines: ['I stand and follow him into the corridor.'], flags: { room: 'hall' } },
+            },
+          ],
+        },
+
+        w_polite_exit_attempt: {
+          lines: [
+            'He nods, agreeable. ~~Of course. Of course. The door is just there. Allow me only to fetch your coat. Mrs. Halliwell took it to the cloakroom — at the back of the house. It will only be a moment.~~',
+            'He turns and steps into the inner corridor before I can speak.',
+            'The maid is still in the other doorway. She is still smiling. She is between me and the front door.',
+          ],
+          flags: { _trying_to_leave: true },
+          scales: { unease: +2 },
+          choices: [
+            {
+              label: 'wait for him to come back',
+              goto: { to: 'w_wait_for_coat', lines: ['I stand and wait. The maid does not move. The clock does not tick.'], scales: { tiredness: +1, intimacy: +1 } },
+            },
+            {
+              label: 'go to the front door now, without the coat',
+              goto: { to: 'e_door_in_reach', lines: ['I step around the maid. She does not stop me. The front door is in front of me.'] },
+            },
+            {
+              label: 'follow him to the cloakroom',
+              goto: { to: 'r_lead', lines: ['I follow him into the corridor. He glances back, pleased.'], flags: { room: 'hall' }, scales: { intimacy: +1 } },
+            },
+          ],
+        },
+
+        w_wait_for_coat: {
+          lines: [
+            'I wait. The wait stretches. The maid is still smiling. The fire is still small.',
+            'When he returns he is empty-handed. ~~Forgive me. The cloakroom was rearranged this morning. Mrs. Halliwell has gone to fetch it. She will not be long.~~',
+            'He gestures to the chair again. ~~Sit. We need not stand on ceremony.~~',
+          ],
+          scales: { tiredness: +2, unease: +1 },
+          choices: [
+            {
+              label: 'sit and wait',
+              goto: { to: 'c_long_time', lines: ['I sit. The chair is warm.'], scales: { tiredness: +2, intimacy: +1 } },
+            },
+            {
+              label: 'go and find the cloakroom myself',
+              goto: { to: 'r_lead', lines: ['I say: I\'ll come with you. I follow him into the corridor.'], flags: { room: 'hall' } },
+            },
+            {
+              label: 'leave without the coat',
+              goto: { to: 'e_door_in_reach', lines: ['I move toward the front door.'] },
+            },
+          ],
+        },
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: TOUR — deeper into the house
+        // ═════════════════════════════════════════════════════════════
+
+        r_lead: {
+          lines: [
+            'The corridor is longer than the front of the house could have suggested. The wallpaper goes from dark green to a deeper red as we walk.',
+            '~~The east wing first,~~ he says, ~~it has the better light at this hour.~~',
+            'There is no light. The windows are draped.',
+          ],
+          flags: { room: 'hall' },
+          scales: { tiredness: +1 },
+          choices: [
+            {
+              label: 'keep following',
+              goto: (p) => poloniusPickRoom(p),
+            },
+            {
+              label: 'turn back to the foyer',
+              goto: { to: 'w_polite_exit_attempt', lines: ['I say: actually, I think I will head back.'] },
+            },
+          ],
+        },
+
+        r_library: {
+          lines: [
+            'The library smells of old paper and dust I can taste. Two of the walls are shelved to the ceiling. A reading lamp is lit. The chair beside it is empty but the cushion is depressed.',
+            'He runs his fingers along a shelf. ~~I have read all of these. I have read most of them more than once. There is time, in a house.~~',
+          ],
+          flags: { room: 'library', _been_library: true },
+          scales: { tiredness: +1, intimacy: +1 },
+          choices: [
+            {
+              label: 'who was sitting here',
+              goto: { to: 'r_library_chair', lines: ['I say: the cushion. Who was sitting here.'] },
+            },
+            {
+              label: 'look at the books',
+              goto: { to: 'r_library_books', lines: ['I cross to the shelf and look at the bindings.'] },
+            },
+            {
+              label: 'keep moving',
+              goto: (p) => poloniusPickRoom(p),
+            },
+          ],
+        },
+
+        r_library_chair: {
+          lines: [
+            'He smiles. ~~The cushion is always like that. The chair has been used. Not recently. Long ago, in the aggregate, by someone who is no longer in the chair.~~',
+            'The way he says ~~no longer in the chair~~ leaves room for several things to be true.',
+          ],
+          scales: { unease: +2 },
+          choices: [
+            { label: 'keep moving', goto: (p) => poloniusPickRoom(p) },
+          ],
+        },
+
+        r_library_books: {
+          lines: [
+            'The bindings: a Latin grammar. A natural history with illustrations of an animal I do not recognise. A book in Greek. A book in a script that runs the wrong way and bends to one side as I look at it.',
+            'A book without a title, bound in something I would prefer not to think about.',
+          ],
+          scales: { unease: +3 },
+          choices: [
+            {
+              label: 'open the untitled book',
+              goto: { to: 'r_library_untitled', lines: ['I open it.'], scales: { unease: +3 }, composure: -1, composureCost: 'My name was on the first page.' },
+            },
+            {
+              label: 'leave it alone',
+              goto: (p) => poloniusPickRoom(p),
+            },
+          ],
+        },
+
+        r_library_untitled: {
+          lines: [
+            'On the first page, in a careful hand, is my given name. Underneath is the name I have not used in years. Underneath that is the name my mother called me.',
+            'Underneath those is a list of names I have never heard, in inks of different ages.',
+            'He has not come over. He is standing where I left him, watching me read.',
+          ],
+          composure: -2,
+          composureCost: 'The names were in the right order.',
+          flags: { _saw_guest_book: true },
+          choices: [
+            { label: 'close the book', goto: (p) => poloniusPickRoom(p) },
+            { label: 'confront him', goto: 'v_polonius_admits' },
+          ],
+        },
+
+        r_parlor: {
+          lines: [
+            'The parlor is hot. The fire has been burning a long time. Two armchairs face it.',
+            'The butler is in one of them, reading a newspaper. He looks up at me. He nods, as one nods at a stranger one has been told to expect. He goes back to his paper.',
+            'The newspaper is yellowed. The date on it is one I should know.',
+          ],
+          flags: { room: 'parlor', _been_parlor: true },
+          scales: { tiredness: +2, unease: +1 },
+          choices: [
+            {
+              label: 'check the date on the paper',
+              goto: { to: 'r_parlor_date', lines: ['I lean in. The date is far older than it should be.'], scales: { unease: +3 } },
+            },
+            {
+              label: 'speak to the butler',
+              goto: { to: 'r_parlor_butler', lines: ['I say: good evening.'] },
+            },
+            {
+              label: 'keep moving',
+              goto: (p) => poloniusPickRoom(p),
+            },
+          ],
+        },
+
+        r_parlor_date: {
+          lines: [
+            'The date is 1888. The headline is about a strike that was settled within a year.',
+            'Polonius says, behind me: ~~He keeps the same paper. He has read it many times. He finds new things in it.~~',
+            'The butler does not look up.',
+          ],
+          scales: { unease: +3 },
+          flags: { _saw_old_paper: true },
+          choices: [
+            { label: 'keep moving', goto: (p) => poloniusPickRoom(p) },
+            { label: 'confront him', goto: 'v_polonius_admits' },
+          ],
+        },
+
+        r_parlor_butler: {
+          lines: [
+            'The butler folds the paper and looks at me with the politeness of a man whose face has been a polite face for too many years.',
+            '~~Good evening, sir.~~ He returns to the paper. He turns no pages.',
+            'Polonius, near the doorway, says: ~~Mr. Halliwell does not have much for conversation in the evening. He saves himself for breakfast.~~',
+          ],
+          scales: { unease: +1, intimacy: +1 },
+          choices: [
+            { label: 'keep moving', goto: (p) => poloniusPickRoom(p) },
+          ],
+        },
+
+        r_gallery: {
+          lines: [
+            'A narrow hall hung with portraits. Men and women in clothes from every century. A boy in a sailor suit. A girl in a frock from a hundred years ago. A woman in a dress I half-remember from a film. A man in modern clothes.',
+            'I stop in front of the man in modern clothes. He is wearing what Polonius is wearing.',
+            'He is not Polonius. He is younger. The face is not the same. He is smiling.',
+          ],
+          flags: { room: 'gallery', _been_gallery: true },
+          scales: { unease: +3 },
+          choices: [
+            {
+              label: 'ask who he is',
+              goto: { to: 'r_gallery_who', lines: ['I say: who is this. He is wearing your clothes.'] },
+            },
+            {
+              label: 'look at the other portraits',
+              goto: { to: 'r_gallery_others', lines: ['I look down the row.'] },
+            },
+            {
+              label: 'keep moving',
+              goto: (p) => poloniusPickRoom(p),
+            },
+          ],
+        },
+
+        r_gallery_who: {
+          lines: [
+            'He smiles. ~~That is the previous guest. He stayed a while. He is no longer with us.~~',
+            'He says ~~previous guest~~ with the same fondness as ~~quirks~~.',
+            'I am not sure what he means by ~~no longer with us~~. The portrait is fresh.',
+          ],
+          scales: { unease: +3, intimacy: +1 },
+          flags: { _saw_previous_guest: true },
+          choices: [
+            { label: 'keep moving', goto: (p) => poloniusPickRoom(p) },
+            { label: 'confront him', goto: 'v_polonius_admits' },
+          ],
+        },
+
+        r_gallery_others: {
+          lines: [
+            'I walk the line of them. They are not arranged by century. They are arranged by something else. By how long someone stood here, perhaps. By the order in which they came in.',
+            'The smallest portrait, at the end, is empty. The frame is empty. The wall behind it is unfaded, as if a portrait had been there until very recently.',
+          ],
+          scales: { unease: +3 },
+          choices: [
+            { label: 'keep moving', goto: (p) => poloniusPickRoom(p) },
+          ],
+        },
+
+        r_clock_hall: {
+          lines: [
+            'A short hall ending in a tall clock. The pendulum is swinging. The face has no hands.',
+            'I stand in front of it. The pendulum is moving. The mechanism is wound. There are no hands.',
+            'Polonius says: ~~The clockmaker took the hands off it himself. He said it made the time easier to bear. I never had the heart to put them back.~~',
+          ],
+          flags: { room: 'clock_hall', _been_clock_hall: true },
+          scales: { unease: +3 },
+          choices: [
+            {
+              label: 'how long has it been like this',
+              goto: { to: 'r_clock_how_long', lines: ['I say: how long has it been like this.'] },
+            },
+            {
+              label: 'keep moving',
+              goto: (p) => poloniusPickRoom(p),
+            },
+          ],
+        },
+
+        r_clock_how_long: {
+          lines: [
+            'He does not answer for a long moment.',
+            '~~Long enough, sir, that I no longer find the question interesting. It is one of the questions one stops asking. The first ones are: how long. The last ones are: how long again. In between there are many.~~',
+            'He smiles. It does not reach the eyes again. The smile holds for too long.',
+          ],
+          scales: { unease: +3, intimacy: +1 },
+          flags: { _heard_how_long: true },
+          choices: [
+            { label: 'keep moving', goto: (p) => poloniusPickRoom(p) },
+            { label: 'confront him', goto: 'v_polonius_admits' },
+          ],
+        },
+
+        r_dining: {
+          lines: [
+            'The dining room. A long table set for two. The places are already arranged. The candles are already burning. Two covered dishes sit between the settings.',
+            'The chef appears in the doorway. He is wiping his hands on an apron that has bloodstains old and new. He bows.',
+            '~~Dinner, sir,~~ Polonius says. ~~The cook has prepared it for a long time. It would be unkind to leave it cold.~~',
+          ],
+          flags: { room: 'dining', _been_dining: true },
+          scales: { tiredness: +2, unease: +1 },
+          choices: [
+            {
+              label: 'sit and eat',
+              goto: { to: 'l_dinner', lines: ['I sit. The chair has been warmed. The food is hot.'], scales: { tiredness: +3, intimacy: +2 } },
+            },
+            {
+              label: 'I\'m not hungry',
+              goto: { to: 'r_dining_decline', lines: ['I say: I\'m not hungry.'] },
+            },
+            {
+              label: 'whose blood is that',
+              goto: { to: 'r_dining_blood', lines: ['I say: whose blood is on his apron.'], scales: { unease: +3 } },
+            },
+          ],
+        },
+
+        r_dining_decline: {
+          lines: [
+            'The chef\'s face does not move. Polonius nods. ~~Of course. Perhaps later. Mr. Halliwell, leave the covers on. He may return to it.~~',
+            'The chef does not leave. He stands in the doorway behind me.',
+          ],
+          scales: { unease: +1 },
+          choices: [
+            { label: 'keep moving', goto: (p) => poloniusPickRoom(p) },
+          ],
+        },
+
+        r_dining_blood: {
+          lines: [
+            'The chef looks at his apron, as if noticing it for the first time. Polonius says, mild: ~~The lamb. He prepared lamb. He has always been a thorough butcher.~~',
+            'The chef nods. He is still standing in the doorway behind me. He has not moved.',
+          ],
+          scales: { unease: +3 },
+          flags: { _noticed_blood: true },
+          choices: [
+            { label: 'sit and eat anyway', goto: { to: 'l_dinner', lines: ['I sit, against my better judgment.'], scales: { tiredness: +3, intimacy: +1 } } },
+            { label: 'keep moving', goto: (p) => poloniusPickRoom(p) },
+          ],
+        },
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: CONFIDENCE — he begins to confide
+        // ═════════════════════════════════════════════════════════════
+
+        c_long_time: {
+          lines: [
+            'He has stopped in a hallway I do not remember walking to. He turns to me and the smile is different. Smaller. More private.',
+            '~~I have been a guest here a long time, sir. Long enough that I find the company of new guests…~~ He searches for the word. ~~…unsettling. Refreshing. I am not sure which.~~',
+          ],
+          flags: { _mood: 'mournful' },
+          scales: { intimacy: +2, unease: +1 },
+          choices: [
+            {
+              label: 'how long',
+              goto: { to: 'c_how_long', lines: ['I say: how long.'] },
+            },
+            {
+              label: 'don\'t answer',
+              goto: { to: 'c_alone_question', lines: ['I do not answer. The hallway is very quiet.'] },
+            },
+            {
+              label: 'are you a patient here',
+              goto: { to: 'c_am_i_patient', lines: ['I say: are you a patient. Are you ill.'] },
+            },
+          ],
+        },
+
+        c_how_long: {
+          lines: [
+            'He laughs once. It is not amused. It is the laugh one practices in a mirror.',
+            '~~A long time, sir. There was a man here before me. The portrait at the end of the gallery. The man before him. I have not learned the man before that. The book is in the library, if you want the count.~~',
+          ],
+          scales: { unease: +3, intimacy: +1 },
+          flags: { _heard_count: true },
+          choices: [
+            { label: 'go on', goto: 'c_alone_question' },
+            { label: 'show me the book', goto: { to: 'r_library_untitled', lines: ['He leads me back to the library. He pulls the untitled book from the shelf and sets it open on the lectern.'] } },
+          ],
+        },
+
+        c_am_i_patient: {
+          lines: [
+            'He looks delighted. He claps his hands together once. The clap is silent.',
+            '~~Oh — quite. Yes. After a fashion. I am the kind of patient one does not visit. I am not contagious. I am not interesting. I am only resident.~~',
+            'He smiles. ~~I have been resident for some time.~~',
+          ],
+          scales: { intimacy: +2, unease: +1 },
+          choices: [
+            { label: 'go on', goto: 'c_alone_question' },
+          ],
+        },
+
+        c_alone_question: {
+          lines: [
+            'He looks at me with the directness of someone who has rehearsed the angle of their head.',
+            '~~Sir. Did you come alone, on the corridor? It is important to me to ask. I would not press if it were not important.~~',
+          ],
+          choices: [
+            {
+              label: 'yes, alone',
+              goto: { to: 'c_alone_yes', lines: ['I say: yes. Alone.'], flags: { _admitted_alone: true } },
+            },
+            {
+              label: 'no, someone is waiting for me',
+              goto: { to: 'c_alone_lie', lines: ['I say: there\'s someone waiting for me. They\'ll come looking.'], flags: { _claimed_company: true } },
+            },
+            {
+              label: 'why is that important',
+              goto: { to: 'c_alone_why', lines: ['I say: why is that important to you.'] },
+            },
+          ],
+        },
+
+        c_alone_yes: {
+          lines: [
+            'Something behind his eyes does a thing that he does not let the rest of his face do.',
+            '~~Ah. I see. Yes. That is — that is a kindness, to be told plainly. People often hedge.~~',
+            'He looks at the maid, who is at the far end of the hallway. She is smiling. She has been smiling for a while.',
+          ],
+          scales: { unease: +3, intimacy: +2 },
+          flags: { _mood: 'predatory' },
+          choices: [
+            { label: 'go on', goto: 'c_about_you' },
+          ],
+        },
+
+        c_alone_lie: {
+          lines: [
+            'He smiles, kind. ~~Of course. Of course. People rarely come into corridors like this one alone. They will know to look for you, then.~~',
+            'He looks at the maid, who is at the far end of the hallway. She has not stopped smiling. He says, more quietly: ~~Mrs. Halliwell. Be alert at the door.~~',
+            'She does not move. She is still smiling.',
+          ],
+          scales: { unease: +2, intimacy: +1 },
+          flags: { _knows_alone: true },
+          choices: [
+            { label: 'go on', goto: 'c_about_you' },
+          ],
+        },
+
+        c_alone_why: {
+          lines: [
+            'He laughs, embarrassed. ~~Forgive me. It is impolite to ask. It is a thing one wants to know about a guest, if one has very few. I would not detain anyone\'s family.~~',
+            'He looks at me steadily. ~~Anyway. Are you?~~',
+          ],
+          scales: { intimacy: +1 },
+          choices: [
+            { label: 'yes, alone', goto: { to: 'c_alone_yes', lines: ['I say: yes. Alone.'], flags: { _admitted_alone: true } } },
+            { label: 'no, someone is waiting for me', goto: { to: 'c_alone_lie', lines: ['I say: someone is waiting for me.'], flags: { _claimed_company: true } } },
+          ],
+        },
+
+        c_about_you: {
+          lines: [
+            '~~Tell me about yourself, sir. Not the trade. The smaller things. I have known many people. I find I like the smaller things best now.~~',
+            'He sits, carefully, on the edge of a side table that should not be able to bear his weight. It does bear his weight. He does not weigh enough to bend it.',
+          ],
+          scales: { intimacy: +2, unease: +1 },
+          choices: [
+            {
+              label: 'share something small',
+              goto: { to: 'c_about_himself', lines: ['I tell him something small. A thing about my mother. He drinks it in like wine.'], scales: { intimacy: +3 } },
+            },
+            {
+              label: 'I\'d rather hear about you',
+              goto: { to: 'c_about_himself', lines: ['I say: I\'d rather hear about you.'], scales: { intimacy: +1 } },
+            },
+            {
+              label: 'I don\'t want to share that',
+              goto: { to: 'c_offers_more', lines: ['I say: I\'d rather not.'], scales: { intimacy: -1, unease: +1 } },
+            },
+          ],
+        },
+
+        c_about_himself: {
+          lines: [
+            'He looks at the wall as if it were a window. He speaks in a register I have not heard him use yet — quieter, less formal, with a small accent I cannot place beneath the Victorian one.',
+            '~~I was born by the sea. The sea was warm and it smelled of resin from the boats. I could not tell you which sea, now. The names of seas change.~~',
+            '~~I came into this house by an error I cannot remember. I was a guest. I am still a guest, by the strict definition.~~',
+          ],
+          scales: { intimacy: +3, unease: +2 },
+          flags: { _heard_origin: true },
+          choices: [
+            {
+              label: 'what error',
+              goto: { to: 'v_polonius_admits', lines: ['I say: what error. What happened to you here.'] },
+            },
+            {
+              label: 'I\'m sorry',
+              goto: { to: 'c_offers_more', lines: ['I say: I\'m sorry. That sounds — lonely.'], scales: { intimacy: +2 } },
+            },
+            {
+              label: 'how long ago',
+              goto: { to: 'v_polonius_admits', lines: ['I say: when. How long ago.'] },
+            },
+          ],
+        },
+
+        c_offers_more: {
+          lines: [
+            'He brightens. He claps his hands together once — silent again, the sound not where his hands meet — and steps to a sideboard I had not noticed.',
+            '~~A glass. The night turns better with a glass in the hand. I have been told this for several centuries. It remains true.~~',
+            'He pours a dark wine. He hands me the glass. The crystal is warm.',
+          ],
+          scales: { tiredness: +1 },
+          choices: [
+            {
+              label: 'drink',
+              goto: { to: 'l_wine', lines: ['I drink. The wine is rich and very old.'], scales: { tiredness: +3, intimacy: +2 } },
+            },
+            {
+              label: 'hold the glass but don\'t drink',
+              goto: { to: 'l_wine', lines: ['I hold the glass. The warmth of it is bone-deep.'], scales: { tiredness: +1 } },
+            },
+            {
+              label: 'set the glass down',
+              goto: { to: 'h_pleads', lines: ['I set the glass on the sideboard. He watches the gesture. The lightness goes out of his face.'], scales: { intimacy: -1 } },
+            },
+          ],
+        },
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: REVEAL — the truth comes out
+        // ═════════════════════════════════════════════════════════════
+
+        v_polonius_admits: {
+          lines: [
+            'He stops. He folds his hands in front of himself. The hands fold the wrong way for an instant — the thumbs on the inside — and then correct.',
+            '~~Sir. Allow me to be plain. It is a thing I have not been in a long time. I would like to be plain for a moment.~~',
+            '~~The house is cursed. It has been cursed for longer than I have memory of. I am bound to it. I cannot leave it.~~',
+            '~~I am asking you to understand only that. Not yet what follows from it.~~',
+          ],
+          scales: { unease: +4, intimacy: +2 },
+          flags: { _heard_truth: true, _mask_on: false, _mood: 'mournful' },
+          composure: -2,
+          composureCost: 'He said it the way one says a name.',
+          choices: [
+            {
+              label: 'what follows from it',
+              goto: { to: 'v_what_follows', lines: ['I say: what follows from it.'] },
+            },
+            {
+              label: 'I\'m sorry',
+              goto: { to: 'v_understanding', lines: ['I say: I\'m sorry. That\'s — I\'m sorry.'], scales: { intimacy: +3 } },
+            },
+            {
+              label: 'how do I get out of this house',
+              goto: { to: 'v_how_to_leave', lines: ['I say: how do I get out of this house.'] },
+            },
+          ],
+        },
+
+        v_what_follows: {
+          lines: [
+            'He smiles. It is small. It is the most honest expression I have seen on him.',
+            '~~The house demands a tenant. If I were to walk out while only one other person remained inside — only one, alive or otherwise — the curse would pass to them. To you.~~',
+            '~~You walked into a house I have been waiting to leave for nine hundred and seventy-two years.~~',
+          ],
+          scales: { unease: +6 },
+          composure: -3,
+          composureCost: 'Nine hundred and seventy-two years.',
+          flags: { _heard_curse_rule: true },
+          choices: [
+            {
+              label: 'I won\'t let that happen',
+              goto: (p) => poloniusAfterReveal(p),
+            },
+            {
+              label: 'is the staff a person',
+              goto: { to: 'v_staff_count', lines: ['I say: are they people. The staff. Do they count.'] },
+            },
+            {
+              label: 'I should leave now',
+              goto: { to: 'e_for_door', lines: ['I take a step toward the front of the house.'] },
+            },
+          ],
+        },
+
+        v_staff_count: {
+          lines: [
+            'He looks tired. ~~They count, in the way the house counts. Yes. They reset with the house each morning. They do not remember. They are bound to a single day. They are good people in their way.~~',
+            'He looks at me steadily. ~~I have killed all three of them on more occasions than you would believe. The morning returned them. The morning has never returned me.~~',
+          ],
+          scales: { unease: +6 },
+          composure: -2,
+          composureCost: 'He said it the way one comments on weather.',
+          flags: { _heard_staff_truth: true },
+          choices: [
+            { label: 'go on', goto: (p) => poloniusAfterReveal(p) },
+            { label: 'leave', goto: 'e_for_door' },
+          ],
+        },
+
+        v_how_to_leave: {
+          lines: [
+            'He looks at me. The look is long, and patient, and tired beyond what should be possible for one face.',
+            '~~Walk back through the front door, sir. It will not be locked. The house does not keep guests against their will. The house only keeps me.~~',
+            'He says this gently. Then he adds, with a smile that is barely a smile: ~~But sir. I will be honest with you again. I will do everything I am able to do to keep you in this house long enough for an accident to occur. I am owed an accident.~~',
+          ],
+          scales: { unease: +6, intimacy: +3 },
+          composure: -2,
+          composureCost: 'He warned me. That was kindness, of a sort.',
+          flags: { _heard_warning: true, _mask_on: false },
+          choices: [
+            {
+              label: 'leave now',
+              goto: { to: 'e_for_door', lines: ['I turn for the front of the house.'] },
+            },
+            {
+              label: 'why warn me',
+              goto: { to: 'v_why_warn', lines: ['I say: why are you telling me that.'] },
+            },
+            {
+              label: 'I\'m going to help you leave instead',
+              goto: { to: 'h_pleads', lines: ['I say: maybe I can help you leave. There must be a way.'], scales: { intimacy: +3 }, flags: { _player_offered_help: true } },
+            },
+          ],
+        },
+
+        v_why_warn: {
+          lines: [
+            'He smiles, the small private smile.',
+            '~~Because I was once a man, sir. I would like to remember it for a moment longer. I am giving you a warning a man would give. After this, I will not be a man with you. I will be a tenant.~~',
+            'The candles in the sconces gutter. They had not been guttering before.',
+          ],
+          scales: { unease: +4 },
+          composure: -1,
+          flags: { _mood: 'broken' },
+          choices: [
+            { label: 'leave now', goto: 'e_for_door' },
+            { label: 'I\'ll stay and talk', goto: (p) => poloniusAfterReveal(p) },
+          ],
+        },
+
+        v_understanding: {
+          lines: [
+            'He looks down. He looks down for a long time.',
+            'When he looks up his eyes are slightly wet. The wetness is not in the right place — it is at the corners by the bridge, not the outer corners. The wrong corners are wet.',
+            '~~Thank you, sir. That is a kindness. The last guest did not say that. The previous to him did not say that. I have not been spoken to that way in some time.~~',
+          ],
+          scales: { intimacy: +4, unease: +3 },
+          composure: -1,
+          composureCost: 'The wrong corners.',
+          flags: { _player_said_sorry: true },
+          choices: [
+            {
+              label: 'I need to leave, though',
+              goto: { to: 'e_for_door', lines: ['I say: I\'m sorry. I have to leave.'] },
+            },
+            {
+              label: 'is there anything I can do',
+              goto: (p) => poloniusAfterReveal(p),
+            },
+          ],
+        },
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: LULL — he wants you tired
+        // ═════════════════════════════════════════════════════════════
+
+        l_dinner: {
+          lines: [
+            'The cook serves something I have never eaten and recognise as having always eaten. Polonius watches me eat. He does not eat. His knife and fork lie on the plate at an angle no human elbow would produce.',
+            '~~You eat well, sir. It pleases me. The cook prepares this meal each evening. Mr. Halliwell delivers it. I do not eat. I sit and watch the meal be eaten. It is, in its way, a comfort.~~',
+          ],
+          flags: { room: 'dining' },
+          scales: { tiredness: +4, intimacy: +2 },
+          choices: [
+            {
+              label: 'keep eating',
+              goto: { to: 'l_wine', lines: ['I keep eating. The food is warm and good and I am hungrier than I had realised.'], scales: { tiredness: +3 } },
+            },
+            {
+              label: 'set down the cutlery',
+              goto: { to: 'h_pleads', lines: ['I set the knife and fork down. The cook, in the doorway, makes a small, unhappy sound.'], scales: { tiredness: -1, intimacy: -1 } },
+            },
+          ],
+        },
+
+        l_wine: {
+          lines: [
+            'The wine is very good. The wine is the kind of wine that says yes for the body before the mind has been consulted.',
+            'He says: ~~There is a parlor chair by the fire. The fire is small. The chair is large. I always think it is a shame for the chair to be empty in the evenings.~~',
+          ],
+          scales: { tiredness: +3 },
+          flags: { _had_wine: true },
+          choices: [
+            {
+              label: 'sit by the fire',
+              goto: { to: 'l_chair_fire', lines: ['I let myself be led. The chair is large. The fire is warm.'], flags: { room: 'parlor' }, scales: { tiredness: +4, intimacy: +2 } },
+            },
+            {
+              label: 'I should stand',
+              goto: { to: 'h_pleads', lines: ['I say: I should stand. I should keep moving.'], scales: { tiredness: -1 } },
+            },
+          ],
+        },
+
+        l_chair_fire: {
+          lines: [
+            'I am in the chair. The chair holds me the way a hand might hold a small animal it has been entrusted with.',
+            'Polonius is in the chair opposite. He does not appear to weigh anything. The cushion under him has not moved.',
+            'He says nothing for a long time. The fire crackles. The clock does not tick. I cannot remember the last time I heard a clock tick.',
+          ],
+          scales: { tiredness: +4 },
+          choices: [
+            {
+              label: 'close your eyes for just a moment',
+              goto: { to: 'l_drift', lines: ['I close my eyes. Just for a moment. To rest them.'], scales: { tiredness: +5 } },
+            },
+            {
+              label: 'stand up',
+              goto: { to: 'h_pleads', lines: ['I push myself out of the chair. My limbs are not where I left them.'], scales: { tiredness: -2 }, composure: -1 },
+            },
+            {
+              label: 'try to speak to keep yourself awake',
+              goto: { to: 'h_pleads', lines: ['I make myself speak. Anything. The sound of my voice is far away.'], scales: { tiredness: -1 } },
+            },
+          ],
+        },
+
+        l_drift: {
+          lines: [
+            'My eyes are closed. The fire is warm against the lid.',
+            'When I open them — when I open them — Polonius is closer. He has moved. He is in the chair, but the chair is closer. The chair has moved across the rug. The rug is in a different position.',
+            '!!I did not hear it move.!!',
+          ],
+          composure: -3,
+          composureCost: 'The chair moved.',
+          scales: { tiredness: +4, unease: +4 },
+          choices: [
+            {
+              label: 'wake up fully',
+              goto: { to: 'h_close', lines: ['I push myself upright. My heart is pounding. I am awake.'], scales: { tiredness: -3 } },
+            },
+            {
+              label: 'close your eyes again',
+              goto: { to: 'end_slept', lines: ['I close my eyes. Just for another moment. The chair is warm. He is humming, very softly, in a language I do not know.'], flags: { _slept: true } },
+            },
+          ],
+        },
+
+        l_offered_bed: {
+          lines: [
+            'He stands. He gestures down a corridor I do not remember being there before.',
+            '~~There is a guest room. The bed is made. You have had a long evening. I would not be a host worth the name if I did not at least offer.~~',
+            'The corridor he is gesturing toward is darker than the others.',
+          ],
+          scales: { tiredness: +2 },
+          choices: [
+            {
+              label: 'follow him to the room',
+              goto: { to: 'l_bedroom', lines: ['I follow. The corridor is long. The bedroom door is open. The bed is turned down.'], flags: { room: 'bedroom' }, scales: { tiredness: +3, intimacy: +2 } },
+            },
+            {
+              label: 'decline politely',
+              goto: { to: 'h_pleads', lines: ['I say: no, thank you. I really must be going.'], scales: { intimacy: -1 } },
+            },
+            {
+              label: 'I\'m not going to fall asleep here',
+              goto: { to: 'm_first_crack', lines: ['I say: I\'m not going to fall asleep in this house.'], scales: { unease: +2 } },
+            },
+          ],
+        },
+
+        l_bedroom: {
+          lines: [
+            'The room is small and warm. The window is bricked but painted to look like a window. The brick painting depicts a night sky I have never seen — the constellations are wrong, or very old.',
+            'He stands at the door. ~~I will leave you to rest, sir. I will not disturb. There is water on the table. I wish you well.~~',
+            'He closes the door behind him. I hear the latch.',
+          ],
+          scales: { tiredness: +4 },
+          composure: -2,
+          composureCost: 'The latch.',
+          choices: [
+            {
+              label: 'lie down',
+              goto: { to: 'end_slept', lines: ['I lie down. Just for a moment, I tell myself. Just to think.'], flags: { _slept: true } },
+            },
+            {
+              label: 'try the door',
+              goto: { to: 'l_bedroom_door', lines: ['I cross to the door and try the handle.'] },
+            },
+            {
+              label: 'try the window',
+              goto: { to: 'l_bedroom_window', lines: ['I cross to the window.'] },
+            },
+          ],
+        },
+
+        l_bedroom_door: {
+          lines: [
+            'The door is unlocked. He did not lock it. The latch I heard was only the latch.',
+            'The corridor outside is empty. He has gone somewhere. The lamps have burned down.',
+          ],
+          choices: [
+            {
+              label: 'try to find the front door',
+              goto: 'e_for_door',
+            },
+            {
+              label: 'go back to the bed',
+              goto: { to: 'end_slept', lines: ['I close the door and turn back to the bed. The bed is so very turned down.'], flags: { _slept: true } },
+            },
+          ],
+        },
+
+        l_bedroom_window: {
+          lines: [
+            'The window is brick. I touch the painting. The painting is paint over brick. The brick is real.',
+            'In the painting, a small figure is standing on a far hill. The figure is looking at me. I had not noticed it before.',
+          ],
+          scales: { unease: +3 },
+          composure: -2,
+          composureCost: 'The figure had not been there before.',
+          choices: [
+            { label: 'try the door', goto: 'l_bedroom_door' },
+            { label: 'lie down', goto: { to: 'end_slept', lines: ['I lie down. The bed is too soft.'], flags: { _slept: true } } },
+          ],
+        },
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: REACH — manipulation
+        // ═════════════════════════════════════════════════════════════
+
+        h_pleads: {
+          lines: [
+            'He looks at me. The look is real for a moment. The eyes are too bright.',
+            '~~Sir. I am asking you, plainly, as one human being to another, although I am no longer entirely the former and you have only my word for the latter — stay one hour. Only one. I will tell you anything you wish to know about the house. After the hour, you may go.~~',
+            'He is not asking me to stay an hour. He is asking me to be in the house at midnight.',
+          ],
+          flags: { _reach_plead: true, _mood: 'mournful' },
+          scales: { intimacy: +2, unease: +2 },
+          choices: [
+            {
+              label: 'no. I\'m leaving',
+              goto: { to: 'e_for_door', lines: ['I say: no.'] },
+            },
+            {
+              label: 'one hour',
+              goto: { to: 'l_chair_fire', lines: ['I say: one hour. One only.'], scales: { tiredness: +2, intimacy: +2 } },
+            },
+            {
+              label: 'tell me how to free you',
+              goto: { to: 'h_kill_staff_offer', lines: ['I say: tell me how I can free you. Without becoming the next tenant.'], scales: { intimacy: +3 } },
+            },
+          ],
+        },
+
+        h_offers_everything: {
+          lines: [
+            'He opens his hands. ~~The library is yours. The wine cellar is yours. The portraits, the silver, the books in languages no living person reads. They are yours. I have no use for any of it any longer.~~',
+            'He pauses. ~~You need only stay. To remain in the house, sir. To… remain.~~',
+          ],
+          flags: { _reach_offer: true },
+          scales: { intimacy: +1 },
+          choices: [
+            { label: 'no', goto: 'e_for_door' },
+            { label: 'tell me how to leave with you instead', goto: 'h_kill_staff_offer' },
+            { label: 'show me the wine cellar', goto: { to: 'h_close', lines: ['I say: show me the cellar.'], scales: { intimacy: +2 } } },
+          ],
+        },
+
+        h_kill_staff_offer: {
+          lines: [
+            'He looks at me with the directness of someone about to suggest a small mercy.',
+            '~~The staff. They reset with the morning. They are bound to the day, as I am bound to the house. If only one of them remained when I walked out, the curse would transfer to them. They would not know to suffer.~~',
+            '~~I have done this. It does not work. They are part of the day. The day reverts them before I have cleared the front step.~~',
+            'He pauses. ~~You, sir, are not part of the day.~~',
+          ],
+          flags: { _reach_kill_staff: true, _mood: 'predatory' },
+          scales: { unease: +4, intimacy: +1 },
+          composure: -2,
+          composureCost: 'You, sir, are not part of the day.',
+          choices: [
+            {
+              label: 'I will not stay behind',
+              goto: { to: 'e_for_door', lines: ['I say: I will not stay behind.'] },
+            },
+            {
+              label: 'what if we both leave together',
+              goto: { to: 'h_together_lie', lines: ['I say: what if we walk out together. Both of us.'], scales: { intimacy: +2 } },
+            },
+            {
+              label: 'kill him yourself',
+              goto: { to: 'e_kill_him', lines: ['I look around the room for something heavy.'] },
+            },
+          ],
+        },
+
+        h_together_lie: {
+          lines: [
+            'He smiles. The smile is bright. It is the brightest his face has been since I came in.',
+            '~~Yes. Yes. Together. We would step over the threshold at the same moment, would we not. We would. We would take a step at once, sir.~~',
+            'He repeats ~~at once~~ a second time, more quietly. The repetition has a small extra weight.',
+          ],
+          scales: { intimacy: +3, unease: +3 },
+          flags: { _agreed_together: true },
+          choices: [
+            {
+              label: 'lead him to the door',
+              goto: { to: 'e_polonius_a_step_ahead', lines: ['I take his arm. His arm is the wrong temperature. We walk toward the foyer.'] },
+            },
+            {
+              label: 'on second thought, no',
+              goto: { to: 'h_threatens', lines: ['I say: actually — no. I don\'t trust you to go at the same moment.'], scales: { intimacy: -2 } },
+            },
+          ],
+        },
+
+        h_threatens: {
+          lines: [
+            'His face does the thing again. The mouth holds; the eyes are still.',
+            '~~Sir. I have done this for nine hundred and seventy-two years. I have asked nicely. I have asked with wine. I have asked with portraits. There is one more way of asking. I would rather not.~~',
+            'The cook is in the doorway. The butler is in the doorway behind him. The maid is at his elbow. They have not made a sound coming in.',
+          ],
+          flags: { _reach_threat: true, _mood: 'predatory' },
+          scales: { unease: +4 },
+          composure: -2,
+          composureCost: 'They had not made a sound.',
+          choices: [
+            {
+              label: 'run for the door',
+              goto: 'e_running',
+            },
+            {
+              label: 'stand your ground',
+              goto: { to: 'h_close', lines: ['I do not move. I will not be the one who moves first.'], scales: { intimacy: +1 } },
+            },
+            {
+              label: 'I\'m not afraid of you',
+              goto: { to: 'm_first_crack', lines: ['I say: I am not afraid of you.'], scales: { unease: +1 } },
+            },
+          ],
+        },
+
+        h_vulnerability: {
+          lines: [
+            'He sits down on the floor. He sits down on the floor with the slowness of a thing that has not sat down on a floor in a long time.',
+            '~~Sir. I am tired. I am very tired. I have done everything in this house there is to do. I have read the library twice. I have learned the staff\'s names and the names of their parents and the names of the dogs their parents owned. I have killed them in every possible order. There is nothing left to do. Please.~~',
+            'He is, I think, crying. The wetness is in the wrong corners again.',
+          ],
+          flags: { _reach_mourn: true, _mood: 'broken' },
+          scales: { intimacy: +4, unease: +2 },
+          composure: -2,
+          composureCost: 'The wrong corners.',
+          choices: [
+            {
+              label: 'I\'m sorry',
+              goto: { to: 'h_mournful', lines: ['I say: I\'m sorry.'], scales: { intimacy: +3 } },
+            },
+            {
+              label: 'I won\'t let it be me',
+              goto: { to: 'e_for_door', lines: ['I say: I won\'t. I won\'t be the one to take your place.'] },
+            },
+            {
+              label: 'this is an act',
+              goto: { to: 'm_first_crack', lines: ['I say: this is an act. You\'ve done this before.'], scales: { unease: +1 } },
+            },
+          ],
+        },
+
+        h_mournful: {
+          lines: [
+            'He looks up at me from the floor. The look is grateful. It is the look of someone who has been hungry a long time.',
+            '~~Then sit with me a while. I will not ask anything else. Only do not go yet.~~',
+            'He extends a hand to me. The hand is hospitable. The hand has too many lines on the palm. They go in directions hands do not go in.',
+          ],
+          flags: { _reach_mourn: true },
+          scales: { tiredness: +2, intimacy: +3 },
+          choices: [
+            {
+              label: 'take his hand',
+              goto: { to: 'h_close', lines: ['I take his hand. It is the wrong temperature on both sides.'], scales: { intimacy: +3, unease: +2 } },
+            },
+            {
+              label: 'don\'t take his hand. Stand your ground',
+              goto: (p) => poloniusReachNext(p),
+            },
+            {
+              label: 'leave',
+              goto: 'e_for_door',
+            },
+          ],
+        },
+
+        h_close: {
+          lines: [
+            'He is much closer than he was, and I cannot remember him having walked. He is in the space where my breath goes when I exhale.',
+            'He smells, very faintly, of laurel. And of something colder. And of old wood.',
+            '~~Stay,~~ he says, in a tone he has not used yet. It is not asking.~~',
+          ],
+          flags: { _reach_close: true, _mood: 'predatory' },
+          scales: { intimacy: +3, unease: +4 },
+          composure: -2,
+          composureCost: 'It was not asking.',
+          choices: [
+            {
+              label: 'step back',
+              goto: { to: 'm_first_crack', lines: ['I step back. He does not step forward. He does not need to.'], scales: { unease: +2 } },
+            },
+            {
+              label: 'run for the door',
+              goto: 'e_running',
+            },
+            {
+              label: 'tell him no',
+              goto: { to: 'm_first_crack', lines: ['I say: no. I am leaving.'], scales: { intimacy: -2 } },
+            },
+          ],
+        },
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: TURN — the mask comes off
+        // ═════════════════════════════════════════════════════════════
+
+        m_first_crack: {
+          lines: [
+            'He laughs. It is a small laugh and it is not a Victorian laugh. It is a sound from much further back. The vowels do not belong in the building.',
+            'His face holds the smile but the smile sits on his face the way a mask sits on a face it has never quite fit.',
+            '!!~~Καλά. Πολύ καλά.~~!! he says, quietly, to himself.',
+          ],
+          flags: { _mask_cracked_once: true, _mask_on: false, _mood: 'predatory' },
+          scales: { unease: +5 },
+          composure: -2,
+          composureCost: 'The vowels did not belong.',
+          choices: [
+            {
+              label: 'what did you say',
+              goto: { to: 'm_ancient_greek', lines: ['I say: what did you just say.'] },
+            },
+            {
+              label: 'leave',
+              goto: 'e_for_door',
+            },
+            {
+              label: 'stand very still',
+              goto: { to: 'm_too_still', lines: ['I stand very still. He stands very still in return.'] },
+            },
+          ],
+        },
+
+        m_ancient_greek: {
+          lines: [
+            'He smiles. The smile becomes wider than his mouth.',
+            '~~A turn of phrase from before I was here. Forgive me, sir. The deeper feelings reach for the deeper words.~~',
+            '~~It means: good. Very good. It is what I would say to a slave who had brought the right wine.~~',
+            'He pauses, and adds, with a small private pleasure: ~~You are not, of course, a slave. You are a guest. The wine is metaphorical.~~',
+          ],
+          scales: { unease: +5 },
+          composure: -2,
+          composureCost: 'The mouth was wider than the face.',
+          choices: [
+            { label: 'leave', goto: 'e_for_door' },
+            { label: 'how old are you really', goto: 'm_genuine_madness' },
+          ],
+        },
+
+        m_too_still: {
+          lines: [
+            'I stand very still. He stands very still. We stand very still for too long.',
+            'I notice, by the small light of the lamps, that he is not breathing. He has not been breathing for the entire time I have been counting.',
+            'His pupils have not adjusted to the dim. They are the same wide black they were near the fire.',
+          ],
+          scales: { unease: +5 },
+          composure: -3,
+          composureCost: 'He had not been breathing.',
+          choices: [
+            { label: 'back away', goto: { to: 'e_for_door', lines: ['I take a step back. Then another.'] } },
+            { label: 'lunge for the door', goto: 'e_running' },
+            { label: 'speak', goto: 'm_genuine_madness' },
+          ],
+        },
+
+        m_genuine_madness: {
+          lines: [
+            'He laughs. It is no longer a Victorian laugh. It is the laugh of a thing that has practiced human laughter the way a parrot practices speech.',
+            '~~Sir. I will tell you the truth. The mask is, I will admit, tiring after many lifetimes. I am very, very, very pleased that you came in.~~',
+            '~~Mrs. Halliwell is in the foyer. Mr. Halliwell is by the back stair. The cook is in the dining room. There is, in this house at this moment, the patient — myself — and the guest — yourself. And three others, who do not count for the purposes of the count.~~',
+            '~~If you remain, I will go. The choice is mine, by all the rules. The remaining-one will become the bound. I am owed an accident, sir. I am owed one very badly. I should like to leave.~~',
+          ],
+          flags: { _heard_full_plan: true, _mask_on: false },
+          scales: { unease: +6, intimacy: +3 },
+          composure: -3,
+          composureCost: 'He counted us aloud.',
+          choices: [
+            {
+              label: 'run for the door',
+              goto: 'e_running',
+            },
+            {
+              label: 'find a weapon',
+              goto: 'e_kill_him',
+            },
+            {
+              label: 'reason with him',
+              goto: { to: 'h_vulnerability', lines: ['I say: please. There must be another way.'], scales: { intimacy: +2 } },
+            },
+          ],
+        },
+
+        // ═════════════════════════════════════════════════════════════
+        //  CLUSTER: RECKONING — endings
+        // ═════════════════════════════════════════════════════════════
+
+        e_for_door: {
+          lines: [
+            'I turn back toward the foyer. The corridor seems longer than it did. The wallpaper has changed colour. The lamps are further apart.',
+            'He does not follow. The staff are arranged at the corners of my vision. None of them are moving.',
+          ],
+          flags: { room: 'hall' },
+          scales: { unease: +2 },
+          choices: [
+            {
+              label: 'keep walking',
+              goto: (p) => {
+                if (p.scales.tiredness >= 14) return 'e_drift_mid_walk';
+                if (p.flags._mask_on === false) return 'e_polonius_blocks';
+                return 'e_door_in_reach';
+              },
+            },
+            {
+              label: 'break into a run',
+              goto: 'e_running',
+            },
+          ],
+        },
+
+        e_running: {
+          lines: [
+            'I break into a run. The corridor is long. My footsteps are louder than they should be.',
+            'The maid is in the foyer ahead of me. She is smiling. She is not blocking the door but she is near it.',
+            'The butler is behind me. I did not see him follow.',
+          ],
+          scales: { unease: +3 },
+          composure: -1,
+          choices: [
+            {
+              label: 'push past the maid',
+              goto: 'e_door_in_reach',
+            },
+            {
+              label: 'turn and face the butler',
+              goto: { to: 'e_butler_blocks', lines: ['I turn. The butler is closer than I expected. He is smiling the same smile.'] },
+            },
+          ],
+        },
+
+        e_door_in_reach: {
+          lines: [
+            'The front door is in front of me. The hospital corridor lies beyond it. The hospital lights are bright, after the oil lamps.',
+            'Polonius is in the foyer. He arrived without my hearing him. He is between me and the door, but only barely. He has placed himself to make a point.',
+            '~~Sir,~~ he says. ~~One last word. Please. One.~~',
+          ],
+          flags: { room: 'foyer' },
+          scales: { unease: +3 },
+          choices: [
+            {
+              label: 'walk past him through the door',
+              goto: { to: 'end_walked_free', lines: ['I walk past him. He does not stop me. I cross the threshold. The hospital corridor receives me.', 'The Greek Wing is behind me. The door, when I look back, is no longer there. It is plaster, only.'], flags: { _walked_free: true } },
+            },
+            {
+              label: 'hear his last word',
+              goto: 'e_last_word',
+            },
+            {
+              label: 'shove him aside and run through',
+              goto: { to: 'end_walked_free', lines: ['I shove him. He is lighter than a man should be. He folds aside. I cross the threshold. The hospital lights are too bright. The wallpaper behind me is plaster.'], flags: { _walked_free: true } },
+            },
+          ],
+        },
+
+        e_last_word: {
+          lines: [
+            '~~Sir. Thank you. Thank you for the evening. It has been pleasant. It has been pleasant the way a meal is pleasant — there is the eating and then there is the wanting more.~~',
+            'He smiles. ~~Go. I will not delay you. I would not be a host worth the name.~~',
+            'He steps aside. He steps aside half a step. The doorway is open.',
+          ],
+          choices: [
+            {
+              label: 'leave',
+              goto: { to: 'end_walked_free', lines: ['I cross the threshold. The hospital corridor is behind me. The Greek Wing is gone.'], flags: { _walked_free: true } },
+            },
+            {
+              label: 'one last question',
+              goto: 'e_last_question',
+            },
+          ],
+        },
+
+        e_last_question: {
+          lines: [
+            'He waits, patient. He has all the time in the world. He always has.',
+            '~~Ask, sir.~~',
+          ],
+          choices: [
+            {
+              label: 'what was your real name',
+              goto: { to: 'end_walked_free', lines: ['I ask his real name. He does not answer. He smiles. He inclines his head.', 'I cross the threshold. The hospital corridor is behind me. I do not look back.'], flags: { _walked_free: true } },
+            },
+            {
+              label: 'how many guests',
+              goto: { to: 'end_walked_free', lines: ['I ask how many. He smiles. ~~Forty-one, sir. You would have been forty-two.~~', 'I cross the threshold. I do not look back.'], flags: { _walked_free: true } },
+            },
+          ],
+        },
+
+        e_polonius_blocks: {
+          lines: [
+            'He is in the corridor ahead of me. He did not walk to it. He is between me and the foyer.',
+            'He says nothing. He is no longer pretending. The smile is in the wrong place again. He is taller than he was an hour ago.',
+          ],
+          scales: { unease: +5 },
+          composure: -2,
+          choices: [
+            {
+              label: 'try to walk past him',
+              goto: { to: 'end_killed', lines: ['I try to step past him. He moves with the quickness of something that does not have to obey joints. His hand is on my throat. His hand is not the temperature it should be.', 'I do not have time to think the word that would be useful here.'], flags: { _killed: true } },
+            },
+            {
+              label: 'try a side door',
+              goto: 'e_locked_room',
+            },
+            {
+              label: 'pick up something heavy',
+              goto: 'e_kill_him',
+            },
+          ],
+        },
+
+        e_butler_blocks: {
+          lines: [
+            'The butler is in the corridor behind me. He is not moving toward me. He is only standing in the corridor.',
+            'His face is the face he has had all evening, only it is more set. He says: ~~Sir. The master would prefer you stay.~~',
+          ],
+          scales: { unease: +3 },
+          choices: [
+            {
+              label: 'push past him',
+              goto: { to: 'e_door_in_reach', lines: ['I push past him. He yields. He yields more easily than he should. He was not, perhaps, trying. I run for the foyer.'] },
+            },
+            {
+              label: 'try a side room',
+              goto: 'e_locked_room',
+            },
+          ],
+        },
+
+        e_locked_room: {
+          lines: [
+            'I try the nearest door. It opens. The room beyond is a small parlor I have not been in.',
+            'I step in. The door closes behind me. The latch clicks.',
+            'I turn the handle. The handle turns. The door does not open.',
+          ],
+          scales: { unease: +4 },
+          composure: -3,
+          composureCost: 'The latch.',
+          flags: { _locked_in: true },
+          choices: [
+            {
+              label: 'try the window',
+              goto: { to: 'end_imprisoned', lines: ['The window is bricked. The brick is painted to look like a window. The painting depicts a sky I have not seen. There is a small figure on a hill, watching.', 'I sit down in the chair by the fire. I do not know how long I sit there. I think I may have sat there for a long time.'], flags: { _imprisoned: true } },
+            },
+            {
+              label: 'shout for help',
+              goto: { to: 'end_imprisoned', lines: ['I shout. The shouts do not carry through the wall. The wallpaper absorbs them.', 'I sit down. I sit down for a long time.'], flags: { _imprisoned: true } },
+            },
+          ],
+        },
+
+        e_kill_him: {
+          lines: [
+            'I look around. There is a poker by the parlor fire. There is a paperweight on the side table. There is a bronze bust on the mantel that would do the job, if I could lift it.',
+            'He is watching me consider these things. He has gone very still. The stillness is not the prey stillness. It is the stillness of something choosing not to move.',
+            '~~Sir,~~ he says. ~~If you do this, you will have one hour to cross the threshold before dawn. You will not have me. I have done it. The body remains.~~',
+          ],
+          scales: { unease: +3 },
+          choices: [
+            {
+              label: 'pick up the poker',
+              goto: 'e_kill_polonius_act',
+            },
+            {
+              label: 'don\'t. Put it down',
+              goto: { to: 'h_vulnerability', lines: ['I do not. I take a breath. I take another. I do not pick up the poker.'], scales: { intimacy: +1 } },
+            },
+          ],
+        },
+
+        e_kill_polonius_act: {
+          lines: [
+            'I pick up the poker. The iron is heavy. The shaft is warmer than iron should be — the fire has been against it.',
+            'He does not move. He says, quietly: ~~Make it clean. Please. I have done it untidily and the morning is harder.~~',
+            'I bring the poker down on the side of his head. The first blow is the worst, in that it is the only one I have to commit to. The skull gives the way old wood gives.',
+            '!!The second blow is mechanical. The third I do not remember.!!',
+            'His body lies on the rug. The blood is the wrong colour — too dark, with a sheen of something metallic.',
+            'The staff are gone. They were here. They are not here. The clock without hands has stopped swinging.',
+          ],
+          composure: -5,
+          composureCost: 'The skull gave the way old wood gives.',
+          flags: { _killed_polonius: true, room: 'parlor' },
+          choices: [
+            {
+              label: 'walk to the front door',
+              goto: { to: 'end_player_killed_him', lines: ['I walk. The poker is still in my hand. I do not put it down. I cross the foyer. I cross the threshold.', 'The hospital lights meet me. They are too bright. There is blood on my shoes. The night nurse is at her station, looking up, and her face goes a colour faces do not.', 'I do not remember what I say to her. I remember that the corridor I came from is now a plain wall.'], flags: { _walked_free: true } },
+            },
+            {
+              label: 'sit down for a moment',
+              goto: { to: 'end_slept', lines: ['I sit. The poker is heavy. The fire is warm. My eyes are very tired. I close them. Just for a moment.'], flags: { _slept: true } },
+            },
+          ],
+        },
+
+        e_polonius_a_step_ahead: {
+          lines: [
+            'We walk together. His arm is on mine. His arm is too light. We cross the foyer. The door is open.',
+            'He says, ~~at once, sir, at once,~~ and his foot crosses the threshold a beat before mine. Only a beat. I see his shoe touch the corridor floor before mine has lifted.',
+            'I try to step. The doorway is in front of me but my foot will not go.',
+          ],
+          composure: -4,
+          composureCost: 'A beat.',
+          flags: { _polonius_left_first: true },
+          choices: [
+            {
+              label: 'try harder',
+              goto: { to: 'end_polonius_escaped', lines: ['I push against nothing. My foot will not cross. The doorway is in front of me, an inch from my face.', 'He is in the corridor. He is laughing. He is laughing a laugh I have not heard from him. It is the laugh of someone who has just woken up.', 'He walks down the corridor. He does not look back.', 'The door closes. The maid is behind me. She is smiling. She says: ~~Welcome home, sir.~~'], flags: { _became_tenant: true } },
+            },
+          ],
+        },
+
+        e_drift_mid_walk: {
+          lines: [
+            'My legs are heavy. The corridor is going dim at the edges. The wallpaper is folding in.',
+            'I lean against the wall. Just for a moment. The wall is warm.',
+            'I will close my eyes only for a moment.',
+          ],
+          choices: [
+            {
+              label: 'force yourself awake',
+              goto: { to: 'e_for_door', lines: ['I shake my head. I push off the wall. I will not. I will not.'], scales: { tiredness: -4 }, composure: -1 },
+            },
+            {
+              label: 'just for a moment',
+              goto: { to: 'end_slept', lines: ['Just for a moment. The wallpaper is so warm. The corridor is so quiet.'], flags: { _slept: true } },
+            },
+          ],
+        },
+
+      },  // end nodes
+    },  // end main spoke
+  },  // end spokes
+
+  // ─────────────────────────────────────────────────────────────────────
+  //  INTERJECTIONS — uninvited beats that interrupt the conversation.
+  //  They fire on probabilistic timers tied to turn count / state and
+  //  shove the player into a beat they didn't choose. The one-turn
+  //  cooldown plus the spoke-active guard mean they only land between
+  //  beats, never mid-scene.
+  // ─────────────────────────────────────────────────────────────────────
+  interjections: [
+    {
+      id: 'maid_in_doorway',
+      once: true,
+      when: (p) => p.turn >= 4 && !p.flags._walked_free && p.flags.room !== 'foyer' && Math.random() < 0.5,
+      prose: [
+        'The maid is in the doorway. She did not come through it. She was just suddenly in it.',
+        'She is smiling. She is carrying a small silver tray. The tray is empty.',
+        '~~Will sir be staying for dinner,~~ she says, although it is not a question.',
+      ],
+      responses: [
+        {
+          label: 'I won\'t be staying',
+          desc: 'Decline. Plainly.',
+          lines: [
+            'I say: I will not be staying.',
+            'She smiles. She does not move from the doorway. ~~Of course, sir. The cook will be very sorry to hear it.~~',
+            'She does not leave the doorway.',
+          ],
+          scales: { unease: +2, intimacy: -1 },
+          flags: { _refused_dinner: true },
+        },
+        {
+          label: 'I might',
+          desc: 'Hedge. Buy time.',
+          lines: [
+            'I say: I might. I haven\'t decided.',
+            'She brightens. ~~Very good, sir. The cook will be hopeful.~~',
+            'She steps aside, but only by a foot.',
+          ],
+          scales: { tiredness: +1, intimacy: +1 },
+        },
+        {
+          label: 'is the front door this way',
+          desc: 'Ask directly.',
+          lines: [
+            'I say: is the front door behind you.',
+            'She tilts her head. The tilt is too far. ~~It is, sir. Would you care to be shown out?~~',
+            'She does not move from the doorway.',
+          ],
+          scales: { unease: +3 },
+          flags: { _asked_door: true },
+        },
+      ],
+    },
+
+    {
+      id: 'butler_appears',
+      once: true,
+      when: (p) => p.turn >= 8 && !p.flags._walked_free && p.flags._heard_truth !== true && Math.random() < 0.5,
+      prose: [
+        'The butler is at my shoulder. He arrived without my noticing.',
+        '~~The master would prefer you not leave the wing without finishing your tea, sir,~~ he says, gently.',
+        'His hand is on a tray. The tray has a fresh cup on it.',
+      ],
+      responses: [
+        {
+          label: 'thank him and continue',
+          desc: 'Take the cup.',
+          lines: [
+            'I take the cup. The cup is warm. The butler nods and is gone, again, without my noticing.',
+            'I drink. The tea is sweeter than the last.',
+          ],
+          scales: { tiredness: +3, intimacy: +1 },
+        },
+        {
+          label: 'who is the master, exactly',
+          desc: 'Press him.',
+          lines: [
+            'I say: who is the master.',
+            'The butler\'s face does not change. ~~Mr. Polonius, sir. The master of the house. He has been here a long time.~~',
+            'He has not blinked.',
+          ],
+          scales: { unease: +3 },
+        },
+        {
+          label: 'no. Step around him',
+          desc: 'Refuse and keep moving.',
+          lines: [
+            'I step around him. He turns smoothly to keep his face toward me. He does not follow. The tray is still in his hand. He stands there, holding it, when I look back.',
+          ],
+          scales: { unease: +2, intimacy: -1 },
+        },
+      ],
+    },
+
+    {
+      id: 'clock_chimes',
+      once: true,
+      when: (p) => p.turn >= 6 && !p.flags._walked_free && Math.random() < 0.4,
+      prose: [
+        'The clock without hands chimes. It chimes a number I do not count. It chimes for longer than a clock should.',
+        'Polonius cocks his head, as if listening for an old friend.',
+        '~~Late. Later than I thought. Sir — we have less time than I had imagined.~~',
+      ],
+      responses: [
+        {
+          label: 'I should leave then',
+          desc: 'Take the warning.',
+          lines: [
+            'I say: I should go.',
+            'He looks at me with a small, gentle disappointment. ~~Indeed, sir. The hour is late. Do, please. The corridor is just there.~~',
+          ],
+          scales: { unease: +1 },
+        },
+        {
+          label: 'what happens at midnight',
+          desc: 'Press him.',
+          lines: [
+            'I say: what happens at midnight.',
+            'He smiles. ~~A great deal, sir. A great deal happens. I would not like to spoil it.~~',
+          ],
+          scales: { unease: +3 },
+          flags: { _heard_midnight: true },
+        },
+      ],
+    },
+
+    {
+      id: 'glimpse_of_him',
+      once: true,
+      when: (p) => p.turn >= 10 && !p.flags._walked_free && p.flags._mask_on !== false && Math.random() < 0.5,
+      prose: [
+        'I catch his reflection in the polished side of a silver bowl. The reflection is not quite Polonius. The face is older. The face does not have all of its features in their accustomed places.',
+        'When I look up, he is in the position he was before. He has not moved. The reflection has.',
+      ],
+      responses: [
+        {
+          label: 'look back at the bowl',
+          desc: 'Verify.',
+          lines: [
+            'I look back at the bowl. The reflection is just him now. The features are in their accustomed places. The face is smiling.',
+            'The face was not smiling a moment ago, when I looked away.',
+          ],
+          scales: { unease: +4 },
+          composure: -2,
+          composureCost: 'The face was not smiling a moment ago.',
+        },
+        {
+          label: 'pretend not to have seen',
+          desc: 'Walk on.',
+          lines: [
+            'I keep walking. He keeps pace. The reflection in the bowl, when I pass, is what I would expect a reflection to be.',
+            'I do not look at the bowl again.',
+          ],
+          scales: { unease: +3 },
+        },
+      ],
+    },
+
+    {
+      id: 'sleepiness_strikes',
+      once: true,
+      when: (p) => p.scales.tiredness >= 10 && !p.flags._walked_free && Math.random() < 0.7,
+      prose: [
+        'The room slides. The lamps double, then resolve. My eyes were closed. I do not remember closing them.',
+        'Polonius is closer than he was. His head is at the angle of someone who has been studying me for some moments.',
+        '~~Are you well, sir? You look very tired.~~',
+      ],
+      responses: [
+        {
+          label: 'I\'m fine',
+          desc: 'Force yourself upright.',
+          lines: [
+            'I say: I\'m fine.',
+            'I push myself upright. My limbs are where I left them, more or less.',
+          ],
+          scales: { tiredness: -2 },
+          composure: -1,
+          composureCost: 'My limbs were not all the way where I left them.',
+        },
+        {
+          label: 'I think I need to sit',
+          desc: 'Concede.',
+          lines: [
+            'I say: I think I need to sit.',
+            'He is delighted. The delight is real. ~~Of course. Of course. Mrs. Halliwell. The chair by the fire.~~',
+            'The chair is suddenly closer to me than it was.',
+          ],
+          scales: { tiredness: +3, intimacy: +2 },
+        },
+      ],
+    },
+  ],
+
+  // ─────────────────────────────────────────────────────────────────────
+  //  ENDINGS — fire when their `when` matches at end of beat.
+  // ─────────────────────────────────────────────────────────────────────
+  endings: [
+    {
+      id: 'walked_free_immediate',
+      when: (p) => p.flags._walked_out_clean && !p.flags._walked_free,
+      title: 'You walked out before he had hold of you',
+      lines: [
+        'I step back into the corridor. The hospital lights are too bright. The smell of wax goes out of my nose at once.',
+        'I look back. The doorway is plaster. There is no door.',
+        'I do not tell anyone. I do not know how I would tell anyone.',
+      ],
+      item: 'worn_ribbon',
+    },
+
+    {
+      id: 'walked_free',
+      when: (p) => p.flags._walked_free && !p.flags._killed_polonius,
+      title: 'You walked out of the Greek Wing',
+      lines: [
+        'I am in the corridor. The hospital lights are too bright after the lamps. My coat is missing. The cold of the corridor is the cold of corridors.',
+        'I look back. The doorway is plaster, the way a doorway is plaster when there has never been a doorway.',
+        'I walk back to the ward. I will not tell anyone. They would not believe me. I would not believe me.',
+      ],
+      item: 'small_bell',
+    },
+
+    {
+      id: 'killed_by_polonius',
+      when: (p) => p.flags._killed,
+      title: 'He had hold of you',
+      lines: [
+        'His hand is on my throat. His hand is not the temperature a hand should be.',
+        'He says, very close to my ear, in a language that has not been spoken on this floor: ~~καλά. Πολύ καλά.~~',
+        'He sets me down with the care one uses for something one will need later.',
+        'The maid is there with a sheet. She is smiling. She has folded the sheet into a small neat package.',
+      ],
+      item: null,
+      scars: ['collapsed', 'named'],
+    },
+
+    {
+      id: 'slept_in_the_house',
+      when: (p) => p.flags._slept,
+      title: 'You closed your eyes',
+      lines: [
+        'I close my eyes. Only for a moment.',
+        'When I open them the room is the same. The fire is the same. Polonius is gone.',
+        'The maid is in the doorway. She is smiling. ~~Good morning, sir. You slept very well. The master is out for the day. He left at dawn. He left in good spirits.~~',
+        '!!I rise. The chair gives me up. My limbs are very heavy. My limbs are very mine in a way they were not yesterday.!!',
+      ],
+      item: null,
+      scars: ['collapsed', 'named'],
+    },
+
+    {
+      id: 'imprisoned',
+      when: (p) => p.flags._imprisoned,
+      title: 'They locked the door from the outside',
+      lines: [
+        'I sit in the chair by the fire. The fire does not go down. The fire does not go up.',
+        'I do not know how long I sit. I do not know if it is hours or days.',
+        'When the door opens it is the maid. She is bringing me tea. She is smiling.',
+        '~~You\'ll be wanting your supper, sir. The cook has prepared it.~~',
+      ],
+      item: null,
+      scars: ['collapsed'],
+    },
+
+    {
+      id: 'polonius_escaped',
+      when: (p) => p.flags._became_tenant,
+      title: 'He stepped through a beat ahead of you',
+      lines: [
+        'He is in the corridor. The hospital lights are on him. He is laughing.',
+        'My foot will not cross the threshold. The doorway is in front of me. The doorway is a wall.',
+        'The maid is at my elbow. She is taking my coat. She is hanging it on the coat-tree.',
+        '~~Welcome home, sir,~~ she says. ~~The master will be back in the morning. He will be sorry to have missed you, but very pleased to find you here.~~',
+      ],
+      item: null,
+      scars: ['collapsed', 'named'],
+    },
+
+    {
+      id: 'player_killed_him',
+      when: (p) => p.flags._killed_polonius && p.flags._walked_free,
+      title: 'You walked out with blood on your shoes',
+      lines: [
+        'The poker is still in my hand. I do not remember the last few strikes.',
+        'The corridor is bright. The night nurse is at her station. Her face does a thing.',
+        'I do not remember what I tell her. I remember that she stops me at the door of my ward and says, very quietly, ~~there is no Greek Wing, sir. There has never been a Greek Wing. Are you alright.~~',
+        'I am holding a poker that came from a fire that does not exist. The blood on the iron is dark. The blood is older than blood should be.',
+      ],
+      item: 'sliver_of_glass',
+      scars: ['named'],
+    },
+  ],
+};
 //
 // A young woman whose son died at delivery. She refuses to accept it. She
 // arrived at the ward with a pram and a bundle of rags she insists is the
@@ -12127,6 +14329,7 @@ const weight = {
 // ════════════════════════════════════════════════════════════════════════
 
 export const PATIENTS = {
+  polonius,
   pram, patriarch, soothlick, glimmer, frostfin, hollow, mire, composer,
   children, sculpture, plague, weight,
   choir,

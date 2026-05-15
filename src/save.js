@@ -12,6 +12,7 @@ const STARTING_WOUNDS  = ['amnesia', 'insomnia', 'split_personality'];
 // lives alongside the wing patients here; the run builder routes it to
 // the final slot.
 const STARTING_PATIENTS = [
+  'polonius',
   'pram', 'patriarch', 'soothlick', 'glimmer', 'frostfin', 'hollow', 'mire', 'composer',
   'children', 'sculpture', 'plague', 'weight',
   'choir',
