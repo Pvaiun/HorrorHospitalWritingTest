@@ -355,6 +355,12 @@ async function enterSpokeNode(nodeId) {
   if (ending) { await fireEnding(ending); return; }
   if (player.composure <= 0) { await fireCollapse(); return; }
 
+  // Interjections may fire at any beat boundary. The cooldown rule and
+  // each interjection's when() guard control when they actually trigger.
+  // The encounter UI gives an active interjection precedence over the
+  // active spoke menu, so a firing interjection seizes the next moment.
+  await maybeFireInterjection();
+
   state.acting = false;
   enc.awaitingPlayer = true;
   render();
@@ -366,6 +372,12 @@ async function runSpokeChoice(idx) {
   const player = enc.player;
   const spoke = pat.def.spokes[enc.activeSpoke.spokeId];
   const node = spoke.nodes[enc.activeSpoke.nodeId];
+  // Beat-graph patients (those declaring startSpoke) live entirely inside
+  // a single spoke and never trigger the spoke-exit turn tick. For them
+  // each player choice IS a turn, so cooldowns and turn-gated when()
+  // conditions advance naturally. Hub-and-spoke patients keep the legacy
+  // "one spoke = one turn" semantics.
+  if (pat.def.startSpoke) pat.turn++;
   const rawChoices = (typeof node.choices === 'function')
     ? node.choices(pat, player)
     : (node.choices || []);
@@ -477,18 +489,17 @@ async function postTurn() {
   render();
 }
 
-// Hard interjections seize a turn. They can fire from three places: encounter
-// intro, end of any non-spoke action, or spoke exit. Two rules keep them from
-// taking over the conversation: (a) they never fire while a spoke is active,
-// (b) a single-turn cooldown gates back-to-back fires unless the interjection
-// opts in with allowBackToBack. An author can also force a specific one from
-// inside a spoke by routing with goto: { to: 'hub', triggerInterjection: 'id' }.
+// Hard interjections seize a turn. They can fire at any beat boundary —
+// encounter intro, after a verb resolves, after a spoke node, or when a
+// spoke exits to the hub. A single-turn cooldown gates back-to-back fires
+// unless the interjection opts in with `allowBackToBack`. Authors gate
+// firing via `when(p, player, hub)`. An author can also force a specific
+// interjection from a spoke choice with `goto: { to: '...', triggerInterjection: 'id' }`.
 async function maybeFireInterjection() {
   const enc = state.enc;
   const pat = enc.patient;
   const player = enc.player;
   const hub = enc.hubState;
-  if (enc.activeSpoke) return false;
   for (const intr of pat.def.interjections || []) {
     if (intr.once && pat.flags['_fired_' + intr.id]) continue;
     const last = pat.flags._lastInterjectionTurn;

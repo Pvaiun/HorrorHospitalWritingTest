@@ -303,11 +303,11 @@ function narrativeWindowEl() {
 }
 
 function verbMenuEl(enc) {
-  // Three modes: in a spoke (player picks a choice on the current node),
-  // patient interjection (legacy — patient asks, player picks a response),
-  // or the hub menu (verbs + spokes, filtered by each one's when() predicate).
-  if (enc.activeSpoke) return spokeChoiceMenuEl(enc);
+  // Three modes: a forced interjection (the patient or world has seized the
+  // moment — wins over any active spoke menu), a player navigating a spoke
+  // node, or the hub menu (verbs + spokes, filtered by each one's when()).
   if (enc.activeInterjection) return interjectionMenuEl(enc);
+  if (enc.activeSpoke) return spokeChoiceMenuEl(enc);
   const wrap = el('div', { class: 'enc-actions' });
   wrap.appendChild(el('div', { class: 'enc-section-label' }, '─ what I may do ─'));
   const grid = el('div', { class: 'enc-actions-grid' });
