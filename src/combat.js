@@ -697,7 +697,14 @@ async function applyResponse(resp) {
   if (resp.shake) shakeStage();
 
   for (const l of lines) {
-    pushLog({ text: l, cls: 'narr' });
+    // A line may be a plain string or an object { text, cls, ... } when
+    // the author wants a specific style on that line (e.g. the menacing
+    // opening of an intrusion beat).
+    if (l && typeof l === 'object') {
+      pushLog({ cls: 'narr', ...l });
+    } else {
+      pushLog({ text: l, cls: 'narr' });
+    }
     await drainLog();
   }
 
