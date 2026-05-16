@@ -454,22 +454,9 @@ const polonius = {
             'He gestures, with a polite open hand, toward the inner doorway. Come in. The parlor is warmer than the foyer, and there is a kettle on.',
           ],
           choices: [
-            {
-              label: 'thank him; step inside',
-              goto: 't_step_inside',
-            },
-            {
-              label: 'ask his name back',
-              goto: 't_his_name',
-            },
-            {
-              label: 'ask what wing this is',
-              goto: 't_where_am_i',
-            },
-            {
-              label: 'look around the foyer first',
-              goto: 't_look_around',
-            },
+            { label: 'thank him; step inside', goto: 't_step_inside' },
+            { label: 'ask his name back, and the wing\'s', goto: 't_his_name' },
+            { label: 'look around the foyer first', goto: 't_look_around' },
           ],
         },
 
@@ -483,10 +470,9 @@ const polonius = {
           flags: { _name_evasion: true },
           scales: { intimacy: +1 },
           choices: [
-            { label: 'thank him; step inside', goto: 't_step_inside' },
             { label: 'ask what wing this is', goto: 't_where_am_i' },
             { label: 'look around the foyer first', goto: 't_look_around' },
-            { label: 'ask about the cold hands', goto: 't_obs_hands_asked' },
+            { label: 'thank him; step inside', goto: 't_step_inside' },
           ],
         },
 
@@ -500,10 +486,9 @@ const polonius = {
           flags: { _heard_wing_history: true },
           scales: { intimacy: +1 },
           choices: [
-            { label: 'thank him; step inside', goto: 't_step_inside' },
-            { label: 'how old is the house', goto: 't_house_age' },
-            { label: 'how did it come to be annexed', goto: 't_why_added' },
+            { label: 'press him on the history of the house', goto: 't_house_age' },
             { label: 'look around the foyer first', goto: 't_look_around' },
+            { label: 'thank him; step inside', goto: 't_step_inside' },
           ],
         },
 
@@ -559,13 +544,25 @@ const polonius = {
             'Polonius waits. He has the patience of a host who is glad to be looked at slowly.',
           ],
           choices: [
-            { label: 'examine the grandfather clock', goto: 't_obs_clock', when: (p) => !p.flags._obs_clock_no_hands },
-            { label: 'look at the painting above the fire', goto: 't_obs_painting', when: (p) => !p.flags._obs_painting_anachronism },
-            { label: 'study the wallpaper', goto: 't_obs_wallpaper', when: (p) => !p.flags._obs_wallpaper_too_new },
-            { label: 'examine the coat-tree', goto: 't_obs_coat_tree', when: (p) => !p.flags._obs_coat_tree },
-            { label: 'look back at the door behind you', goto: 't_obs_door_behind' },
-            { label: 'thank him; step inside', goto: 't_step_inside' },
+            { label: 'examine something in the room', goto: 't_examine' },
             { label: 'ask him about something you noticed', goto: 't_ask_about_noticed', when: (p) => poloniusNoticed(p) },
+            { label: 'thank him; step inside', goto: 't_step_inside' },
+          ],
+        },
+
+        t_examine: {
+          // Observation sub-menu — gathered so the look-around beat
+          // does not surface too many choices at once. Each option is
+          // gated on its observation-flag, so the menu shrinks as the
+          // player notices things.
+          lines: [
+            'I let my eye go where it wants.',
+          ],
+          choices: [
+            { label: 'the grandfather clock', goto: 't_obs_clock', when: (p) => !p.flags._obs_clock_no_hands },
+            { label: 'the painting above the fire', goto: 't_obs_painting', when: (p) => !p.flags._obs_painting_anachronism },
+            { label: 'the door behind you', goto: 't_obs_door_behind', when: (p) => !p.flags._obs_door_no_handle },
+            { label: 'never mind; look elsewhere', goto: 't_look_around' },
           ],
         },
 
@@ -746,11 +743,9 @@ const polonius = {
           ],
           flags: { room: 'parlor' },
           choices: [
-            { label: 'sit by the fire', goto: 'm_sit' },
-            { label: 'stand; thank him for the welcome', goto: 'm_stand' },
-            { label: 'thank Mrs. Halliwell', goto: 'm_thank_maid' },
-            { label: 'compliment the parlor', goto: 'm_compliment_room' },
-            { label: 'examine the bronze bust on the mantel', goto: 'm_obs_bust' },
+            { label: 'thank him; take the chair', goto: 'm_sit' },
+            { label: 'remain standing; thank him for the welcome', goto: 'm_stand' },
+            { label: 'thank Mrs. Halliwell by name', goto: 'm_thank_maid' },
           ],
         },
 
@@ -833,8 +828,7 @@ const polonius = {
           choices: [
             { label: 'give him the card', goto: 'm_card_given' },
             { label: 'ask about the register first', goto: 'm_about_register' },
-            { label: 'ask why a register is needed', goto: 'm_why_register' },
-            { label: 'ask to see the previous entries', goto: 'm_see_register' },
+            { label: 'ask to see the previous entries first', goto: 'm_see_register' },
           ],
         },
 
@@ -1054,14 +1048,43 @@ const polonius = {
           ],
           scales: { intimacy: +1 },
           choices: [
-            { label: 'ask about Mrs. Halliwell', goto: 'm_about_maid' },
-            { label: 'ask about the butler', goto: 'm_about_butler' },
+            { label: 'ask after the staff', goto: 'm_about_staff' },
             { label: 'ask about Polonius himself', goto: 'm_about_him' },
-            { label: 'examine his hands', goto: 'm_obs_hands', when: (p) => !p.flags._named_hands },
-            { label: 'examine the decanter', goto: 'm_obs_decanter', when: (p) => !p.flags._obs_decanter_full },
-            { label: 'examine the chair you are in', goto: 'm_obs_chair_warm', when: (p) => !p.flags._noticed_chair_warm },
-            { label: 'notice what he isn\'t doing', goto: 'm_obs_no_breath', when: (p) => !p.flags._obs_no_breath },
+            { label: 'let your eye wander around the room', goto: 'm_look_around_parlor' },
             { label: 'I think I should be going', goto: 'l_should_go', when: (p) => poloniusNoticed(p) || (p.turn || 0) >= 4 },
+          ],
+        },
+
+        m_about_staff: {
+          lines: [
+            'I say: the staff, sir. The Halliwells, and the cook.',
+            'He brightens, fond. Mrs. Halliwell runs the foyer and the cloakroom and the tea-cups. Mr. Halliwell — her husband — sits the parlor in the evenings; he keeps the keys to the cloakroom on his person. Mr. Cook is at the dining room and the range.',
+            'He pauses. They keep their own rooms. They cross paths only at the meals, by tradition. They reset with the morning.',
+            'He stops. He had not meant to say the last sentence. He looks at me with the small honesty of a man caught out.',
+          ],
+          flags: { _heard_staff_routine: true, _heard_staff_resets: true, _heard_origin: true, _heard_keys_butler: true },
+          scales: { intimacy: +2, unease: +3 },
+          composure: -1,
+          composureCost: 'They reset with the morning.',
+          choices: [
+            { label: 'press him on what that means', goto: 'm_about_him' },
+            { label: 'let it pass; continue talking', goto: 'm_smalltalk' },
+            { label: 'I think I should be going', goto: 'l_should_go' },
+          ],
+        },
+
+        m_look_around_parlor: {
+          // Observation sub-menu — gated so usually only two or three
+          // are visible at a time. The most evocative obs (hands and
+          // breathing) are the anchors.
+          lines: [
+            'I let my eye move around the room while he talks. The parlor has the small carefully-arranged quality of a room that has been kept the same for a long while.',
+          ],
+          choices: [
+            { label: 'look at his hands', goto: 'm_obs_hands', when: (p) => !p.flags._named_hands },
+            { label: 'look at his cup, the decanter', goto: 'm_obs_decanter', when: (p) => !p.flags._obs_decanter_full },
+            { label: 'count his breaths', goto: 'm_obs_no_breath', when: (p) => !p.flags._obs_no_breath },
+            { label: 'look away; continue talking', goto: 'm_smalltalk' },
           ],
         },
 
@@ -1387,43 +1410,88 @@ const polonius = {
         hub_corridor: {
           lines: [
             'I am in the corridor between the foyer and the back of the house. The wallpaper is darker here. The lamps hang lower. There is a smell of old wood that I can taste.',
-            'Doorways branch off the corridor. The front door is behind me. Polonius is in the parlor, by the fire. The maid is somewhere. The butler is somewhere. The cook is in the kitchen.',
+            'Doorways branch off the corridor. The front door is behind me. Polonius is in the parlor. The staff are at their stations.',
           ],
           flags: { room: 'hall' },
           choices: [
-            { label: 'parlor',     goto: { to: 'r_parlor',     lines: ['I push the parlor door open.'] } },
-            { label: 'library',    goto: { to: 'r_library',    lines: ['I step into the library. The lamp is lit.'] } },
-            { label: 'gallery',    goto: { to: 'r_gallery',    lines: ['I follow the corridor to the gallery. The portraits watch.'] } },
-            { label: 'clock hall', goto: { to: 'r_clock_hall', lines: ['I take the short hall to the clock.'] } },
-            { label: 'dining room', goto: { to: 'r_dining',    lines: ['I push open the dining room door. The candles are burning.'] } },
+            { label: 'walk into a room', goto: 'hub_rooms' },
+            { label: 'find Polonius — talk to him', goto: (p) => poloniusFaceNode(p) },
+            { label: 'try the front door', goto: (p) => poloniusDoorAttempt(p) },
+          ],
+        },
+
+        hub_rooms: {
+          // The hub's most "next-step" rooms — the card-hunt rooms.
+          // Aside from the parlor (always visible until the keys are
+          // taken), each room only appears once the player has heard
+          // enough to want to visit it. Off-path rooms surface via the
+          // "wander further into the house" branch.
+          lines: [
+            'I weigh the doorways. The parlor opens off the corridor on my left. The other doors run further down.',
+          ],
+          choices: [
             {
-              label: 'cloakroom',
+              label: 'the parlor — the butler keeps the cloakroom keys',
+              goto: { to: 'r_parlor', lines: ['I push the parlor door open.'] },
+              when: (p) => !p.flags._have_cloakroom_keys,
+            },
+            {
+              label: 'the cloakroom — your card was placed there',
               goto: { to: 'r_cloakroom_approach', lines: ['I walk to the back of the corridor where the cloakroom is.'] },
-              when: (p) => p.flags._heard_card_in_cloakroom || p.flags._aware_locked,
+              when: (p) => !!p.flags._have_cloakroom_keys && !p.flags._been_cloakroom,
             },
             {
-              label: 'kitchen',
-              goto: { to: 'r_kitchen', lines: ['I push the kitchen door. The cook is at the range.'] },
-              when: (p) => p.flags._been_dining || p.flags._heard_kitchen,
+              label: 'the study — locked',
+              goto: { to: 'r_study_approach', lines: ['I walk to the door with the brass plate.'] },
+              when: (p) => p.flags._heard_study && !p.flags._been_study && (p.flags._card_location === 'study' || p.flags._heard_card_in_study),
             },
             {
-              label: 'study',
-              goto: { to: 'r_study_approach', lines: ['I walk to the door that has the brass plate. The study.'] },
-              when: (p) => p.flags._heard_study,
+              label: 'the cellar — the back stair drops to it',
+              goto: { to: 'r_cellar_approach', lines: ['I take the back stair. The cellar door is at the bottom.'] },
+              when: (p) => p.flags._heard_cellar && !p.flags._been_cellar,
             },
             {
-              label: 'cellar door',
-              goto: { to: 'r_cellar_approach', lines: ['I walk to the back stair. The door at the bottom is the cellar door.'] },
-              when: (p) => p.flags._heard_cellar,
+              label: 'the kitchen — the cook is awake there',
+              goto: { to: 'r_kitchen', lines: ['I push the kitchen door open.'] },
+              when: (p) => (p.flags._been_dining || p.flags._heard_kitchen) && !p.flags._been_kitchen,
             },
-            {
-              label: 'talk to him',
-              goto: (p) => poloniusFaceNode(p),
-            },
-            {
-              label: 'try the front door',
-              goto: (p) => poloniusDoorAttempt(p),
-            },
+            { label: 'wander further into the house', goto: 'hub_explore' },
+            { label: 'back to the corridor', goto: 'hub_corridor' },
+          ],
+        },
+
+        hub_explore: {
+          // The non-card rooms — intel and observation, not central
+          // path. Library has the binding-shard archive; gallery has
+          // the past tenants; clock hall reveals the staff routes;
+          // dining is the cook's bound state and the cleaver.
+          // Visited rooms drop out of the menu so each visit narrows
+          // the list.
+          lines: [
+            'I let myself want a moment in a room without a goal. The corridor offers a few. The house has more rooms than the hunt has needed.',
+          ],
+          choices: [
+            { label: 'the library', goto: { to: 'r_library', lines: ['I step into the library. The lamp is lit.'] }, when: (p) => !p.flags._been_library },
+            { label: 'the gallery', goto: { to: 'r_gallery', lines: ['I follow the corridor to the gallery.'] }, when: (p) => !p.flags._been_gallery },
+            { label: 'the clock hall', goto: { to: 'r_clock_hall', lines: ['I take the short hall to the clock.'] }, when: (p) => !p.flags._been_clock_hall },
+            { label: 'the dining room', goto: { to: 'r_dining', lines: ['I push open the dining room door.'] }, when: (p) => !p.flags._been_dining },
+            { label: 'one I have already been in', goto: 'hub_revisit' },
+            { label: 'back to the corridor', goto: 'hub_corridor' },
+          ],
+        },
+
+        hub_revisit: {
+          // Visited intel rooms — surfaced only when the player wants
+          // to go back.
+          lines: [
+            'I think back on the rooms I have already opened. I weigh which one to step into a second time.',
+          ],
+          choices: [
+            { label: 'the library', goto: { to: 'r_library', lines: ['I step back into the library.'] }, when: (p) => !!p.flags._been_library },
+            { label: 'the gallery', goto: { to: 'r_gallery', lines: ['I step back into the gallery.'] }, when: (p) => !!p.flags._been_gallery },
+            { label: 'the clock hall', goto: { to: 'r_clock_hall', lines: ['I step back into the clock hall.'] }, when: (p) => !!p.flags._been_clock_hall },
+            { label: 'the dining room', goto: { to: 'r_dining', lines: ['I step back into the dining room.'] }, when: (p) => !!p.flags._been_dining },
+            { label: 'back to the corridor', goto: 'hub_corridor' },
           ],
         },
 
@@ -1443,33 +1511,23 @@ const polonius = {
           flags: { room: 'parlor', _been_parlor: true, _saw_keys: true },
           scales: { tiredness: +1, unease: +1 },
           choices: [
-            {
-              label: 'speak to the butler about the keys',
-              goto: 'r_parlor_butler',
-            },
-            {
-              label: 'check the date on the paper',
-              goto: 'r_parlor_paper',
-            },
-            {
-              label: 'take the poker from the grate',
-              goto: 'r_parlor_take_poker',
-              when: (p) => poloniusWondering(p),
-            },
-            {
-              label: 'try to lift the keys without him noticing',
-              goto: 'r_parlor_pickpocket',
-              when: (p) => p.scales.intimacy <= 6 || p.flags._butler_distracted,
-            },
-            {
-              label: 'distract the butler with the paper',
-              goto: 'r_parlor_distract',
-            },
-            {
-              label: 'sit by the fire',
-              goto: 'r_parlor_sit',
-            },
+            { label: 'speak to the butler about the keys', goto: 'r_parlor_butler' },
+            { label: 'try a quieter way to get the keys', goto: 'r_parlor_take_keys' },
+            { label: 'take the poker from the grate', goto: 'r_parlor_take_poker', when: (p) => poloniusWondering(p) },
             { label: 'back to the corridor', goto: 'hub_corridor' },
+          ],
+        },
+
+        r_parlor_take_keys: {
+          // Sub-menu for the quiet-keys approaches.
+          lines: [
+            'The butler is in the chair. The keys are at his waistcoat. He has not looked up from the paper for some minutes. There are several ways to do this.',
+          ],
+          choices: [
+            { label: 'lift them from his pocket while he reads', goto: 'r_parlor_pickpocket', when: (p) => p.scales.intimacy <= 6 || p.flags._butler_distracted },
+            { label: 'distract him with the paper first', goto: 'r_parlor_distract' },
+            { label: 'check the date on the paper instead', goto: 'r_parlor_paper' },
+            { label: 'never mind; back to the parlor', goto: 'r_parlor' },
           ],
         },
 
@@ -1635,23 +1693,9 @@ const polonius = {
           flags: { room: 'library', _been_library: true },
           scales: { tiredness: +1, intimacy: +1 },
           choices: [
-            {
-              label: 'the lectern',
-              goto: 'r_library_lectern',
-            },
-            {
-              label: 'look at the books',
-              goto: 'r_library_books',
-            },
-            {
-              label: 'who was sitting here',
-              goto: 'r_library_chair',
-            },
-            {
-              label: 'look for a book about him',
-              goto: 'r_library_his_book',
-              when: (p) => p.flags._heard_truth || p.flags._heard_origin,
-            },
+            { label: 'cross to the lectern; read the open book', goto: 'r_library_lectern' },
+            { label: 'examine the shelves', goto: 'r_library_books' },
+            { label: 'look for a book about him', goto: 'r_library_his_book', when: (p) => p.flags._heard_truth || p.flags._heard_origin },
             { label: 'back to the corridor', goto: 'hub_corridor' },
           ],
         },
@@ -1668,22 +1712,9 @@ const polonius = {
           composure: -2,
           composureCost: 'The names were in the right order.',
           choices: [
-            {
-              label: 'turn the page back',
-              goto: 'r_library_guest_book_back',
-            },
-            {
-              label: 'turn the page forward',
-              goto: 'r_library_guest_book_forward',
-            },
-            {
-              label: 'tear out the page',
-              goto: 'r_library_tear_page',
-            },
-            {
-              label: 'close the book; turn to him',
-              goto: 'f_about_the_card',
-            },
+            { label: 'turn the page back', goto: 'r_library_guest_book_back' },
+            { label: 'tear out the page', goto: 'r_library_tear_page' },
+            { label: 'close the book; turn to him', goto: 'f_about_the_card' },
           ],
         },
 
@@ -1878,18 +1909,8 @@ const polonius = {
           flags: { room: 'gallery', _been_gallery: true },
           scales: { unease: +3 },
           choices: [
-            {
-              label: 'ask who the modern man is',
-              goto: 'r_gallery_who',
-            },
-            {
-              label: 'examine the empty frame',
-              goto: 'r_gallery_empty_frame',
-            },
-            {
-              label: 'walk the line of them',
-              goto: 'r_gallery_others',
-            },
+            { label: 'ask about the modern portrait', goto: 'r_gallery_who' },
+            { label: 'examine the empty frame', goto: 'r_gallery_empty_frame' },
             { label: 'back to the corridor', goto: 'hub_corridor' },
           ],
         },
@@ -2003,23 +2024,22 @@ const polonius = {
           flags: { room: 'clock_hall', _been_clock_hall: true, _heard_study: true, _heard_cellar: true },
           scales: { unease: +3 },
           choices: [
-            {
-              label: 'watch the corridor; mark the staff routes',
-              goto: 'r_clock_watch',
-            },
-            {
-              label: 'examine the clock face',
-              goto: 'r_clock_face',
-            },
-            {
-              label: 'follow the back corridor',
-              goto: 'r_clock_back_corridor',
-            },
-            {
-              label: 'follow the stair down',
-              goto: 'r_clock_descend',
-            },
+            { label: 'stand still; watch the staff cross the corridor', goto: 'r_clock_watch' },
+            { label: 'examine the clock', goto: 'r_clock_face' },
+            { label: 'follow one of the corridors', goto: 'r_clock_branch' },
             { label: 'back to the corridor', goto: 'hub_corridor' },
+          ],
+        },
+
+        r_clock_branch: {
+          // Sub-menu for the two corridors off the clock hall.
+          lines: [
+            'I weigh the two corridors. One curves toward the back of the house — the wallpaper darkens. One drops by a narrow stair — the stone smells colder.',
+          ],
+          choices: [
+            { label: 'the back corridor', goto: 'r_clock_back_corridor' },
+            { label: 'the stair down', goto: 'r_clock_descend' },
+            { label: 'back to the clock hall', goto: 'r_clock_hall' },
           ],
         },
 
@@ -2129,27 +2149,9 @@ const polonius = {
           flags: { room: 'dining', _been_dining: true, _seen_cook: true },
           scales: { tiredness: +1, unease: +1 },
           choices: [
-            {
-              label: 'sit and eat',
-              goto: 'r_dining_eat',
-            },
-            {
-              label: 'whose blood is that',
-              goto: 'r_dining_blood',
-            },
-            {
-              label: 'speak to the cook plainly',
-              goto: 'r_dining_speak_cook',
-            },
-            {
-              label: 'reach for the cleaver',
-              goto: 'r_dining_take_cleaver',
-              when: (p) => poloniusWondering(p),
-            },
-            {
-              label: 'I am not hungry',
-              goto: 'r_dining_decline',
-            },
+            { label: 'sit at the table', goto: 'r_dining_eat' },
+            { label: 'speak to the cook', goto: 'r_dining_speak_cook' },
+            { label: 'reach for the cleaver', goto: 'r_dining_take_cleaver', when: (p) => poloniusWondering(p) },
             { label: 'back to the corridor', goto: 'hub_corridor' },
           ],
         },
@@ -2460,35 +2462,24 @@ const polonius = {
           composure: +1,
           composureGain: 'The cook is here. The cook is awake.',
           choices: [
-            {
-              label: 'ask about the shard',
-              goto: 'r_kitchen_ask_shard',
-            },
-            {
-              label: 'ask about the card',
-              goto: 'r_kitchen_ask_card',
-            },
-            {
-              label: 'ask about the back stair',
-              goto: 'r_kitchen_ask_stair',
-            },
-            {
-              label: 'take a knife from the block',
-              goto: 'r_kitchen_take_knife',
-            },
-            {
-              label: 'take a cleaver',
-              goto: 'r_kitchen_take_cleaver',
-            },
-            {
-              label: 'try the pantry door',
-              goto: 'r_kitchen_pantry',
-            },
-            {
-              label: 'try the narrower back door',
-              goto: 'r_kitchen_back_door',
-            },
+            { label: 'ask the cook for help', goto: 'r_kitchen_ask_help' },
+            { label: 'take a weapon from the rack', goto: 'r_kitchen_take_cleaver', when: (p) => poloniusWondering(p) },
+            { label: 'try the doors at the back', goto: 'r_kitchen_back_door' },
             { label: 'back to the corridor', goto: 'hub_corridor' },
+          ],
+        },
+
+        r_kitchen_ask_help: {
+          // Sub-menu for the cook conversation. He's lucid here and
+          // will answer any of three questions; the player can ask
+          // one then return to the kitchen.
+          lines: [
+            'I keep my voice low. I say: I need to know — quickly, before the day reverts you.',
+          ],
+          choices: [
+            { label: 'the shard — where is it', goto: 'r_kitchen_ask_shard' },
+            { label: 'my card — where has it gone', goto: 'r_kitchen_ask_card' },
+            { label: 'the back stair — what is the route', goto: 'r_kitchen_ask_stair' },
           ],
         },
 
@@ -3087,34 +3078,10 @@ const polonius = {
           flags: { room: 'parlor' },
           scales: { intimacy: +1 },
           choices: [
-            {
-              label: 'ask after Mrs. Halliwell — has she returned with the card',
-              goto: 'f_ask_after_maid',
-            },
-            {
-              label: 'ask about the wing\'s arrangement',
-              goto: 'f_about_arrangement',
-            },
-            {
-              label: 'ask after the cellar',
-              goto: { to: 'hub_corridor', lines: ['I say: I notice a back stair off the clock hall. Where does it lead.', 'He smiles. The cellar, sir. The wines. Mr. Cook attends to them.'], flags: { _heard_cellar: true } },
-              when: (p) => !p.flags._heard_cellar,
-            },
-            {
-              label: 'ask, plainly, whether you may have the card back',
-              goto: 'f_demand_card',
-              when: (p) => poloniusNoticed(p),
-            },
-            {
-              label: 'press him on what is going on',
-              goto: 'f_about_the_card',
-              when: (p) => poloniusWondering(p),
-            },
-            {
-              label: 'ask how you might free him from the wing',
-              goto: 'f_offers_trade',
-              when: (p) => p.flags._heard_truth || p.flags._heard_binding,
-            },
+            { label: 'small talk — ask about the wing', goto: 'f_about_arrangement' },
+            { label: 'ask plainly for the card back', goto: 'f_demand_card', when: (p) => poloniusNoticed(p) },
+            { label: 'press him on what is going on', goto: 'f_about_the_card', when: (p) => poloniusWondering(p) },
+            { label: 'ask how to free him from the wing', goto: 'f_offers_trade', when: (p) => p.flags._heard_truth || p.flags._heard_binding },
             { label: 'back to the corridor', goto: 'hub_corridor' },
           ],
         },
@@ -3272,18 +3239,8 @@ const polonius = {
           composure: -2,
           composureCost: 'The card is the cruelty he has left.',
           choices: [
-            {
-              label: 'how do I get out',
-              goto: 'f_how_to_leave',
-            },
-            {
-              label: 'how do I free you',
-              goto: 'f_offers_trade',
-            },
-            {
-              label: 'demand the card now',
-              goto: 'f_demand_card',
-            },
+            { label: 'how do I get out', goto: 'f_how_to_leave' },
+            { label: 'how do I free you', goto: 'f_offers_trade' },
             { label: 'back to the corridor', goto: 'hub_corridor' },
           ],
         },
@@ -3359,7 +3316,6 @@ const polonius = {
           composureCost: 'The smile is on the wrong part of the mouth.',
           choices: [
             { label: 'demand the card', goto: 'f_demand_card' },
-            { label: 'tell him to step away from the front door', goto: 'f_step_away' },
             { label: 'find a weapon', goto: 'k_strike_consider' },
             { label: 'back to the corridor', goto: 'hub_corridor' },
           ],
