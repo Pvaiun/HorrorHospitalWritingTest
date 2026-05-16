@@ -540,8 +540,8 @@ const polonius = {
 
         t_look_around: {
           lines: [
-            'I take in the foyer. The walls are panelled in dark wood, with a dark green velvet wallpaper above; the pattern is a small repeating laurel. A coat-tree stands beside the door. A polished grandfather clock leans against the wall, without a speck of dust on it. A small fire burns in an iron grate, and above it hangs a small painting in an old gold frame.',
-            'Polonius waits as I look. He has the patience of a host who doesn\'t mind being studied.',
+            'I take in the foyer. The walls are panelled in dark wood, with a dark green velvet wallpaper above; the pattern is a small repeating laurel. A coat-tree stands beside the door. A grandfather clock stands against the far wall, polished, without a speck of dust on it. A small fire burns in an iron grate, and above it hangs a painting in an old gold frame.',
+            'Polonius waits while I look. He has the patience of a host who doesn\'t mind being studied.',
           ],
           choices: [
             { label: 'examine something in the room', goto: 't_examine' },
@@ -556,7 +556,7 @@ const polonius = {
           // gated on its observation-flag, so the menu shrinks as the
           // player notices things.
           lines: [
-            'I let my eye go where it wants to go.',
+            'I let my eye settle on whatever it wants to settle on.',
           ],
           choices: [
             { label: 'the grandfather clock', goto: 't_obs_clock', when: (p) => !p.flags._obs_clock_no_hands },
@@ -752,14 +752,14 @@ const polonius = {
         m_thank_maid: {
           lines: [
             'I turn to her. Thank you, Mrs. Halliwell.',
-            'She brightens — a small, real brightening. Her smile shifts shape for a moment.',
+            'Her face brightens — a small, surprised brightening that shifts the shape of her smile for a moment.',
             'You are very welcome, sir. It\'s a pleasure to have a guest. The wing is so quiet, most evenings.',
             'Polonius adds, fondly: Mrs. Halliwell is partial to a guest. We don\'t get many.',
           ],
           flags: { _thanked_maid: true },
           scales: { intimacy: +1 },
           composure: +1,
-          composureGain: 'I greeted her by name. He had wanted to do that for me.',
+          composureGain: 'I greeted her by name. He\'d wanted to do that for me.',
           choices: [
             { label: 'sit by the fire', goto: 'm_sit' },
             { label: 'compliment the parlor', goto: 'm_compliment_room' },
@@ -794,7 +794,7 @@ const polonius = {
           flags: { _obs_bust_old: true, _heard_origin: true, _heard_how_long: true },
           scales: { unease: +3, intimacy: +1 },
           composure: -1,
-          composureCost: 'The bust is his face.',
+          composureCost: 'The bust has his face.',
           choices: [
             { label: 'sit by the fire', goto: 'm_sit' },
             { label: 'compliment the parlor', goto: 'm_compliment_room', when: (p) => !p.flags._heard_long_time },
@@ -1538,7 +1538,7 @@ const polonius = {
             'I say: the cloakroom keys are in your pocket.',
             'He looks down at the pocket as if surprised to find them there. The keys, sir. Indeed they are. The cloakroom is at the back of the house; the keys are with me at the master\'s direction. I\'m to keep them on my person for the evening.',
             'He smiles. ~~It\'s the same smile as Polonius\'s, only colder.~~',
-            'I cannot give them to you, sir. The master placed them with me. If you wish to have them, you\'ll have to take it up with the master, or with me. I would prefer it be with the master.',
+            'I can\'t give them to you, sir. The master placed them with me. If you want them, you\'ll have to take it up with the master, or with me. I\'d prefer it be with the master.',
             '~~He is part of the day. He can\'t give the keys away. He can only have them taken from him.~~',
           ],
           flags: { _heard_keys_butler: true, _butler_keys_explicit: true },
@@ -1617,8 +1617,8 @@ const polonius = {
           lines: [
             'I lean in and tap the paper. I say: this article in the second column — the man named Adams. Was the strike settled in his favour, or against?',
             'The butler looks down at the column. He\'s read it many times, but no one has ever asked him about it. He frowns and turns the paper toward the light.',
-            'My right hand slips into his waistcoat pocket. The keys lift free. He doesn\'t feel them go; he is in the article. He is in 1888.',
-            'The butler comes back to himself. He looks up, at me, then at his pocket. The pocket is empty.',
+            'My right hand slips into his waistcoat pocket. The keys lift free. He doesn\'t feel them go — he is in the article. He is in 1888.',
+            'After a moment he comes back to himself. He looks up at me, then down at his pocket. The pocket is empty.',
             'He says, mild as a bowl of milk: I\'ll mention this to the master, sir. I don\'t imagine he\'ll be surprised.',
           ],
           flags: { _have_cloakroom_keys: true, _butler_aware: true },
@@ -1985,7 +1985,7 @@ const polonius = {
         r_gallery_others: {
           lines: [
             'I walk down the line of them. They aren\'t arranged by century. They are arranged by something else — by how long someone stood here, perhaps, or by the order in which they arrived.',
-            'The portraits at the start of the row are in old styles — tempera on board, gold leaf — and the figures wear things I have only seen in books. The portraits move forward in time as the row goes on.',
+            'The portraits at the start of the row are in old styles — tempera on board, gold leaf — and the figures wear things I\'ve only ever seen in books. The portraits move forward in time as the row goes on.',
             'I count them. There are forty-one.',
           ],
           flags: { _counted_portraits: true, _heard_count: true },
@@ -2119,7 +2119,7 @@ const polonius = {
         r_clock_cook_intercepts: {
           lines: [
             'I climb back up to the landing. The cook is at the top of the stair, his apron stained the colour it always is. He stops me with a hand on my arm — his hand is larger than I expected.',
-            'Sir, he says, quietly. His voice is the voice of a man who is not, for the moment, part of the day. The accent is northern. The eyes are awake.',
+            'Sir, he says, quietly. His accent is northern, and his eyes are awake — ~~the voice of a man who is not, for the moment, part of the day.~~',
             'The cellar is fine, sir. There\'s a shelf along the back wall, and a shard on the shelf. The shard is what holds him. I\'ve done the wines for forty-one years. I\'ve looked at the shard every time.',
             'He pauses. Sir — if I\'m away from the kitchen for more than a minute, the day reverts me. I won\'t remember this conversation. Go down. I won\'t stop you. The master can\'t stop you on the stair.',
           ],
@@ -2485,8 +2485,8 @@ const polonius = {
 
         r_kitchen_ask_shard: {
           lines: [
-            'I say, quickly: the shard. It\'s in the cellar.',
-            'The cook nods. On the back shelf, sir. Low — at about the level of a man\'s knee. Behind the third bottle. A piece of broken clay, no bigger than a thumbprint. There\'s a name scratched into it, in a script older than any of us.',
+            'I say, quickly: the shard — where is it?',
+            'The cook nods. In the cellar, sir. On the back shelf, low — at about the level of a man\'s knee. Behind the third bottle. A piece of broken clay, no bigger than a thumbprint. There\'s a name scratched into it, in a script older than any of us.',
             'He pauses. Sir, the shard is what holds him. If you break it, he\'ll go. He\'ll go the way men go. The staff will go with him. The day will end.',
             'The day will end for me too, sir. I don\'t mind it. I\'ve been here a great while.',
             '~~He\'s telling me he\'s ready to be released. He\'s part of the bargain.~~',
@@ -3003,7 +3003,7 @@ const polonius = {
 
         l_bedroom: {
           lines: [
-            'The room is small and warm. The window has been bricked over and painted to look like a window — and the painting shows a night sky I have never seen. The constellations are wrong, or very old.',
+            'The room is small and warm. The window has been bricked over and painted to look like a window — and the painting shows a night sky I\'ve never seen. The constellations are wrong, or very old.',
             'He stands at the door. I\'ll leave you to rest, sir. I won\'t disturb you. There\'s water on the table. I wish you well.',
             'He closes the door behind him. I hear the latch fall into place.',
           ],
@@ -3313,7 +3313,7 @@ const polonius = {
           flags: { _mask_on: false, _mood: 'predatory' },
           scales: { unease: +5 },
           composure: -2,
-          composureCost: 'The smile is on the wrong part of the mouth.',
+          composureCost: 'The mask is off.',
           choices: [
             { label: 'demand the card', goto: 'f_demand_card' },
             { label: 'find a weapon', goto: 'k_strike_consider' },
