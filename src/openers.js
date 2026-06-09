@@ -5,9 +5,9 @@
 export const TITLE_OPENERS = [
   // The Letter
   [
-    "I'm at the address on the letter. The one I received in the mail written in ~~my own~~ a strange handwriting.",
+    "I am at the address on the letter. The one that came in the mail, addressed in ~~my own~~ a stranger's handwriting.",
     "I walk through the front door. A desk. A nurse greets me. !!Hello again!!, she says. !!I've been expecting you.!!",
-    "The walls are dark and tall. Screams echo through the halls. This is not a [[10]].",
+    "The walls are dark and tall. A long way down the corridor, someone is ~~screaming~~ singing. This is not a [[10]].",
   ],
 
   // The Bus
@@ -21,7 +21,7 @@ export const TITLE_OPENERS = [
   [
     "My phone rings. I answer. The voice on the other end is ~~my own~~ a stranger's. It tells me an address.",
     "I drive to it. A building. I walk inside. A desk. A nurse looks up. !!Welcome,!! she says. !!We've been trying to reach you.!!",
-    "The walls of the lobby are dark and tall. Screams echo down a corridor I cannot see the end of. This is not the [[7]] the voice gave me.",
+    "The walls of the lobby are dark and tall. The corridor behind the desk has no end I can see. Someone in it is ~~screaming~~ counting. This is not the [[7]] the voice gave me.",
   ],
 
   // The Mirror

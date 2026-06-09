@@ -31,7 +31,7 @@ export const EVENTS = {
       {
         key: 'take',
         label: 'Take what she offers',
-        prose: 'I take it. It is warm. ~~The room~~ The room is steadier for a moment.',
+        prose: 'I take it. It is warm. ~~I am steadier~~ The room is steadier for a moment.',
         effect(p) { bumpComposure(p, 3); },
       },
       {
@@ -86,7 +86,7 @@ export const EVENTS = {
     glyph: 'Lumenpup',
     prose: [
       'A mirror at the end of the corridor. The angle is wrong. It shows the corridor behind me, and also a corridor I have not been in.',
-      'In the other corridor, !!I am already past the mirror.!! ~~I have not~~ I have not turned left.',
+      'In the other corridor, !!I am already past the mirror.!! ~~I will not~~ I have not turned left. Yet.',
     ],
     choices: [
       {
@@ -123,13 +123,13 @@ export const EVENTS = {
       {
         key: 'remember',
         label: 'Remember the number',
-        prose: 'I write it down. I will keep it. ~~Someone~~ Someone should.',
+        prose: 'I write it down. I will keep it. ~~No one~~ Someone should.',
         effect(p) { addItem(p, 'scrap_of_paper'); },
       },
       {
         key: 'forget',
         label: 'Forget it on purpose',
-        prose: 'I let it go before I am asked to. The corridor is cleaner. ~~I~~ I am steadier for it.',
+        prose: 'I let it go before I am asked to. ~~It is hard.~~ It is easy. I am steadier for it.',
         effect(p) { bumpComposure(p, 3); },
       },
     ],
@@ -159,7 +159,7 @@ export const EVENTS = {
       {
         key: 'pocket_pen',
         label: 'Pocket the pen',
-        prose: 'I take the pen. It is heavier than it should be. ~~Black ink.~~ Black ink.',
+        prose: 'I take the pen. It is heavier than it should be. ~~It is not ink.~~ Black ink.',
         effect(p) { addItem(p, 'ink_bottle'); },
       },
     ],
@@ -189,7 +189,7 @@ export const EVENTS = {
       {
         key: 'open',
         label: 'Open the window',
-        prose: 'Cold. A wind comes in from outside. ~~I am thinner~~ I am thinner for it. !!I am also sharper.!!',
+        prose: 'Cold. A wind comes in from ~~the garden~~ outside. I am thinner for it. !!I am also sharper.!!',
         effect(p) { bumpComposure(p, -2); addItem(p, 'sliver_of_glass'); },
       },
     ],
@@ -213,13 +213,13 @@ export const EVENTS = {
       {
         key: 'put',
         label: 'Put something in',
-        prose: 'I drop the card from my pocket through the slot. ~~The card~~ The card I will not be needing.',
+        prose: 'I drop the card from my pocket through the slot. ~~My name.~~ The card I will not be needing.',
         effect(p) { bumpComposure(p, -1); applyScar(p, 'named'); },
       },
       {
         key: 'leave',
         label: 'Leave it alone',
-        prose: 'I keep walking. The rattling continues a long time. ~~Or it is~~ Or it is something in my chest.',
+        prose: 'I keep walking. The rattling goes on a long time. ~~Behind me.~~ In my chest.',
         effect(p) { bumpComposure(p, 1); },
       },
     ],

@@ -399,7 +399,7 @@ export function renderResolution() {
     page.appendChild(taken);
   } else {
     page.appendChild(el('div', { class: 'doc-prose dim' },
-      'nothing in my pocket this time. ~~the room~~ the room did not give me anything.'));
+      'nothing in my pocket this time. ~~the room gave me~~ the room did not give me anything.'));
   }
 
   // scars carried forward

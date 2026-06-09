@@ -141,7 +141,7 @@ export const ITEMS = {
         lines: [
           'I take it from my pocket. I wind the stem.',
           'The mechanism resumes. The room settles by a degree.',
-          '~~Something has been put back.~~ Something has been put back. I do not know how long it holds.',
+          '~~Time has been put back.~~ Something has been put back. I do not know how long it holds.',
         ],
         scales: shifts,
       };
@@ -174,7 +174,7 @@ export const ITEMS = {
     name: 'a worn ribbon',
     file: 'Red. Tied and untied many times. ~~Once~~ The shape of what it was tied around is still in it.',
     desc: 'Give it. Soft memory. For tender patients.',
-    voice: 'A ribbon. ~~Someone~~ Someone wore it.',
+    voice: 'A ribbon. ~~A child~~ Someone wore it.',
     when: (p) => {
       const s = p.def.scales || {};
       return s.tenderness !== undefined || s.recognition !== undefined
@@ -253,7 +253,7 @@ export const ITEMS = {
       return {
         lines: [
           'I take it out. I set it on the floor between us.',
-          'The room settles. ~~Something has been paid for.~~ Something has been paid for.',
+          'The room settles. ~~I have been paid for.~~ Something has been paid for.',
         ],
         scales: shifts,
         composure: -2,
@@ -275,7 +275,7 @@ export const ITEMS = {
       return {
         lines: [
           'I open it. I drink half.',
-          'The room is suddenly very soft. ~~My edges are gone.~~ My edges are gone. !!I am still here.!!',
+          'The room is suddenly very soft. ~~It is working.~~ My edges are gone. !!I am still here.!!',
         ],
         composure: +2,
         scales: shifts,
@@ -287,7 +287,7 @@ export const ITEMS = {
   sliver_of_glass: {
     id: 'sliver_of_glass',
     name: 'a sliver of glass',
-    file: 'From a mirror in the east corridor. Sharp. ~~Clean.~~ Clean of fingerprints.',
+    file: 'From a mirror in the east corridor. Sharp. Clean of ~~blood~~ fingerprints.',
     desc: 'Clutch it. Costs composure. Wards off the next blow.',
     voice: 'A sliver. ~~I will not need this.~~',
     respond() {
@@ -295,10 +295,10 @@ export const ITEMS = {
         lines: [
           'I press my thumb against the edge. Just enough to mark the skin.',
           '!!The pain is small but it is the loudest thing in the room.!!',
-          '~~I am awake.~~ I am awake.',
+          '~~I am dreaming.~~ I am awake.',
         ],
         composure: -2,
-        composureCost: '~~A little blood.~~ A little blood. It keeps me here.',
+        composureCost: 'A little blood. It keeps me here.',
         flags: { glass_clutched: true },
       };
     },
@@ -315,11 +315,11 @@ export const ITEMS = {
       return {
         lines: [
           'I unstop it. I write what I have been told on the wall behind her.',
-          '~~I write~~ I write what I remember. The rest fills itself in.',
+          '~~I write what happened.~~ I write what I remember. The rest fills itself in.',
           '!!The file is open in front of me. All of it.!!',
         ],
         composure: -2,
-        composureCost: '~~The ink does not dry.~~ The ink does not dry. The room will not let it.',
+        composureCost: '~~The ink dries.~~ The ink does not dry. The room will not let it.',
         flags: { _revealAllFile: true },
       };
     },
@@ -341,7 +341,7 @@ export const ITEMS = {
       return {
         lines: [
           'I ring it. Once. It is louder than the room.',
-          'She stops what she is doing. She is here. ~~Partly.~~ Partly.',
+          'She stops what she is doing. She is here. ~~Entirely.~~ Partly.',
         ],
         scales: shifts,
       };
