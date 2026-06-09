@@ -42,6 +42,7 @@ A run goes: ADMISSION → 5 wings (one corridor event + one patient encounter ea
 Each turn: patient telegraphs its next pose(s); player picks one of five core actions or their wound-given SIGNATURE; resolves player → patient; statuses tick at turn end; phase advances when patient HP hits 0; final phase ends with a resolution choice that grants one of three branching traits. Damage modifiers (bracing on ENDURE, raw amplification, trait hooks) are applied inside `dealDamage`. Combat is async — `combat.js` interleaves `pushLog`, `drainLog` (typewriter sleep) and `render()` so each line of narration lands in beat with the action.
 
 ## Conventions
+- **Voice.** All player-facing prose follows `docs/VOICE.md`. Read it before writing or editing any game text.
 - **`state` is global and mutated directly.** Don't pass as a parameter; import it.
 - **Re-render after mutation.** Any user-visible change ends with `render()`. Async combat flows in `combat.js` interleave `render()` and `await sleep(ms)` for animation pacing.
 - **No build step.** Browser-native ES modules.
