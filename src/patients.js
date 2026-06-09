@@ -10105,7 +10105,7 @@ const children = {
           + 'They are still at the door. The asking is quieter, more patient. They are willing to wait.';
       case 'orderly_present':
         return 'An orderly has come down the corridor. He is at my door. He is speaking. '
-          + 'The children have gone quiet for him. !!Or so it seems.!!';
+          + 'The children have gone quiet for him. !!I did not hear them leave.!!';
       default:
         return 'The door is closed. There are voices in the corridor.';
     }
@@ -10131,7 +10131,7 @@ const children = {
     power_out: '!!The line of light under the door is gone. The corridor is black. The voices continue without interruption.!!',
     barricaded: 'The chain is across. The chair is wedged. The door is doubled. They are willing to wait.',
     orderly_present: 'An orderly has come down the corridor. He is at my door. The children have gone quiet for him.',
-    in_the_room: '!!The door is open. They are inside. The page ends in a way it should not.!!',
+    in_the_room: '!!The door is open. They are inside. The rest of this page was never written.!!',
   },
 
   // ─────────────────────────────────────────────────────────────────────
@@ -10616,7 +10616,7 @@ const children = {
         surnames: {
           lines: [
             'I say: your surnames. Both.',
-            'There is a long pause. The shorter one says: ~~we do not use them, mister. Our mother said it was rude.~~',
+            'There is a pause long enough to confer in. The shorter one says: ~~we do not use them, mister. Our mother said it was rude.~~',
             'She has the answer ready. It is not the kind of answer a child has ready.',
           ],
           scales: { suspicion: +4 },
@@ -11023,7 +11023,7 @@ const children = {
           lines: [
             'I say: you contradicted yourself. You are not who you said you were.',
             'A pause. The shorter one says, gently: ~~we are who we say we are, mister. We are who you let us be.~~',
-            'Whatever they are,',
+            'I do not remember letting them be anything.',
           ],
           scales: { suspicion: +5, invitation: -2 },
           flags: { confronted_anything: true, confronted_contradiction: true },
@@ -11619,7 +11619,7 @@ const children = {
           scales: { invitation: -4, suspicion: +3 },
           flags: { held_still_in_screaming: true, they_are_screaming: false, they_have_gone_silent: true, silence_start: p => p.turn },
           composure: +1,
-          composureGain: 'She named me not afraid. I will hold that.',
+          composureGain: 'She named me not afraid.',
           choices: [
             { label: 'breathe', goto: { to: 'hub', forceState: 'silence' } },
           ],
@@ -11710,7 +11710,7 @@ const children = {
             'I say: you. Thomas. You are letting her do that. Stop her.',
             'A long pause. The biting stops.',
             'The taller one says, evenly: ~~she stops when you let us in, mister. She does not stop for me.~~',
-            ' Either of those is something to have done.',
+            'He says it without raising his voice. He has said it before.',
           ],
           scales: { invitation: +1, suspicion: +5 },
           flags: { addressed_taller_sh: true, taller_speaking: true, they_are_self_harming: false },
@@ -11805,7 +11805,7 @@ const children = {
           lines: [
             'I say: I am here. I am listening.',
             'The voice on the other side says, in the borrowed cadence: ~~it has been so long. Will you let me in.~~',
-            'The phrasing is familiar but not the way the person it is imitating phrased things. Almost.',
+            'The phrasing is familiar. It is not quite how she phrased things.',
           ],
           scales: { invitation: +5, suspicion: +3 },
           flags: { played_along: true },
@@ -11859,7 +11859,7 @@ const children = {
           scales: { suspicion: +6, invitation: -4 },
           flags: { asked_specific_test: true, trick_active: false },
           composure: +1,
-          composureGain: 'There was one dog. I have one.',
+          composureGain: 'There was one dog. They did not know it.',
           choices: [
             { label: 'pull back', goto: { to: 'hub', forceState: 'tense' } },
           ],
@@ -12240,7 +12240,7 @@ const children = {
           lines: [
             'I stand still. I close my eyes, though they were not helping anyway.',
             'I hear the asks more clearly. The shorter one\'s voice is closer than it was. Her face is at the door, against the wood.',
-            'I hear, behind her, no taller one. He is not breathing.',
+            'Behind her, nothing. The taller one is not breathing.',
           ],
           scales: { suspicion: +5 },
           flags: { listened_dark: true },
@@ -12402,7 +12402,7 @@ const children = {
           lines: [
             'I shout for him. Loud as my voice will go. I name him.',
             'A long way down the corridor, a door opens. A voice answers. I cannot make it out.',
-            'The shorter one says, on the other side of mine: ~~he heard you, mister.~~ She does not sound disappointed.',
+            'The shorter one says, on the other side of mine: ~~he heard you, mister.~~ She does not sound worried.',
             'A pause. Then footsteps in the corridor. Slow. Coming.',
           ],
           scales: { invitation: -3, suspicion: +1 },
@@ -13053,7 +13053,7 @@ const children = {
           desc: 'Hold the wood. Be the second hinge.',
           lines: [
             'I put my shoulder to the door. The wood is shaking. My ribs absorb each impact.',
-            'They cannot get the door to give. They go on for a long time anyway. My breathing is the same as theirs by the end.',
+            'They cannot get the door to give. They go on anyway. My breathing is the same as theirs by the end.',
           ],
           scales: { latch: +2, suspicion: +2 },
           composure: -2,
@@ -13078,7 +13078,7 @@ const children = {
           desc: 'Take it. Let the noise pass through you.',
           lines: [
             'I cover my ears. I stand very still in the middle of the room and let it happen.',
-            'It does not stop for a long time. When it does stop, the corridor is the same kind of quiet as before.',
+            'It goes on. I count and lose count. When it stops, the corridor is the same kind of quiet as before.',
           ],
           scales: { invitation: +2, suspicion: +1 },
           composure: -3,
