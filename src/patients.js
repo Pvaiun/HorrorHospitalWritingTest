@@ -7378,7 +7378,7 @@ const frostfin = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: I do not remember if I was ever one of yours.',
-            'She thinks about that. ~~Carefully.~~ She thinks about that carefully.',
+            'She thinks about that. Carefully.',
             'She says: ~~then we can decide.~~',
           ],
           scales: { warmth: +2, waiting: -1 },
@@ -7389,7 +7389,7 @@ const frostfin = {
           when: (_, player) => player.wound === 'insomnia',
           lines: [
             'I say: the one who came on the late train.',
-            'Her face changes. ~~Relief.~~ Relief. She has been waiting for the late one.',
+            'Her face changes. ~~Recognition.~~ Relief. She has been waiting for the late one.',
             'She squeezes my sleeve. She does not check.',
           ],
           scales: { warmth: +3, waiting: -3, cold: -2 },
@@ -7402,7 +7402,7 @@ const frostfin = {
           when: (_, player) => player.wound === 'split_personality',
           lines: [
             'I say: both of us came. One of me stayed at home with the chair pulled out.',
-            'She nods. ~~That is the right number.~~ That is the right number.',
+            'She nods. That is the right number.',
             'She does not let go of my arm.',
           ],
           scales: { warmth: +2, waiting: -1 },
@@ -7671,7 +7671,7 @@ const choir = {
         return {
           lines: [
             'I listen. I am there. I have been there. I have been singing for longer than I have been listening.',
-            '~~For how long.~~ For how long.',
+            'I only came in this morning. ~~The voice is older than that.~~',
           ],
           scales: { recognition: +3, self: -1 },
           composure: -1,
@@ -7788,7 +7788,7 @@ const choir = {
           ['I look at one of them. She is rocking a pram. Her arms are tight.', 'I have been in this room before. ~~Recently.~~'],
           ['I look at another. He sits in a chair. He is dictating to a clerk who is not here.', '~~I closed his eyes.~~ I closed his eyes.'],
           ['I look at another. She is humming a chord. The piano lid is still open.', '~~I never let her finish.~~'],
-          ['I look at another. She is on a bench, waiting. The room is much colder than the corridor.', 'I sat with her. ~~For an hour.~~ For an hour.'],
+          ['I look at another. She is on a bench, waiting. The room is much colder than the corridor.', 'I sat with her. ~~For an hour.~~ For a winter.'],
         ];
         const m = memories[Math.min(which - 1, memories.length - 1)];
         return {
@@ -7948,7 +7948,7 @@ const choir = {
           when: (_, player) => player.wound === 'insomnia',
           lines: [
             'I say: someone who could not sleep. Someone the night kept open.',
-            'The chord softens by a degree. ~~The night ones are different.~~ The night ones are different here.',
+            'The chord softens by a degree. The night ones are different here.',
             'They keep humming. They do not press.',
           ],
           scales: { self: +1, voice: +1, recognition: +1 },
@@ -7960,7 +7960,7 @@ const choir = {
           lines: [
             'I say: I am one of two. The other is at home in a chair you cannot reach.',
             'The chord falters. ~~They have not had a doubled one before.~~',
-            'A voice says: ~~we will take the one in the room with us.~~ A voice says: we will take the one in the room with us.',
+            'A voice says: we will take the one in the room with us. Another says it again, in the same breath.',
           ],
           scales: { self: +2, voice: -2, recognition: +1 },
           composure: -1,
@@ -7974,7 +7974,7 @@ const choir = {
       when: (p) => p.scales.voice >= 3 && p.scales.self <= 6,
       prose: [
         'A single voice — closer than the others — speaks.',
-        'It says: ~~We missed you.~~ We missed you.',
+        'It says: ~~We missed you.~~ We never lost you.',
       ],
       responses: [
         {
@@ -8017,7 +8017,7 @@ const choir = {
     if (p.scales.chord >= 6) {
       return {
         lines: [
-          'I wait. The chord deepens. One voice rises — rocking quietly. Another, humming. Another, staring.',
+          'I wait. The chord deepens. One of the singers rocks a pram. One hums the same chord. One watches a door.',
           'They have learned the whole ward. They are singing it.',
         ],
         scales: { self: -1, voice: +1, chord: +1 },
@@ -8094,7 +8094,7 @@ const hollow = {
   subtitle: 'She has been given several daughters.',
   role: 'wing', tier: 2,
   file: [
-    'Subject was admitted with [[6]] years prior. Subject continues to ~~claim the orderlies~~ recognize the daughter.',
+    'Subject was admitted with [[6]] some years prior. Subject continues to ~~claim the orderlies~~ recognize the daughter.',
     "Volunteers placed in Subject's room have been ~~reassigned~~ withdrawn from the program. **They do not come out the same.**",
     "When asked her own name, Subject gives the orderly's. !!The orderly does not contradict her.!!",
   ],
@@ -8401,7 +8401,7 @@ const hollow = {
       when: (p) => p.scales.recognition >= 4 && p.scales.insistence <= 6,
       prose: [
         'She is looking at me carefully. She has stopped speaking.',
-        'She asks: ~~Tell me about yourself.~~ Tell me about yourself.',
+        'She asks: ~~Tell me about yourself.~~',
       ],
       responses: [
         {
@@ -8494,7 +8494,7 @@ const hollow = {
           label: "I'll come back",
           desc: 'A kinder lie.',
           lines: [
-            "I say: I have to go. But I'll come back. ~~Tomorrow.~~ Tomorrow.",
+            "I say: I have to go. But I'll come back. ~~I will not.~~ Tomorrow.",
             'She nods. She does not check her watch. But she lets go of my arm.',
           ],
           scales: { panic: -2, insistence: -2 },
@@ -8537,7 +8537,7 @@ const hollow = {
           desc: 'Tell her no.',
           lines: [
             "I say: I wasn't.",
-            'She is quiet. ~~For a long time.~~ For a long time. She does not let go of my arm.',
+            'She is quiet. She does not let go of my arm.',
           ],
           scales: { grief: +2, panic: +1, insistence: -1 },
         },
@@ -8592,7 +8592,7 @@ const hollow = {
           desc: 'Spare her.',
           lines: [
             'I look at the clock. I ask if she wants tea.',
-            'She does not answer for a long time. ~~She had been about to say more.~~',
+            'She does not answer. ~~She had been about to say more.~~',
           ],
           scales: { grief: -2, insistence: +2, panic: +1 },
           composure: -1,
@@ -8645,7 +8645,7 @@ const hollow = {
       title: 'You tell her the truth',
       lines: [
         'She has heard me. She has known a while. She sits with it.',
-        'She says her own name out loud. ~~Once.~~ Once. Softly. She has not said it in a long time.',
+        'She says her own name out loud. Once. Softly. She has not said it in years.',
       ],
       item: 'ink_bottle',
     },
@@ -8974,7 +8974,7 @@ const mire = {
         return {
           lines: [
             'I find a towel. I dry the corner of the room near the door.',
-            'The carpet is fabric again, briefly. She watches me write.',
+            'The carpet is fabric again, briefly. She watches me work.',
           ],
           scales: { pond: -2, recognition: +1, approach: -1 },
         };
@@ -9030,7 +9030,7 @@ const mire = {
           desc: 'Honest.',
           lines: [
             "I say: I don't know him.",
-            'She does not answer for a long time. Then she says: ~~No one does anymore.~~',
+            'She does not answer. Then, to the wall: ~~No one does anymore.~~',
           ],
           scales: { release: +3, pond: +1 },
           composure: -1,
@@ -9052,7 +9052,7 @@ const mire = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: I do not remember anyone. I came in without anyone with me.',
-            'She faces the wall again. ~~She is not angry.~~ She is not angry.',
+            'She faces the wall again. ~~She is angry.~~ She is not angry.',
             'She says: ~~no one does anymore.~~',
           ],
           scales: { release: +2, recognition: +1, pond: +1 },
@@ -9074,7 +9074,7 @@ const mire = {
           when: (_, player) => player.wound === 'split_personality',
           lines: [
             'I say: one of me does. The one still at the house.',
-            'She is quiet for a long time. Then she turns. ~~For the first time tonight.~~',
+            'She is quiet. Then she turns. ~~For the first time tonight.~~',
             'She says: ~~then you can tell me where he is.~~',
           ],
           scales: { release: +1, approach: +2, recognition: +1, pond: +1 },
@@ -9098,7 +9098,7 @@ const mire = {
           desc: 'Commit to standing between her and it.',
           lines: [
             'I say: yes.',
-            'She lets out a long breath. She sits down on the wet floor. ~~Thank god.~~ Thank god, she says.',
+            'She lets out a long breath. She sits down on the wet floor. Thank god, she says.',
           ],
           scales: { approach: -5, recognition: +3, release: +1 },
           composure: -1,
@@ -9206,7 +9206,7 @@ const mire = {
           desc: 'Do not require the story.',
           lines: [
             "I say: it doesn't matter what you meant.",
-            'She looks at me a long time. She does not agree. But she does not turn back to the wall.',
+            'She looks at me. She does not agree. But she does not turn back to the wall.',
           ],
           scales: { recognition: +2, release: -1, pond: +1 },
         },
@@ -9231,7 +9231,7 @@ const mire = {
       ],
       scales: { pond: +1, approach: +1 },
       composure: -1,
-      composureCost: 'My shoes are taking on water. ~~A child could fit in the room.~~',
+      composureCost: 'My shoes are taking on water. ~~The pond was about this size.~~',
     };
   },
 
@@ -9735,7 +9735,7 @@ const composer = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: I do not remember what the right one is. I am sorry.',
-            'She lifts her hand off the keys. ~~Slowly.~~ Slowly.',
+            'She lifts her hand off the keys. Slowly.',
             'She says: ~~that is the kindest answer I have been given.~~',
           ],
           scales: { completion: +2, chord: -1, silence: +2 },
@@ -9818,7 +9818,7 @@ const composer = {
         ],
         scales: { chord: -7, completion: -7, tension: +3 },
         composure: -2,
-        composureCost: 'One of the notes is wrong. It is the one I added.',
+        composureCost: 'The chord landed without me. I heard where I would have been.',
         flags: { finished_alone: true },
       };
     }
@@ -9835,7 +9835,7 @@ const composer = {
       title: 'You finish the chord with her',
       lines: [
         'She has eased back from the keys. I am still pressing the chord. She leans against my shoulder.',
-        'We do not say anything. ~~For a long time.~~ For a long time.',
+        'We do not say anything for a long time.',
       ],
       item: 'scrap_of_paper',
     },
