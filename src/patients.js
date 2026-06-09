@@ -13473,7 +13473,7 @@ const sculpture = {
     { at: 5,  announce: 'A line fills in. Containment breaches average 4.2 seconds. Subject\'s blink rate is logged at 16 per minute.' },
     { at: 10, announce: 'Another. Item has been observed to make sounds while no one is in the room. ~~Scraping. Wet noises.~~' },
     { at: 16, announce: 'Another. The bolt on this door is on the corridor wall. ~~There is no override on the inside.~~' },
-    { at: 24, announce: 'Another. Item has not been moved from this cell since [[1973]]. ~~The cell was built around it.~~' },
+    { at: 24, announce: 'Another. Item has not been moved from this cell since [[4]]. ~~The cell was built around it.~~' },
     { at: 32, announce: 'Another. The strip light flickers on a schedule. ~~The schedule is the item\'s.~~' },
     { at: 42, announce: '!!The last line. Two researchers in this room have not been recovered.!!' },
   ],
@@ -14377,7 +14377,7 @@ const plague = {
   role: 'wing', tier: 2,
   file: [
     'Subject reports a Visitor in the dress of a 17th-century plague physician.',
-    'Visitor carries a leather case. ~~Brass implements within.~~ Implements within.',
+    'Visitor carries a leather case. ~~Lancets within.~~ Implements within.',
     'Visitor speaks chiefly in Latin. ~~Subject does not have Latin. The Visitor is being understood anyway.~~',
     'Visitor has identified Subject as a carrier of the Pestilence. !!He intends to administer.!!',
     'The room smells of camphor and vinegar of the four thieves. The window has been closed.',
@@ -14469,7 +14469,7 @@ const plague = {
     { at: 5,  announce: 'A line fills in. Visitor has been on the ward for [[3]] days. ~~He has attended four others.~~' },
     { at: 10, announce: 'Another. The implements in his case are not period. ~~They are sharpened to a modern edge.~~' },
     { at: 16, announce: 'Another. The Latin he is speaking is a funeral office. Specifically, the office for one who has died of plague.' },
-    { at: 24, announce: 'Another. His credentials are signed by a board that was disbanded in [[1721]].' },
+    { at: 24, announce: 'Another. His credentials are signed by a board that was disbanded in [[4]].' },
     { at: 32, announce: 'Another. The four others he attended are in the basement morgue. ~~They are not noted in the day log.~~' },
     { at: 42, announce: '!!The last line. He has been struck from the medical register on the same date his credentials were signed.!!' },
   ],
@@ -14554,7 +14554,7 @@ const plague = {
             lines: [
               'I name a third. My eyes are not yellow. My tongue is not coated. My lymph is not swollen at the throat or under the arm.',
               'He has been listening. The bird-beak has been still for some seconds.',
-              'He turns to the case. He reads. He does not turn back to me for a long beat.',
+              'He turns to the case. He reads. He does not turn back to me.',
             ],
             scales: { doubt: +5, cure: -2 },
             composure: -1,
@@ -14570,7 +14570,7 @@ const plague = {
             ],
             scales: { doubt: +4, cure: -1 },
             composure: -1,
-            composureCost: 'He listened. That has its own cost.',
+            composureCost: 'The beak nodded, once.',
           };
         }
         return {
@@ -14642,7 +14642,7 @@ const plague = {
           lines: [
             'I say: what is your given name.',
             'He inclines the beak. He says: ~~it has been many years. I am called Medicus. I have not had a given name for some time.~~',
-            'He says it the way someone says a thing they have made peace with.',
+            'He does not try to remember it.',
           ],
           scales: { doubt: +3, cure: -1 },
           composure: -1,
@@ -14804,7 +14804,7 @@ const plague = {
         return {
           lines: [
             'I say a date. I do not know how I know it. It is the date his license was struck.',
-            'He goes very still. He says, after some seconds: ~~that is correct.~~',
+            'The gloves stop moving. He says, after some seconds: ~~that is correct.~~',
             'He sets the beak on the writing chair. He sets the lance back into the case. He folds his hands.',
           ],
           scales: { doubt: +7, cure: -6, proximity: +2 },
@@ -14825,7 +14825,7 @@ const plague = {
             lines: [
               'I swing my arm across the table. The case clatters onto the floor.',
               'Brass implements scatter. One of them — the lance — rolls under the bed. He does not bend for them.',
-              'He looks at the open case for a long beat. He says, quietly: ~~that was unnecessary, miser.~~ He has not stepped forward.',
+              'He looks at the case on the floor. He says, quietly: ~~that was unnecessary, miser.~~ He has not stepped forward.',
             ],
             scales: { cure: -7, doubt: +4, proximity: +2 },
             composure: -2,
@@ -14874,7 +14874,7 @@ const plague = {
           lines: [
             'I take the card from my coat. I hold it up so the beak can read it.',
             'He looks at the card. He says: ~~the number is yours. But you have been listed as a carrier on the day log.~~',
-            '~~He has access to the day log.~~ He has access to the day log.',
+            '~~He wrote the day log.~~ He has access to the day log.',
           ],
           scales: { doubt: +2, cure: +1 },
           composure: -1,
@@ -15134,7 +15134,7 @@ const plague = {
           lines: [
             'I say: the four others. Their letters. Where did they go.',
             'He says: ~~into the case, miser. With the vials. The Board collects them.~~',
-            'He does not see what is wrong with the sentence.',
+            'The letters have never left the case.',
           ],
           scales: { doubt: +5 },
           composure: -2,
@@ -15226,7 +15226,7 @@ const plague = {
           desc: 'Out loud.',
           lines: [
             'I say: the assistant. The one in the mirror.',
-            'He goes very still. He says: ~~there is no assistant on this ward, miser. The Board has not authorized one.~~',
+            'He does not look at the mirror. He says: ~~there is no assistant on this ward, miser. The Board has not authorized one.~~',
             'He says it the way someone answers a question they have been waiting to be asked.',
           ],
           scales: { doubt: +4, cure: -1 },
@@ -15403,7 +15403,7 @@ const weight = {
   subtitle: 'You are awake. You cannot move. She is on your chest.',
   role: 'wing', tier: 2,
   file: [
-    'Subject is in bed. Time [[02:14]]. Subject is asleep. ~~Subject is unable to indicate distress.~~ Subject is awake.',
+    'Subject is in bed. Time [[5]]. Subject is asleep. ~~Subject is unable to indicate distress.~~ Subject is awake.',
     'Night nurse has passed the door twice. !!The door has not been opened.!!',
     'The mattress is wet under Subject. The mattress was dry at admission.',
     'Subject\'s eyes are open. Subject\'s pupils are responsive. Subject is not responding to verbal address.',
@@ -15517,7 +15517,7 @@ const weight = {
     else if (w >= 12)her = '!!Her face is close to mine. Her hair is on my cheek. Her hands are pressing down through my collarbones. Her weight is enormous.!!';
     else if (w >= 8) her = 'Her hands are at my collarbones. Her hair is on the pillow on either side of my face. Her face is above mine.';
     else if (w >= 4) her = 'She is on my chest. She is small. She is heavier than she should be. Her hands are flat on my collarbones.';
-    else             her = '~~She has lifted.~~ She has lifted off my chest. Mostly. Her hand is still on my left collarbone.';
+    else             her = '~~She is gone.~~ She has lifted off my chest. Mostly. Her hand is still on my left collarbone.';
 
     let me;
     if (m >= 16)     me = '!!My side has rolled. My foot has the floor. My hand has the rail of the bed.!!';
@@ -15619,7 +15619,7 @@ const weight = {
         return {
           lines: [
             'I close one eye. Just the right. I count to ten under it.',
-            'I open it. The room is the same. The weight is the same. Some part of me is calmer for the count.',
+            'I open it. The room is the same. The weight is the same. The count reached ten.',
           ],
           composure: +1,
           scales: { movement: +1 },
@@ -15928,7 +15928,7 @@ const weight = {
       respond(p) {
         return {
           lines: [
-            'I let the corner of my eye release the thing it had been holding. A tear falls. Sideways. Into my hairline.',
+            'I stop holding it back. A tear falls. Sideways. Into my hairline.',
             'She has lifted her face a degree. She is watching where the tear went.',
           ],
           scales: { movement: +1, pressure: +1 },
@@ -16057,7 +16057,7 @@ const weight = {
           lines: [
             'I get the heel down. The bedframe rings against the wall.',
             'The door opens. The corridor light is on me.',
-            'The nurse has the file in one hand and the wrist of the other in her teeth.',
+            'The nurse has the file in one hand. Her other hand is at her mouth.',
           ],
           scales: { pressure: -4, movement: +3 },
           flags: { framed_kicked: true },
@@ -16363,7 +16363,7 @@ const weight = {
       lines: [
         'The bedframe rings against the wall. The nurse comes in fast.',
         'She lifts the sheet. The weight is gone. My ankle is bruised where it caught the rail.',
-        'She holds my wrist for a long time. Her own pulse is not steady either.',
+        'She does not let go of my wrist. Her own pulse is not steady either.',
       ],
       item: 'sliver_of_glass',
     },
