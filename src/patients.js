@@ -8094,7 +8094,7 @@ const hollow = {
   subtitle: 'She has been given several daughters.',
   role: 'wing', tier: 2,
   file: [
-    'Subject was admitted with [[6]] some years prior. Subject continues to ~~claim the orderlies~~ recognize the daughter.',
+    'Subject was admitted [[6]] years prior. Subject continues to ~~claim the orderlies~~ recognize the daughter.',
     "Volunteers placed in Subject's room have been ~~reassigned~~ withdrawn from the program. **They do not come out the same.**",
     "When asked her own name, Subject gives the orderly's. !!The orderly does not contradict her.!!",
   ],
