@@ -1,47 +1,48 @@
 // Title-screen openers. One is picked at random each time the title is
 // rendered. Each entry is the three paragraphs of the main prose block;
 // the dim corridor line below it is fixed and lives in screens.js.
+// Prose register: see docs/VOICE.md.
 
 export const TITLE_OPENERS = [
   // The Letter
   [
-    "I am at the address on the letter. The one that came in the mail, addressed in ~~my own~~ a stranger's handwriting.",
-    "I walk through the front door. A desk. A nurse greets me. !!Hello again!!, she says. !!I've been expecting you.!!",
-    "The walls are dark and tall. A long way down the corridor, someone is ~~screaming~~ singing. This is not a [[10]].",
+    "I am at the address from the letter. No stamp, no postmark — it was simply in the box one morning, addressed in ~~my own~~ a stranger's handwriting. The paper smelled faintly of carbolic soap.",
+    "Inside the front door: a desk. A nurse looks up as if I am on time. !!Hello again,!! she says. !!I've been expecting you.!!",
+    "The walls are dark and taller than walls need to be. A long way down the corridor, someone is ~~screaming~~ singing. This is not a [[10]].",
   ],
 
   // The Bus
   [
-    "The bus I take every day is empty when I board. The driver does not look at me. The doors open at the stop ~~I have been dreading~~ I do not know.",
-    "A nurse is waiting on the curb. !!Welcome,!! she says. !!We were beginning to wonder.!!",
-    "The lobby behind her is dim. A long corridor leads past the desk. This is not a [[4]] I have ever seen.",
+    "The bus I take every day is empty when I board. The driver does not look at me, and I cannot find the moment the streets stop being the ones I know. The doors open at a stop ~~I have been dreading~~ that is not on the route.",
+    "A nurse is waiting on the curb, hands folded, the way people wait for the expected. !!Welcome,!! she says. !!We were beginning to wonder.!!",
+    "Behind her, a lobby. A desk. A corridor going down past the reach of its own lights. This is not a [[4]] I have ever seen.",
   ],
 
   // The Phone Call
   [
-    "My phone rings. I answer. The voice on the other end is ~~my own~~ a stranger's. It tells me an address.",
-    "I drive to it. A building. I walk inside. A desk. A nurse looks up. !!Welcome,!! she says. !!We've been trying to reach you.!!",
-    "The walls of the lobby are dark and tall. The corridor behind the desk has no end I can see. Someone in it is ~~screaming~~ counting. This is not the [[7]] the voice gave me.",
+    "My phone rings. The voice on the other end is ~~my own~~ a stranger's, and it reads me an address the way you read to a child — slowly, and twice.",
+    "I drive there. A building with no sign on it. A desk, a nurse, my file already open. !!Welcome,!! she says. !!We've been trying to reach you.!!",
+    "The lobby walls go up into the dark, and the corridor goes back farther than the building does. This is not the [[7]] the voice gave me.",
   ],
 
   // The Mirror
   [
-    "I look in the mirror over my sink. The face in the glass is ~~not mine~~ unfamiliar. I turn from the sink.",
-    "A desk. A nurse looks up from my file. !!Welcome back,!! she says. !!The doctor is ready for you.!!",
-    "The mirror is on the wall behind me. The corridor stretches in front. This is not the [[8]] I came into.",
+    "I look into the mirror over my sink, and the face in the glass is ~~not mine~~ unfamiliar — by a margin too small to swear to. I turn away from it.",
+    "Behind me is a desk. A nurse looks up from my file. !!Welcome back,!! she says. !!The doctor is ready for you.!!",
+    "The mirror is still on the wall, hanging over a sink that is no longer there. The corridor runs out ahead of me. This is not the [[8]] I was standing in.",
   ],
 
   // The Cemetery
   [
-    "I walk through the cemetery at night. I read the inscriptions on the stones. The name on one is ~~mine~~ familiar.",
-    "I look up. The cemetery is gone. A desk. A nurse looks up from my file. !!Welcome,!! she says. !!Your visit is overdue.!!",
-    "The corridor stretches in both directions. The night sky is gone. This is not the [[5]] I came to visit.",
+    "I walk the cemetery at night, reading the stones the way I read everything — to make sure it stays written. The name on one of them is ~~mine~~ familiar.",
+    "I look up from it, and the night is a ceiling. A desk. A nurse looks up from my file. !!Welcome,!! she says. !!Your visit is overdue.!!",
+    "The corridor runs in both directions, farther than the grounds could hold. The grass underfoot is terrazzo now. This is not the [[5]] I came to visit.",
   ],
 
   // The Light Switch
   [
-    "I turn off the lights in my bedroom. I turn them back on a moment later. The room I am in is ~~where I always end up~~ not my bedroom. It is a long corridor.",
-    "A desk at the far end. A nurse looks up. !!Hello again,!! she says. !!Your room is ready.!!",
-    "The fluorescents overhead hum. The walls are tall and dim. I do not see a [[6]] on any wall.",
+    "I turn off my bedroom light. I turn it back on a moment later, because the dark had a draft in it. The room the light comes back to is ~~where I always end up~~ not my bedroom. It is a long corridor.",
+    "At the far end, a desk. A nurse looks up. !!Hello again,!! she says. !!Your room is ready.!!",
+    "The fluorescents hum overhead, one of them failing somewhere I cannot see. There is no [[6]] on any of these walls.",
   ],
 ];

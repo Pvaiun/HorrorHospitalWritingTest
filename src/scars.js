@@ -21,7 +21,7 @@ export const SCARS = {
   witnessed: {
     id: 'witnessed',
     name: 'Witnessed',
-    file: 'I saw it. I have not put down what I saw. !!It is in my chest.!!',
+    file: 'I saw it. What is seen is kept. !!It is in my chest now.!!',
     desc: 'Maximum composure −1.',
     composureCap: 4,
   },
@@ -41,7 +41,7 @@ export const SCARS = {
   failed: {
     id: 'failed',
     name: 'Failed',
-    file: 'The hour ran out. They ran out with me. !!I could not finish.!!',
+    file: 'The hour ran out while I was still inside it. !!I could not finish what I was let in to do.!!',
     desc: 'Starting composure −1 each room. Waiting bites harder.',
     startComposureDelta: -1,
     driftBite: 1,
@@ -56,7 +56,7 @@ export const SCARS = {
   wearing: {
     id: 'wearing',
     name: 'Wearing',
-    file: 'The corridor is on me. The wallpaper smell. The fluorescent. ~~The rest.~~',
+    file: 'The corridor is on me. The carbolic, the burnt dust, the hum. ~~The rest.~~ It does not wash out.',
     desc: 'Starting composure −1 each room.',
     startComposureDelta: -1,
   },

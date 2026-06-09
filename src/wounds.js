@@ -9,7 +9,7 @@ export const WOUNDS = {
     name: 'Amnesia',
     one_liner: 'I do not remember the address. I am here anyway.',
     file: [
-      'Subject was admitted unaccompanied. No identification on file.',
+      'Subject arrived unaccompanied, by no recorded transport. No identification on file.',
       'Vitals nominal. Responds to questions. !!Cannot give an address.!!',
       'Settled into the assigned room without resistance. ~~Subject knew the way.~~',
     ],

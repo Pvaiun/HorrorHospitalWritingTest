@@ -47,7 +47,7 @@ export function renderTitle() {
   app().appendChild(el('div', { class: 'doc-version' }, `v${VERSION}`));
   const page = docPage('// Admission · The door · open');
   page.appendChild(prose(pick(TITLE_OPENERS).join('\n\n')));
-  page.appendChild(prose('I glance at the corridor behind the desk. I cannot see anything beyond the darkness.', true));
+  page.appendChild(prose('Behind the desk, the corridor runs out past its last working light. Nothing beyond it moves. ~~Nothing beyond it.~~', true));
 
   const save = state.save || { runs: 0, finishes: 0, archive: [] };
   const meta = el('div', { class: 'doc-archive-summary' });
@@ -84,9 +84,9 @@ export function renderAdmission() {
   app().appendChild(el('div', { class: 'doc-version' }, `v${VERSION}`));
   const page = docPage('// Admission · Patient 0413 · day one');
   page.appendChild(prose([
-    'The nurse opens my file. She pushes it across to me.',
-    'The first line is for me to ~~confirm~~ sign. She says: !!Just say what is wrong.!!',
-    'The boxes are already checked. ~~I do not remember which I came in for.~~ I do not remember any of them being true.',
+    'The nurse opens my file and turns it to face me, the way you turn a plate toward a guest.',
+    'The first line waits for me to ~~confirm~~ sign. She says: !!Just say what is wrong.!!',
+    'The boxes are already checked, in ink that has had time to dry. ~~I do not remember which one I came in for.~~ I do not remember any of them being true.',
   ].join('\n\n')));
 
   const available = (state.save?.unlocked.wounds || []).filter(id => WOUNDS[id]);
@@ -101,7 +101,7 @@ export function renderAdmission() {
 
   // starting item — the nurse asks what I have in my pocket.
   page.appendChild(prose([
-    'She asks: !!What do you have in your pocket?!! I empty it onto the desk.',
+    'She asks: !!What is in your pocket?!! I empty it onto the desk, and the desk receives it like a collection coming home.',
     '~~I do not remember packing this.~~ I do not remember putting any of it in.',
   ].join('\n\n')));
   page.appendChild(sectionLabel('what I brought'));
@@ -234,7 +234,7 @@ function corridorIntro(run, n) {
   }
   if (n.kind === 'patient') {
     const def = PATIENTS[n.id];
-    return `A room. The door is ajar. The file on the desk reads ${def ? def.name : '[]'}. ~~The room is contained.~~ The room is occupied.`;
+    return `A door stands ajar, at the angle doors are left for visitors. The file in its holder reads ${def ? def.name : '[]'}. ~~The room is contained.~~ The room is occupied.`;
   }
   return 'I keep walking. ~~The hall does not end.~~ The hall does end.';
 }
@@ -437,7 +437,7 @@ export function renderArchive() {
   if (summary?.payload.outcome === 'finished') {
     page.appendChild(prose([
       'The door is open. The corridor behind me is closed.',
-      'I do not look back. ~~Someone is signing me out.~~ Someone at the desk is signing me out.',
+      'I do not look back. ~~I am signing myself out.~~ Someone at the desk is signing me out.',
       '!!The signature is not the one I came in with.!!',
     ].join('\n\n')));
   } else {

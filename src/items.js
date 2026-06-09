@@ -19,17 +19,17 @@ export const ITEMS = {
   photograph: {
     id: 'photograph',
     name: 'a photograph',
-    file: 'Creased twice. Two figures. ~~The smaller one~~ has been folded out of frame.',
+    file: 'Creased along two old folds. Two figures in front of a house I should know. The smaller one ~~is~~ has been folded out of the frame.',
     desc: 'Show it. For patients who need to be seen by someone.',
-    voice: 'A photograph. I do not remember keeping it.',
+    voice: 'A photograph. I do not remember keeping it. Keeping it is the kind of thing I would remember.',
     when: (p) => p.def.scales?.recognition !== undefined,
     respond(p) {
       const shifts = { recognition: +3 };
       if (p.def.scales?.grief !== undefined) shifts.grief = +1;
       return {
         lines: [
-          'I take it from my pocket. I hold it up to her.',
-          'She lifts it carefully. She does not give it back.',
+          'I take it out and hold it up, picture side first, the way you show a dog your empty hand.',
+          'She takes it by the edges, with both hands, like something that can still drown.',
           '~~She knows the smaller one.~~ She names the smaller one.',
         ],
         scales: shifts,
@@ -46,8 +46,8 @@ export const ITEMS = {
     respond() {
       return {
         lines: [
-          'I unwrap it. I set it on my tongue.',
-          'The room ~~stops humming~~ holds still for a moment.',
+          'I unwrap it and set it on my tongue, and for as long as it lasts I am a child being kept quiet in someone\'s kitchen.',
+          'The room ~~stops humming~~ holds its breath with me.',
         ],
         composure: +2,
       };
@@ -74,8 +74,8 @@ export const ITEMS = {
       if (s.tension !== undefined)   shifts.tension = -2;
       return {
         lines: [
-          'I unfold it. I offer it.',
-          'She takes it. She folds it once more. She puts it in her own pocket.',
+          'I shake out the fold and offer it, corner first.',
+          'She takes it, refolds it along its own creases, and puts it away in her pocket. It was never going to be used for tears.',
         ],
         scales: shifts,
         composure: -1,
@@ -102,9 +102,9 @@ export const ITEMS = {
       if (s.release !== undefined)    shifts.release = +2;
       return {
         lines: [
-          'I unfold it. I hold it up.',
-          'Her face changes. She does not reach for it.',
-          '!!She has not let herself look at one in a long time.!!',
+          'I unfold it along its soft creases and hold it up at her eye level.',
+          'Her face does the arithmetic of the two figures, the taller and the smaller. She does not reach for it.',
+          '!!She has not let herself look at one in years.!!',
         ],
         scales: shifts,
         composure: -1,
@@ -140,7 +140,7 @@ export const ITEMS = {
       return {
         lines: [
           'I take it from my pocket. I wind the stem.',
-          'The mechanism resumes. The room settles by a degree.',
+          'The mechanism resumes mid-thought. The room settles by one degree.',
           '~~Time has been put back.~~ Something has been put back. I do not know how long it holds.',
         ],
         scales: shifts,
@@ -160,7 +160,7 @@ export const ITEMS = {
       if (p.def.scales?.recognition !== undefined) shifts.recognition = +2;
       return {
         lines: [
-          'I take it out. I read my number off it. !!Patient 0413.!!',
+          'I take it out and read my number off it, two digits at a time, like checking a ticket against a board. !!Patient 0413.!!',
           'I am here. I am the one who came in.',
         ],
         composure: +2,
@@ -172,7 +172,7 @@ export const ITEMS = {
   worn_ribbon: {
     id: 'worn_ribbon',
     name: 'a worn ribbon',
-    file: 'Red. Tied and untied many times. ~~Once~~ The shape of what it was tied around is still in it.',
+    file: 'Red. Tied and untied so many times it ties itself. The shape of what it was tied around is still in it.',
     desc: 'Give it. Soft memory. For tender patients.',
     voice: 'A ribbon. ~~A child~~ Someone wore it.',
     when: (p) => {
@@ -189,8 +189,8 @@ export const ITEMS = {
       if (s.trust !== undefined)       shifts.trust = +2;
       return {
         lines: [
-          'I take it out. She sees it before I have lifted it all the way.',
-          'She lets me lay it across her knee. She does not speak.',
+          'I take it out. She sees it before it has cleared my pocket.',
+          'She lets me lay it across her knee, where it makes the shape it knows. She does not speak.',
         ],
         scales: shifts,
       };
@@ -209,8 +209,8 @@ export const ITEMS = {
       if (roll < 0.5 && p.def.scales?.recognition !== undefined) {
         return {
           lines: [
-            'I read the name. It is one I had not been carrying on purpose.',
-            'She looks up. She half-knows it.',
+            'I read the name out. It has been riding in my pocket without my once deciding to carry it.',
+            'She looks up. She knows it the way you know a smell.',
           ],
           scales: { recognition: +3 },
         };
@@ -222,7 +222,7 @@ export const ITEMS = {
             'I put the scrap back. ~~It was not a name.~~ It may not have been a name.',
           ],
           composure: -1,
-          composureCost: 'The name was for someone else. ~~Someone I.~~ I do not remember.',
+          composureCost: 'The name belonged to someone. ~~Someone I knew.~~ I do not remember.',
         };
       }
       // rare — bad
@@ -252,7 +252,7 @@ export const ITEMS = {
       }
       return {
         lines: [
-          'I take it out. I set it on the floor between us.',
+          'I set it on the floor between us, heads up. If that is a head.',
           'The room settles. ~~I have been paid for.~~ Something has been paid for.',
         ],
         scales: shifts,
@@ -330,7 +330,7 @@ export const ITEMS = {
     name: 'a small bell',
     file: 'Brass. One note. ~~The note is somewhere in the building already.~~',
     desc: 'Ring it once. Wakes patients who have gone elsewhere.',
-    voice: 'A bell. ~~The sound is the same as the corridor.~~',
+    voice: 'A bell. The corridor hums a quarter-tone under its note. ~~It was tuned here.~~',
     respond(p) {
       const shifts = {};
       if (p.def.scales?.sight !== undefined)       shifts.sight = +3;

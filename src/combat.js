@@ -219,7 +219,7 @@ async function runPlayerVerb(verbId) {
       ? pat.def.leave.respond(pat, p)
       : (typeof pat.def.onLeave === 'function')
         ? pat.def.onLeave(pat, p)
-        : { lines: ['I walk out. I leave the door open behind me.', 'I am farther from her than I came.'], composure: -2, composureCost: '~~I locked it behind me.~~ I closed the door behind me.', scars: ['abandoned'] };
+        : { lines: ['I walk out. I leave the door open behind me.', 'The corridor takes me back the way a tide takes things that have stopped swimming.'], composure: -2, composureCost: '~~I did not look back.~~ I looked back once.', scars: ['abandoned'] };
     await applyResponse(resp);
   } else if (typeof verbId === 'string' && verbId.startsWith('item:')) {
     const itemId = verbId.slice(5);
@@ -609,7 +609,7 @@ function callDrift(pat, player) {
   const bite = scarsDriftBite(player);
   if (bite > 0 && typeof resp.composure === 'number' && resp.composure < 0) {
     resp = { ...resp, composure: resp.composure - bite,
-             composureCost: resp.composureCost || 'The room is heavier than it should be. ~~Something has been wearing.~~' };
+             composureCost: resp.composureCost || 'Waiting is not free here. ~~The room keeps a meter.~~ I have never seen the meter.' };
   }
   return resp;
 }
