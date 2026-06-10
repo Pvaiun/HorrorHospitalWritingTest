@@ -5055,69 +5055,69 @@ const patriarch = {
   role: 'wing', tier: 1,
   file: [
     'Subject was the head of his household for forty years. He ~~beat his daughters~~ enforced expectations physically.',
-    'His daughter [[7]] died on [[8]]. !!Her death was ruled a suicide.!!',
-    'Subject continues to hold court. Family ~~refuse to visit~~ are unable to visit.',
+    'His daughter [[7]] was found on [[8]] with ~~his belt~~ an article of his property. !!The ruling was suicide. He has appealed it nightly since.!!',
+    'Subject continues to convene the household at six. Attendance: ~~none, in nine years~~ recorded as pending. The minutes are taken regardless.',
   ],
   intro: [
-    'He is in the chair, presiding. He looks up as I come in. He is evaluating me.',
-    'He does not speak. He is waiting for me to address him by his title.',
+    'The chair is set square to the door, the way a bench faces a dock. He does not rise. Rising is for the ones who enter.',
+    'He reads me the way you read a summons — once for the name, once for the offense. The proceedings are waiting on my title.',
   ],
 
   scales: {
     presence: {
       initial: 8, min: 0, max: 10, label: 'presence', kind: 'negative',
       bands: [
-        { at: 0, word: 'broken' },
-        { at: 3, word: 'shaken' },
+        { at: 0, word: 'vacated' },
+        { at: 3, word: 'subsiding' },
         { at: 5, word: 'presiding' },
-        { at: 7, word: 'commanding' },
-        { at: 9, word: 'absolute' },
+        { at: 7, word: 'in session' },
+        { at: 9, word: 'load-bearing' },
       ],
       crossUp: {
-        3: 'He settles the room. I am a guest here.',
-        4: 'The room has its master back. It is not me.',
+        3: 'The room comes back to order. I am in it on sufferance.',
+        4: 'The house has its load-bearing wall back. Everything leans on him again, including me.',
       },
       crossDown: {
-        2: 'His authority has cracked.',
-        1: 'He is smaller than he was a minute ago.',
-        0: 'He is just a man in a chair.',
+        2: 'A crack has gone up him, hairline, the kind surveyors photograph.',
+        1: 'He has settled, the way buildings settle. The chair holds more of him than it did.',
+        0: 'The bench is just a chair. He is just the man in it.',
       },
     },
     grief: {
       initial: 0, min: 0, max: 10, label: 'grief', kind: 'positive',
       bands: [
-        { at: 0, word: 'composed' },
-        { at: 2, word: 'unsteady' },
-        { at: 5, word: 'stirring' },
-        { at: 7, word: 'rising' },
-        { at: 9, word: 'breaking' },
+        { at: 0, word: 'within tolerance' },
+        { at: 2, word: 'a hairline' },
+        { at: 5, word: 'taking load' },
+        { at: 7, word: 'past load' },
+        { at: 9, word: 'coming down' },
       ],
       crossUp: {
-        2: 'His shoulders have begun to shake.',
-        3: 'His mouth has lost its line.',
-        4: '!!He is weeping without sound.!!',
+        2: 'A sound starts in him, low, the sound walls make at night when the house cools.',
+        3: 'His mouth has lost its plumb.',
+        4: '!!Water is coming through. He sits under it as if it were happening to the ceiling.!!',
       },
       crossDown: {
-        1: 'He has folded it away.',
-        0: 'He is composed again. Nothing is the matter.',
+        1: 'He has shored it. The crack is still there. It is painted now.',
+        0: 'Inspection over. The structure is declared sound, by the structure.',
       },
     },
     rage: {
       initial: 1, min: 0, max: 10, label: 'rage', kind: 'negative',
       bands: [
-        { at: 0, word: 'still' },
-        { at: 2, word: 'impatient' },
-        { at: 5, word: 'sharpening' },
-        { at: 7, word: 'dangerous' },
+        { at: 0, word: 'in recess' },
+        { at: 2, word: 'objecting' },
+        { at: 5, word: 'finding contempt' },
+        { at: 7, word: 'passing sentence' },
         { at: 9, word: 'about to stand' },
       ],
       crossUp: {
-        2: 'His patience has thinned.',
-        3: 'His hand has gone to the arm of the chair.',
-        4: '!!He is leaning forward. He has not finished with me.!!',
+        2: 'He has begun to note my conduct. Out loud. In the third person.',
+        3: 'His hand has found the arm of the chair, where a gavel would live.',
+        4: '!!He is leaning forward over the whole room. The proceedings are no longer civil.!!',
       },
       crossDown: {
-        1: 'His shoulders have softened.',
+        1: 'The objection is withdrawn. His hand returns to his knee.',
       },
     },
   },
@@ -5129,9 +5129,9 @@ const patriarch = {
   },
 
   fileReveals: [
-    { announce: 'A line fills in. Subject struck a staff member who ~~mentioned his daughter~~ contradicted him.' },
-    { announce: 'Another. His daughter used ~~his belt~~ a length of fabric. !!It is on permanent file.!!' },
-    { announce: 'The last line. Subject ~~refuses to remember~~ cannot retain the fact of her death.' },
+    { announce: 'A line fills in. On [[5]] Subject struck an orderly who ~~said her name~~ spoke out of turn. The orderly is recorded as **clumsy**.' },
+    { announce: 'Another. The instrument was ~~his belt, the one he is wearing~~ a household article. !!It was returned to him with his effects.!!' },
+    { announce: 'The last line. Subject has been informed of her death. The minutes show ~~he struck the informant~~ the matter was tabled. It is tabled nightly.' },
   ],
 
   presented(p) {
@@ -5140,22 +5140,22 @@ const patriarch = {
     const ra = p.scales.rage;
 
     let stance;
-    if (pr >= 8)      stance = 'He sits as though the room is his to dismiss. His weight settles everything.';
-    else if (pr >= 5) stance = 'He sits forward, less easy. He is still the one being listened to.';
-    else if (pr >= 2) stance = 'He sits smaller. His title has thinned. He is still in the chair.';
-    else              stance = 'He is small in the chair. He has nothing left to preside over.';
+    if (pr >= 8)      stance = 'He sits the way a courthouse sits on a town square. The room is in session because he is in it.';
+    else if (pr >= 5) stance = 'He sits forward, hearing the room out. Whatever it says, he will rule on it.';
+    else if (pr >= 2) stance = 'The chair is a size too big for him now. He fills it the way a flag fills a courtroom. By arrangement.';
+    else              stance = 'He sits in the chair the way furniture sits in a vacated house. Nothing is in session.';
 
     let mood;
-    if (ra >= 7)      mood = '!!His hands are gripping the arms of the chair.!!';
-    else if (ra >= 4) mood = 'His knuckles have whitened.';
-    else if (ra >= 2) mood = 'His mouth has set into a line.';
-    else              mood = 'He is composed.';
+    if (ra >= 7)      mood = '!!Both hands are on the arms of the chair, and the chair has become the thing a man rises from.!!';
+    else if (ra >= 4) mood = 'His hand opens and closes on the chair arm, at the pace of a man counting offenses.';
+    else if (ra >= 2) mood = 'His mouth has been ruled straight, like a line in a ledger.';
+    else              mood = 'He is in order. Every part of him has been entered correctly.';
 
     let inner;
-    if (g >= 7)      inner = 'His face has fallen. He is not hiding it anymore.';
-    else if (g >= 4) inner = 'His breathing has gone shallow.';
-    else if (g >= 1) inner = 'Something is moving behind his eyes.';
-    else             inner = 'Nothing in him is moving.';
+    if (g >= 7)      inner = 'The front of him has failed. He is still upright the way condemned buildings are upright.';
+    else if (g >= 4) inner = 'Under his breathing there is a second sound, low, like joists taking weight.';
+    else if (g >= 1) inner = 'Behind his eyes a load has shifted. The face does not report it.';
+    else             inner = 'Nothing in him moves that has not been approved.';
 
     return `${stance} ${mood} ${inner}`;
   },
@@ -5170,16 +5170,16 @@ const patriarch = {
         if (reps >= 3) {
           return {
             lines: [
-              'I have been listening a long time. He is repeating himself.',
-              'He notices my attention has gone glassy. !!Are you still here?!! he asks.',
+              'I have heard this ruling before. He reads it again in full, with the same pauses. The minutes do not shorten for being repeated.',
+              'My attention slackens, and he marks it. !!The witness will attend,!! he says. I am the witness now. I was a guest a minute ago.',
             ],
             scales: { presence: -2, rage: +1 },
           };
         }
         return {
           lines: [
-            'I let him speak. He addresses his daughters by name. None of them are in the room.',
-            'He tells me about the proper order of a household. He is precise about it.',
+            'I let him proceed. He addresses his daughters in order of age. He leaves a pause after each name, the length of an apology.',
+            'He sets out the order of the household, article by article. It is sound. It is the soundness of a house no one lives in.',
           ],
           scales: { presence: -1, grief: +1 },
         };
@@ -5194,8 +5194,8 @@ const patriarch = {
         if (reps >= 1) {
           return {
             lines: [
-              'I kneel again. He looks down. !!Yes. That is correct.!!',
-              'His hand rests on the crown of my head. The room is mine to leave only when he allows.',
+              'I kneel a second time. He looks down at me a long moment. !!Yes,!! he says. !!Entered.!!',
+              'His hand comes to rest on the crown of my head, with the weight of a seal coming down on wax. The room is mine to leave when the session ends. No session here has ever ended.',
             ],
             scales: { presence: +1, rage: -2 },
             flags: { kneeled_twice: true },
@@ -5206,22 +5206,22 @@ const patriarch = {
         if (p.scales.presence >= 7) {
           return {
             lines: [
-              'I kneel beside the chair. I look up at him.',
-              '!!Good,!! he says. The room is the correct shape again.',
+              'I kneel at the side of the chair, where the kneeling is done. The floor there is worn paler than the rest.',
+              '!!Good,!! he says, and the word goes into the record. The room squares itself around him like a paragraph.',
             ],
             scales: { presence: +1, rage: -1 },
             composure: -1,
-            composureCost: 'I have placed myself below him.',
+            composureCost: 'My knees found the worn place without being shown. That is what the worn place is for.',
           };
         }
         return {
           lines: [
-            'I kneel. He does not seem to know why.',
-            'After a moment he reaches out and pats my shoulder. He calls me by a name. It is not mine.',
+            'I kneel, and the gesture arrives in a room that has stopped expecting it. He looks at me the way you look at mail for a previous tenant.',
+            'Then his hand finds my shoulder, and he says a name. Two syllables, worn smooth from saying. Not mine.',
           ],
           scales: { rage: -1, grief: +1 },
           composure: -1,
-          composureCost: 'The name is not mine. He is sure of it.',
+          composureCost: 'He said the name the way you test a beam. I held.',
         };
       },
     },
@@ -5233,8 +5233,8 @@ const patriarch = {
         if (p.scales.presence >= 7) {
           return {
             lines: [
-              'I say: yes. You are right.',
-              'He nods. !!Good. You understand.!! He resumes with renewed certainty.',
+              'I say: you are right. It goes into the minutes in his favor.',
+              'He nods once, the nod of a motion carried. !!Good. You understand the order of things.!! He proceeds with the full weight of a seconded man.',
             ],
             scales: { presence: +1, rage: -2 },
             composure: -1,
@@ -5243,8 +5243,8 @@ const patriarch = {
         }
         return {
           lines: [
-            'I say: yes. You are right.',
-            'He nods, less sure of what he was making. He continues. It does not quite hold together.',
+            'I say: you are right. The words go in, but the motion finds no floor.',
+            'He nods and continues, and the argument leans. I can hear it leaning, the way you hear a staircase under a stranger.',
           ],
           scales: { presence: -1, rage: -1, grief: +1 },
         };
@@ -5259,8 +5259,8 @@ const patriarch = {
         if (reps >= 2) {
           return {
             lines: [
-              'I interrupt him again. He has stopped speaking.',
-              '!!Do not interrupt me again,!! he says. !!I will not be told to be quiet in my own house.!!',
+              'I cut in a third time, and the silence that follows is not mine. He has gaveled the room with it.',
+              '!!You are out of order,!! he says. !!In my house there is no out of order. There is only out.!!',
             ],
             scales: { presence: -2, rage: +3 },
             composure: -2,
@@ -5270,18 +5270,18 @@ const patriarch = {
         if (p.scales.presence >= 7) {
           return {
             lines: [
-              'I cut into his sentence. He stops.',
-              'He looks at me. !!You will wait until I am finished.!!',
+              'I speak into the middle of his sentence. The sentence stops around me like a door held open by mistake.',
+              '!!The floor is not yours,!! he says. !!It will be yours when I yield it. I have never yielded it.!!',
             ],
             scales: { presence: -1, rage: +2 },
             composure: -1,
-            composureCost: 'I am a guest. I am only a guest.',
+            composureCost: 'My body filed for recess without me. I caught it checking the door.',
           };
         }
         return {
           lines: [
-            'I speak over him. He does not stop me, but his jaw sets.',
-            'He waits for me to finish. Then he resumes as if I had not spoken.',
+            'I speak over him. He lets me, the way a court lets a man exhaust himself for the record.',
+            'When I stop, he resumes from the exact word I interrupted. My remarks are not stricken. They were never entered.',
           ],
           scales: { presence: -1, rage: +1 },
         };
@@ -5297,20 +5297,20 @@ const patriarch = {
         if (reps >= 1) {
           return {
             lines: [
-              'I say his name again. He flinches.',
-              '!!No one calls me that,!! he says. !!Not in this house.!! But his voice is softer than the words.',
+              'I say it again. The name goes through him like damp through plaster, finding the old route.',
+              '!!No one calls me that,!! he says. !!Not under this roof.!! But the roof has heard it twice now, and roofs remember water.',
             ],
             scales: { presence: -2, grief: +2, rage: +1 },
           };
         }
         return {
           lines: [
-            'I say his given name. Quietly. The one his mother used.',
-            'He goes very still. He looks at me as if I have walked through a wall.',
+            'I say his given name. Two syllables with no office attached to them.',
+            'He goes still the way a house goes still between the lightning and the count.',
           ],
           scales: { presence: -2, grief: +2, rage: +1 },
           composure: -1,
-          composureCost: 'I have used a name that has not been used in this room.',
+          composureCost: 'The name has been said under this roof now. Load has been applied.',
         };
       },
     },
@@ -5322,10 +5322,10 @@ const patriarch = {
       respond(p) {
         return {
           lines: [
-            'I lay my hand over his where it rests on the arm of the chair. He is dry and very still.',
+            'I lay my hand over his on the arm of the chair. It is dry and cool, like a banister no one uses.',
             p.scales.grief >= 4
-              ? 'He turns his hand and grips my fingers. Hard. He does not let go for a long time.'
-              : 'He does not pull away. He studies my hand as if it had been left on his table.',
+              ? 'His hand turns under mine and closes, hard — the grip of a man holding the rail of a structure that has started to move.'
+              : 'He does not withdraw it. He examines my hand like an exhibit no one has entered, and rules nothing, and lets it lie.',
           ],
           scales: { grief: +2, rage: -2, presence: -1 },
         };
@@ -5340,8 +5340,8 @@ const patriarch = {
         if (p.scales.rage >= 6) {
           return {
             lines: [
-              'I say her name. The one on his file.',
-              '!!Get out,!! he says. !!Get out of my house.!!',
+              'I say her name. The one the file gives a width instead of letters.',
+              '!!Get out of my house,!! he says. !!That matter is closed. It was closed by ruling.!!',
               'He has begun to stand.',
             ],
             scales: { rage: +4, presence: -1, grief: +1 },
@@ -5352,24 +5352,24 @@ const patriarch = {
         if (p.scales.presence <= 4 && p.scales.rage <= 3) {
           return {
             lines: [
-              'I say her name. Quietly. The one on his file.',
-              'His face folds. He says it back to me. Once. Then again.',
-              'He sits with the name in the room with him. He has not let it in for years.',
+              'I say her name, quietly, the way you set a weight on a floor you do not trust.',
+              'It takes the load. Then his face goes — not all at once, the way a wall goes, a course at a time, from the bottom.',
+              'He says it back. Once, as a finding. Then again, as nothing of the kind.',
             ],
             scales: { grief: +4, presence: -2, rage: -1 },
             flags: { named_her: true },
             composure: -1,
-            composureCost: 'I have brought her into the room.',
+            composureCost: 'She is in the record now. I entered her.',
           };
         }
         return {
           lines: [
-            'I say her name. The one on his file.',
-            'He stops speaking. He looks at the door. !!Do not say that name in here.!!',
+            'I say her name into the middle of his order. It lands like a summons on a bench.',
+            'He stops. His eyes go to the door — checking it is shut, checking who heard. !!That name is not before this house,!! he says.',
           ],
           scales: { grief: +2, rage: +3 },
           composure: -1,
-          composureCost: 'I have said something he has spent years not saying.',
+          composureCost: 'He checked the door before he answered. The door, not me.',
         };
       },
     },
@@ -5381,14 +5381,14 @@ const patriarch = {
       respond() {
         return {
           lines: [
-            'I close his eyes with my palm. He does not resist.',
-            'A long-held breath leaves him. He says her name. Quietly. To himself.',
+            'I bring my palm down over his eyes. He lets me. No motion opposes.',
+            'The breath goes out of him the long way, the way a building lets go of the day\'s heat. Under it, her name. Once. Off the record.',
             '!!The room is a room again.!!',
           ],
           flags: { closed_eyes: true },
           scales: { presence: -4, rage: -3 },
           composure: -1,
-          composureCost: 'I have closed something that should have closed years ago.',
+          composureCost: 'I have adjourned a session that outlived its house.',
         };
       },
     },
@@ -5396,7 +5396,7 @@ const patriarch = {
 
   wait: {
     label: 'wait',
-    desc: 'Let him hold the room.',
+    desc: 'Let the session run.',
     when: (p) => p.scales.presence >= 7,
   },
 
@@ -5406,16 +5406,16 @@ const patriarch = {
       once: true,
       when: (p) => p.scales.presence >= 8 && p.turn >= 1,
       prose: [
-        'He looks at me directly for the first time. He has decided I have been rude.',
-        'He says: !!You will address me by my title before you speak again.!!',
+        'He looks at me directly for the first time, and I am found. There has been no charge. There does not need to be.',
+        'He says: !!You will address me by my title. It will be entered before anything else you say.!!',
       ],
       responses: [
         {
           label: 'use his title',
           desc: 'Submit to the expectation.',
           lines: [
-            'I say his title. He nods, satisfied.',
-            'He continues as though I had been here all along.',
+            'I give him the title. It goes down, and I go down with it, somewhere in the minutes.',
+            'He continues as though I had been present from the start. By his record, I have been.',
           ],
           scales: { presence: +2, rage: -2 },
           composure: -1,
@@ -5425,8 +5425,8 @@ const patriarch = {
           label: 'use his given name',
           desc: 'The intimate, threatening choice.',
           lines: [
-            'I say his given name instead. He freezes.',
-            '!!You will not,!! he says. !!You will not call me that in this house.!!',
+            'I give him his given name instead. The one with no house attached to it.',
+            '!!You will not,!! he says. !!~~She called me~~ You will not call me that in this house.!!',
           ],
           scales: { presence: -2, rage: +3, grief: +1 },
         },
@@ -5435,7 +5435,7 @@ const patriarch = {
           desc: 'Refuse the bargain.',
           lines: [
             'I do not speak.',
-            'He waits. He waits longer than is comfortable. He decides this means something.',
+            'He waits. The wait is itself a kind of sentence, and he lets me serve it standing. Then he rules on my silence and moves on.',
           ],
           scales: { presence: -1, rage: +2 },
         },
@@ -5447,27 +5447,27 @@ const patriarch = {
       once: true,
       when: (p) => p.scales.presence >= 6 && p.turn >= 3,
       prose: [
-        'He is telling me how he raised his daughters.',
-        'He says: !!A house only runs if the rules are kept. I was firm with them. It was for their good.!!',
+        'He has arrived at the question of how the household was kept. He reads it out like findings.',
+        'He says: !!A house stands by its rules. I applied them evenly. No one can say I was not even.!!',
       ],
       responses: [
         {
           label: 'agree',
           desc: 'Tell him he was right.',
           lines: [
-            'I say: yes. They needed structure.',
-            'He nods. !!That is correct.!! His shoulders settle.',
+            'I say: yes. A house needs its rules.',
+            'He nods once. !!So entered.!! His shoulders come down like a load finding its footing.',
           ],
           scales: { presence: +2, rage: -2 },
           composure: -2,
-          composureCost: 'I have said something I do not believe.',
+          composureCost: 'My signature is on a finding I do not hold.',
         },
         {
           label: 'ask if it worked',
           desc: 'Make him answer for himself.',
           lines: [
             'I ask: did it work?',
-            'He opens his mouth. He closes it. He says: !!They are good women.!! Then, quieter: ~~They were.~~',
+            'He says: !!They are good women.!! The room takes the minutes. ~~They are~~ They were. He does not correct it out loud. The page does.',
           ],
           scales: { presence: -2, grief: +2, rage: +1 },
         },
@@ -5476,11 +5476,11 @@ const patriarch = {
           desc: 'Bring her up.',
           lines: [
             'I ask: and the one who is not here?',
-            'His knuckles have gone white. !!You will not bring her up,!! he says. !!Not in this house.!!',
+            'His hand closes on the chair arm to the knuckle. !!Her matter is settled,!! he says. !!It was settled in this house, by this house. You will not reopen it.!!',
           ],
           scales: { presence: -2, grief: +2, rage: +3 },
           composure: -1,
-          composureCost: 'I have stepped close to the thing he does not name.',
+          composureCost: 'Settled. The word a floor uses, just before.',
         },
       ],
     },
@@ -5490,8 +5490,8 @@ const patriarch = {
       once: true,
       when: (p) => p.scales.grief >= 4 && p.scales.presence <= 6,
       prose: [
-        'He looks at the door. He looks at me as if he has only just noticed I am not one of his daughters.',
-        'He asks: ~~Where are they?~~',
+        'His eyes go to the door, then to me, and find me insufficient. I am in a seat that was issued to someone else.',
+        'He asks: ~~The session will come to order.~~ Where are they?',
       ],
       responses: [
         {
@@ -5499,8 +5499,8 @@ const patriarch = {
           desc: 'Gentle. Probably a lie.',
           lines: [
             "I say: they'll come.",
-            'He nods. He goes back to watching the door.',
-            'He has been doing this a long time.',
+            'He nods, and adjourns nothing, and goes back to watching the door. The watch is part of the order of the house now. It keeps its own hours.',
+            'The varnish on the chair arms is worn through where his hands wait. That is how long.',
           ],
           scales: { presence: +1, rage: -1, grief: -1 },
           scars: ['named'],
@@ -5510,8 +5510,8 @@ const patriarch = {
           desc: 'The truth.',
           lines: [
             'I say: they will not. They have not come in years.',
-            'He sits with that. His face does not change. Then it changes.',
-            '!!The room is suddenly larger than he is.!!',
+            'He takes it the way a wall takes water. Nothing, for a long moment. Then the line of him moves where lines do not move.',
+            '!!The room is larger than him now. It was his size a minute ago.!!',
           ],
           scales: { presence: -3, grief: +4, rage: +1 },
           composure: -2,
@@ -5522,7 +5522,7 @@ const patriarch = {
           desc: 'Redirect.',
           lines: [
             'I say: tell me their names.',
-            'He does. One. Two. He stops before the third. He starts again, from one.',
+            'He gives them. One. Two. Before the third he stops, and starts again from one, the way you re-add a column that keeps coming out wrong.',
           ],
           scales: { grief: +2, presence: -1 },
         },
@@ -5534,8 +5534,8 @@ const patriarch = {
       once: true,
       when: (p) => p.scales.presence <= 3 && p.scales.grief >= 4,
       prose: [
-        'He has stopped speaking. He sits very small in the chair. He looks tired.',
-        'He asks, almost without volume: ~~What do you want from me?~~',
+        'He has stopped speaking. The chair has more of him than he does. What is left sits where the title used to.',
+        'He asks, with no bench left under it: ~~What do you want from me?~~',
       ],
       responses: [
         {
@@ -5543,8 +5543,8 @@ const patriarch = {
           desc: 'Release him from the duty.',
           lines: [
             'I say: nothing.',
-            'He sits with that. His shoulders give way. He leans back into the chair.',
-            'It is the first time he has used it as a chair, not as a station.',
+            'He examines the word for the demand hidden in it and finds none. His shoulders come off duty, one before the other.',
+            'It is the first time he has used the chair as a chair, not as a station.',
           ],
           scales: { grief: +3, presence: -3, rage: -1 },
         },
@@ -5552,8 +5552,8 @@ const patriarch = {
           label: 'say her name with me',
           desc: 'Ask him to say it aloud.',
           lines: [
-            'I say her name. I ask him to say it with me.',
-            'He shakes his head. Then he says it. Quietly. Just the once.',
+            'I say her name, and leave it in the air between us, and ask him to second it.',
+            'He shakes his head. The head goes on shaking while his mouth says it. Once. The two of him are not in session together.',
           ],
           scales: { grief: +3, presence: -2 },
           flags: { named_her: true },
@@ -5565,7 +5565,7 @@ const patriarch = {
           desc: 'For her.',
           lines: [
             'I say: tell me you are sorry.',
-            'He looks up at me. For a long time he does not say anything.',
+            'He looks up. The silence runs long enough to be measured, so I measure it. Nine breaths. Ten.',
             'Then he says: ~~It was for her good.~~ I am sorry.',
           ],
           scales: { grief: +4, presence: -3 },
@@ -5578,7 +5578,7 @@ const patriarch = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: I do not know what I came in for. Tell me.',
-            'He looks up. He is not used to being asked anything.',
+            'He looks up. Questions travel one way in this house, and I have sent one back up the stairs.',
             'After a moment he says: ~~you came in alone. You knew the way.~~',
             'He sits with that. So do I.',
           ],
@@ -5591,7 +5591,7 @@ const patriarch = {
           lines: [
             'I say: tell me something I can sleep on.',
             'He looks at me a long time. Then says: ~~there is nothing left to sit up for.~~',
-            'His hands settle on the arms of the chair.',
+            'His hands settle on the chair arms, palms down, the way you close a ledger for the night.',
           ],
           scales: { grief: +2, presence: -2 },
         },
@@ -5601,12 +5601,12 @@ const patriarch = {
           when: (_, player) => player.wound === 'split_personality',
           lines: [
             'I say: tell me which one of you I am talking to. The man, or the lord of the house.',
-            'He goes still. He has not been asked that.',
+            'He goes still. The question has no precedent, and he is a man who rules from precedent.',
             'He says: ~~the lord of the house.~~ There is only the one left.',
           ],
           scales: { grief: +2, presence: -2 },
           composure: -1,
-          composureCost: 'I have named what no one is supposed to name in his room.',
+          composureCost: 'I asked the bench to identify itself. It did.',
         },
       ],
     },
@@ -5616,32 +5616,32 @@ const patriarch = {
     if (p.scales.rage >= 5) {
       return {
         lines: [
-          'I wait. He has not stopped looking at me.',
-          '!!Are you still here?!! he asks. !!Do you not have somewhere to be?!!',
+          'I wait. His attention does not. It stays on me with the weight of a beam stored upright.',
+          '!!Is there business?!! he asks. !!If there is no business, the room will be cleared.!!',
         ],
         scales: { rage: +1, presence: +1 },
         composure: -1,
-        composureCost: 'His voice has changed.',
+        composureCost: 'My feet have squared to the door. They ruled before I did.',
       };
     }
     if (p.scales.presence >= 7) {
       return pick([
-        { lines: ['I wait. He addresses his oldest daughter. She is not in the room.'], scales: { presence: +1 } },
-        { lines: ['I wait. He instructs a clerk who is not there to record a list of family infractions.'], scales: { presence: +1, rage: +1 }, composure: -1 },
-        { lines: ['I wait. He explains the order of his house. It is the third time he has explained it.'], scales: { presence: +1 } },
+        { lines: ['I wait. He calls on the eldest. He waits the exact length of an answer, nods at it, and moves to the next item.'], scales: { presence: +1 } },
+        { lines: ['I wait. He dictates to a clerk who is not there. The infractions are itemized by daughter, by date. He has the dates cold.'], scales: { presence: +1, rage: +1 }, composure: -1 },
+        { lines: ['I wait. He sets out the order of the house again, clause by clause. The clauses have not changed. The house has.'], scales: { presence: +1 } },
       ]);
     }
     if (p.scales.grief >= 4) {
       return {
         lines: [
-          'I wait. He looks at the door. ~~Where is she?~~',
-          'He says it to himself.',
+          'I wait. His eyes make their circuit: the door, the empty middle of the room, the door. ~~Where is she?~~',
+          'It is not addressed to me. It is not addressed to anyone on the roll.',
         ],
         scales: { grief: +1 },
       };
     }
     return {
-      lines: ['I wait. The room is still. He is watching the door for someone who is not coming.'],
+      lines: ['I wait. He watches the door the way a surveyor watches a wall he knows is wet inside.'],
       scales: { presence: -1 },
     };
   },
@@ -5651,10 +5651,10 @@ const patriarch = {
     {
       id: 'release',
       when: (p) => p.flags.closed_eyes && p.scales.grief >= 6,
-      title: 'You let him grieve',
+      title: 'The house settles',
       lines: [
-        'He does not wipe his face. He says her name once more, very quietly.',
-        'When I leave the room, he is still in the chair. But he is not presiding.',
+        'He does not wipe his face. He says her name once more, at the volume of a man alone, while I am still in the room.',
+        'When I leave, he is in the chair, and the chair is only carrying him. Nothing else is filed under it.',
         '!!The door does not need to be watched.!!',
       ],
       item: 'small_bell',
@@ -5665,8 +5665,8 @@ const patriarch = {
       when: (p) => p.flags.kneeled_twice && p.scales.presence >= 7,
       title: 'You bow',
       lines: [
-        'I leave the room walking backward. He has accepted me as a daughter of the house.',
-        'He calls me by a name on the way out. I answer to it.',
+        'I leave the room walking backward, because daughters of the house do not show the bench their backs. I know this now without having been told.',
+        'At the door he says a name, and my mouth answers to it. ~~Hers.~~ Mine now, on the record.',
         '!!He will be waiting when I come back.!!',
       ],
       item: 'ink_bottle',
@@ -5678,9 +5678,9 @@ const patriarch = {
       when: (p) => p.scales.rage >= 9,
       title: 'He stands. You run.',
       lines: [
-        '!!He is on his feet.!! He is larger than the chair was. The room is no longer mine.',
-        'I am at the door. I am through the door. He is still coming.',
-        '!!He stops at the threshold. He will not leave the room.!!',
+        '!!He is on his feet, and the room re-measures itself around him.!! Standing, he is the size the chair was. The chair was the largest thing in the room.',
+        'I am at the door. I am through the door. Behind me his footsteps keep the unhurried rate of a man who has never once had to chase.',
+        '!!He stops at the threshold. The house ends there, so he does.!!',
       ],
       item: null,
       scars: ['failed'],
@@ -5691,8 +5691,8 @@ const patriarch = {
       when: (p) => p.turn >= 14 && !p.flags.closed_eyes,
       title: 'He outlasts you',
       lines: [
-        'He is in the chair. He has always been in the chair. I cannot find an edge to begin from.',
-        'I leave him to it. The door is heavier than I expected.',
+        'He is in the chair, and the chair is in the house, and the house is in him. There is no seam where a person could be let in.',
+        'I adjourn myself. The door takes both hands, the way doors do when the room has not recognized your motion to leave.',
       ],
       item: null,
       scars: ['failed'],
@@ -5701,7 +5701,7 @@ const patriarch = {
       id: 'abandoned',
       when: (p) => p.flags.left,
       title: 'You walk out',
-      lines: ['I close the door. He kept speaking through the door.'],
+      lines: ['I close the door mid-clause. The clause goes on behind it. It was never addressed to me.'],
       item: null,
       scars: ['abandoned'],
     },
