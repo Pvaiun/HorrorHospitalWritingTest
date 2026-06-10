@@ -5732,72 +5732,72 @@ const soothlick = {
   subtitle: 'She has not held a license in [[2]] years.',
   role: 'wing', tier: 1,
   file: [
-    'Subject worked the night ward for thirty-eight years. She has not held a license in [[2]] of them.',
-    'Subject ~~killed three patients~~ administered incorrect dosages on three occasions. !!The last was in [[8]].!!',
-    'Subject was ~~fired~~ removed from the roster. Staff ~~humor her~~ allow her to continue her rounds.',
+    'Subject kept the night ward for thirty-eight years. For the last [[2]] of them, no roster has kept her.',
+    'On three occasions her patients ~~did not wake~~ **rested** ahead of schedule. !!The last was in [[8]]. She signed all three charts.!!',
+    'Subject was ~~dismissed~~ relieved of duties. Staff ~~cannot stop her~~ do not schedule against her. Her rounds continue. They are on no chart.',
   ],
   intro: [
-    'The lights in the room have dimmed. She is at the foot of the bed, straightening the sheet.',
-    'Her name tag is from a hospital that does not have her on its rolls. She does not look up when I come in.',
+    'The lights are down to night levels. No one lowered them. She is at the foot of the bed, squaring a sheet that was already square.',
+    'I read her tag. The hospital on it is this one. The hospital does not have her. She does not look up. I am not due yet.',
   ],
 
   scales: {
     tending: {
       initial: 6, min: 0, max: 10, label: 'tending', kind: 'negative',
       bands: [
-        { at: 0, word: 'stopped' },
+        { at: 0, word: 'off duty' },
         { at: 3, word: 'small things' },
         { at: 5, word: 'on her rounds' },
-        { at: 7, word: 'committed' },
+        { at: 7, word: 'double shift' },
         { at: 9, word: 'will not stop' },
       ],
       crossUp: {
-        2: 'She has gone deeper into the work.',
-        3: 'She has decided which work needs doing tonight.',
-        4: '!!She is not going to stop until she is finished.!!',
+        2: 'She has found more that needs doing. There is always more.',
+        3: 'She has begun the full round. Every bed, in order.',
+        4: '!!The round has no last bed in it.!!',
       },
       crossDown: {
-        2: 'She has stepped back from the bedside.',
-        1: 'She has set the tray down.',
-        0: 'She has stopped tending. It is the first time in [[8]] years.',
+        2: 'She has stepped back from the bed. One small step, unscheduled.',
+        1: 'The tray is down. Her hands are unemployed.',
+        0: 'She has stopped tending. The ward breathes on without her. It always could.',
       },
     },
     clarity: {
       initial: 0, min: 0, max: 10, label: 'clarity', kind: 'positive',
       bands: [
         { at: 0, word: 'in 1972' },
-        { at: 2, word: 'half-here' },
+        { at: 2, word: 'between rounds' },
         { at: 5, word: 'noticing' },
         { at: 7, word: 'awake' },
         { at: 9, word: 'all the way back' },
       ],
       crossUp: {
         2: 'Her eyes have come up off the sheet.',
-        3: 'She has noticed the year.',
-        4: '!!She is here. She is awake.!!',
+        3: 'She has looked at the window. The dark outside is older than her shift.',
+        4: '!!She is here, and the hour is the real hour.!!',
       },
       crossDown: {
-        1: 'She has slipped back into the work.',
-        0: 'The work has resumed without her.',
+        1: 'The work has taken her hands back.',
+        0: 'The round has resumed. Whatever woke in her is **resting** again.',
       },
     },
     guilt: {
       initial: 0, min: 0, max: 10, label: 'guilt', kind: 'positive',
       bands: [
-        { at: 0, word: 'unspoken' },
-        { at: 2, word: 'sharpening' },
+        { at: 0, word: 'sealed' },
+        { at: 2, word: 'measured' },
         { at: 5, word: 'rising' },
         { at: 7, word: 'in her hands' },
-        { at: 9, word: 'breaking' },
+        { at: 9, word: 'spilling' },
       ],
       crossUp: {
-        2: 'Her hands have begun to tremble.',
-        3: 'She has set the tray down.',
+        2: 'Her pour has lost its level. Only just. A nurse would notice.',
+        3: 'She has put the tray down without being asked. Nothing is due.',
         4: '!!She has covered her mouth.!!',
       },
       crossDown: {
-        1: 'She has folded it away.',
-        0: 'Her hands have steadied.',
+        1: 'She has folded it away with the linens.',
+        0: 'Her hands are level again. Whatever was rising has been brought back to the line.',
       },
     },
   },
@@ -5809,9 +5809,9 @@ const soothlick = {
   },
 
   fileReveals: [
-    { announce: 'A line fills in. Her first error was ~~a fatal overdose~~ a dosage error on patient [[7]].' },
-    { announce: 'Another. Her medication tray ~~has been empty for [[2]] years~~ is restocked weekly with sugar water.' },
-    { announce: 'The last line. The beds Subject tends ~~are empty~~ are not under her care.' },
+    { announce: 'A line fills in. Patient [[7]] was due half a grain. ~~She gave five.~~ The chart shows a clerical inconsistency.' },
+    { announce: 'Another. The tray she carries is restocked weekly, with care, by staff who sign for it. ~~With sugar water.~~ With everything she needs.' },
+    { announce: 'The last line. The beds on her round ~~are empty. All of them. Every night.~~ are not assigned to her.' },
   ],
 
   presented(p) {
@@ -5820,21 +5820,21 @@ const soothlick = {
     const g = p.scales.guilt;
 
     let work;
-    if (t >= 8)      work = 'She is at the bedside. She has decided which work needs doing tonight.';
-    else if (t >= 5) work = 'She is at the bedside. She is doing the work she came to do.';
-    else if (t >= 2) work = 'She is pacing. She keeps finding small things to fix.';
-    else             work = 'She has stopped. She is at the door, not sure if she should leave.';
+    if (t >= 8)      work = 'She is at the bedside with the tray. Everything on it is lined up by size. Tonight has a list, and I am on it.';
+    else if (t >= 5) work = 'She moves bed to bed. Each gets its minute. The minutes are exact.';
+    else if (t >= 2) work = 'She is between rounds. Her hands keep finding small things — a fold, a cup a finger off square — and put them right without consulting her.';
+    else             work = 'She stands near the door she never opens. Her hands hang empty. They do not know the posture.';
 
     let eyes;
-    if (c >= 7)      eyes = 'Her eyes are on me. She knows what year it is. She has decided to be here anyway.';
-    else if (c >= 4) eyes = 'Her eyes find me sometimes. She is not sure who she is tending.';
-    else if (c >= 1) eyes = 'Her eyes have started to make me out. As a person.';
-    else             eyes = 'Her eyes are on her work. They are not on me.';
+    if (c >= 7)      eyes = 'Her eyes are on me, level. She knows the year. She is staying anyway, the way you stay with a patient past the end of a shift.';
+    else if (c >= 4) eyes = 'Her eyes find me between tasks, and each time they have to start over on who I am.';
+    else if (c >= 1) eyes = 'Her eyes have begun to include me. Not as a bed. Not yet as a person.';
+    else             eyes = 'Her eyes are with her hands. I am later in the round.';
 
     let hands;
-    if (g >= 7)      hands = '!!Her hands are shaking. She has set the tray down.!!';
-    else if (g >= 4) hands = 'Her hands are not quite steady.';
-    else if (g >= 1) hands = 'Her hands move a little slower than her eyes.';
+    if (g >= 7)      hands = '!!Her hands have been put down at her sides, like instruments she no longer trusts.!!';
+    else if (g >= 4) hands = 'Her hands pour a little wide of level. She corrects them. They drift again.';
+    else if (g >= 1) hands = 'Her hands run a beat behind her eyes, like a pulse taken twice to be sure.';
     else             hands = 'Her hands are steady.';
 
     return `${work} ${eyes} ${hands}`;
@@ -5850,19 +5850,19 @@ const soothlick = {
         if (reps >= 2) {
           return {
             lines: [
-              'I let her again. She hums something low. She is good at this.',
-              'After a while she stops humming. She looks at the tray. ~~It is empty.~~ She notices it is empty.',
+              'I lie still for it again. Her hands know the order: brow, wrist, sheet. I am well kept.',
+              'Then her humming runs out. She is looking at the tray. ~~There is nothing on it.~~ She counts what is on it. She counts it twice.',
             ],
             scales: { tending: -2, clarity: +2 },
             flags: { let_her_tend: true },
             composure: -1,
-            composureCost: 'She has been working a long time on nothing.',
+            composureCost: 'Her hands were kind. The tray was empty. Both of these are true.',
           };
         }
         return {
           lines: [
-            'I let her smooth the sheet over me. The starch smells of paper and bleach.',
-            'She hums something soft. She has done this a long time.',
+            'I lie still. She draws the sheet to my chin and squares it. The starch smells of carbolic and old sun.',
+            'She hums, low, three notes worth. It is the sound of being checked on. I had forgotten the sound.',
           ],
           scales: { tending: +1, clarity: +1 },
           flags: { let_her_tend: true },
@@ -5878,17 +5878,17 @@ const soothlick = {
         if (reps >= 2) {
           return {
             lines: [
-              'I wave her off again. And again. She is patient. She will be back.',
-              'My refusal has become a routine. Routine is what she works in.',
+              'I decline again. She accepts it the way she accepts a pulse: noted, charted, due to be taken again.',
+              'My no has been worked into the round. It comes around nightly now, like the rest of me.',
             ],
             composure: -1,
-            composureCost: 'Her humming is the sound the room makes.',
+            composureCost: 'I am being managed. Gently. On schedule.',
           };
         }
         return {
           lines: [
-            'I wave her off. I say: !!I do not need this.!!',
-            'She sets the tray down anyway. Her face does not change. But she does not press.',
+            'I lift a hand between us. I say: nothing for me. Not tonight.',
+            'She sets the tray down within reach anyway. Refusal, in her experience, is a stage the patient passes through.',
           ],
           scales: { tending: -2 },
         };
@@ -5904,8 +5904,8 @@ const soothlick = {
         if (reps >= 1) {
           return {
             lines: [
-              'I ask again, differently. How long has she been here? The question lands somewhere she has been avoiding.',
-              'She stares at the dark window for a long time. She does not answer.',
+              'I ask it again, smaller: how long have you been on?',
+              'She looks at the window. She does not answer. The not-answering takes a long time, and she does it standing quite still.',
             ],
             scales: { clarity: +3, tending: -2 },
             composure: -1,
@@ -5915,7 +5915,7 @@ const soothlick = {
         return {
           lines: [
             'I ask: when did you come on?',
-            'She answers without thinking: !!seven.!! Then she stops. She looks at the dark window. ~~A long time ago.~~ A very long time ago.',
+            'Seven, she says, at once, the way you answer a doctor. Then she hears it. Her eyes go to the window. The dark there is not evening dark. It has not been evening for years.',
           ],
           scales: { clarity: +2 },
         };
@@ -5931,7 +5931,7 @@ const soothlick = {
           return {
             lines: [
               'I say her name. The one on her tag.',
-              'She stops folding. She says: yes? She has not been called by it in a long time.',
+              'She stops mid-fold. Yes? she says — present, reporting for it. No one has called her anything but nurse in years.',
             ],
             scales: { clarity: +2, guilt: +1, tending: -1 },
           };
@@ -5939,7 +5939,7 @@ const soothlick = {
         return {
           lines: [
             'I say her name. The one on her tag.',
-            'She does not turn. She goes on straightening the sheet. It is a name she half-recognizes.',
+            'She does not turn. The name goes past her like a page on the tannoy for someone two wards over.',
           ],
           scales: { clarity: +1 },
         };
@@ -5955,23 +5955,23 @@ const soothlick = {
           return {
             lines: [
               'I say his name. The patient from [[8]].',
-              'She stops. The sheet falls from her hands. Her face folds.',
-              'She sits down on the floor at the foot of the bed. !!She has not let it land in years.!!',
+              'The sheet leaves her hands. She watches it go down. Her hands stay where the sheet was.',
+              'She lowers herself to the floor at the foot of the bed and sits. !!It has been due for years. Tonight it is administered.!!',
             ],
             scales: { guilt: +4, clarity: +2, tending: -3 },
             flags: { named_him: true },
             composure: -1,
-            composureCost: 'I have brought him into the room with us.',
+            composureCost: 'His name is on the air now, like ether. We are both breathing it.',
           };
         }
         return {
           lines: [
             'I say his name. The patient from [[8]].',
-            'She freezes. !!Do not say his name here,!! she says. Her voice is very small.',
+            'She goes still. !!Not on the ward,!! she says. !!Names carry on a night ward.!! She says it at the volume nurses keep for the dying.',
           ],
           scales: { guilt: +2, clarity: +1, tending: +1 },
           composure: -1,
-          composureCost: 'I have said something she has spent years not saying.',
+          composureCost: 'She did not ask how I knew it. That is the part I keep returning to.',
         };
       },
     },
@@ -5985,8 +5985,8 @@ const soothlick = {
           return {
             lines: [
               'I say: you were let go. You are not on the roster.',
-              'She nods. She does not protest. She looks at the tray as if she had only just noticed it.',
-              'She says: !!I know.!! Quietly.',
+              'She nods, once, the way she would take an order she disagreed with. Her eyes go down to the tray and do not come back up.',
+              'I know, she says. Quietly, like a reading taken at night and not written down.',
             ],
             scales: { clarity: +3, tending: -4, guilt: +2 },
             flags: { told_her: true },
@@ -6013,14 +6013,14 @@ const soothlick = {
       respond() {
         return {
           lines: [
-            'I say: you can stop. The work is done.',
-            'She looks at her hands. She lets the sheet go.',
+            'I say: the round is finished. Everyone has been seen to. You can stop now.',
+            'She looks at her hands. She lets the corner of the sheet go, and the sheet stays where it is, without her.',
             'She puts her face in her hands. !!Her shift is over.!!',
           ],
           scales: { tending: -10, guilt: -2, clarity: +2 },
           flags: { released: true },
           composure: -1,
-          composureCost: 'I have given her permission no one else has.',
+          composureCost: 'I have signed her out. Nothing gave me the authority but the hour.',
         };
       },
     },
@@ -6038,7 +6038,7 @@ const soothlick = {
       once: true,
       when: (p) => p.scales.tending >= 6 && p.turn >= 2,
       prose: [
-        'She pauses at the corner of the sheet. She looks at me as if she had just realized I was there.',
+        'She pauses at the corner of the sheet, mid-tuck. Her eyes come up the bed to my face, checking it against a list.',
         'She asks: ~~Who are you tonight?~~',
       ],
       responses: [
@@ -6047,7 +6047,7 @@ const soothlick = {
           desc: 'Accept her premise.',
           lines: [
             'I say: a new patient.',
-            'She nods. She has done this a thousand times. The work resumes.',
+            'She nods. New patients are the easiest hour of the night. The sheet comes up to my chin, and the round closes over me.',
           ],
           scales: { tending: +2, clarity: -1 },
           flags: { let_her_tend: true },
@@ -6058,7 +6058,7 @@ const soothlick = {
           desc: 'A small lie.',
           lines: [
             'I say: a visitor.',
-            'She pauses. She looks at the dark window. She has not had a visitor in a while.',
+            'She pauses. Visiting hours ended at eight. Eight of some year. She does not say which, and neither does the window.',
           ],
           scales: { clarity: +2, tending: -1 },
         },
@@ -6067,7 +6067,7 @@ const soothlick = {
           desc: 'The truest answer.',
           lines: [
             'I say: someone who came to find you.',
-            'She stops. Her face does several things in sequence.',
+            'She stops. Her face goes through its stations — nurse, then woman, then neither.',
             'She lets the sheet go.',
           ],
           scales: { clarity: +3, guilt: +1, tending: -3 },
@@ -6080,7 +6080,7 @@ const soothlick = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: I do not know. They admitted me without anyone with me.',
-            'She nods. She has had patients like that. They are easier to tend.',
+            'She nods. She has had patients with nothing attached to them. They are the lightest work on the round.',
             'Her hand goes back to the corner of the sheet.',
           ],
           scales: { tending: +1, clarity: +1 },
@@ -6102,7 +6102,7 @@ const soothlick = {
           when: (_, player) => player.wound === 'split_personality',
           lines: [
             'I say: one of us came in. The other is at home.',
-            'She accepts that without flinching. She has tended people who came in pieces before.',
+            'She takes it without blinking. People arrive on this ward in pieces. The pieces all get the same sheet.',
           ],
           scales: { clarity: +2, tending: -1 },
         },
@@ -6114,7 +6114,7 @@ const soothlick = {
       once: true,
       when: (p) => p.scales.clarity >= 5 && p.turn >= 3,
       prose: [
-        'She stops mid-fold. Her eyes look very tired suddenly.',
+        'She stops mid-fold. The tiredness arrives all at once, the way it does at the end of a double.',
         'She asks, quietly: ~~What year is it?~~',
       ],
       responses: [
@@ -6122,8 +6122,8 @@ const soothlick = {
           label: 'tell her the year',
           desc: 'Gently.',
           lines: [
-            'I tell her. She does not contradict me. She does not say anything for a long time.',
-            'Eventually she sits on the foot of the bed. She has not sat down in a while.',
+            'I tell her the number. She holds it. She does not write it anywhere. There is nowhere on her chart for it.',
+            'Then she sits on the foot of the bed. The bed takes her weight as if this, too, were overdue.',
           ],
           scales: { clarity: +3, guilt: +2, tending: -4 },
           composure: -1,
@@ -6134,7 +6134,7 @@ const soothlick = {
           desc: 'Kind refusal.',
           lines: [
             'I say: it does not matter. You are needed here regardless.',
-            'She nods, almost grateful. She resumes. Slower now.',
+            'She nods, grateful at the edges, and resumes the round. A touch slower. Doses get smaller near the end of the night.',
           ],
           scales: { tending: -1, clarity: -1 },
           scars: ['named'],
@@ -6144,7 +6144,7 @@ const soothlick = {
           desc: 'Meet her where she is.',
           lines: [
             "I say: I do not know.",
-            'She lets out a small breath. She looks at me as if I had answered the easier question correctly.',
+            'A small breath goes out of her. Between us we have no year at all. The ward will run to schedule regardless.',
           ],
           scales: { clarity: +1 },
         },
@@ -6156,7 +6156,7 @@ const soothlick = {
       once: true,
       when: (p) => p.scales.clarity >= 6 && p.turn >= 5,
       prose: [
-        'She has the sheet halfway folded. Her face is somewhere else.',
+        'The fold stops halfway. She holds the two corners apart, going nowhere.',
         'She says, to herself: ~~I was supposed to be home by now.~~',
       ],
       responses: [
@@ -6174,20 +6174,20 @@ const soothlick = {
           label: 'you can go',
           desc: 'Release her.',
           lines: [
-            'I say: you can go. The work is done.',
-            'She looks at the dark window. She does not stand. But she stops folding.',
+            'I say: you can go. The night will keep.',
+            'She looks at the window, where going would be. She does not stand. But the fold stops, and stays stopped.',
             'Her hands are her own.',
           ],
           scales: { clarity: +3, tending: -4, guilt: +1 },
           composure: -1,
-          composureCost: 'I have given her permission to stop.',
+          composureCost: 'The work was the only thing keeping the hour off her.',
         },
         {
           label: "ask who's home",
           desc: 'Ask.',
           lines: [
             'I ask: who is at home?',
-            'She names someone. Quietly. It has been a long time since she said the name out loud.',
+            'She says a name. One. It comes out at the volume of a pulse.',
           ],
           scales: { clarity: +2 },
         },
@@ -6199,7 +6199,7 @@ const soothlick = {
       once: true,
       when: (p) => p.scales.guilt >= 5 && p.scales.clarity >= 4,
       prose: [
-        'She has stopped folding. Her hands are not quite steady.',
+        'The folding has stopped on its own. Her hands hold their level the way a tired hand holds it — by correcting.',
         'She says, smaller: ~~I lost one of them.~~',
       ],
       responses: [
@@ -6208,7 +6208,7 @@ const soothlick = {
           desc: 'Meet her in the admission.',
           lines: [
             'I say: I know.',
-            'She nods. She does not look up. Her hands have stopped moving.',
+            'She nods at the floor. Her hands have gone still at last. Folded. Off duty.',
             'She says: ~~three.~~ I lost three.',
           ],
           scales: { guilt: +3, clarity: +2, tending: -2 },
@@ -6237,7 +6237,7 @@ const soothlick = {
           ],
           scales: { guilt: +2, clarity: +1 },
           composure: -1,
-          composureCost: 'I have tried to absolve something not mine to absolve.',
+          composureCost: 'Absolution is a dose too. I had no order for it.',
         },
       ],
     },
@@ -6247,8 +6247,8 @@ const soothlick = {
     if (p.scales.guilt >= 6) {
       return {
         lines: [
-          'I wait. She has stopped folding. Her hands are in her lap.',
-          'She is looking at the dark window. She does not move for a long time.',
+          'I wait. Nothing is being smoothed. Her hands rest in her lap, and the rest is not restful.',
+          'She watches the dark window for as long as a temperature takes. Then longer.',
         ],
         scales: { guilt: +1, clarity: +1 },
       };
@@ -6258,11 +6258,11 @@ const soothlick = {
         lines: ['I wait. She straightens the sheet under my chin. Her humming is the sound the room makes.'],
         scales: { tending: +1 },
         composure: -1,
-        composureCost: 'The corner of the sheet is not right. She has not noticed.',
+        composureCost: 'My breathing has slowed to rounds pace. I did not slow it.',
       };
     }
     return {
-      lines: ['I wait. Her shoes make no sound on the floor.'],
+      lines: ['I wait. Her shoes make no sound on the terrazzo. Night shoes. Bought for this.'],
       scales: { tending: +1 },
     };
   },
@@ -6274,9 +6274,9 @@ const soothlick = {
       when: (p) => p.flags.let_her_tend && p.scales.clarity >= 6 && p.scales.tending <= 3,
       title: 'She sets the tray down',
       lines: [
-        'She looks at the tray. The cup. The folded sheet.',
-        'She says: there is nothing here. She does not say it to me.',
-        '!!She walks out of the room without looking back at the bed.!!',
+        'She takes the inventory. The tray. The cup. The folded sheet. The count comes out the same twice.',
+        'There is nothing here, she says. Not to me. It is the last entry of the night.',
+        '!!She leaves the room the way nurses leave the dead: quietly, and without turning around.!!',
       ],
       item: 'vial',
     },
@@ -6284,11 +6284,11 @@ const soothlick = {
     {
       id: 'she_grieved',
       when: (p) => p.flags.released || (p.flags.named_him && p.scales.guilt >= 7 && p.scales.tending <= 4),
-      title: 'You let her grieve',
+      title: 'Her shift ends',
       lines: [
-        'She sits on the floor at the foot of the bed. She does not stand for a long time.',
-        'She says his name. Once. Then she says it again. She holds it.',
-        '!!It is the first time it has been said in this room.!!',
+        'She sits on the floor at the foot of the bed, off her feet at last. No bell rings for her. She stays down.',
+        'She says his name. Once, the way it is written. Then again, the way it was said.',
+        '!!The name was due years ago. It is given now, in full.!!',
       ],
       item: 'small_bell',
     },
@@ -6298,8 +6298,8 @@ const soothlick = {
       when: (p) => p.scales.tending >= 9 && p.turn >= 8,
       title: 'Her work outlasts you',
       lines: [
-        'She works around me. I am one of the things she is straightening tonight.',
-        '!!I leave before she finishes.!! She does not notice.',
+        'She works around me. I have become part of the round — turned, smoothed, seen to.',
+        'I leave before the round ends. !!The round does not end.!! My door closes itself behind me, soft as a jar.',
       ],
       item: null,
       scars: ['failed'],
