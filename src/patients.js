@@ -3071,8 +3071,8 @@ const polonius = {
 
         f_polite: {
           lines: [
-            'I find him in the parlor. He is in the armchair opposite the butler. The butler is reading the paper.',
-            'He rises when I come in. He has the small courtesy of a man who rises when a guest enters a room.',
+            'I find him in the parlor, in the armchair opposite the butler. The butler is in 1888.',
+            'He rises when I come in — the courtesy of a man who has risen for guests since rising was invented.',
             'Sir. The evening proceeds. May I be of any small assistance.',
           ],
           flags: { room: 'parlor' },
@@ -3089,9 +3089,9 @@ const polonius = {
         f_ask_after_maid: {
           lines: [
             'I say: Mrs. Halliwell — has she returned with the card.',
-            'He looks toward the inner doorway, fond. Not yet, sir. The cloakroom is locked at this hour, as I mentioned. She is, in her way, waiting on Mr. Halliwell\'s keys.',
-            'He pauses. He has had this question before.',
-            'You will find the keys faster than I will, sir. They are in his waistcoat pocket. He saves himself for breakfast in the evenings and will not come for a shout — but he will be obliging in person.',
+            'He looks toward the inner doorway, fond. Not yet, sir. The cloakroom is locked at this hour, as I mentioned. She is, in her way, waiting on Mr. Halliwell\'s keys. The house waits on a great many things.',
+            'He pauses, with the patience of a man who has been asked this question in forty-one accents.',
+            'You will find the keys faster than I will, sir. His waistcoat pocket. He will not come for a shout — but in person he is obliging.',
           ],
           flags: { _heard_parlor_keys: true, _heard_keys_butler: true },
           scales: { intimacy: +1 },
@@ -3103,11 +3103,11 @@ const polonius = {
 
         f_about_arrangement: {
           lines: [
-            'I say: the staff — they all have their own room, by the day. Why is it arranged that way.',
-            'He looks at me with the small attention of a man who knows he is being asked, by the question, about something more than the question.',
-            'A tradition, sir. Mr. Halliwell in the parlor; Mrs. Halliwell in the foyer and the cloakroom; Mr. Cook in the dining room. They cross paths only at the meals. The arrangement has held since I was a young man.',
+            'I say: the staff — each kept to a room, by the day. Why is it arranged that way.',
+            'He looks at me with the attention of a man who knows the question is wearing a smaller question\'s coat.',
+            'A tradition, sir. Mr. Halliwell the parlor; Mrs. Halliwell the foyer and cloakroom; Mr. Cook the dining room. They cross paths only at the meals. The arrangement has held since I was a young man.',
             'He pauses. He says, fond: they reset with the morning, sir. The arrangement does not change.',
-            'He stops. The sentence got out before he weighed it. He watches me to see whether I have caught it.',
+            'He stops. That sentence escaped rather than being served. He looks at me, with a small honesty, to see whether I have caught it.',
           ],
           flags: { _heard_staff_routine: true, _heard_staff_resets: true, _heard_origin: true },
           scales: { intimacy: +2, unease: +3 },
@@ -3122,9 +3122,9 @@ const polonius = {
         f_demand_card: {
           lines: [
             'I say: I would like the card back, sir. Plainly.',
-            'He inclines his head. The smile is polite and tired. The card is at the back of the house, sir. In the cloakroom. I do not have it on my person; I gave it to Mrs. Halliwell. She locked it with the coats.',
-            'He pauses. He lifts his arms a small way from his sides.',
-            'You may, of course, search me. If it would put your mind at rest.',
+            'He inclines his head, polite and tired. The card is at the back of the house, sir. The cloakroom. I do not have it on my person; I gave it to Mrs. Halliwell, and she locked it with the coats.',
+            'He pauses. He weighs the next sentence and gives it freely.',
+            'You may, of course, search me. If it would put your mind at **rest**.',
           ],
           flags: { _heard_card_offer_search: true },
           scales: { intimacy: +1 },
@@ -3144,8 +3144,8 @@ const polonius = {
 
         f_search_polonius: {
           lines: [
-            'I step forward. I put my hands on him. He does not flinch. His coat is the wrong temperature; it has been against his body for so long that the body has become the coat.',
-            'I search the vest pocket. The vest pocket is —',
+            'I step in and put my hands on him. He does not flinch. He does not breathe. The coat is the wrong temperature: it has been against that body so long the body has become the coat.',
+            'I go for the vest pocket —',
           ],
           choices: [
             {
@@ -3157,10 +3157,10 @@ const polonius = {
 
         f_search_card_found: {
           lines: [
-            'In his vest pocket is my admission card. I take it out. The number on it is my number.',
+            'In the vest pocket: my admission card. I take it out. I read the number. Mine.',
             '!!I have the card.!!',
             'Polonius is still, very still. He has not stopped me. He has not pulled away. He says, very quietly: well done, sir. The forty-first did not have the courage.',
-            'His eyes do something that the mask does not move to cover.',
+            'The smile holds its post. Behind it, the eyes have lost a possession, and they watch it leave in my hand.',
           ],
           flags: { _card_location: 'recovered', _recovered_from: 'polonius' },
           scales: { unease: +3, intimacy: +1 },
@@ -3180,9 +3180,9 @@ const polonius = {
 
         f_search_empty: {
           lines: [
-            'The vest pocket is empty. I check the other pockets. They are empty. I check the coat. The coat hangs the wrong way around him but the pockets are empty.',
+            'The vest pocket is empty. The other pockets are empty. The coat hangs wrong on him in a way I decline to study, and its pockets are empty too.',
             'He smiles. As I said, sir. The card is at the back of the house. I would not lie to you about the card.',
-            '~~He would lie to me about anything. But not about this. He wants me to chase the card. He wants me deeper.~~',
+            'He would lie to me about anything. Not about the card. The card is the leash, and a leash only works if I believe in the far end of it.',
           ],
           flags: { _searched_polonius: true },
           scales: { unease: +2 },
@@ -3197,9 +3197,9 @@ const polonius = {
           lines: [
             'I say: that is a lie. You know where the card is. You moved it. You are still moving it.',
             'He nods, slowly. He does not deny.',
-            'I am, sir. I am moving it. Mr. Halliwell has retrieved it from the cloakroom; he is on his way to the study with it now. The drawer in the study is locked. The key to the drawer is in my pocket.',
-            'He produces a small brass key. He turns it once over in his fingers. He returns it to his vest.',
-            '~~He has shown me. He has told me. He has done both as a courtesy.~~',
+            'I am, sir. I am moving it. Mr. Halliwell has it out of the cloakroom; he is walking it to the study now. The study drawer is locked. The key to the drawer is in my pocket.',
+            'He produces a small brass key, turns it once over in his fingers, and returns it to his vest.',
+            'He has shown me the key the way a host shows a guest the good silver: as a courtesy, and as an inventory.',
             'I am not lying to you about the shape of the evening, sir. I am only winning. Walk through the house. Try.',
           ],
           flags: { _heard_card_in_study: true, _heard_truth: true, _mask_on: false, _heard_drawer_key: true, _card_location: 'study' },
@@ -3215,9 +3215,9 @@ const polonius = {
 
         f_lunge_key: {
           lines: [
-            'I lunge for his vest. His hand is on my wrist before I have closed the distance. The grip is light. It is also unmovable.',
-            'Sir. Please. He is mild about it. I will not let you have the key by this method. The butler will be at the study in a moment regardless. I am giving you a fair race.',
-            'He releases me. He nods. He sits back down.',
+            'I lunge for his vest. His hand is on my wrist before the distance closes. The grip is light. It is also a hinge that has decided not to be one.',
+            'Sir. Please. He is mild about it. You will not have the key by this method. The butler reaches the study in a moment regardless. I am giving you a fair race.',
+            'He releases me. He nods. He sits back down, smoothing the coat over the pocket with the key in it.',
           ],
           scales: { unease: +2 },
           composure: -2,
@@ -3231,7 +3231,7 @@ const polonius = {
           lines: [
             'I say: why are you doing this. Why take the card at all. Why not lock the door and have done with it.',
             'He smiles. He looks at the fire.',
-            'Because, sir, a locked door is a noise. A locked door brings a guest banging on it. A guest who bangs on a door is a guest who does not stay long enough. The card is a — kindness. The card lets you believe you can go. The card lets you believe with every step deeper that you are still walking toward the door.',
+            'Because, sir, a locked door is a noise. A locked door brings a guest banging on it, and a guest who bangs does not stay long enough. The card is a — **kindness**. The card lets you believe you can go. It lets you believe, with every step deeper, that you are still walking toward the door.',
             'He pauses. I am sorry, sir. I am being honest. I have not had the energy for elaborate cruelties in a long time. The card is the cruelty I have left.',
           ],
           flags: { _heard_truth: true, _mask_on: false, _mood: 'mournful' },
@@ -3247,9 +3247,9 @@ const polonius = {
 
         f_how_to_leave: {
           lines: [
-            'He looks at me. The look is long, and patient, and tired beyond what should be possible for one face.',
+            'He looks at me. The look is long, and patient, and tired past what one face should be able to hold.',
             'Walk back through the front door, sir. With the card. The door will read. The door will open. It always has.',
-            'He pauses. But sir. I will be honest with you again. I will do everything I am able to do to keep you in this house long enough for an accident to occur. I am owed an accident. After this, I will not be a man with you. I will be a tenant.',
+            'He pauses. But sir. I will be honest with you again. !!I will do everything I am able to keep you in this house until an **accident** occurs. I am owed an accident. After this I will not be a man with you. I will be a tenant.!!',
           ],
           scales: { unease: +5, intimacy: +3 },
           composure: -2,
@@ -3265,11 +3265,11 @@ const polonius = {
           lines: [
             'I say: tell me how to free you. Without becoming the next tenant.',
             'He is quiet for a long moment.',
-            'There is a shard, sir. A piece of broken clay. It was buried in the foundation of the house, the day the house was first cursed. It has my name written on it — my first name, in a language nobody alive speaks. I moved it to the cellar a long time ago, when I still hoped to break it myself.',
-            'I have not broken it. I have not been able to break it. The hand that placed it is the hand that must not break it. Someone not of the day must break it. You are not of the day, sir.',
-            'If the shard is broken, the binding ends. I will go. I will go the way men go — old, and tired, and human. The staff will go with me. The house will be empty.',
-            'You will not be bound. The curse needs a tenant; if there is no tenant when the curse ends, the curse ends with it. The door will open. You will walk out.',
-            '~~He has told me the whole of it. He could have lied. He did not lie.~~',
+            'There is a shard, sir. Broken clay, buried in the foundation the day the house was first cursed. My name is on it — my first name, in a language nobody alive has spoken. I moved it to the cellar long ago, when I still hoped to break it myself.',
+            'I have not broken it. I cannot. The hand that placed it must not be the hand that breaks it. A hand not of the day must do it. Yours is not of the day, sir.',
+            'Break the shard and the binding ends. I go — old, and tired, and human, the way men go. The staff go with me. The house stands empty.',
+            'You will not be bound. The curse needs a tenant; end the curse and there is no tenancy to inherit. The door will open. You will walk out.',
+            'He could have lied. The lie was available, and cheaper. He paid for the truth instead, and I do not yet know with what.',
           ],
           flags: { _heard_binding: true, _heard_binding_full: true, _binding_is_shard: true, _knows_free_path: true, _heard_cellar: true, _heard_shard_in_cellar: true },
           scales: { intimacy: +4, unease: +2 },
@@ -3282,7 +3282,7 @@ const polonius = {
             },
             {
               label: 'where is the shard',
-              goto: { to: 'hub_corridor', lines: ['I say: where is the shard. He smiles. In the cellar, sir. On a low shelf at the back wall. Behind the third bottle in the third row. Mr. Cook has put a hand print on the row, if you are paying attention.', '~~He has told me where. He has told me. He is asking me to do it.~~'], flags: { _heard_shard_in_cellar: true } },
+              goto: { to: 'hub_corridor', lines: ['I say: where is the shard. He smiles. The cellar, sir. A low shelf at the back wall, behind the third bottle in the third row. Mr. Cook has left a sleeve-mark on the row, if you are paying attention.', 'Shelf, bottle, row. He has given it to me like a delivery address. He is asking without asking.'], flags: { _heard_shard_in_cellar: true } },
             },
             { label: 'back to the corridor', goto: 'hub_corridor' },
           ],
@@ -3291,9 +3291,9 @@ const polonius = {
         f_why_telling_me: {
           lines: [
             'He smiles. The smile is small and old and not unkind.',
-            'Because I am tired, sir. Because I am a man who has been waiting a very long time, and I have, at the centre of myself, the small part that has always wanted the rest of me to go. I would like to go, sir. I would like to go the way men go.',
-            'He pauses. I am also a man who, when the shard is in the cellar and you are upstairs and the card is on me, will move to the front door faster than you. I am the man and I am the tenant. I am asking you to be quick.',
-            '~~He has told me he is tired. He has told me he will fight me. Both are true. He has been both for nine hundred years.~~',
+            'Because I am tired, sir. Because at the centre of me there is a small part that has always wanted the rest of me to go. I would like to go. I would like to go the way men go.',
+            'He pauses. I am also the man who, with the shard in the cellar and you upstairs and the card on me, will reach the front door first. I am the man and I am the tenant. I am asking you to be quick.',
+            'He is tired and he will fight me. Both are true. They have shared the house for nine hundred years; there is room.',
           ],
           scales: { intimacy: +5, unease: +3 },
           composure: -2,
@@ -3307,8 +3307,8 @@ const polonius = {
         f_dropped: {
           lines: [
             'I find him in the parlor. The chair is empty. He is standing. The fire is burning low.',
-            'He has stopped pretending. The face does not arrange itself the way a face does. The smile is on the wrong part of the mouth. The eyes do not blink in the way an eye blinks.',
-            '!!Καλά, sir. Πολύ καλά.!! he says, very quietly. I have been honest. I have been more honest than I have been in a long time. I find I am out of polite.',
+            'He has stopped pretending. The face has stopped doing the work faces do. The smile is on the wrong part of the mouth. The blink arrives after the eyes have already moved.',
+            '!!Καλά, sir. Πολύ καλά.!! he says, very quietly. I have been honest. More honest than I have been in — sir, I find I am out of polite. The house will lend me some. The house will lend.',
           ],
           flags: { _mask_on: false, _mood: 'predatory' },
           scales: { unease: +5 },
@@ -3324,9 +3324,9 @@ const polonius = {
         f_step_away: {
           lines: [
             'I say: step away from the front door.',
-            'He smiles, broken. I have not been at the front door, sir. I will be at the front door when you are at the front door, and not before. I am a courteous host. I do not crowd the threshold.',
+            'He smiles, broken. I have not been at the front door, sir. I will be at the front door when you are at the front door, and not before. I am a courteous host. I do not crowd a threshold.',
             'He pauses. But sir — when you do come to it, I will be there a beat ahead. That is the only beat I need. One beat.',
-            '~~One beat. He will be one beat ahead. I will need to be the one in front.~~',
+            'One beat. I begin rehearsing a walk with no beats in it.',
           ],
           flags: { _heard_one_beat: true, _polonius_at_door: false },
           scales: { unease: +3, intimacy: +1 },
