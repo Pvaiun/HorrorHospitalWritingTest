@@ -9309,13 +9309,13 @@ const composer = {
   subtitle: 'She is composing the room.',
   role: 'wing', tier: 2,
   file: [
-    'Subject was a piano instructor. A student fell from the lesson-room window on [[8]]. Subject did not look up.',
-    'Subject composes the same chord. Subject believes the chord will ~~bring the child back~~ correct the moment.',
-    'Each near-completion has cost staff [[3]] minutes of unaccounted time. !!Do not stand at the keyboard.!!',
+    'Subject was a piano instructor. On [[8]] a student fell from the lesson-room window. Subject ~~kept playing~~ did not look up.',
+    'Subject composes the same chord. Subject believes the chord, complete, will ~~bring the child back~~ correct the moment.',
+    'Each near-completion costs the room minutes. The ward clock and the corridor clock now disagree by [[3]]. !!Do not stand at the keyboard while it gathers.!!',
   ],
   intro: [
-    'The upright piano is in the corner. She is at the bench. Her fingers hover above the keys but she is not playing.',
-    'She is humming. ~~The chord.~~ A chord. She has been at it forty years.',
+    'The room is scored. The radiator holds a low pedal note that never lifts. The corridor behind me has gone minor. The upright is in the corner; she is at the bench, hands above the keys, not playing.',
+    'She is humming. ~~The chord.~~ A chord. Forty years of it. By my count I have been in the doorway half a minute; the clock over the door has not recorded me yet.',
   ],
 
   scales: {
@@ -9329,12 +9329,12 @@ const composer = {
         { at: 9, word: 'absent' },
       ],
       crossUp: {
-        2: 'I have stopped fidgeting. She has noticed.',
-        3: 'The room has space for her now.',
+        2: 'I have stopped fidgeting. Her shoulders take note.',
+        3: 'I have become a rest in her bar. The music goes around me.',
         4: '~~I am not in the song.~~ I am next to it.',
       },
       crossDown: {
-        1: 'My breathing has gotten loud again.',
+        1: 'My breathing is back in the score, unwritten.',
       },
     },
     completion: {
@@ -9347,9 +9347,9 @@ const composer = {
         { at: 9, word: 'landing' },
       ],
       crossUp: {
-        2: 'The song has begun to know what it is.',
-        3: 'She has found the last few notes.',
-        4: '!!The chord is ready to land.!!',
+        2: 'The chord has begun to know what it is missing.',
+        3: 'She has found all but the last interval.',
+        4: '!!The chord is ready to land. The minute hand has stopped to let it.!!',
       },
       crossDown: {
         1: 'She has lost her place again.',
@@ -9365,13 +9365,13 @@ const composer = {
         { at: 9, word: 'demanding release' },
       ],
       crossUp: {
-        3: 'The chord has thickened. There are voices in it.',
-        4: '!!The chord wants to land. It is louder than the room.!!',
+        3: 'The chord has thickened. There are small voices in the upper register.',
+        4: '!!The chord wants to land. Between its notes, the clock is missing ticks.!!',
       },
       crossDown: {
         2: 'A note has fallen out of it.',
-        1: 'The chord has come apart.',
-        0: 'The chord is gone. The room is quiet.',
+        1: 'The chord has come apart into plain notes.',
+        0: 'The chord is gone. The radiator holds its pedal alone.',
       },
     },
     tension: {
@@ -9384,13 +9384,13 @@ const composer = {
         { at: 9, word: 'breaking' },
       ],
       crossUp: {
-        2: 'The room has gone tight.',
+        2: 'The room has tightened a half-step.',
         3: '!!My teeth are ringing.!!',
-        4: '!!The room is about to fall apart.!!',
+        4: '!!The room is sharp by an eighth-tone. Nothing can hold there long.!!',
       },
       crossDown: {
         2: 'The tension has eased.',
-        1: 'The room has settled.',
+        1: 'The room has settled back into its key.',
       },
     },
   },
@@ -9404,9 +9404,9 @@ const composer = {
   },
 
   fileReveals: [
-    { announce: 'A line of her file fills in. ~~The student fell from the lesson-room window.~~' },
-    { announce: '~~She believes the chord will correct the moment.~~ The chord is in the room.' },
-    { announce: 'The last line completes the page. **She did not look up.**' },
+    { announce: 'A line fills in. The lesson ran four to half past. The window was open for the air. The fall is logged at 4:19, between a scale and a scale.' },
+    { announce: 'Another. The chord is written to land at 4:19, and hold, and this time the room will be looking up.' },
+    { announce: 'The last line completes the page. At 4:19 she was watching her hands. The hands have not forgiven the eyes. ~~She did not look up.~~ She has not looked up since.' },
   ],
 
   presented(p) {
@@ -9415,20 +9415,20 @@ const composer = {
     const co = p.scales.completion;
     const t = p.scales.tension;
     let sound;
-    if (c >= 8)      sound = '!!The chord is full. It has been full a while. It wants to land.!!';
-    else if (c >= 5) sound = 'The chord is almost there. It is several notes thick.';
-    else if (c >= 2) sound = 'The chord is forming. A few notes are stacked, humming.';
-    else             sound = 'The room is quiet. She has not begun.';
+    if (c >= 8)      sound = '!!The chord is all but full — one small note short, the gap near the top of it, child-high. It wants to land.!!';
+    else if (c >= 5) sound = 'The chord stands several notes thick in the air, the way scaffolding stands: temporary on purpose, year after year.';
+    else if (c >= 2) sound = 'A few notes are stacked and humming over the radiator\'s pedal, an interval at a time.';
+    else             sound = 'The room is quiet. The radiator holds its one low note. She has not begun.';
     let posture;
-    if (co >= 7)     posture = 'She is trembling above the keys. Ready to land.';
+    if (co >= 7)     posture = 'Her hands tremble above the keys at the height of a held downbeat.';
     else if (co >= 4) posture = 'She is poised over the keys without pressing them.';
-    else if (co >= 1) posture = 'She drifts above the keys. Searching.';
+    else if (co >= 1) posture = 'Her hands drift over the keys without landing, the way you pat pockets for a thing you know is gone.';
     else              posture = 'She has stopped. The keys are at rest in front of her.';
     let me;
-    if (t >= 6)      me = '!!The room is loud. My ears are full.!!';
-    else if (s >= 4) me = 'I am very quiet in the corner. The room has space for her.';
+    if (t >= 6)      me = '!!The room is loud past the ears. The wired glass takes it up. My watch runs slow against my pulse.!!';
+    else if (s >= 4) me = 'I am quiet in the corner, written in as a rest.';
     else if (s >= 1) me = 'I am holding still. Listening.';
-    else             me = 'I am breathing normally. It is loud, in here.';
+    else             me = 'My breathing is the loudest wrong thing in the room.';
     return `${sound} ${posture} ${me}`;
   },
 
@@ -9436,14 +9436,14 @@ const composer = {
 
     hold_still: {
       label: 'hold still',
-      desc: 'Do nothing. Let the room have its breath.',
+      desc: 'Do nothing. Be silence she can compose on.',
       respond(p) {
         const reps = streakCount(p, 'hold_still');
         if (reps >= 2) {
           return {
             lines: [
-              'I am very still. She has stopped noticing me. Which is the right way.',
-              'A note arrives. Another. She has been working.',
+              'I am still enough that she has stopped scoring around me. That is the right way to be here.',
+              'A note arrives. Another. The clock over the door is further along than my counting says it should be.',
             ],
             scales: { silence: +2, completion: +2, chord: +1 },
           };
@@ -9464,10 +9464,10 @@ const composer = {
       respond(p) {
         return {
           lines: [
-            'I listen. I follow the shape of what she is building. I do not breathe in time.',
+            'I listen. The chord is a staircase with one tread missing, near the top, and she keeps everyone off that step.',
             p.scales.completion >= 4
               ? 'She nods, slightly. She knows I am with her.'
-              : 'She does not notice me listening. But the chord deepens a little anyway.',
+              : 'Nothing in her marks me listening. But the chord deepens a little anyway.',
           ],
           scales: { silence: +2, completion: +1 },
         };
@@ -9483,8 +9483,8 @@ const composer = {
         if (reps >= 2) {
           return {
             lines: [
-              'I keep humming notes. The chord has thickened. She has not stopped.',
-              '~~The chord has more of me in it than I meant.~~ I have given more than I should have.',
+              'I keep humming. The chord takes what I give and stays exactly one note short. It is not my note it wants.',
+              'I check my watch against the corridor clock. ~~They agree.~~ They have stopped agreeing.',
             ],
             scales: { chord: +2, tension: +1, silence: -1 },
             composure: -1,
@@ -9494,8 +9494,8 @@ const composer = {
         if (p.scales.chord >= 7) {
           return {
             lines: [
-              'I hum a low note. It does not fit. ~~The chord winces around it.~~',
-              'She stops humming. She looks at me. !!She is angry. Briefly.!!',
+              'I hum a low note into the gap. It is the wrong size. !!The gap is not low. The gap is small.!!',
+              'She stops humming. She looks at me — briefly, schoolroom-grade, a look with a ruler in it.',
             ],
             scales: { chord: -1, completion: -1, tension: +2 },
             composure: -2,
@@ -9504,7 +9504,7 @@ const composer = {
         }
         return {
           lines: [
-            'I hum a note. It fits. ~~It is one she had been waiting for.~~',
+            'I hum a note. It fits. ~~It is the one she is waiting for.~~ It is next to the one she is waiting for.',
             'She nods, almost.',
           ],
           scales: { chord: +1, completion: +2 },
@@ -9521,9 +9521,9 @@ const composer = {
           return {
             lines: [
               'I reach past her. Her shoulder is warm. I lower the lid over the keys.',
-              'The chord stops in the air. ~~It does not finish.~~ It cannot.',
+              'The chord stops in the air. ~~It does not finish.~~ It is allowed not to finish.',
               'She lowers her arms. She rests them on the closed lid. She breathes out.',
-              '!!She has been waiting for someone to do this.!!',
+              '!!Forty years, and what she was waiting for was the lid.!!',
             ],
             flags: { closed_lid: true },
             scales: { chord: -5, completion: -3, tension: -2 },
@@ -9532,11 +9532,11 @@ const composer = {
         return {
           lines: [
             'I reach to close it. She gets to the lid first. She does not push me away.',
-            'She says: !!Not yet.!! She is firm.',
+            'She says: !!Not yet.!! Said the way teachers say it: as a fact about the schedule.',
           ],
           scales: { tension: +2 },
           composure: -1,
-          composureCost: '!!The chord has gone wrong.!!',
+          composureCost: 'Not yet has a schedule. I am not shown it.',
         };
       },
     },
@@ -9551,7 +9551,7 @@ const composer = {
             lines: [
               'I sit on the bench beside her. I find her shoulder with my shoulder.',
               'I press my fingers to the keys where hers are.',
-              'We press. The chord lands. The room composes itself around it.',
+              'We press. The chord lands, whole, and for one bar the room is at 4:19, and this time we are looking up.',
               '!!She lets the keys go. She has finished. ~~She does not check the window.~~!!',
             ],
             flags: { finished_chord: true },
@@ -9561,7 +9561,7 @@ const composer = {
         return {
           lines: [
             'I sit beside her. I reach for the keys. She shakes her head. ~~Not now.~~ Not yet.',
-            'She guides my fingers back off the keyboard gently.',
+            'She lifts my fingers off the keys the way you lift a student\'s, correcting the hand without blaming it.',
           ],
           scales: { silence: +1, tension: +2 },
           composure: -1,
@@ -9577,13 +9577,13 @@ const composer = {
       respond() {
         return {
           lines: [
-            'I sing a note that does not fit. It is wrong. It is obviously wrong.',
+            'I sing a note that does not fit, on purpose, the way you drop a plate to end a silence.',
             'She stops humming. She stares at the spot the chord was in.',
             'One of the notes has dropped out of it. The others are leaning.',
           ],
           scales: { chord: -3, completion: -2, tension: +3 },
           composure: -1,
-          composureCost: 'Her not-yet has gone on too long.',
+          composureCost: 'The clock took its minute back. Her hands paid it.',
         };
       },
     },
@@ -9596,8 +9596,8 @@ const composer = {
         return {
           lines: [
             'I ask: what is this song?',
-            'She tells me. Quietly. It is for ~~the one who fell~~ a child. She is not sure whose.',
-            'Either way she has been writing it forty years.',
+            'She tells me, quietly. It is for ~~the one who fell~~ a student. Her sentence stops early, the way his scales did, mid-octave.',
+            'She has been writing it for forty years. It has been nearly finished for thirty-nine of them.',
           ],
           scales: { completion: +2, tension: -1 },
         };
@@ -9607,7 +9607,7 @@ const composer = {
 
   wait: {
     label: 'wait',
-    desc: 'Hold the silence. Let the chord stack itself.',
+    desc: 'Hold the silence. The chord stacks. The clock pays.',
     when: (p) => p.scales.completion <= 6 || p.scales.silence >= 3 || p.turn >= 4,
   },
 
@@ -9617,7 +9617,7 @@ const composer = {
       once: true,
       when: (p) => p.scales.chord >= 6 && p.scales.silence >= 4,
       prose: [
-        'She pauses, suspended above the keyboard. She turns her head slightly toward me.',
+        'She pauses, hands suspended, and turns her head a quarter toward me — the angle of a teacher listening to the back row.',
         'She asks: ~~Can you hear it?~~',
       ],
       responses: [
@@ -9626,7 +9626,7 @@ const composer = {
           desc: 'Confirm. Let her have a listener.',
           lines: [
             'I say: yes.',
-            'She returns to the keys. Her tremor has steadied. She is no longer alone in this.',
+            'She returns to the keys. Her tremor steadies. The chord has a witness now.',
           ],
           scales: { completion: +3, silence: +2 },
         },
@@ -9635,7 +9635,7 @@ const composer = {
           desc: 'Precise. Less than yes.',
           lines: [
             'I say: I hear a chord. Four notes. One of them is a half-step under the others.',
-            'She nods slowly. She is surprised. She had not thought anyone was that careful.',
+            'She nods slowly, twice. No one has counted it back to her before. Counting, in this room, is a kind of kindness.',
           ],
           scales: { completion: +3, chord: +1, silence: +1 },
         },
@@ -9644,7 +9644,7 @@ const composer = {
           desc: 'Soft.',
           lines: [
             'I say: I hear it now.',
-            'She adds a fingering I have not seen before. The chord widens by one note. She is teaching me, briefly.',
+            'She adds a fingering I have not seen before — slowly, twice: once to do it, once for me. I am being taught. The lesson resumes where lessons stopped.',
           ],
           scales: { chord: +1, completion: +2, silence: +1 },
         },
@@ -9655,7 +9655,7 @@ const composer = {
       once: true,
       when: (p) => p.scales.silence >= 4 && p.scales.completion >= 3,
       prose: [
-        'She has gone still, briefly. She is looking at the keys.',
+        'She goes still. Her hands hold their shape above the keys, the span fixed, as if lifting them would lose the measurement.',
         'She asks: ~~Which one was at the window? Was it the boy or the girl? I cannot remember which this is for.~~',
       ],
       responses: [
@@ -9664,7 +9664,7 @@ const composer = {
           desc: 'Pick one.',
           lines: [
             'I say: the boy.',
-            'She nods. She begins again. One note at a time. ~~She does not check.~~',
+            'She nods. She begins again, one note at a time. ~~She does not check.~~ Checking would mean looking up.',
           ],
           scales: { completion: +2, chord: +1 },
           scars: ['named'],
@@ -9674,7 +9674,7 @@ const composer = {
           desc: 'Pick the other.',
           lines: [
             'I say: the girl.',
-            'She pauses. She is not sure. But she begins again.',
+            'She pauses one full bar. Then she begins again, in the same key, for a different child. The chord does not mind. !!The chord only needs it small.!!',
           ],
           scales: { completion: +1, tension: +1 },
           scars: ['named'],
@@ -9684,7 +9684,7 @@ const composer = {
           desc: 'Do not name.',
           lines: [
             'I say: tell me what you remember.',
-            'She does. It is small. ~~A scraped knee. A way of saying a particular word.~~',
+            'She does. A scraped knee. A way of saying Wednesday. Scales taken two steps at a time, against the rule.',
             '!!A child, made specific.!!',
           ],
           scales: { completion: +3, silence: +1 },
@@ -9696,7 +9696,7 @@ const composer = {
       once: true,
       when: (p) => p.scales.chord >= 7 && p.scales.tension <= 5,
       prose: [
-        'She has stopped humming. She is suspended above the keys, very still.',
+        'She stops humming. Her hands hang above the keys, very still — the stillness of a metronome caught at the top of its arc.',
         'She asks: ~~Is this right? Does it sound right?~~',
       ],
       responses: [
@@ -9705,7 +9705,7 @@ const composer = {
           desc: 'Give her the reassurance.',
           lines: [
             'I say: it sounds right.',
-            'She nods. She returns to the keys. ~~Her tremor is steadier than it was.~~',
+            'She nods and returns to the keys. ~~It is right.~~ It is one note short of right. We both leave that unsaid.',
           ],
           scales: { completion: +3, silence: +1 },
         },
@@ -9718,14 +9718,14 @@ const composer = {
           ],
           scales: { chord: -2, tension: +2, completion: +1 },
           composure: -1,
-          composureCost: 'The lid is heavier than I thought.',
+          composureCost: 'The third from the bottom. She has known for forty years.',
         },
         {
           label: "I can't tell",
           desc: 'Honest in a different way.',
           lines: [
             "I say: I can't tell.",
-            'She nods. ~~She has been wondering, too.~~',
+            'She nods. ~~She has been wondering, too.~~ She has been wondering for forty years.',
           ],
           scales: { completion: +1, silence: +1, tension: +1 },
         },
@@ -9746,8 +9746,8 @@ const composer = {
           when: (_, player) => player.wound === 'insomnia',
           lines: [
             'I say: it sounds right to someone who has not slept in days.',
-            'She thinks about that. ~~She has not slept either.~~',
-            'She nods at the keys. The chord goes quieter. Once.',
+            'She weighs it. ~~She has not slept either.~~ Sleep lands at night the way chords land. Hers has not landed in years.',
+            'She nods at the keys. The chord drops a dynamic, one full marking.',
           ],
           scales: { completion: +2, chord: -1, tension: -1 },
         },
@@ -9762,7 +9762,7 @@ const composer = {
           ],
           scales: { completion: +2, chord: -2, silence: +2 },
           composure: -1,
-          composureCost: 'She has counted me twice. ~~I am not sure she should.~~',
+          composureCost: 'She has counted me twice. The chord heard the census.',
         },
       ],
     },
@@ -9771,7 +9771,7 @@ const composer = {
       once: true,
       when: (p) => p.scales.completion >= 6 && p.scales.silence >= 3,
       prose: [
-        'She lets her arms fall to her lap. She looks at the keys as if for the first time tonight.',
+        'She lets her arms down to her lap — lowered, not dropped — and looks at the keys as if they have just been delivered.',
         'She asks me: ~~Am I done?~~',
       ],
       responses: [
@@ -9780,7 +9780,7 @@ const composer = {
           desc: 'Release her.',
           lines: [
             "I say: you're done.",
-            'She nods slowly. She lowers the lid and rests her arms on the wood. ~~She has been waiting.~~',
+            'She nods slowly. She lowers the lid and rests her arms on the wood, and the radiator\'s pedal note holds on alone, and is enough.',
           ],
           scales: { chord: -3, completion: -2, tension: -2 },
           flags: { closed_lid: true },
@@ -9801,7 +9801,7 @@ const composer = {
           desc: 'Honest.',
           lines: [
             "I say: I don't know. Only you know.",
-            'She sits with that. She does not move toward the keys. She does not begin again.',
+            'She sits with it. Her hands stay in her lap. By the clock over the door, nothing is taken. The room keeps its minute.',
           ],
           scales: { completion: -1, silence: +2, tension: +1 },
         },
@@ -9813,8 +9813,8 @@ const composer = {
     if (p.scales.completion >= 7 && p.scales.chord >= 7 && p.scales.silence < 4) {
       return {
         lines: [
-          'I wait. She adds the final note. The chord lands without me. ~~Without anyone.~~',
-          '!!The room composes itself. But I was not in it.!!',
+          'I wait one beat too long. She adds the final note herself. The chord lands. The clock over the door gives up [[4]] minutes without complaint.',
+          '!!The room sets itself to 4:19. I was not in the bar when it landed.!!',
         ],
         scales: { chord: -7, completion: -7, tension: +3 },
         composure: -2,
@@ -9823,7 +9823,7 @@ const composer = {
       };
     }
     return {
-      lines: ['I wait. She adds a note. Then another. The chord deepens.'],
+      lines: ['I wait. She adds a note, then another. Between the two, the minute hand moves more than a minute. The difference goes to the chord.'],
       scales: { chord: +1, completion: +1, tension: +1 },
     };
   },
@@ -9835,7 +9835,7 @@ const composer = {
       title: 'You finish the chord with her',
       lines: [
         'She has eased back from the keys. I am still pressing the chord. She leans against my shoulder.',
-        'We do not say anything for a long time.',
+        'We do not say anything for a long time. The clocks in the room agree, for once, on how long.',
       ],
       item: 'scrap_of_paper',
     },
@@ -9844,7 +9844,7 @@ const composer = {
       when: (p) => p.flags.closed_lid && p.scales.silence >= 4,
       title: 'You close the lid',
       lines: [
-        'The lid is closed. She rests her arms on the wood. The room is quiet for the first time.',
+        'The lid is closed. She rests her arms on the wood. The room is quiet down to the radiator\'s one held note, which was never hers.',
         '!!She lets it be quiet.!!',
       ],
       item: 'sliver_of_glass',
@@ -9854,8 +9854,8 @@ const composer = {
       when: (p) => p.flags.finished_alone,
       title: 'She finishes it without you',
       lines: [
-        'The chord arrives. She does not look at me. She has finished what she came in to finish.',
-        'I leave the room. ~~The chord follows me for some hours.~~ The chord is in the corridor now too.',
+        'The chord arrives without me in it. She does not look at me. Not looking is a thing she has had practice at.',
+        'I leave. ~~The chord follows me.~~ The corridor has been transposed. It was minor on the way in. I cannot name what it is now.',
       ],
       item: 'photograph',
       scars: ['witnessed'],
@@ -9865,8 +9865,8 @@ const composer = {
       when: (p) => p.scales.tension >= 9,
       title: 'The chord falls apart',
       lines: [
-        'She lets the keys go. She stares at them. The chord is in pieces around her.',
-        '!!She has lost the place she was holding it from.!!',
+        'She lets the keys go. The chord comes down out of the air in pieces, and none of the pieces is the missing one.',
+        '!!Forty years of almost, and I am the one who dropped it.!!',
       ],
       item: null,
       scars: ['witnessed', 'failed'],
@@ -9875,7 +9875,7 @@ const composer = {
       id: 'abandoned',
       when: (p) => p.flags.left,
       title: 'You walk out',
-      lines: ['I close the door. The chord is humming behind me. ~~It always was.~~'],
+      lines: ['I close the door on the chord, still one note short. By my watch the visit cost minutes I can count. The corridor clock says I was never there.'],
       item: null,
       scars: ['abandoned'],
     },
