@@ -8094,13 +8094,13 @@ const hollow = {
   subtitle: 'She has been given several daughters.',
   role: 'wing', tier: 2,
   file: [
-    'Subject was admitted [[6]] years prior. Subject continues to ~~claim the orderlies~~ recognize the daughter.',
-    "Volunteers placed in Subject's room have been ~~reassigned~~ withdrawn from the program. **They do not come out the same.**",
-    "When asked her own name, Subject gives the orderly's. !!The orderly does not contradict her.!!",
+    'Subject was admitted [[6]] years prior. Subject continues to ~~claim whoever enters~~ recognize the daughter. The daughter is recorded as [[9]].',
+    "**Volunteers** placed in Subject's room are ~~reassigned~~ withdrawn from the program. They answer to the wrong name for weeks after.",
+    "When asked her own name, Subject gives the orderly's. !!The orderly has stopped contradicting her.!!",
   ],
   intro: [
-    "She is at the door before I am all the way through it. She takes my arm just above the elbow. ~~She has been waiting.~~ She knew when I would arrive.",
-    'She says: there you are.',
+    'She is at the door before I am through it, and her hand finds my arm above the elbow, where a mother holds. The chair by the window is already pulled out. The tea on the table is already at drinking heat.',
+    'She says: there you are. The words go in under the sternum, like a hook cast years ago and only now drawn.',
   ],
 
   scales: {
@@ -8114,9 +8114,9 @@ const hollow = {
         { at: 9, word: 'all the way here' },
       ],
       crossUp: {
-        2: 'She has begun to study my face properly.',
+        2: 'She has begun to read my face like a page — line by line, not all at once.',
         3: 'She sees me. Partly.',
-        4: '!!She sees me. She sees who I am.!!',
+        4: '!!She sees me. Not the daughter. The woman standing in the daughter\'s outline.!!',
       },
       crossDown: {
         1: 'Her eyes have left my face.',
@@ -8133,11 +8133,11 @@ const hollow = {
       ],
       crossUp: {
         2: 'Her lips have begun to shape a name she has not said in a while.',
-        3: 'Her face has shifted. She is somewhere old.',
-        4: '!!The grief has come up.!!',
+        3: 'Her face has gone somewhere older than the room. The room waits.',
+        4: '!!The grief is up. It has been kept at drinking heat too.!!',
       },
       crossDown: {
-        1: 'She has folded the grief back away.',
+        1: 'She has folded the grief away, the way you fold a thing you intend to take out again.',
       },
     },
     insistence: {
@@ -8151,12 +8151,12 @@ const hollow = {
       ],
       crossUp: {
         3: 'Her grip on my arm has tightened.',
-        4: '!!She has decided I am her. She will not be moved.!!',
+        4: '!!The decision is made. I am hers. There is no form on which to contest it.!!',
       },
       crossDown: {
-        2: 'She has eased off, slightly.',
+        2: 'Her grip has eased by a finger.',
         1: 'She has stopped insisting.',
-        0: 'She has let me go. I am my own again.',
+        0: 'She has let me go. The arm remembers the hand. The rest of me is mine.',
       },
     },
     panic: {
@@ -8171,11 +8171,11 @@ const hollow = {
       crossUp: {
         2: 'Her breath has gone short.',
         3: 'She has gone pale around the mouth.',
-        4: '!!She is not in the room anymore. She is somewhere worse.!!',
+        4: '!!She is not in this room anymore. She is in the one where it happened.!!',
       },
       crossDown: {
         1: 'Her breath has settled.',
-        0: 'She is calm. ~~For now.~~',
+        0: 'She is calm. The kettle is on again. No one has filled it.',
       },
     },
   },
@@ -8188,9 +8188,9 @@ const hollow = {
   },
 
   fileReveals: [
-    { announce: 'A line of her file fills in. ~~Her daughter.~~ ~~The one she came in with.~~' },
-    { announce: '**The room next door is empty.**' },
-    { announce: "The last line writes itself. ~~She gave the orderly's name.~~" },
+    { announce: "A line fills in. Subject was admitted with her daughter. The daughter's admission was ~~brief~~ closed within the week." },
+    { announce: 'Another. The room next door is held **vacant**. The bed in it is made nightly. No one is recorded as sleeping there.' },
+    { announce: 'The last line writes itself in. When Subject is asked who she is, she answers with whoever is in the room. !!Today that is me.!!' },
   ],
 
   presented(p) {
@@ -8199,19 +8199,19 @@ const hollow = {
     const g = p.scales.grief;
     const pa = p.scales.panic;
     let grip;
-    if (i >= 8)      grip = 'She is holding my arm and has not let go since I came in.';
-    else if (i >= 5) grip = 'She catches at my sleeve, often. She does not seem to notice doing it.';
-    else if (i >= 2) grip = 'She has eased her grip. It has not entirely settled.';
+    if (i >= 8)      grip = 'Her hand is on my arm where it landed when I came in. It has not moved. It weighs nothing. It cannot be lifted.';
+    else if (i >= 5) grip = 'She catches at my sleeve, often, without looking. The hand does the noticing for her.';
+    else if (i >= 2) grip = 'Her grip has eased. Her hand stays within reach of my sleeve, the way a cup stays within reach of its saucer.';
     else             grip = 'She has let me go. She sits with herself.';
     let eyes;
-    if (re >= 7)     eyes = 'Her eyes are on me. She has seen me. She has seen who I am.';
-    else if (re >= 4) eyes = 'Her eyes are searching my face for someone she half-knows.';
-    else if (pa >= 5) eyes = 'Her eyes flick around the room. She is checking exits.';
-    else              eyes = 'Her eyes are on me without seeing me. She is somewhere else, behind them.';
+    if (re >= 7)     eyes = 'Her eyes are on me, and they have me right: a stranger, my size, in her daughter\'s chair.';
+    else if (re >= 4) eyes = 'Her eyes work my face the way hands work a key that almost fits the lock.';
+    else if (pa >= 5) eyes = 'Her eyes make their circuit: door, window, door. She is counting exits, or arrivals.';
+    else              eyes = 'Her eyes are on me without using me. The looking goes through to someone standing in my outline.';
     let mouth;
     if (g >= 7)      mouth = 'Her mouth is shaping a name she has not said in a long time.';
     else if (g >= 4) mouth = 'Her lips are moving without sound.';
-    else             mouth = 'Her mouth is at rest. She is composed.';
+    else             mouth = 'Her mouth is at rest. Everything about her is set out neatly, like a table laid for two.';
     return `${grip} ${eyes} ${mouth}`;
   },
 
@@ -8225,12 +8225,12 @@ const hollow = {
         if (reps >= 3) {
           return {
             lines: [
-              'I have been her daughter a while now. I have told her about a week I did not have.',
-              'She has been very glad. ~~I am tired.~~ I am thinner.',
+              'I have been her daughter the better part of an hour. I have given her a week I did not live: the walk, the young man, the rain.',
+              'She is glad in a way that takes. ~~I am tired.~~ I am less. The shape I am filling was kept warm for someone else, and it fits, and the fit is the cost.',
             ],
             scales: { insistence: +2, recognition: -1 },
             composure: -2,
-            composureCost: 'Her hand is around my arm. It has not let go.',
+            composureCost: 'Her hand has been on my arm so long it has a temperature I answer to.',
             scars: ['named'],
           };
         }
@@ -8239,7 +8239,7 @@ const hollow = {
             lines: [
               'I let her tell me what I have been doing this week.',
               'I have been at school. I have been seeing a young man. I have been thinking of cutting my hair.',
-              'She is glad for me. It is a long monologue. ~~She has been waiting to give it.~~',
+              'She is glad for me. The gladness comes out fully made, like the tea. ~~She has been waiting to give it.~~ It was poured before I arrived.',
             ],
             scales: { grief: -1, insistence: +1 },
             composure: -1,
@@ -8248,8 +8248,8 @@ const hollow = {
         }
         return {
           lines: [
-            'I let her keep her grip on my arm. I let her look at my face.',
-            'She breathes out. ~~She has been afraid I would not come.~~',
+            'I let the hand stay. I let the face be read.',
+            'She calls me a pet name, soft with use. It is one letter off a name that would fit me. The letter sits in my ear all the same. ~~She was afraid I would not come.~~ She is afraid of the day I do not.',
           ],
           scales: { insistence: +1, panic: -1 },
         };
@@ -8262,10 +8262,10 @@ const hollow = {
       respond(p) {
         return {
           lines: [
-            'I sit beside her. I do not perform a relation. I am a person who is here.',
+            'I sit beside her — in the other chair, not the pulled-out one. A person, present, unassigned.',
             p.scales.recognition >= 3
-              ? 'She looks at me, sidelong. She is letting me be what I am.'
-              : 'She catches my sleeve anyway. Absentmindedly.',
+              ? 'She looks at me sidelong, and lets the chair by the window stay empty. It is the heaviest thing she has lifted today.'
+              : 'Her hand crosses to my sleeve anyway, on its own errand.',
           ],
           scales: { recognition: +2, insistence: -1, panic: -1 },
         };
@@ -8281,12 +8281,12 @@ const hollow = {
         if (reps >= 1) {
           return {
             lines: [
-              'I say it again. ~~She does not want to hear it again.~~ She refuses to hear it.',
-              'She lets go of my arm and presses where her pulse should be. Her breath has changed.',
+              'I say it again. ~~She does not hear it.~~ She declines it, the way a hand declines change from a tray.',
+              'She lets go of my arm and presses two fingers to her own wrist, taking the pulse of something. Her breath has changed registers.',
             ],
             scales: { panic: +3, recognition: -1 },
             composure: -2,
-            composureCost: 'Her breath has changed. ~~She has heard something.~~',
+            composureCost: 'Twice now. The second no costs double.',
           };
         }
         if (p.scales.recognition >= 6) {
@@ -8295,22 +8295,22 @@ const hollow = {
               'I say: I am not your daughter.',
               'She looks at me a long time. She does not argue. She lets go of my arm.',
               'She says: ~~I knew that.~~ I knew that.',
-              'She sits down. She is suddenly very small.',
+              'She sits down. The chair is too big for her, all at once, the way chairs are too big for children.',
             ],
             scales: { insistence: -4, recognition: +3, grief: +2 },
             composure: -1,
-            composureCost: '!!I have given her something I am not.!!',
+            composureCost: '!!I have unmade her daughter in front of her.!!',
           };
         }
         return {
           lines: [
             'I say: I am not your daughter.',
-            'She does not hear me. Or she hears but it is a fact she has already decided does not apply.',
-            'Her grip on my arm stays exactly where it was.',
+            'She hears it the way you hear weather through a window: noted, irrelevant to the room.',
+            'Her grip does not move. The fact has been received and filed under nothing.',
           ],
           scales: { recognition: +1, panic: +2 },
           composure: -1,
-          composureCost: 'I have been telling her a week I did not have.',
+          composureCost: 'I told the truth and the room absorbed it like a spill.',
         };
       },
     },
@@ -8324,8 +8324,8 @@ const hollow = {
         if (reps >= 1) {
           return {
             lines: [
-              'I ask another. And another. She gives me details. Small ones. A knee scar. A favorite color.',
-              'She is bringing back a person, one detail at a time.',
+              'I ask another, and another. She hands me details one at a time, the way you hand someone china: a knee scar shaped like a comma. A coat with one toggle gone. A way of standing in doorways.',
+              'Between us, on the table, a person is being set out.',
             ],
             scales: { grief: +2, recognition: +1 },
           };
@@ -8333,7 +8333,7 @@ const hollow = {
         return {
           lines: [
             'I ask: what was she like?',
-            'She answers. She answers for a long time. She remembers a great deal. Some of it is happy.',
+            'She answers at length, and the length is the point: every minute of the telling is a minute the daughter is at the table.',
             'At the end she says a name. ~~The name.~~ A name.',
             'I write it down. I will keep it.',
           ],
@@ -8351,7 +8351,7 @@ const hollow = {
         if (r_) {
           return {
             lines: [
-              'I say her name. Her own. ~~I have practiced this.~~ It lands on her like a thing she had set down somewhere and missed.',
+              'I say her name — her own, from the spine of her file. ~~I have practiced it.~~ I have carried it folded in the chest pocket. It lands like a parcel she had stopped expecting.',
               'She answers: yes? She says it not as a question.',
               '!!Her grip on my arm gives way.!!',
             ],
@@ -8360,10 +8360,10 @@ const hollow = {
         }
         return {
           lines: [
-            'I say her name. Her own. The one on her file. She has not been called by it in a long time.',
+            'I say her name. Her own, the one on the file, worn from disuse like a coin kept in a drawer.',
             p.scales.recognition >= 5
               ? 'She answers: yes? She says it like a question she had stopped asking.'
-              : 'She frowns. She is trying to decide if I am talking to her, or to someone else with the same name.',
+              : 'She frowns at the name, holding it to the light, deciding whether it is hers or belongs to a woman she once stood next to.',
           ],
           scales: { recognition: +2, insistence: -1, panic: +1 },
         };
@@ -8377,9 +8377,9 @@ const hollow = {
       respond() {
         return {
           lines: [
-            'I write the name in my file. Carefully. ~~As if she had asked me to.~~ She did not ask me to.',
-            'She watches me do it. She does not stop me.',
-            '!!The name belongs somewhere now.!!',
+            'I write the name into my own file, in the space the page leaves me. ~~Because she asked.~~ She did not ask. That is why.',
+            'She watches the pen the whole way. She does not stop me. She checks the spelling over my shoulder, once, with one nod.',
+            '!!The name is on paper that leaves this room.!!',
           ],
           scales: { grief: +2, recognition: +2, insistence: -1 },
           flags: { kept_name: true },
@@ -8390,7 +8390,7 @@ const hollow = {
 
   wait: {
     label: 'wait',
-    desc: 'Let her tell me my own history. ~~It costs.~~',
+    desc: 'Let her talk. The tea stays at drinking heat. It always does.',
     when: (p) => p.scales.insistence >= 6 || p.turn >= 4,
   },
 
@@ -8400,7 +8400,7 @@ const hollow = {
       once: true,
       when: (p) => p.scales.recognition >= 4 && p.scales.insistence <= 6,
       prose: [
-        'She is looking at me carefully. She has stopped speaking.',
+        'She has stopped mid-story. Her eyes come up from the tea to my face, careful, the way you look up from a letter to check the person against it.',
         'She asks: ~~Tell me about yourself.~~',
       ],
       responses: [
@@ -8409,7 +8409,7 @@ const hollow = {
           desc: 'Plant yourself in the present.',
           lines: [
             'I tell her: I came in this morning. I was found at the front entrance.',
-            'She takes that in slowly. She nods.',
+            'She takes it in slowly, stirring it into what she already has.',
             'She says: yes. Yes, I remember now.',
           ],
           scales: { recognition: +3, insistence: -2 },
@@ -8419,7 +8419,7 @@ const hollow = {
           desc: 'Meet her where she is.',
           lines: [
             "I say: I don't know.",
-            'She nods slowly. She has been on this side of the question.',
+            'She nods, slowly, and pats my hand. It is the first thing I have said that she has believed all the way through.',
           ],
           scales: { recognition: +2, grief: +3 },
         },
@@ -8428,7 +8428,7 @@ const hollow = {
           desc: 'Turn it around.',
           lines: [
             'I say: tell me first. Who are you?',
-            'She is quiet for a long time. She says her own name. ~~She has not said it in a while.~~',
+            'She is quiet a long time. Then she says her own name, in two pieces, checking each piece against the other. ~~She has not said it in a while.~~ It has not been said to her in longer.',
           ],
           scales: { recognition: +4, insistence: -3, grief: +1 },
         },
@@ -8438,7 +8438,7 @@ const hollow = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: I cannot. I came in without identification, without anyone with me.',
-            'She holds that. Her face softens — she has been on this side of the file.',
+            'She holds it. Her face softens at the blank where a name should be. She knows the blank. She keeps one made up in the next room.',
             'She says: ~~then we are both starting over.~~',
           ],
           scales: { recognition: +2, insistence: -2, grief: +1 },
@@ -8449,8 +8449,8 @@ const hollow = {
           when: (_, player) => player.wound === 'insomnia',
           lines: [
             'I say: I have not slept in days. There is not much left to tell.',
-            'She takes my hand, briefly. She has not slept either.',
-            '~~Mothers do not.~~ She has not.',
+            'She takes my hand, briefly, and turns it over, reading the palm for tiredness.',
+            '~~Mothers do not sleep.~~ Mothers wait up. She is still waiting up.',
           ],
           scales: { recognition: +2, insistence: -1, grief: +2 },
         },
@@ -8460,12 +8460,12 @@ const hollow = {
           when: (_, player) => player.wound === 'split_personality',
           lines: [
             'I say: there are two of me. One is here. The other is still at home.',
-            'She goes very still. ~~She is not going to ask which one.~~',
+            'She goes very still. ~~She will not ask which one I am.~~ She has already set a place for both.',
             'She says: ~~stay anyway.~~',
           ],
           scales: { recognition: +1, insistence: -3, grief: +3 },
           composure: -1,
-          composureCost: 'She has chosen the half in the room. ~~I am not sure she did.~~',
+          composureCost: 'There are two cups on the table now. I watched her pour neither.',
         },
       ],
     },
@@ -8475,7 +8475,7 @@ const hollow = {
       once: true,
       when: (p) => p.scales.panic >= 5 && p.scales.insistence >= 5,
       prose: [
-        'She has heard a sound outside the room. Her grip on my arm tightens.',
+        'A trolley passes in the corridor. Her grip arrives on my arm before the sound does.',
         'She asks: ~~Do you have to go?~~',
       ],
       responses: [
@@ -8484,18 +8484,18 @@ const hollow = {
           desc: 'Commit.',
           lines: [
             "I say: I'll stay.",
-            'Her grip eases. Her breath steadies. ~~She had been afraid.~~',
+            'Her grip eases. Somewhere behind me a kettle comes off the boil. No one has filled one.',
           ],
           scales: { panic: -4, insistence: +1 },
           composure: -1,
-          composureCost: 'Her face has shut.',
+          composureCost: 'Stay has a length here. It is not mine to set.',
         },
         {
           label: "I'll come back",
           desc: 'A kinder lie.',
           lines: [
             "I say: I have to go. But I'll come back. ~~I will not.~~ Tomorrow.",
-            'She nods. She does not check her watch. But she lets go of my arm.',
+            'She nods. Tomorrow is a word she has long experience of holding. She lets go of my arm one finger at a time.',
           ],
           scales: { panic: -2, insistence: -2 },
           scars: ['named'],
@@ -8505,7 +8505,7 @@ const hollow = {
           desc: 'Gentle. Honest.',
           lines: [
             "I say: you'll be alright.",
-            'She does not seem convinced. But she does not stop me either.',
+            'She looks at the pulled-out chair, then at me. She does not stop me. The chair stays pulled out.',
           ],
           scales: { panic: -1, recognition: +1 },
         },
@@ -8517,7 +8517,7 @@ const hollow = {
       once: true,
       when: (p) => p.scales.grief >= 6 && p.scales.recognition >= 4,
       prose: [
-        'Her face has gone still. She is looking somewhere I cannot see.',
+        'Her face goes still over the cup. Her thumb finds her ring and turns it, once, the way you wind a small clock.',
         'She asks me: ~~Were you at the funeral?~~',
       ],
       responses: [
@@ -8526,7 +8526,7 @@ const hollow = {
           desc: 'Tell her yes.',
           lines: [
             'I say: I was. I was there.',
-            'She nods. ~~The small one~~ A small one was there too, she says.',
+            'She nods. You wore the grey coat, she says. I have never owned a grey coat. I find myself certain of its buttons.',
           ],
           scales: { grief: +3, recognition: +1, insistence: -1 },
           composure: -1,
@@ -8537,7 +8537,7 @@ const hollow = {
           desc: 'Tell her no.',
           lines: [
             "I say: I wasn't.",
-            'She is quiet. She does not let go of my arm.',
+            'She is quiet. Then: no, she says. No one was. It rained, and the cars came late. She gives it like a timetable. Her grip does not move.',
           ],
           scales: { grief: +2, panic: +1, insistence: -1 },
         },
@@ -8546,11 +8546,11 @@ const hollow = {
           desc: 'Open it.',
           lines: [
             'I say: tell me about it.',
-            'She does. It is small. And clear. ~~She has not let herself say any of it out loud.~~',
+            'She does. The wrong hymn. The vicar with the stress on the wrong half of the name. A coffin you could carry one-armed. ~~She has never said it aloud.~~ She has said it nightly, to the room next door.',
           ],
           scales: { grief: +3, recognition: +2 },
           composure: -1,
-          composureCost: 'I have been her daughter a while now.',
+          composureCost: 'A coffin you could carry one-armed. I will keep the measurement.',
         },
       ],
     },
@@ -8560,7 +8560,7 @@ const hollow = {
       once: true,
       when: (p) => p.scales.grief >= 5 && p.scales.insistence <= 6,
       prose: [
-        'She has gone very still. The room has narrowed to whatever she is looking at.',
+        'She has gone very still. Her arms have moved into a curve without her, around a weight the room does not contain.',
         'She says, ~~to me~~ mostly to herself: ~~She was so small. I held her in one arm.~~',
       ],
       responses: [
@@ -8569,11 +8569,11 @@ const hollow = {
           desc: 'Just stay there with it.',
           lines: [
             'I say: yes. She was small.',
-            'She breathes out. ~~She has been holding it.~~',
+            'She breathes out. The curve of her arms eases, as if something in them had been set down gently.',
           ],
           scales: { grief: +3, recognition: +1, insistence: -2 },
           composure: -1,
-          composureCost: 'Her breath has changed. ~~She has heard something.~~',
+          composureCost: 'My own arms made the curve back. I did not instruct them.',
         },
         {
           label: 'how small',
@@ -8581,22 +8581,22 @@ const hollow = {
           lines: [
             'I ask: how small?',
             'She measures a shape into the air, careful and exact. She names a weight. She names a length.',
-            '~~A person, made specific.~~',
+            'Six pounds, eleven ounces. Nineteen inches. The numbers stand in the air where the shape was.',
           ],
           scales: { grief: +3, recognition: +2 },
           composure: -1,
-          composureCost: '!!I have given her something I am not.!!',
+          composureCost: 'I wrote the numbers down. Someone had to be holding them.',
         },
         {
           label: 'change the subject',
           desc: 'Spare her.',
           lines: [
-            'I look at the clock. I ask if she wants tea.',
-            'She does not answer. ~~She had been about to say more.~~',
+            'I look at the clock and ask about tea. There is tea in front of me already. There has been tea in front of me since before I sat down.',
+            'She does not answer. Her arms hold their curve a moment longer, then remember the table. ~~She had more.~~ She had all of it.',
           ],
           scales: { grief: -2, insistence: +2, panic: +1 },
           composure: -1,
-          composureCost: 'I have been telling her a week I did not have.',
+          composureCost: 'The tea was at drinking heat. It is always at drinking heat. I drank it anyway.',
         },
       ],
     },
@@ -8606,24 +8606,24 @@ const hollow = {
     if (p.scales.insistence >= 7) {
       return {
         lines: [
-          'I wait. She is telling me about a birthday party. It was for me. I was eight.',
-          '~~It was a long time ago.~~ It was forty years ago. I was not there.',
+          'I wait. She tells me about my eighth birthday: the cake with the lemon icing, the dress with the wrong sleeves, how I cried and would not say why.',
+          '~~I remember it.~~ I was not there. Somewhere in me, the lemon icing has a taste.',
         ],
         scales: { insistence: +1 },
         composure: -1,
-        composureCost: 'Her face has shut.',
+        composureCost: 'The icing was lemon. I know it was lemon. I was not there.',
       };
     }
     if (p.scales.recognition >= 4) {
       return {
         lines: [
-          'I wait. She is quiet. She watches my face like she might find something she has misplaced.',
+          'I wait. She is quiet, and she watches my face the way you watch a window at dusk — for the room behind it, not the glass.',
         ],
         scales: { recognition: +1, grief: +1 },
       };
     }
     return {
-      lines: ['I wait. She is humming. Something I do not recognize. It sounds like an old song.'],
+      lines: ['I wait. She hums to herself, a tune with a gap in it where a child\'s part would answer. She leaves the gap open every time it comes around.'],
       scales: { grief: +1, insistence: +1 },
     };
   },
@@ -8634,7 +8634,7 @@ const hollow = {
       when: (p) => p.flags.kept_name && p.scales.grief >= 8 && p.scales.recognition >= 6,
       title: "You keep her daughter's name",
       lines: [
-        'I write the name in my file. I will say it to other people who ought to know it.',
+        'The name leaves the room in my file, in my hand. I will say it to people who are paid to know it, and to some who are not.',
         '~~It is mine.~~ It is hers. It is mine to carry.',
       ],
       item: 'scrap_of_paper',
@@ -8644,8 +8644,8 @@ const hollow = {
       when: (p) => p.scales.recognition >= 9 && p.scales.grief >= 5,
       title: 'You tell her the truth',
       lines: [
-        'She has heard me. She has known a while. She sits with it.',
-        'She says her own name out loud. Once. Softly. She has not said it in years.',
+        'She has heard me. She has known a while — the way you know a clock is wrong and thank it anyway.',
+        'She says her own name aloud, once, softly, and sets it on the table between us like a cup returned to its saucer.',
       ],
       item: 'ink_bottle',
     },
@@ -8654,7 +8654,7 @@ const hollow = {
       when: (p) => p.scales.insistence >= 10 && p.scales.recognition <= 3,
       title: 'You are her, for as long as it takes',
       lines: [
-        'I let her tell me my history. I let her tell me what I am about to do with my life.',
+        'I let her give me the history entire: the school, the young man, the haircut I am still deciding on. I am going to do very well. She has always known I would.',
         '!!She is at peace.!! She has not been at peace since.',
         'I leave the room with the things she has given me. ~~They are not mine.~~ They are mine now.',
       ],
@@ -8666,8 +8666,8 @@ const hollow = {
       when: (p) => p.scales.panic >= 9,
       title: 'You lose her',
       lines: [
-        'Her face has shut. She does not see me anymore. She is afraid in a way I cannot reach.',
-        '!!I leave the room. She does not notice.!!',
+        'Her face has shut like a house at bad news. Whoever she sees now, it is no one who can help her, and it is wearing my coat.',
+        '!!I leave. The chair stays pulled out behind me.!!',
       ],
       item: null,
       scars: ['witnessed', 'failed'],
@@ -8676,7 +8676,7 @@ const hollow = {
       id: 'abandoned',
       when: (p) => p.flags.left,
       title: 'You walk out',
-      lines: ['I close the door. ~~She is still saying the name she calls me.~~ She is calling me by her daughter\'s name as I go.'],
+      lines: ['I close the door. Through it she is still calling me in. ~~My name.~~ Her daughter\'s name. From the corridor, the difference is one letter.'],
       item: null,
       scars: ['abandoned'],
     },
