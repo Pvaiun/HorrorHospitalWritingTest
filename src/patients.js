@@ -2453,9 +2453,9 @@ const polonius = {
 
         r_kitchen: {
           lines: [
-            'The kitchen. A great iron range. Steam from a pot the cook has not stirred in a while. A block of knives at the wall. Two cleavers on a high rack. A door to a small pantry. A second door — narrower — set into the back wall.',
-            'The cook is at the range. He looks at me. The eyes are different here. The eyes have the lights on. The smile is no longer a fixed smile; it is a hesitant one.',
-            'Quietly, in a northern accent: Sir. Quickly. We have a minute. The master saves himself for the parlor. He does not come into the kitchen.',
+            'The kitchen. The great iron range, the block of knives, two cleavers on a high rack, the pantry door, the narrower door in the back wall. A pot steams over a burner that is not lit.',
+            'The cook is at the range. He looks at me, and the eyes have the lights on. The smile has stopped being a fixture and started being a question.',
+            'Quietly, the north back in his voice: Sir. Quickly. We have a minute. The master saves himself for the parlor. He does not come into the kitchen.',
           ],
           flags: { room: 'kitchen', _been_kitchen: true, _seen_cook_lucid: true },
           scales: { unease: +1, intimacy: +1 },
@@ -2474,7 +2474,7 @@ const polonius = {
           // will answer any of three questions; the player can ask
           // one then return to the kitchen.
           lines: [
-            'I keep my voice low. I say: I need to know — quickly, before the day reverts you.',
+            'I keep my voice under the range\'s hiss. I say: quickly, before the day takes you back. One question.',
           ],
           choices: [
             { label: 'the shard — where is it', goto: 'r_kitchen_ask_shard' },
@@ -2486,10 +2486,10 @@ const polonius = {
         r_kitchen_ask_shard: {
           lines: [
             'I say, quickly: the shard. It is in the cellar.',
-            'The cook nods. On the back shelf, sir. Low — at the level of a man\'s knee. Behind the third bottle. A piece of broken clay, no bigger than a thumbprint. There is a name scratched into it in a script that is older than any of us.',
-            'He pauses. Sir. The shard is what holds him. If you break it, he will go. He will go the way men go. The staff will go with him. The day will end.',
-            'The day will end for me, too, sir. I do not mind. I have been here a great while.',
-            '~~He is telling me he is ready to be released. He is part of the bargain.~~',
+            'The cook nods. The back shelf, sir. Low — knee height. Behind the third bottle. A piece of broken clay no bigger than a thumbprint, with a name scratched in, older than any tongue in this house.',
+            'He pauses. Sir. The shard is what holds him. Break it and he goes — goes the way men go. The staff go with him. The day ends.',
+            'The day ends for me too, sir. I do not mind. I have been here a great while, and the lamb has been the same lamb.',
+            'He is pricing his own end into the bargain, calmly, the way he would cost a joint of meat.',
           ],
           flags: { _heard_shard_in_cellar: true, _heard_binding: true, _heard_binding_full: true, _binding_is_shard: true, _knows_free_path: true, _heard_cellar: true, _cook_ready_to_end: true },
           scales: { intimacy: +2 },
@@ -2503,9 +2503,9 @@ const polonius = {
         r_kitchen_ask_card: {
           lines: [
             'I say: my card. The admission card. Where is it.',
-            'The cook thinks. Sir. The maid brought it to the cloakroom. Mr. Halliwell took it from the cloakroom on the master\'s direction. It is in the study now. Locked drawer. The key is in the desk; the desk is also locked.',
-            'He pauses. Or the master is wearing it again, sir, if his mood has cooled. He keeps it on his person in the late evenings. I have seen it.',
-            '~~The card is in the study or on him. The cook does not know which.~~',
+            'The cook thinks. Sir. The maid carries it to the cloakroom. Mr. Halliwell takes it on from there, at the master\'s direction. The study, then — the locked drawer. The drawer key is in the desk, and the desk is also locked. The house likes its boxes inside boxes.',
+            'He pauses. Or the master is wearing it again, sir, if his mood has cooled. He keeps cards on his person in the late evenings. I have seen the corner of one at his vest.',
+            'The study, or his vest pocket. Two places. I can search both. Only one of them will let me.',
           ],
           flags: { _heard_study: true, _heard_card_in_study: true, _card_location_unknown_specific: true },
           scales: { unease: +2, intimacy: +1 },
@@ -2519,9 +2519,9 @@ const polonius = {
         r_kitchen_ask_stair: {
           lines: [
             'I say: the back stair. Down to the cellar.',
-            'He nods. Sir. Through this kitchen. The narrower door. The stair turns once. The cellar is at the bottom. Mrs. Halliwell is at the front. Mr. Halliwell is in the parlor. The master will not come down. He has not been down in some centuries. The cellar is cold for him.',
-            'He pauses. Sir, when you come back up. Do not stop in the kitchen on the way out. Run for the front. The master will be in the foyer when he hears the shard break, and he will be quick. Have the card before you break it.',
-            '~~Have the card before I break it. The order matters.~~',
+            'He nods. Through this kitchen, sir. The narrower door. The stair turns once. Mrs. Halliwell keeps the front. Mr. Halliwell keeps the parlor. The master will not come down — he has not been down in some centuries. The cellar is cold for him in a way it is not cold for you.',
+            'He pauses. Sir. When you come back up, do not stop in this kitchen. Run for the front. He will be in the foyer when he hears the shard go, and he will be quick. !!Have the card before you break it.!!',
+            'Card first. Clay second. I say the order to myself twice, like a number I cannot write down.',
           ],
           flags: { _heard_back_stair: true, _heard_route: true, _heard_break_order: true, _heard_cellar: true },
           scales: { unease: +1 },
@@ -2534,8 +2534,8 @@ const polonius = {
 
         r_kitchen_take_knife: {
           lines: [
-            'I take a small knife from the block. It is sharp. It is the cook\'s knife. The handle has worn to the cook\'s hand and now fits mine awkwardly.',
-            'The cook nods. Take it, sir. I have had no need of it in the kitchen for some time.',
+            'I take a small knife from the block. Sharp, well kept. The handle has worn itself to the cook\'s grip over the years and sits in mine like a borrowed shoe.',
+            'The cook nods. Take it, sir. I have had no need of it in the kitchen for some time. The lamb stopped arguing long ago.',
           ],
           flags: { _armed: true, _weapon: 'knife' },
           scales: { unease: +1 },
@@ -2548,8 +2548,8 @@ const polonius = {
 
         r_kitchen_take_cleaver: {
           lines: [
-            'I reach for a cleaver on the high rack. The cook nods. He hands it down himself. The cleaver is heavier than the knife. It has been used for things that are not lamb.',
-            'Sir, he says. Aim for the side of the head, if the master gives you cause. The bone gives. He has been hit before. He gets up. The staff dissolve when he goes down hard enough.',
+            'I reach for a cleaver on the high rack. The cook hands it down himself. It is heavier than a kitchen needs. The edge has been kept for work the menu does not mention.',
+            'Sir, he says. The side of the head, if the master gives you cause. The bone gives. He has been hit before; he gets up. !!If he goes down hard enough, the staff go out like lamps.!!',
           ],
           flags: { _armed: true, _weapon: 'cleaver' },
           scales: { unease: +1 },
@@ -2562,8 +2562,8 @@ const polonius = {
 
         r_kitchen_pantry: {
           lines: [
-            'I open the pantry. It is dark. There are shelves of preserved things. Pickled lemons. A jar of something with a label written in Greek. A row of small bottles.',
-            'I close the pantry. The pantry is no use to me at the moment.',
+            'I open the pantry. Dark shelves of **preserved** things. Pickled lemons. A jar whose label is in Greek, and whose contents I elect not to translate. A row of small bottles.',
+            'I close the pantry. Not tonight.',
           ],
           scales: { unease: +1 },
           choices: [
@@ -2573,9 +2573,9 @@ const polonius = {
 
         r_kitchen_back_door: {
           lines: [
-            'I open the narrower door. Behind it is a stair down, narrow and stone-walled.',
+            'I open the narrower door. A stair drops away behind it, stone-walled, one turn.',
             'The cook, behind me: That is the way, sir. The cellar door is at the bottom. I will not follow.',
-            '~~He will not follow because he cannot. The kitchen is the room he is awake in.~~',
+            'Will not, he says. The kitchen is the one room he is awake in. Past this jamb he is the dining room\'s again.',
           ],
           flags: { _heard_back_stair: true, _heard_cellar: true },
           scales: { unease: +1 },
@@ -2593,7 +2593,7 @@ const polonius = {
 
         r_study_approach: {
           lines: [
-            'I walk to the door with the brass plate. The plate reads ~~Study~~. The door is closed.',
+            'I walk to the door with the brass plate. I read the plate: Study. Under the engraving, the brass is worn by a thousand years of the same thumb.',
             'I try the handle. The handle turns; the lock holds.',
           ],
           flags: { _aware_study_locked: true },
@@ -2618,8 +2618,8 @@ const polonius = {
 
         r_study_try_keys: {
           lines: [
-            'I take out the cloakroom keys. The brass-headed one does not fit. The smaller key — there is a smaller key on the ring — does. The smaller key was a butler\'s key. The butler has many.',
-            'The study door opens.',
+            'I take out the cloakroom keys. The brass-headed one does not fit. The smaller one — there is always a smaller one on a butler\'s ring — does.',
+            'The study door opens onto the smell of ink and cold candle.',
           ],
           flags: { _study_open: true },
           scales: { unease: +1 },
@@ -2632,9 +2632,9 @@ const polonius = {
 
         r_study_pick: {
           lines: [
-            'I work the lock with what I have. The lock is small. The mechanism is old. After what feels like several minutes, the lock turns.',
+            'I work the lock with what I have. Small lock, old works. I count the pins as they argue: one, two, a long third. The lock turns.',
             'The door opens. I step into the study.',
-            'Down the corridor, Polonius makes a small sound. The sound is one a man makes when an inevitability advances by a step.',
+            'Down the corridor, Polonius makes a small sound — the sound a man makes when an inevitability advances by one square.',
           ],
           flags: { _study_open: true, _picked_study_lock: true },
           scales: { unease: +2, intimacy: +1 },
@@ -2647,8 +2647,8 @@ const polonius = {
 
         r_study_shoulder: {
           lines: [
-            'I throw my weight at the door. The door is older than I am and stronger than I am. My shoulder will feel it in the morning, if there is a morning.',
-            'On the third attempt the latch gives. The door swings inward. The frame around the latch is splintered.',
+            'I put my shoulder to the door. The door is older than I am and has met shoulders before. My arm reports the score: door, one.',
+            'On the third try the latch gives. The door swings in. The frame hangs in splinters — the first broken thing this house has allowed all evening.',
             'Down the corridor, fast: footsteps. Polonius is coming.',
           ],
           flags: { _study_open: true, _study_forced: true, _polonius_alerted: true },
@@ -2662,9 +2662,9 @@ const polonius = {
 
         r_study_inside: {
           lines: [
-            'A small study. A desk with a green leather top. A bookshelf of ledgers. A locked drawer at the right of the desk. A window painted to look like a window.',
-            'A leather notebook on the desk; an ink-pot; a fountain pen with a fresh nib. A small bowl of brass tacks.',
-            'There are papers spread across the desk. The papers are written in his hand.',
+            'A small study. A desk with a green leather top, a shelf of ledgers, a locked drawer at the desk\'s right hand. The window is paint over brick, finished down to a painted latch.',
+            'On the desk: a leather notebook, an ink-pot, a fountain pen with a fresh nib, a small bowl of brass tacks.',
+            'Papers lie spread across the leather, all in his hand.',
           ],
           flags: { room: 'study', _been_study: true },
           scales: { unease: +2, intimacy: +1 },
@@ -2687,7 +2687,7 @@ const polonius = {
 
         r_study_drawer: {
           lines: [
-            'I try the drawer. The drawer is locked. The lock is brass and small.',
+            'I try the drawer. Locked. The lock is brass and small and certain of itself.',
           ],
           choices: [
             {
@@ -2715,8 +2715,8 @@ const polonius = {
 
         r_study_pry_cleaver: {
           lines: [
-            'I wedge the blade of the cleaver between the drawer and the desk. I lever it. The wood gives. The drawer slides open in pieces.',
-            'Inside the drawer is —',
+            'I wedge the cleaver\'s blade between drawer and desk and lever. The wood considers its centuries, then gives. The drawer comes open in pieces.',
+            'Inside the drawer —',
           ],
           flags: { _study_drawer_open: true, _drawer_forced: true },
           scales: { unease: +1 },
@@ -2730,9 +2730,9 @@ const polonius = {
 
         r_study_pry_knife: {
           lines: [
-            'I work the knife into the seam. The knife is small. The drawer is older than the knife. The knife snaps before the drawer gives.',
-            'The blade is in two pieces. The drawer is still locked.',
-            '~~The drawer was patient with me. The knife was not.~~',
+            'I work the knife into the seam. The knife is small. The drawer has outlived better tools. The blade snaps before the wood notices.',
+            'The knife is in two pieces. The drawer is still locked.',
+            'The drawer was patient with me. The knife was not.',
           ],
           flags: { _weapon: null, _broke_knife: true },
           scales: { unease: +2 },
@@ -2745,8 +2745,8 @@ const polonius = {
 
         r_study_pry_poker: {
           lines: [
-            'I wedge the poker between the drawer and the desk. The poker is iron. The wood is wood. The drawer gives.',
-            'Inside the drawer is —',
+            'I wedge the poker between drawer and desk. Iron does not negotiate with wood. The drawer gives.',
+            'Inside the drawer —',
           ],
           flags: { _study_drawer_open: true, _drawer_forced: true },
           scales: { unease: +1 },
@@ -2760,9 +2760,9 @@ const polonius = {
 
         r_study_pick_drawer: {
           lines: [
-            'I work the lock with the pin from a tack. It takes longer than I have. After what feels like several minutes the pins line up.',
+            'I work the lock with the pin of a brass tack. It takes longer than the evening wants to give me. The pins line up at last, one, two, three.',
             'The drawer slides open.',
-            'Inside the drawer is —',
+            'Inside the drawer —',
           ],
           flags: { _study_drawer_open: true },
           scales: { unease: +1, intimacy: +1 },
@@ -2778,10 +2778,10 @@ const polonius = {
 
         r_study_card_found: {
           lines: [
-            'Inside the drawer is my admission card. The number on it is my number. The card is on top of a small pile of other cards — admission cards, every one — with names and dates on them in his hand. Forty-one cards. Mine is the forty-second on top.',
-            'I take my card. I leave the others.',
+            'My admission card, the number mine, lying on top of a pile of other cards — admission cards, every one, named and dated in his hand. I count without wanting to. Forty-one. Mine makes forty-two.',
+            'I take mine. I leave the others. ~~There is nothing I can do for the others.~~ There is nothing the others need now.',
             '!!The card is in my pocket.!!',
-            'Down the corridor: Polonius is coming. Fast.',
+            'Down the corridor: Polonius. Coming. Fast.',
           ],
           flags: { _card_location: 'recovered', _recovered_from: 'study', _saw_card_pile: true, _polonius_alerted: true },
           scales: { unease: +3 },
@@ -2797,8 +2797,8 @@ const polonius = {
 
         r_study_drawer_empty: {
           lines: [
-            'Inside the drawer are forty-one admission cards. They are arranged in chronological order. The most recent is over fifty years old. The names mean nothing to me. The dates are written in his hand.',
-            'Mine is not here. Mine has been moved. He is wearing it again.',
+            'Forty-one admission cards, in chronological order, names and dates in his hand. The most recent is over fifty years old. The collection is complete except for one.',
+            'Mine is not here. Mine has been moved. He is wearing it again, the way a collector wears the newest piece before it goes in the case.',
           ],
           flags: { _saw_card_pile: true, _card_known: true, _card_location_palmed: true },
           scales: { unease: +4 },
@@ -2811,10 +2811,10 @@ const polonius = {
 
         r_study_papers: {
           lines: [
-            'The papers are notes — half in English, half in Greek, half in a script I cannot place. They are notes on each previous guest. What worked. What did not. How long each lasted. How each was lost.',
-            'I read the most recent. The most recent is dated two months ago.',
-            '~~He has been keeping a research notebook. He has been studying us.~~',
-            'A column of names runs down the side. The column ends at my name. To the right of my name, in fresh ink, is a single word: ~~careful~~.',
+            'The papers are notes, in English and Greek and a third script I cannot place. Notes on each previous guest. What worked. What did not. How long each lasted. How each was ~~lost~~ concluded.',
+            'I read the most recent. It is dated two months ago.',
+            'These are a collector\'s condition reports. We are the collection.',
+            'A column of names runs down the margin and ends at mine. To the right of my name, in fresh ink, one word: **careful**.',
           ],
           flags: { _read_papers: true, _heard_count: true },
           scales: { unease: +4 },
@@ -2827,10 +2827,10 @@ const polonius = {
 
         r_study_notebook: {
           lines: [
-            'I open the leather notebook. The notebook is the same notebook as in the library. The last page is the last page I read. The page now has another line below the one I had seen.',
-            'The line reads: ~~The new guest has the keys. He is in the study. He is reading this entry as I write it. He will, I think, look up.~~',
-            'I look up. The page is dry. The pen is on the desk. The pen is not in his hand.',
-            '~~He is not writing this. The book is.~~',
+            'I open the leather notebook. It is the library\'s notebook, or its twin. The last page is the page I read before — with one new line beneath it.',
+            'The line reads: the new guest has the keys. He is in the study. He is reading this entry as I write it. He will, I think, look up.',
+            'I look up. The room is empty. The ink is dry. The pen is in its stand on the desk, where pens are kept.',
+            '~~He is writing this.~~ The book is writing this. The book keeps its own minutes.',
           ],
           flags: { _saw_self_book: true },
           scales: { unease: +5 },
@@ -2850,10 +2850,10 @@ const polonius = {
 
         r_cellar_approach: {
           lines: [
-            'I open the door at the foot of the stair. The cellar is cold. The air is still. It tastes of wax and stone.',
-            'Wine bottles in rows, stoppered with wax that is older than any country I would name. The bottles run to the back wall.',
-            'A low shelf at the back wall, at the level of a man\'s knee.',
-            'No one is down here. Polonius is not down here. The staff are not down here. The cellar is mine.',
+            'I open the door at the foot of the stair. Cold — the still, kept cold of a room the house does not visit.',
+            'Wine in rows, stoppered under wax stamped with the shields of houses no country remembers. The rows run to the back wall.',
+            'At the back wall, a low shelf, knee height.',
+            'No one is down here. Polonius is not down here. The staff are not down here. For the first time tonight, a room is mine.',
           ],
           flags: { room: 'cellar', _been_cellar: true },
           scales: { unease: +2 },
@@ -2879,8 +2879,8 @@ const polonius = {
 
         r_cellar_wine: {
           lines: [
-            'I walk the rows. The wax seals on the bottles are stamped with shields I do not recognise — houses long extinguished. The dust on the bottles is undisturbed except along the third row, where a sleeve has brushed it thin.',
-            '~~Someone has been at the third row recently.~~',
+            'I walk the rows and read the seals like spines: shields, crests, a boar, a tower — houses long since put out. The dust lies even on every bottle but one row.',
+            'Along the third row, a sleeve has written in the dust, and recently.',
           ],
           flags: { _saw_dust_print: true },
           scales: { unease: +2 },
@@ -2892,9 +2892,9 @@ const polonius = {
 
         r_cellar_shelf: {
           lines: [
-            'I cross to the low shelf at the back wall. The shelf is bare except for dust and a small wooden box.',
-            'I open the box. Inside the box is a piece of broken pottery — terracotta, the colour of rust, with a curve to it. About the size of a thumbprint.',
-            'On the inside curve of the shard, in a script that is older than my language, is a name. The name is not Polonius. The name is Greek and very short. It has a breathing mark in it.',
+            'I cross to the low shelf at the back wall. Bare, except for dust and a small wooden box.',
+            'I open the box. Inside: a piece of broken pottery — terracotta, rust-coloured, curved. The size of a thumbprint.',
+            'On the inside of the curve, in a script older than my language, a name. Not Polonius. Greek, and very short, with a breathing mark in it, like a held breath written down.',
             '!!This is the shard. This is what holds him.!!',
           ],
           flags: { _have_shard: true, _knows_free_path: true, _binding_is_shard: true },
@@ -2908,9 +2908,9 @@ const polonius = {
 
         r_cellar_third_bottle: {
           lines: [
-            'I crouch at the third bottle in the third row. I move the bottle. Behind the bottle, against the cellar wall, is a small wooden box.',
-            'I open the box. Inside the box is a piece of broken pottery — terracotta, the colour of rust, with a curve to it. About the size of a thumbprint.',
-            'On the inside curve of the shard, in a script that is older than my language, is a name. The name is not Polonius. The name is Greek and very short. It has a breathing mark in it.',
+            'I crouch at the third bottle in the third row — the row the sleeve wrote in. I move the bottle. Behind it, against the cellar wall, a small wooden box.',
+            'I open the box. Inside: a piece of broken pottery — terracotta, rust-coloured, curved. The size of a thumbprint.',
+            'On the inside of the curve, in a script older than my language, a name. Not Polonius. Greek, and very short, with a breathing mark in it, like a held breath written down.',
             '!!This is the shard. This is what holds him.!!',
           ],
           flags: { _have_shard: true, _knows_free_path: true, _binding_is_shard: true },
@@ -2924,8 +2924,8 @@ const polonius = {
 
         r_cellar_with_shard: {
           lines: [
-            'I close the box. I put the shard in my pocket. The shard is warm.',
-            'I climb the stair. The cellar is behind me. The kitchen is at the top.',
+            'I close the box and pocket the shard. It is warm. Nothing in a cold cellar should be warm, and the warmest thing in the house is in my pocket.',
+            'I climb the stair, skipping the third step and the seventh. The kitchen is at the top.',
           ],
           flags: { _have_shard: true },
           scales: { unease: +2 },
