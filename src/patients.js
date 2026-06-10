@@ -9923,21 +9923,21 @@ const children = {
   id: 'children',
   name: '[Children at the Door]',
   glyph: 'Sproutkin',
-  subtitle: 'Two children are in the corridor. They want in.',
+  subtitle: 'Two children in the corridor. They are not allowed in unless you say.',
   role: 'wing', tier: 1,
   file: [
-    'Subject reports two minors in the corridor outside Ward 1, both barefoot.',
+    'Subject reports two **minors** in the corridor outside Ward 1. Barefoot. Hair wet. No wet weather is on record.',
     'Staff have not seen them. The night camera ~~has~~ has not.',
-    'The minors have requested admission [[7]] times in three hours. !!They have not been let in.!!',
+    'The minors have **requested admission** [[7]] times in three hours. Each request is logged as polite. !!They have not been let in.!!',
     'Taller minor wears a uniform consistent with St. Anselm\'s. ~~St. Anselm\'s was demolished in [[4]].~~',
-    'Shorter minor has referred to Subject by ~~a given name not on the admission card.~~',
+    'Shorter minor has addressed Subject by ~~a given name not on the admission card.~~',
     'Night nurse declines to walk past the door. !!She has been a nurse here for [[2]] years.!!',
   ],
   intro: [
-    'The door is closed. The bolt is set. There is a small brass peephole.',
-    'I have been listening to them for a long time. Longer than the hour I have been awake.',
-    'Two voices in the corridor. One taller. One shorter. The shorter one does the talking.',
-    'She knocks. Three taps. Even pressure. The way a child is taught to knock.',
+    'The door is six panels of painted wood with a bolt, a chain, and a brass peephole. I have read it the way you read a contract. The gap at the sill is one finger wide.',
+    'I have been listening longer than I have been awake. The listening started without me.',
+    'Two voices. The shorter one sits low against the wood, about bolt height. The taller one stands further back and does not breathe where I can hear it.',
+    'She knocks. Three taps. Even pressure. The kind of knock somebody teaches.',
     'She says: !!mister. Please. Can we come in?!!',
   ],
 
@@ -9949,19 +9949,19 @@ const children = {
         { at: 4, word: 'asked again' },
         { at: 8, word: 'considered' },
         { at: 12, word: 'leaning yes' },
-        { at: 16, word: 'almost spoken' },
+        { at: 16, word: 'in my mouth' },
         { at: 19, word: 'said' },
       ],
       crossUp: {
-        2: 'The shorter one has changed how she asks.',
-        3: 'I have caught myself reaching for the bolt.',
+        2: 'The asking has changed key. Nothing else about it has changed.',
+        3: 'My hand has been to the bolt and back. I did not send it.',
         4: '!!My hand is on the bolt. I do not remember putting it there.!!',
         5: '!!The word is in my mouth. I have not bitten down on it yet.!!',
       },
       crossDown: {
-        2: 'My hand has come back from the bolt.',
-        1: 'I have stepped away from the door.',
-        0: 'I have stopped considering it.',
+        2: 'My hand is back at my side. I counted it there.',
+        1: 'Three steps between me and the door. I count them twice.',
+        0: 'The asking is just sound again. Sound stays outside.',
       },
     },
     latch: {
@@ -9979,11 +9979,11 @@ const children = {
         4: '!!The chain is across. The door is doubled.!!',
       },
       crossDown: {
-        4: 'The bolt has eased back by a quarter turn.',
+        4: 'The bolt has eased back a quarter turn. Neither of my hands was on it.',
         3: 'The bolt is loose in its housing.',
-        2: 'The bolt is barely catching.',
+        2: 'The bolt is barely in its keep.',
         1: '!!The bolt has turned itself the rest of the way.!!',
-        0: 'The door is held by the frame alone.',
+        0: 'Nothing holds the door now but its habit of being shut.',
       },
     },
     suspicion: {
@@ -9992,17 +9992,17 @@ const children = {
         { at: 0, word: 'none' },
         { at: 4, word: 'noticing' },
         { at: 8, word: 'wrong' },
-        { at: 12, word: 'sure' },
+        { at: 12, word: 'adding up' },
         { at: 16, word: 'certain' },
         { at: 19, word: 'not children' },
       ],
       crossUp: {
-        2: 'Something about the cadence is off. I cannot name it.',
-        3: 'They are using a phrase a child would not put together.',
+        2: 'The please is the same please every time. Worn smooth, like a stair.',
+        3: 'They speak like a letter written by someone old, read aloud by someone small.',
         4: '!!They are not children. I do not know what they are.!!',
-        5: 'Whatever they are, they have been here a long time. The corridor remembers them.',
+        5: 'Whatever they are, the door is not the thing keeping them out. !!The rule is.!!',
       },
-      crossDown: { 1: 'I have talked myself out of what I noticed.' },
+      crossDown: { 1: 'I have talked myself around. It took both of us.' },
     },
   },
 
@@ -10017,10 +10017,10 @@ const children = {
   },
 
   fileReveals: [
-    { at: 4,  announce: 'A line fills in. Subject reports two minors in the corridor outside Ward 1.' },
-    { at: 9,  announce: 'Another. Staff have not seen them. ~~The night camera has not either.~~' },
-    { at: 14, announce: 'Another. The minors have requested admission seven times in three hours.' },
-    { at: 20, announce: 'Another. The taller wears the uniform of a school that closed in [[4]].' },
+    { at: 4,  announce: 'A line of the file fills itself in. Subject reports two **minors** outside Ward 1. The hand is not mine.' },
+    { at: 9,  announce: 'Another. Staff have not seen them. ~~Neither has the night camera.~~ The strike is fresh.' },
+    { at: 14, announce: 'Another. **Requested admission**, seven times in three hours. Each request filed as polite.' },
+    { at: 20, announce: 'Another. The taller minor wears the uniform of a school that closed in [[4]].' },
     { at: 28, announce: 'Another. The shorter has named Subject by ~~a name not on file.~~' },
     { at: 36, announce: '!!The last line. The night nurse will not walk past the door. She has been a nurse here a long time.!!' },
   ],
@@ -10054,35 +10054,35 @@ const children = {
     switch (hub) {
       case 'at_the_door': {
         const what = p.flags.heard_lesson
-          ? '!!I have heard them rehearse the asking. The taller one is coaching her.!! '
-          : (p.flags.overheard ? 'I have heard them breathing through the gap. The breathings are not in sync. ' : '');
+          ? '!!I have heard the asking rehearsed. He sets the line; she carries it to the door.!! '
+          : (p.flags.overheard ? 'Through the gap I have heard her breathing. Only hers. I have stopped assuming it is both. ' : '');
         const eye = p.flags.saw_eye
           ? '!!Through the peephole, her eye filled the brass. No white. Bone-pale lashes.!! '
-          : (p.flags.seen_them ? 'Through the peephole, two children. Wet hair. Bare feet. ' : 'I have not looked through the peephole. I am standing in front of the door. ');
+          : (p.flags.seen_them ? 'Through the peephole, two children, wet-haired, barefoot on dry linoleum. ' : 'I have not looked. The door is grain and paint and a brass lens I have not used. ');
         return what + eye + 'The shorter one knocks. Three taps. Even pressure. She says: !!mister. Please.!!';
       }
       case 'engaged':
-        return 'The shorter one does the talking. She is patient. She waits for me to choose a thing to say. '
+        return 'The shorter one carries the talking. Her voice sits at bolt height against the wood. She leaves a space after each question the exact size of an answer. '
           + (p.flags.taller_speaking
               ? 'The taller one is speaking now. His voice is older than his height. '
-              : 'The taller one is quiet at her elbow. ')
+              : 'The taller one waits. I have not heard him breathe yet. ')
           + (p.flags.asked_want
-              ? 'They have told me what they want. They are waiting for the rest.'
+              ? 'They have said what they want. In. The rest of the conversation is the terms.'
               : '');
       case 'mother_story':
-        return 'The shorter one is at the gap, telling me about her old kitchen. A window. A song her mother sang at it. '
-          + 'The taller one is quiet behind her. I find I have been listening with my eyes closed.';
+        return 'The shorter one is low at the gap, telling me about a kitchen. A window over the sink. A song. '
+          + 'The taller one has gone quiet in a way that is its own sound. My eyes have been closed for I do not know how many breaths.';
       case 'tense':
         return (p.flags.engaged
-            ? 'They know I have caught them. The asking has not stopped. It has only gone quieter. The shorter one chooses her words now. '
-            : 'I have caught them at something. The asking continues at the same volume. They have not changed pace, but the cadence has thinned. ')
-          + '!!Neither of them moves on the linoleum.!!';
+            ? 'They know I have caught them. The asking has not stopped; it has gone careful. She weighs each word now before setting it against the wood. '
+            : 'I have caught them out. The asking holds its volume and its twelve-second interval. Only the cadence has thinned. ')
+          + 'Neither pair of feet has moved on the linoleum since I counted them last.';
       case 'pressing':
         return '!!The bolt is loose in its housing. My hand is at my side, then at the bolt, then at my side. The word is in my mouth.!! '
-          + 'The shorter one is at the gap, whispering. Her please is in time with my breathing.';
+          + 'She is at the gap, whispering. Her please lands on my exhale. Every exhale. I did not set that rhythm.';
       case 'screaming':
-        return '!!They are throwing themselves at the door. Banging. The shorter one is screaming. The taller one is laughing under it.!! '
-          + 'The bolt holds. The frame holds. The door holds. I cannot let them in.';
+        return '!!They are throwing themselves at the door. The shorter one screams. Under the screaming, the taller one is laughing.!! '
+          + 'The bolt holds. The frame holds. I count the hits in fours to keep them weather.';
       case 'self_harm':
         return '!!The shorter one is hurting herself. I can hear her teeth on her own arm. Her crying is the right shape but the wrong rhythm.!! '
           + 'The taller one is silent. He is letting it run.';
@@ -10090,24 +10090,24 @@ const children = {
         return 'The voice on the other side of the door has changed. !!It is not the shorter one anymore. It is a voice I have heard before, but not in this corridor.!!';
       case 'more_arrive':
         return '!!There are more of them now. Three voices. Four. They are taking turns at the door.!! '
-          + 'The asking does not stop. It rotates. The corridor is full of them.';
+          + 'The asking never stops; it changes mouths. Under the door, the line of light is broken in more places than I can account for.';
       case 'silence':
-        return '!!They have gone completely quiet. The corridor sounds empty. No breathing, no shifting, no asking.!! '
-          + 'I cannot tell if they have left or if they are waiting.';
+        return '!!They have gone completely quiet. No breathing, no shifting, no asking. The gap shows unbroken light.!! '
+          + 'Quiet is not gone. I make myself write that down: quiet is not gone.';
       case 'recognized':
-        return '!!The shorter one has said something only my mother knew. She is using my mother\'s pet name for me.!! '
-          + 'The taller one is silent behind her, satisfied.';
+        return '!!The shorter one is using my mother\'s pet name for me. The name is correct. The mouth is not.!! '
+          + 'Behind her, the taller one keeps his silence the way you keep a receipt.';
       case 'power_out':
         return '!!The corridor lights are out. The peephole is black. The voices continue without interruption.!! '
-          + 'The line of light under my door is gone.';
+          + 'The gap at the sill is a line of nothing now. I keep my feet a stride back from it.';
       case 'barricaded':
-        return 'The chain is across. The bolt is dropped. The chair is wedged under the handle. '
-          + 'They are still at the door. The asking is quieter, more patient. They are willing to wait.';
+        return 'Chain across. Bolt dropped. Chair under the handle. The door is an inventory now, and I keep taking it. '
+          + 'The asking has gone quiet and patient, a voice with its hands folded. They are not waiting for the door. They are waiting for me.';
       case 'orderly_present':
         return 'An orderly has come down the corridor. He is at my door. He is speaking. '
-          + 'The children have gone quiet for him. !!I did not hear them leave.!!';
+          + 'The children have gone quiet for him. Their quiet is a thing they do on purpose. !!I did not hear them leave.!!';
       default:
-        return 'The door is closed. There are voices in the corridor.';
+        return 'The door is shut. The voices are not.';
     }
   },
 
@@ -10118,19 +10118,19 @@ const children = {
   // ─────────────────────────────────────────────────────────────────────
 
   hubFlavor: {
-    engaged: 'The conversation has begun. She is at the gap, asking through the wood. I am still on this side of it.',
-    tense: 'I have caught them at something. The asking has not stopped. It has only gone quieter.',
+    engaged: 'The conversation has begun. You cannot un-begin one. She settles in at the gap, low against the wood.',
+    tense: 'I have caught them out. The asking does not stop for being caught. It only goes careful.',
     pressing: '!!The bolt is loose. My hand is going to it. The word is in my mouth.!!',
     mother_story: 'The asking has dropped out of her voice. She is telling me about a kitchen.',
     screaming: '!!The asking has stopped. They are throwing themselves at the door and screaming.!!',
     self_harm: '!!The asking has stopped. There is a wet sound at the gap. She is hurting herself.!!',
-    tricking: 'The voice on the other side has changed. It is a voice I have heard before, but not in this corridor.',
-    more_arrive: '!!The corridor has filled with voices. Different ages. Different accents. They are taking turns.!!',
-    silence: 'The corridor has gone completely quiet. I cannot tell if they have left or if they are waiting.',
-    recognized: '!!The shorter one has said something only my mother knew. The taller one is satisfied behind her.!!',
-    power_out: '!!The line of light under the door is gone. The corridor is black. The voices continue without interruption.!!',
-    barricaded: 'The chain is across. The chair is wedged. The door is doubled. They are willing to wait.',
-    orderly_present: 'An orderly has come down the corridor. He is at my door. The children have gone quiet for him.',
+    tricking: 'The voice has changed owners mid-sentence. The cadence stayed. The throat did not.',
+    more_arrive: '!!More feet in the corridor. More voices. The asking goes around them like a plate being passed.!!',
+    silence: 'The corridor has gone quiet all at once, like a radio switched off rather than a room emptied.',
+    recognized: '!!She has used my mother\'s pet name for me. I have not heard it said aloud since the funeral.!!',
+    power_out: '!!The line of light under the door is struck out. The asking does not pause for the dark.!!',
+    barricaded: 'The chain is across. The chair is wedged. The door is doubled. The asking turns patient, like interest accruing.',
+    orderly_present: 'An orderly has come down the corridor. He is at my door. The children have gone quiet for him. Their quiet has manners too.',
     in_the_room: '!!The door is open. They are inside. The rest of this page was never written.!!',
   },
 
@@ -10152,21 +10152,21 @@ const children = {
       nodes: {
         lens: {
           lines: [
-            'I lean toward the door. The brass of the lens is colder than the wood around it.',
-            'Two children in the corridor. The shorter one is in front, looking up at the lens. The taller one is a step behind her.',
-            'Their hair is wet. Their feet are bare. They are not shivering.',
+            'I lean to the lens. The brass is colder than the wood around it. The wood is warmer than it should be.',
+            'Two children. The shorter one stands square to the lens, hands folded in front of her as if for a recital. The taller one keeps a step back, where the light goes least.',
+            'Their hair is wet. Their feet are bare on the linoleum. Neither of them is shivering, and neither of them is trying not to.',
           ],
           scales: { suspicion: +3 },
           flags: { seen_them: true },
           choices: [
             { label: 'press your eye to the lens', goto: 'eye_at_lens' },
             { label: 'tilt to see the floor', goto: 'floor' },
-            { label: 'pull back from the lens', goto: { lines: ['I step back. The lens goes dark. They are still there.'], flags: { peephole_examined: true }, to: 'hub' } },
+            { label: 'pull back from the lens', goto: { lines: ['I step back. The lens goes dark. The dark does not mean gone.'], flags: { peephole_examined: true }, to: 'hub' } },
           ],
         },
         eye_at_lens: {
           lines: [
-            'I press in. The shorter one\'s eye is at the lens from the other side.',
+            'I press in. Her eye is already at the lens from the other side, focused, as if I had kept an appointment.',
             'It is the whole of the brass circle. No white. The lashes are bone-pale and very still.',
             'She has not blinked.',
           ],
@@ -10195,8 +10195,8 @@ const children = {
         },
         floor: {
           lines: [
-            'I tilt my head. The shorter one has pulled back from the lens. The floor of the corridor is in frame.',
-            'Wet footprints, where they are standing. The prints continue down the corridor in the direction they came from.',
+            'I tilt my head. She steps aside without being asked. The corridor floor comes into frame, as if presented.',
+            'Wet footprints where they are standing. The prints continue back down the corridor, the way they came.',
             'There are more sets of prints than there are children.',
           ],
           scales: { suspicion: +4 },
@@ -10210,8 +10210,8 @@ const children = {
         },
         count: {
           lines: [
-            'I count. Three sets in. The third set is larger than either of the children\'s.',
-            'I cannot see where the third set goes. It is not behind them. It is not in the corridor at all.',
+            'I count. Three sets coming in. The third is larger than either child\'s, and barefoot all the same.',
+            'The third set comes down the corridor and does not arrive anywhere. It is not behind them. It is not in the corridor at all.',
           ],
           scales: { suspicion: +5 },
           flags: { counted_prints: true, counted_prints_turn: p => p.turn, peephole_examined: true },
@@ -10233,15 +10233,15 @@ const children = {
         gap: {
           lines: [
             'I crouch. I press my cheek to the floor. The gap under the door is the width of a finger.',
-            'Two pairs of feet. Bare. The taller one\'s feet are still. The shorter one\'s feet are on her toes.',
-            'I can hear them breathing. The breathings are not in sync.',
+            'Two pairs of feet, bare. Hers rise to the toes and settle, rise and settle. His have not moved since I started counting.',
+            'Breathing, close to the floor. Hers, on a count of four. I wait through ten of hers for one of his and do not get it.',
           ],
           scales: { suspicion: +3 },
           flags: { overheard: true },
           choices: [
             { label: 'stay and listen for them to speak', goto: 'rehearsal' },
             { label: 'press an ear to the wood, higher', goto: 'wood' },
-            { label: 'stand up', goto: { lines: ['I stand. My knees are loud. The breathing on the other side does not change.'], flags: { gap_examined: true }, to: 'hub' } },
+            { label: 'stand up', goto: { lines: ['I stand. My knees are loud. Her count of four does not falter for them.'], flags: { gap_examined: true }, to: 'hub' } },
           ],
         },
         rehearsal: {
@@ -10256,14 +10256,14 @@ const children = {
           composureCost: 'He is coaching her.',
           choices: [
             { label: 'press higher, hear what else', goto: 'wood' },
-            { label: 'stand up slowly', goto: { lines: ['I stand. The breathing on the other side stops for a beat. Then resumes.'], flags: { gap_examined: true }, to: 'hub' } },
+            { label: 'stand up slowly', goto: { lines: ['I stand. Her breathing stops for one beat, two. Then it resumes on the same count of four.'], flags: { gap_examined: true }, to: 'hub' } },
           ],
         },
         wood: {
           lines: [
-            'I stand. I press my ear flat against the wood.',
+            'I stand and press my ear flat to a panel. The grain carries sound the way a desk carries a pen scratch.',
             'The taller one is reciting numbers. Quietly. ~~Seven doors. Three refused. He is the fourth. He is awake.~~',
-            'The shorter one repeats them after him, like a child learning a poem.',
+            'The shorter one repeats them after him, like a child learning a catechism.',
           ],
           scales: { suspicion: +5 },
           flags: { heard_lesson: true, heard_lesson_turn: p => p.turn, gap_examined: true },
@@ -10278,14 +10278,14 @@ const children = {
 
     speak_through_the_door: {
       label: 'speak through the door',
-      desc: 'Begin a conversation.',
+      desc: 'Begin. It cannot be un-begun.',
       when: (p, _pl, hub) => hub === 'at_the_door' && !p.flags.engaged,
       entry: 'first_word',
       nodes: {
         first_word: {
           lines: [
-            'I bring my mouth to the wood. The grain is warm where my breath is on it.',
-            'Three things I could say. None of them are easy.',
+            'I bring my mouth to the wood. My breath comes back off the grain, warmed. The door does the breathing for both of us.',
+            'There are three things I could say. Saying any of them signs me into the conversation.',
           ],
           choices: [
             { label: 'who is at my door', goto: 'who' },
@@ -10312,7 +10312,7 @@ const children = {
           lines: [
             'I say: what do you want.',
             'The shorter one says: ~~to come in. Just to come in. Just for a little while. Until our mother comes for us.~~',
-            'She has the phrase ready. She has used it before.',
+            'She does not say the phrase. She produces it, the way you produce a ticket.',
           ],
           scales: { invitation: +2, suspicion: +1 },
           flags: { engaged: true, asked_want: true, asked_want_turn: p => p.turn, mister_count: 1 },
@@ -10324,7 +10324,7 @@ const children = {
           lines: [
             'I say: I can hear you. I have been at the door longer than you knew.',
             'There is a pause. The taller one says, evenly: ~~that is alright, mister. We can hear you too.~~',
-            'The shorter one says: ~~we are very cold.~~ The pivot is fast.',
+            'The shorter one says: ~~we are very cold.~~ No beat lost. The pivot was already loaded.',
           ],
           scales: { invitation: +1, suspicion: +3 },
           flags: { engaged: true, mister_count: 1, called_their_bluff: true },
@@ -10346,7 +10346,7 @@ const children = {
         back: {
           lines: [
             'I take three steps backward. The bed creaks behind my calves. I sit on it.',
-            'The asking has not stopped. It is the same volume across the room.',
+            'The asking crosses the room at the same volume it had at the door. Distance is not a thing it spends.',
           ],
           scales: { invitation: -2 },
           flags: { stepped_back: true },
@@ -10361,20 +10361,20 @@ const children = {
         pattern: {
           lines: [
             'I count the seconds between asks. Twelve. Thirteen. Twelve. Thirteen. They do not vary.',
-            'The pattern is too even to be a child waiting on her own.',
+            'Children do not keep time. Clocks keep time, and things that have been told to.',
           ],
           scales: { suspicion: +4 },
           flags: { noticed_pattern: true },
           composure: -1,
-          composureCost: 'The pattern was too even.',
+          composureCost: 'Twelve. Thirteen. Twelve.',
           choices: [
             { label: 'go back to the door', goto: { to: 'hub' } },
           ],
         },
         corridor: {
           lines: [
-            'I listen past them. The radiator. A pipe somewhere. The fluorescent tube above my door humming, far away.',
-            'No other doors are open. No nurse station chatter. Just them, and the building breathing.',
+            'I listen past them. The radiator knocks once. A pipe ticks as it cools. The fluorescent above my door hums at the pitch it always hums.',
+            'No trolley wheels. No desk chatter. No second hum of any other awake room. The ward has been cleared around this conversation.',
           ],
           scales: { suspicion: +2 },
           composure: -1,
@@ -10394,9 +10394,9 @@ const children = {
       nodes: {
         look: {
           lines: [
-            'I crouch a step back from the door. The fluorescent strip in the corridor casts a line of light under the gap.',
-            'Two shadows interrupt it. Both the size of children. They do not move.',
-            'I watch the line of light for thirty seconds. Neither shadow shifts. Children fidget. These do not.',
+            'I crouch an arm\'s length back. The corridor strip lays a line of light under the door, thin as a ruled margin.',
+            'Two interruptions in it, child-sized. I time them against my pulse.',
+            'Thirty seconds. Sixty. Neither shadow moves a hair. Children fidget. These have been stood like furniture.',
           ],
           scales: { suspicion: +3 },
           flags: { checked_shadow: true },
@@ -10417,9 +10417,9 @@ const children = {
       nodes: {
         survey: {
           lines: [
-            'I look at my own door. The bolt is brass, set in its keep. The chain hangs loose against the frame.',
+            'I read my own door like a clause. Brass bolt, set in its keep. Chain hanging slack against the frame, links the colour of old spoons.',
             'There is a hook for the chain. The hook is mine to lift.',
-            'The peephole is in the middle of the door at eye height. The frame is sound. The hinges are inside.',
+            'Peephole at eye height. Frame sound. The hinges are on my side, which means whoever hung this door expected the trouble to be outside it.',
           ],
           flags: { read_door: true },
           choices: [
@@ -10436,7 +10436,7 @@ const children = {
           ],
           scales: { suspicion: +2, invitation: +1 },
           composure: -1,
-          composureCost: 'She knew which sound that was.',
+          composureCost: 'A quarter inch, and she heard it.',
           choices: [
             { label: 'lift the chain', goto: 'chain' },
             { label: 'step away', goto: { to: 'hub' } },
@@ -10444,7 +10444,7 @@ const children = {
         },
         chain: {
           lines: [
-            'I lift the chain in my hand. It is heavier than I remember chains being. The links are cold.',
+            'I lift the chain in my hand. It is heavier than I remember chains being. The links are colder than the room.',
             'I do not put it in the keep. Not yet.',
           ],
           flags: { chain_in_hand: true },
@@ -10471,7 +10471,7 @@ const children = {
             'I say: who are you. The two of you.',
             'The shorter one says: ~~we are children, mister. From Saint Anselm\'s. Down the road.~~',
             (p) => p.flags.heard_lesson
-              ? 'She has used the answer the taller one was rehearsing with her. The exact phrasing.'
+              ? 'It is the rehearsed answer, word for word. He wrote it. She has delivered it.'
               : 'Saint Anselm\'s. ~~I have heard the name. I do not remember in what context.~~',
           ],
           scales: { suspicion: (p) => p.flags.heard_lesson ? +4 : +3 },
@@ -10491,7 +10491,7 @@ const children = {
           scales: { suspicion: +5, invitation: -1 },
           flags: { caught_anselm_lie: true, caught_them_out: true },
           composure: +1,
-          composureGain: 'I have caught them at a thing.',
+          composureGain: 'Caught. On the record.',
           choices: [
             { label: 'let it go', goto: { to: 'hub' } },
           ],
@@ -10521,7 +10521,7 @@ const children = {
           lines: [
             'I say: what do you want.',
             'The shorter one says: ~~to come in. Just to come in. Just for a little while. Until our mother comes for us.~~',
-            'She has the phrase ready. She has used it before.',
+            'She does not say the phrase. She produces it, the way you produce a ticket.',
           ],
           scales: { invitation: +2, suspicion: +1 },
           flags: { asked_want: true, asked_want_turn: p => p.turn, mister_count: (p) => (p.flags.mister_count || 0) + 1 },
