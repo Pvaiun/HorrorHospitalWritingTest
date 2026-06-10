@@ -4399,36 +4399,36 @@ const pram = {
   id: 'pram',
   name: '[The Pram]',
   glyph: 'Emberkin',
-  subtitle: 'She is rocking a son who did not survive delivery.',
+  subtitle: 'She is rocking her son. The wheels have never turned.',
   role: 'wing', tier: 1,
   file: [
-    'Subject was admitted with a perambulator. ~~The perambulator is empty.~~ Subject reports an infant inside.',
-    'Her son ~~died in delivery~~ did not survive the delivery on [[8]]. !!Subject was not informed in time.!!',
-    'Staff are instructed ~~not to inform her~~ not to correct her. !!Subject is violent when questioned.!!',
+    'Subject was admitted with a perambulator. Contents ~~rags, folded to the weight of a child~~ as Subject reports: her son, sleeping.',
+    'The son ~~was stillborn~~ did not survive the delivery of [[8]]. !!Subject was informed too late, and then too often.!!',
+    'Standing order: staff will ~~not tell her again~~ not correct her. !!Do not touch the pram. Do not stop the song.!!',
   ],
   intro: [
-    'She is on the chair by the window with the pram between her knees.',
-    'She is rocking it slowly. She is humming a lullaby. She does not look up.',
+    'She has the chair by the window and the pram against her knees, and she is rocking it — on the spot, by the handle. The wheels never come into it.',
+    'She is humming. Five notes, then the same five. By the third round my pulse has picked up the tempo. She does not look up.',
   ],
 
   scales: {
     lucidity: {
       initial: 0, min: 0, max: 10, label: 'lucidity', kind: 'positive',
       bands: [
-        { at: 0, word: 'far away' },
+        { at: 0, word: 'under the song' },
         { at: 2, word: 'fogged' },
-        { at: 5, word: 'stirring' },
+        { at: 5, word: 'surfacing' },
         { at: 7, word: 'clear-eyed' },
         { at: 9, word: 'all the way here' },
       ],
       crossUp: {
         2: 'Her eyes have come up off the blanket.',
-        3: 'She is in the room with me. Partly.',
+        3: 'She is in the room with me. The part of her that counts the notes.',
         4: '!!She has remembered where she is.!!',
       },
       crossDown: {
-        1: 'She has slipped under again.',
-        0: 'Her eyes are gone.',
+        1: 'She has gone back under the song.',
+        0: 'The song has her again. All five notes of her.',
       },
     },
     grip: {
@@ -4436,40 +4436,40 @@ const pram = {
       bands: [
         { at: 0, word: 'hands open' },
         { at: 3, word: 'resting on the handle' },
-        { at: 5, word: 'tight' },
+        { at: 5, word: 'closed' },
         { at: 7, word: 'white-knuckled' },
-        { at: 9, word: 'fused to it' },
+        { at: 9, word: 'part of the pram' },
       ],
       crossUp: {
         2: 'Her knuckles have whitened on the handle.',
-        3: 'Her arms are rigid. The pram is hers and only hers.',
-        4: '!!Her grip has fused. She and the pram are one shape.!!',
+        3: 'Her arms have gone to wood. The rocking does not slow for it.',
+        4: '!!I cannot tell anymore where her hands end and the handle begins.!!',
       },
       crossDown: {
         3: 'Her arms have eased.',
         2: 'Her fingers have loosened on the handle.',
-        1: 'She has let the pram go. She has set herself down.',
-        0: 'The pram rests at her feet. Her hands are in her lap.',
+        1: 'She has let the handle go. Her hands hang as if returned to her.',
+        0: 'The pram stands at her feet. Her hands are in her lap, palms up, off duty.',
       },
     },
     agitation: {
       initial: 2, min: 0, max: 10, label: 'agitation', kind: 'negative',
       bands: [
-        { at: 0, word: 'calm' },
-        { at: 3, word: 'uneasy' },
-        { at: 6, word: 'agitated' },
-        { at: 8, word: 'beginning to scream' },
+        { at: 0, word: 'in time' },
+        { at: 3, word: 'off the beat' },
+        { at: 6, word: 'climbing' },
+        { at: 8, word: 'past singing' },
         { at: 10, word: 'fit' },
       ],
       crossUp: {
-        2: 'Her humming has changed pitch.',
-        3: 'Her rocking has gone off-beat.',
-        4: '!!She is making a sound that is not the lullaby anymore.!!',
+        2: 'The five notes have moved up a key. Nothing else in the room has.',
+        3: 'The rocking has lost the beat. My pulse keeps trying to find it for her.',
+        4: '!!The sound she is making has no notes in it at all.!!',
       },
       crossDown: {
-        2: 'The worst of it has passed. Her breath has come back.',
+        2: 'The worst is past. Her breath has come back to four counts.',
         1: 'She is no longer screaming.',
-        0: 'She has calmed.',
+        0: 'Calm. The five notes resume, as if from the top.',
       },
     },
   },
@@ -4481,9 +4481,9 @@ const pram = {
   },
 
   fileReveals: [
-    { announce: 'A line fills in. Subject ~~holds a bundle of rags~~ holds the infant carefully.' },
-    { announce: 'Another. The lullaby Subject sings is ~~from her own childhood~~ five notes she repeats endlessly.' },
-    { announce: 'The last line. Subject has been informed of his death on [[2]] occasions. !!She does not retain it.!!' },
+    { announce: 'A line fills in. Subject holds ~~rags, the heavy fold where a head would be~~ the infant. Correctly.' },
+    { announce: 'Another. The lullaby is logged as ~~hers, from her own nursery~~ five notes, in rotation, without error.' },
+    { announce: 'The last line. Subject has been informed on [[2]] occasions. !!Each time was the first time.!!' },
   ],
 
   presented(p) {
@@ -4492,22 +4492,22 @@ const pram = {
     const a = p.scales.agitation;
 
     let arms;
-    if (a >= 7)      arms = '!!Her arms are rigid. She rocks the pram so fast the room moves with her.!!';
-    else if (g >= 7) arms = 'She rocks the pram quickly. Her arms are tight around the handle.';
-    else if (g >= 4) arms = 'She rocks the pram. Steady. The wheels do not turn.';
-    else if (g >= 1) arms = 'Her arms rest on the pram. She has mostly stopped rocking.';
-    else             arms = 'The pram sits between her feet. She has stopped rocking it.';
+    if (a >= 7)      arms = '!!She is rocking at a speed no child is rocked at. The floorboards have taken up the count.!!';
+    else if (g >= 7) arms = 'The rocking has quickened. Her arms have shortened their travel, hoarding the pram in.';
+    else if (g >= 4) arms = 'She rocks the pram at a nursing pace. The wheels do not turn. They have never had to.';
+    else if (g >= 1) arms = 'Her arms rest along the handle, riding the last of the rocking out.';
+    else             arms = 'The pram stands at her feet, still. It does not look used to it.';
 
     let eyes;
-    if (l >= 7)      eyes = 'Her eyes are on me. She is here.';
-    else if (l >= 4) eyes = 'Her eyes find me sometimes. Then leave for the blanket.';
-    else if (a >= 5) eyes = 'Her eyes are somewhere I cannot follow. Fixed and far.';
-    else             eyes = 'She does not look up. Her eyes are on the blanket.';
+    if (l >= 7)      eyes = 'Her eyes are on me. They do not slide back to the blanket. She is here.';
+    else if (l >= 4) eyes = 'Her eyes find me between notes. The blanket reclaims them by the fifth.';
+    else if (a >= 5) eyes = 'Her eyes are fixed past the room, on a distance the window does not have.';
+    else             eyes = 'She does not look up. Her eyes keep to the blanket, where the fold lies heaviest.';
 
     let voice;
-    if (a >= 7)      voice = 'Her humming has gone off the song. !!She is keening.!!';
-    else if (a >= 4) voice = 'Her humming has thinned. She has noticed me.';
-    else             voice = 'She is humming the same five notes. Over and over.';
+    if (a >= 7)      voice = '!!She is keening, and the keening keeps the rocking\'s time.!!';
+    else if (a >= 4) voice = 'Her humming has thinned. It is the only part of her that has noticed me.';
+    else             voice = 'She hums five notes, and then the same five. I have started counting them. I did not decide to.';
 
     return `${arms} ${eyes} ${voice}`;
   },
@@ -4522,18 +4522,18 @@ const pram = {
         if (reps >= 3) {
           return {
             lines: [
-              'I keep listening. The five notes have not changed. They are not for me.',
-              'She does not seem to know I have been here.',
+              'I keep listening. The five notes have worn a path in me the way feet wear terrazzo.',
+              'She has not once needed me here. The song was full before I came.',
             ],
             scales: { grip: +1, lucidity: -1 },
             composure: -1,
-            composureCost: 'I have learned the song. I cannot unhear it.',
+            composureCost: 'I have the song by heart now. That is where it keeps things.',
           };
         }
         return {
           lines: [
-            'I let her sing. The lullaby is the same five notes, over and over.',
-            'Her rocking is steady. The wheels do not turn.',
+            'I let her sing. Five notes, a rest, the same five. The rest is where a name would go.',
+            'The rocking holds its tempo. My pulse has stopped arguing with it.',
           ],
           scales: { lucidity: +1 },
         };
@@ -4542,26 +4542,26 @@ const pram = {
 
     sing_with_her: {
       label: 'sing with her',
-      desc: 'Pick up the line she keeps starting. Indulge her.',
+      desc: 'Take up the five notes with her. Indulge her.',
       respond(p) {
         const reps = streakCount(p, 'sing_with_her');
         if (reps >= 2) {
           return {
             lines: [
-              'I hum the line again. She meets me on the second beat.',
-              'She looks at me. !!You know it,!! she says. !!Good.!!',
-              'She does not stop. We hum together.',
+              'I hum the line again. She comes in on the second note, above me, and I am the accompaniment now.',
+              'She looks at me for the first time. !!You know it,!! she says. !!Good. Now you know it.!!',
+              'We hum it together, round on round. Somewhere in the rounds it stops being hers to stop.',
             ],
             scales: { grip: -1, agitation: -2, lucidity: -1 },
             flags: { sang_with_her: true },
             composure: -1,
-            composureCost: 'I have agreed to a song without a child in it.',
+            composureCost: 'I have put my voice to the song. That is a signature, of a kind.',
           };
         }
         return {
           lines: [
-            'I find the line she keeps starting. I hum a bar of it.',
-            'Her humming meets mine. Her shoulders ease. She does not look at me, but she is no longer alone in the song.',
+            'I find the line she keeps offering and hum one bar of it, low, under hers.',
+            'Her humming makes room for mine without breaking. Her shoulders come down a width. She does not look up, but the song is sung by two now.',
           ],
           scales: { grip: -1, agitation: -1, lucidity: -1 },
           flags: { sang_with_her: true },
@@ -4577,18 +4577,18 @@ const pram = {
           return {
             lines: [
               'I ask: how is he?',
-              '!!Quiet,!! she snaps. !!You will wake him.!! Her humming has changed.',
+              '!!Shh,!! she snaps. !!Shh. You will wake him, and then.!! The sentence has no end. The humming comes back in the wrong key.',
             ],
             scales: { agitation: +3, grip: +2 },
             composure: -1,
-            composureCost: 'Her face has gone wrong.',
+            composureCost: 'Her face went wrong on the second shh.',
           };
         }
         if (p.scales.lucidity >= 5) {
           return {
             lines: [
               'I ask: how is he?',
-              'She stops humming. She looks at the blanket for a long time. !!He is sleeping,!! she says. But softer than before.',
+              'The humming stops mid-round. She looks at the blanket a long time, at the heavy end of it. He is sleeping, she says — softer, like a question minding its manners.',
             ],
             scales: { lucidity: +2, agitation: +1, grip: -1 },
           };
@@ -4596,7 +4596,7 @@ const pram = {
         return {
           lines: [
             'I ask: how is he?',
-            'She smiles, faintly. !!He is sleeping,!! she says. !!He has been so good.!!',
+            'She smiles, a small one, pre-counted. He is sleeping, she says. He has been so good. So good. The words rock at the same tempo as her arms.',
           ],
           scales: { lucidity: +1, agitation: +1 },
         };
@@ -4612,35 +4612,35 @@ const pram = {
           return {
             lines: [
               'I say: he is not in the pram. He did not survive.',
-              '!!You stop talking,!! she says. !!You stop talking now.!!',
-              'She has begun to scream without sound. Her rocking has gone fast.',
+              '!!You stop that,!! she says. !!You stop that this minute.!!',
+              'Her mouth opens on a scream pitched past hearing. The rocking goes to a gallop, and my pulse, traitor, goes with it.',
             ],
             scales: { agitation: +5, grip: +3, lucidity: +1 },
             composure: -2,
-            composureCost: '!!She is hearing something I cannot.!!',
+            composureCost: '!!My pulse is keeping her time now, not mine.!!',
           };
         }
         if (p.scales.lucidity >= 7) {
           return {
             lines: [
-              'I say: he did not survive the delivery. He is not in the blanket.',
-              'She does not look up. Her humming stops on a note that does not finish.',
-              'After a long time she says, very small: ~~I know.~~ I know.',
+              'I say: he did not survive the delivery. What is in the blanket is the blanket.',
+              'She does not look up. The humming stops on the fourth note, and the fifth never comes.',
+              'A long time passes at the rocking\'s old tempo, without the rocking. Then, very small: ~~I know.~~ I know.',
             ],
             scales: { lucidity: +3, grip: -3, agitation: +2 },
             flags: { told_her: true },
             composure: -1,
-            composureCost: 'I have said it in this room. !!Out loud.!!',
+            composureCost: 'It has been said in this room now. !!By me.!!',
           };
         }
         return {
           lines: [
             'I say: he is not in the pram. He did not survive the delivery.',
-            'Her humming stops. She looks at me. !!Why would you say that to me?!! she asks. Her voice has gone thin.',
+            'The humming stops. She looks at me the way you look at a stain on a christening gown. Why would you say that, she asks. Why would you say that to me. The second asking has no question left in it.',
           ],
           scales: { lucidity: +2, agitation: +3, grip: +1 },
           composure: -1,
-          composureCost: 'I have said it. !!She has heard it.!!',
+          composureCost: 'I have said it. !!She has heard it. Those are two different weights.!!',
         };
       },
     },
