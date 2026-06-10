@@ -526,7 +526,7 @@ const polonius = {
         t_why_added: {
           lines: [
             'I say: how did the wing come to be annexed.',
-            'He brightens. The wing has been here since the second hospital, sir. Or the third. The hospital is built around the house in layers, each renovation swallowing it a little further. By the present arrangement there is one corridor in — the one you came down.',
+            'He brightens. The wing has been here since the second hospital, sir. Or the third. Each renovation swallows the house a little further. By the present arrangement there is one corridor in — the one you came down.',
             'He pauses. He looks at me with attention. Paying attention is not a thing he has ever had trouble affording.',
             'Most visitors arrive without quite having decided to. The corridor is a quality of the house.',
           ],
@@ -540,12 +540,12 @@ const polonius = {
 
         t_look_around: {
           lines: [
-            'I take the foyer in by item. Dark panelling. A coat-tree, three pegs, no coats. The grandfather clock, polished, no dust in the carving. The small fire. Above it, a painting in old gilt. Green velvet paper, a small laurel, repeating.',
+            'I take the foyer in by item. Dark panelling. A coat-tree, three pegs, no coats. The grandfather clock, no dust in its carving. The small fire; above it, a painting in old gilt. Green velvet paper, a small laurel, repeating.',
             'Polonius waits. He has the patience of a host who is glad to have his rooms read slowly.',
           ],
           choices: [
-            { label: 'examine something in the room', goto: 't_examine' },
-            { label: 'ask him about something you noticed', goto: 't_ask_about_noticed', when: (p) => poloniusNoticed(p) },
+            { label: 'examine the room, item by item', goto: 't_examine' },
+            { label: 'ask him about what you noticed', goto: 't_ask_about_noticed', when: (p) => poloniusNoticed(p) },
             { label: 'thank him; step inside', goto: 't_step_inside' },
           ],
         },
@@ -784,7 +784,7 @@ const polonius = {
 
         m_obs_bust: {
           lines: [
-            'I cross to the mantel. The bust is small, bronze, dark with age and the smoke of many small fires. A young man in a laurel wreath, looking out and slightly down, with the small smile of a thing accustomed to being looked at.',
+            'I cross to the mantel. The bust is bronze, dark with age and the smoke of many small fires. A young man in a laurel wreath, looking out and slightly down, with the smile of a thing accustomed to being looked at.',
             'I read the patina. I read the face. I read the face again.',
             'The face is Polonius.',
             'I look across the room at his face. The two faces are the same face. The bronze is older than the room. The room is older than the hospital. The man is in the room with me.',
@@ -851,7 +851,7 @@ const polonius = {
         m_why_register: {
           lines: [
             'I say: why does the wing keep a register.',
-            'He inclines his head. An old tradition, sir. Mr. Halliwell — the butler — would have it that the wing has always been a place where visitors are named. I keep the tradition because — he smiles — there is little left for me to do but keep.',
+            'He inclines his head. An old tradition, sir. Mr. Halliwell would have it that the wing has always been a place where visitors are named. I keep it because — he smiles — there is little left for me to do but keep.',
             'He waits, patient, with the open hand.',
           ],
           scales: { intimacy: +1 },
@@ -887,7 +887,7 @@ const polonius = {
           lines: [
             'I say: how long have you been keeping the register.',
             'He looks down at the open page. A small pause. Nothing in his chest spends it.',
-            'A long time, sir. I am the wing\'s **resident** — the only one. The hospital is told there is a single tenant in the Greek Wing, and the single tenant is myself.',
+            'A long time, sir. I am the wing\'s resident — the only one. The hospital is told there is a single tenant in the Greek Wing, and the single tenant is myself.',
             'He smiles. The smile is small and a little tired.',
             'I do not know that I have been counting in years for some while.',
           ],
@@ -1043,7 +1043,7 @@ const polonius = {
         m_smalltalk: {
           lines: [
             'He balances his cup on the kneecap — an old manner. Men stopped sitting that way before my grandmother was born.',
-            'It is a pleasure, sir, to have company. We do not get many **guests** on this corridor. The house and I are accustomed to long evenings without a second voice.',
+            'It is a pleasure, sir, to have company. We do not get many guests on this corridor. The house and I are accustomed to long evenings without a second voice.',
             'The fire ticks. The clock does not. Between his sentences the house holds its breath, and I am sitting inside the held breath, drinking its tea.',
           ],
           scales: { intimacy: +1 },
@@ -1058,7 +1058,7 @@ const polonius = {
         m_about_staff: {
           lines: [
             'I say: the staff, sir. The Halliwells, and the cook.',
-            'He brightens, fond. Mrs. Halliwell keeps the foyer, the cloakroom, the tea-cups. Mr. Halliwell — her husband — sits the parlor of an evening; the cloakroom keys stay on his person. Mr. Cook keeps the dining room and the range.',
+            'He brightens, fond. Mrs. Halliwell keeps the foyer, the cloakroom, the tea-cups. Mr. Halliwell — her husband — sits the parlor evenings; the keys stay on his person. Mr. Cook keeps the dining room and the range.',
             'He pauses. They keep to their own rooms. They cross paths only at the meals, by tradition. They reset with the morning.',
             'He stops. The last sentence had not been on the menu. He looks at me with the small honesty of a man caught out.',
           ],
@@ -1108,7 +1108,7 @@ const polonius = {
         m_about_butler: {
           lines: [
             'I say: Mr. Halliwell — the butler. The same family?',
-            'He nods. Yes — Mr. and Mrs. Halliwell. They came on together, by the books. They keep separate rooms by the day — he the parlor, she the foyer and cloakroom, the cook the dining room. They cross paths only at the meals, by tradition.',
+            'He nods. Yes — Mr. and Mrs. Halliwell. They came on together, by the books. They keep separate rooms by day — he the parlor, she the foyer and cloakroom, the cook the dining room. They cross only at the meals, by tradition.',
             'By tradition. The phrase does the work of a lock.',
           ],
           flags: { _heard_staff_routine: true },
@@ -1123,7 +1123,7 @@ const polonius = {
           lines: [
             'I say: and yourself, sir. What was it you did, before the wing.',
             'He looks at the fire. His face does the small careful arrangement of a man who has been asked before and would like to give the answer he gave the first time.',
-            'I was a guest, sir. I came into the house as a guest, a young man with the means to travel. The house was a house I came to for one night. I **remained**, in a manner of speaking.',
+            'I was a guest, sir. I came into the house as a guest, a young man with the means to travel. The house was a house I came to for one night. I remained, in a manner of speaking.',
             'He smiles, small and tired. I do not get many questions about myself, sir. The ones I get tend to be the same one.',
           ],
           flags: { _heard_origin: true },
@@ -1362,7 +1362,7 @@ const polonius = {
 
         l_what_is_the_meal: {
           lines: [
-            'He smiles, smaller. The house is cursed, sir. Cursed long before I came in. It requires one bound tenant, and the tenant resets with the house each morning. If the tenant walks out while one living guest remains inside, the curse changes hands. The house will take the guest. The house will take.',
+            'He smiles, smaller. The house is cursed, sir. It requires one bound tenant, reset each morning. If the tenant walks out while a living guest remains, the curse changes hands. The house will take the guest. The house will take.',
             'I am the tenant, sir. I have been the tenant for nine hundred and seventy-two years.',
             'You walked into a house I have been waiting to leave for nine hundred and seventy-two years.',
             'The card is at the back of the house. The keys are between us. I am not going to lie to you about the shape of the evening, sir. I am asking you only to see the shape.',
@@ -1383,7 +1383,7 @@ const polonius = {
             'He nods, with the patience of a man who has heard the accusation forty-one times and finds it less interesting on the forty-second.',
             'It is a trick, sir. I do not contest the word. I would only suggest, gently, that I have not been clumsy. The trick has held up for some centuries.',
             'He pauses. He weighs the next sentence, and gives it freely.',
-            '!!I will be honest, because you said the word out loud. I will do everything I am able to keep you in this house until an **accident** occurs. I am owed an accident. After tonight I will not be a man with you. I will be a tenant.!!',
+            '!!I will be honest, because you said the word. I will do all I am able to keep you here until an **accident** occurs. I am owed an accident. After tonight I will not be a man with you. I will be a tenant.!!',
             'The candles in the sconces gutter, all together, once. They had not been guttering before.',
           ],
           scales: { unease: +5, intimacy: +3 },
@@ -1505,7 +1505,7 @@ const polonius = {
         r_parlor: {
           lines: [
             'The parlor is hot. The fire has been at the same log all evening, and the log has not given an inch of itself. Two armchairs, the decanter, the bust, the iron poker against the grate.',
-            'The butler is in one armchair with a newspaper. He does not turn his head to me; he turns all of himself, the way a wardrobe is walked across a floor. He nods, as at a stranger he was told to expect. He goes back to the paper.',
+            'The butler is in one armchair with a newspaper. He does not turn his head to me; he turns all of himself, the way a wardrobe is walked across a floor. He nods, as at an expected stranger, and goes back to the paper.',
             'At his waistcoat pocket: the brass head of a keyring. I read it the way I read everything now. Mine.',
           ],
           flags: { room: 'parlor', _been_parlor: true, _saw_keys: true },
@@ -1583,7 +1583,7 @@ const polonius = {
           flags: { _armed: true, _weapon: 'poker', _armed_in_view: true },
           scales: { unease: +1, intimacy: +1 },
           composure: +2,
-          composureGain: 'I am holding something heavy.',
+          composureGain: 'The iron is in my hand.',
           choices: [
             { label: 'back to the corridor', goto: 'hub_corridor' },
             { label: 'go after Polonius now', goto: 'k_strike_consider' },
@@ -1733,7 +1733,7 @@ const polonius = {
           choices: [
             {
               label: 'close the book',
-              goto: { to: 'r_library', lines: ['I close the book. I keep the image of the shard in my head.'], composure: +1, composureGain: 'I have something to look for.' },
+              goto: { to: 'r_library', lines: ['I close the book. I carry the drawing out in my head: the curve, the marks, the broken edge.'], composure: +1, composureGain: 'I have a shape to look for.' },
             },
             {
               label: 'ask him about the shard',
@@ -1793,7 +1793,7 @@ const polonius = {
           lines: [
             'I say: where is the shard, then.',
             'He smiles. He does not answer at once.',
-            'In the cellar, sir. A low shelf at the back wall. I placed it there a long time ago and have not had cause to move it. The cellar is reached by the back stair, and the back stair is one I have not taken in some centuries. The cook does the wines.',
+            'In the cellar, sir. A low shelf at the back wall. I placed it there long ago and have not had cause to move it. The back stair reaches it — a stair I have not taken in some centuries. The cook does the wines.',
             'He pauses. He weighs the next sentence longer than any tonight. He adds it.',
             'If you went down, sir, I would not stop you. Mr. Halliwell would not stop you. Mrs. Halliwell keeps between the front door and the corridor. She is not on the back stair.',
             'He has given me the path, and the names of everyone who is not standing on it.',
@@ -1881,7 +1881,7 @@ const polonius = {
           lines: [
             'I look for it by intent. I hold his name in my head and let the shelf pull my hand. The hand stops at a book bound in dark blue.',
             'I open it. A memoir, in his own hand, in three languages. The pages turn easily, the way well-walked stairs are worn smooth.',
-            'A passage in the middle reads: the shard is in the cellar. The shard binds me. I have not been able to break it. I have not been able to hide it where no one would find it. I have made my choice forty-one times. The forty-second will be the same.',
+            'A passage in the middle: the shard is in the cellar. The shard binds me. I have not been able to break it, nor to hide it past finding. I have made my choice forty-one times. The forty-second will be the same.',
             'He is watching me read it. He is not stopping me. The book was on a reachable shelf.',
           ],
           flags: { _heard_binding_full: true, _heard_shard_in_cellar: true, _knows_free_path: true, _heard_cellar: true },
@@ -2142,7 +2142,7 @@ const polonius = {
         r_dining: {
           lines: [
             'The dining room. A long table laid for two, the places arranged, two covered dishes between the settings. The candles burn; the wax has pooled in the holders, and the candles are no shorter for it.',
-            'The cook appears in the doorway, wiping his hands on his apron. He bows. The hands go on wiping after the bow is finished.',
+            'The cook fills the doorway, wiping his hands on his apron. He bows. The hands go on wiping after the bow is finished.',
             'Dinner, sir, Polonius says. The cook has prepared it for a long time. It would be unkind to leave it cold.',
             'At the cook\'s waist, in a sheath: a meat-cleaver. The handle is bone.',
           ],
@@ -2503,7 +2503,7 @@ const polonius = {
         r_kitchen_ask_card: {
           lines: [
             'I say: my card. The admission card. Where is it.',
-            'The cook thinks. Sir. The maid carries it to the cloakroom. Mr. Halliwell takes it on from there, at the master\'s direction. The study, then — the locked drawer. The drawer key is in the desk, and the desk is also locked. The house likes its boxes inside boxes.',
+            'The cook thinks. Sir. The maid carries it to the cloakroom; Mr. Halliwell takes it on at the master\'s direction. The study, then — the locked drawer. The key is in the desk; the desk is also locked. Boxes inside boxes.',
             'He pauses. Or the master is wearing it again, sir, if his mood has cooled. He keeps cards on his person in the late evenings. I have seen the corner of one at his vest.',
             'The study, or his vest pocket. Two places. I can search both. Only one of them will let me.',
           ],
@@ -2519,7 +2519,7 @@ const polonius = {
         r_kitchen_ask_stair: {
           lines: [
             'I say: the back stair. Down to the cellar.',
-            'He nods. Through this kitchen, sir. The narrower door. The stair turns once. Mrs. Halliwell keeps the front. Mr. Halliwell keeps the parlor. The master will not come down — he has not been down in some centuries. The cellar is cold for him in a way it is not cold for you.',
+            'Through this kitchen, sir. The narrower door; the stair turns once. Mrs. Halliwell keeps the front, Mr. Halliwell the parlor. The master will not come down — not in centuries. The cellar is cold for him. For you it is only cold.',
             'He pauses. Sir. When you come back up, do not stop in this kitchen. Run for the front. He will be in the foyer when he hears the shard go, and he will be quick. !!Have the card before you break it.!!',
             'Card first. Clay second. I say the order to myself twice, like a number I cannot write down.',
           ],
@@ -2540,7 +2540,7 @@ const polonius = {
           flags: { _armed: true, _weapon: 'knife' },
           scales: { unease: +1 },
           composure: +1,
-          composureGain: 'I have something in my pocket that the cook gave me.',
+          composureGain: 'The cook\'s knife is in my pocket. It was given, not taken.',
           choices: [
             { label: 'continue', goto: 'r_kitchen' },
           ],
@@ -3231,7 +3231,7 @@ const polonius = {
           lines: [
             'I say: why are you doing this. Why take the card at all. Why not lock the door and have done with it.',
             'He smiles. He looks at the fire.',
-            'Because, sir, a locked door is a noise. A locked door brings a guest banging on it, and a guest who bangs does not stay long enough. The card is a — **kindness**. The card lets you believe you can go. It lets you believe, with every step deeper, that you are still walking toward the door.',
+            'A locked door is a noise, sir. It brings banging, and a guest who bangs does not stay. The card is a — **kindness**. It lets you believe you can go. With every step deeper, it lets you believe you are walking toward the door.',
             'He pauses. I am sorry, sir. I am being honest. I have not had the energy for elaborate cruelties in a long time. The card is the cruelty I have left.',
           ],
           flags: { _heard_truth: true, _mask_on: false, _mood: 'mournful' },
@@ -3249,7 +3249,7 @@ const polonius = {
           lines: [
             'He looks at me. The look is long, and patient, and tired past what one face should be able to hold.',
             'Walk back through the front door, sir. With the card. The door will read. The door will open. It always has.',
-            'He pauses. But sir. I will be honest with you again. !!I will do everything I am able to keep you in this house until an **accident** occurs. I am owed an accident. After this I will not be a man with you. I will be a tenant.!!',
+            'He pauses. But sir. I will be honest again. !!I will do all I am able to keep you here until an **accident** occurs. I am owed an accident. After this I will not be a man with you. I will be a tenant.!!',
           ],
           scales: { unease: +5, intimacy: +3 },
           composure: -2,
@@ -3265,7 +3265,7 @@ const polonius = {
           lines: [
             'I say: tell me how to free you. Without becoming the next tenant.',
             'He is quiet for a long moment.',
-            'There is a shard, sir. Broken clay, buried in the foundation the day the house was first cursed. My name is on it — my first name, in a language nobody alive has spoken. I moved it to the cellar long ago, when I still hoped to break it myself.',
+            'There is a shard, sir. Broken clay, buried in the foundation the day the house was cursed. My name is on it — the first one, in a language nobody alive has spoken. I moved it to the cellar when I still hoped to break it myself.',
             'I have not broken it. I cannot. The hand that placed it must not be the hand that breaks it. A hand not of the day must do it. Yours is not of the day, sir.',
             'Break the shard and the binding ends. I go — old, and tired, and human, the way men go. The staff go with me. The house stands empty.',
             'You will not be bound. The curse needs a tenant; end the curse and there is no tenancy to inherit. The door will open. You will walk out.',
@@ -4058,7 +4058,7 @@ const polonius = {
                 && p.flags._mask_on !== false
                 && Math.random() < 0.7,
       prose: [
-        'I catch his reflection in the polished flank of a silver bowl. I read the hallmark first, out of habit; the hallmark is older than hallmarks. The reflection is not quite Polonius. Older. The features are not all at their stations.',
+        'I catch his reflection in the flank of a silver bowl. I read the hallmark first, from habit; it is older than hallmarks. The reflection is not quite Polonius. Older. The features are not all at their stations.',
         'When I look up, he is exactly where he was. He has not moved. The reflection has.',
       ],
       responses: [
