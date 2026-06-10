@@ -7240,7 +7240,7 @@ const frostfin = {
           lines: [
             "I say: I don't think it's coming.",
             'She is quiet. She looks at the stretch of bench beside her, the seat kept open through forty years of timetable.',
-            'She says: ~~he said he would come.~~ I knew. Very small.',
+            'She says, very small, in the voice you use after the last departure has gone up on the board: ~~he said he would come.~~ I knew.',
           ],
           scales: { waiting: -4, warmth: +1, cold: +1 },
           composure: -2,
