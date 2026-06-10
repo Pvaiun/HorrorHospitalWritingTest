@@ -8696,13 +8696,13 @@ const mire = {
   subtitle: 'There is no pond on the grounds.',
   role: 'wing', tier: 2,
   file: [
-    "Subject persists in asking after the pond. There is no pond on the grounds.",
-    'Subject describes a ~~stone~~ statue at the edge. ~~None on file.~~ Of the right size for a small child.',
-    'Family report Subject placed **something** in a pond. They will not say what. !!The room is mopped on the hour.!!',
+    'Subject persists in asking after the pond. There is no pond on the grounds. The grounds have been walked.',
+    'Subject describes a ~~stone~~ statue at the edge, of the right size. The absence of any pond is restated for the file. The grounds have been walked twice.',
+    'Family report Subject placed [[11]] in a pond. !!The room is mopped on the hour. The water is recorded as condensation. The hospital wishes it noted, formally, that there is no pond.!!',
   ],
   intro: [
-    'The floor of the room is wet. It is not raining. It has not rained.',
-    'She is at the far wall. She does not turn. She is asking the wall:',
+    'The wet on the floor begins at the door as a film and deepens toward the far wall by even degrees, like the painted markings on a lock gate. I read it the way you read depth. Shallow end. Deep end.',
+    'She is at the deep end, facing the wall. She does not turn. She is asking the wall, politely, the way one asks staff:',
     'Where is the pond. You know the one. The one with the statue.',
   ],
 
@@ -8719,7 +8719,7 @@ const mire = {
       crossUp: {
         2: 'Her eyes have left the wall.',
         3: 'She has turned. Partly.',
-        4: '!!She is here. She is with me.!!',
+        4: '!!She has turned all the way. The wall is just a wall behind her.!!',
       },
       crossDown: { 1: 'Her eyes have gone back to the wall.' },
     },
@@ -8733,11 +8733,11 @@ const mire = {
         { at: 9, word: 'let go' },
       ],
       crossUp: {
-        2: 'She has begun to say what she has not said.',
-        3: 'The words are coming.',
-        4: '!!She has named it.!!',
+        2: 'Words are surfacing, one at a time, in the order drowned things surface.',
+        3: 'The words are coming up faster than she can stop them.',
+        4: '!!She is speaking around it in smaller and smaller circles.!!',
       },
-      crossDown: { 1: 'The words have gone back inside.' },
+      crossDown: { 1: 'The words have gone back under.' },
     },
     approach: {
       initial: 0, min: 0, max: 10, label: 'approach', kind: 'negative',
@@ -8767,13 +8767,13 @@ const mire = {
         { at: 9, word: 'submerging' },
       ],
       crossUp: {
-        2: 'The floor has wet through the carpet.',
-        3: '!!The floor is open under me.!!',
-        4: '!!I am up to my ankles. The room is becoming the pond.!!',
+        2: 'The damp has crossed the room\'s halfway line. I had marked the line by a tile.',
+        3: '!!The wet has reached my shoes. My reflection has arrived in it, half a second late.!!',
+        4: '!!I am in to the ankles. The room has a deep end now, and she is standing in it.!!',
       },
       crossDown: {
         2: 'The floor has gone back to being a floor.',
-        1: 'The carpet is dry.',
+        1: 'The carpet is drying from the door inward.',
         0: 'The room is a room again.',
       },
     },
@@ -8788,9 +8788,9 @@ const mire = {
   },
 
   fileReveals: [
-    { announce: 'A line of her file fills in. ~~There is no pond on the grounds.~~' },
-    { announce: '~~The statue.~~ ~~None on file.~~' },
-    { announce: 'The last line writes itself in. **She put something in a pond, once.**' },
+    { announce: 'A line fills in. The grounds were surveyed on [[8]]. The survey found no pond. The surveyor asked not to be sent again.' },
+    { announce: 'Another. The statue is ~~a child~~ not on file. It is of the right size. The file does not say for what.' },
+    { announce: 'The last line writes itself in. What she placed in the pond is entered as [[11]]. The bar lies flat on the page, like still water.' },
   ],
 
   presented(p) {
@@ -8799,17 +8799,17 @@ const mire = {
     const re = p.scales.recognition;
     const rl = p.scales.release;
     let dist;
-    if (a >= 8)      dist = '!!She is in front of me. She has caught my collar.!!';
+    if (a >= 8)      dist = '!!She is in front of me, her hand closed on my collar, her face an inch from mine and not one drop on it.!!';
     else if (a >= 5) dist = 'She has crossed half the room. She is between me and the door now.';
-    else if (a >= 2) dist = 'She has taken steps toward me. She is closer than before.';
+    else if (a >= 2) dist = 'She has come up the gradient toward me, out of the deep end, without one sound of wading.';
     else             dist = 'She is at the far wall. She is asking the wall.';
     let water;
-    if (pd >= 7)     water = 'The floor is wet to the ankles. The carpet is gone under it.';
-    else if (pd >= 4) water = 'The floor is wet. My shoes leave prints on it.';
-    else if (pd >= 1) water = 'The floor is damp. ~~There is no water source.~~';
-    else             water = 'The floor is dry. The room is normal.';
+    if (pd >= 7)     water = 'The water is at my ankles, colder at the left one. The room has a current, and the current runs toward her.';
+    else if (pd >= 4) water = 'The floor is wet enough to hold reflections. Mine moves a half-beat behind me. Hers moves first.';
+    else if (pd >= 1) water = 'The floor is damp in a gradient I can read like depth markings: a film at the door, a sheen at the middle, a shine at her feet.';
+    else             water = 'The floor is dry. I check it twice, the second time with my palm.';
     let eyes;
-    if (re >= 5)     eyes = 'She has turned. She is looking at me as if I belong to the room.';
+    if (re >= 5)     eyes = 'She has turned. Her eyes rest on me with the patience of water finding its level.';
     else if (rl >= 4) eyes = 'She has said something she had not said before. She will not look at me.';
     else if (a >= 3) eyes = 'She is looking at me, sidelong.';
     else             eyes = 'She is asking the wall about the pond. She has not turned.';
@@ -8826,12 +8826,12 @@ const mire = {
         if (reps >= 2) {
           return {
             lines: [
-              'I keep answering. Each answer makes the pond more real.',
-              'The floor is getting wetter. Her face is closer than before.',
+              'I keep answering. Every answer is a bucketful. The pond is being filled from my side of the room.',
+              'The gradient has steepened. The deep end is wider than it was, and her face is nearer than her feet account for.',
             ],
             scales: { approach: +2, pond: +2 },
             composure: -1,
-            composureCost: 'The floor is wet to my ankles.',
+            composureCost: 'I am building it for her, answer by answer.',
           };
         }
         if (p.scales.pond <= 3) {
@@ -8839,7 +8839,7 @@ const mire = {
             lines: [
               'I say: it is out by the east lawn. The one with the statue.',
               'She nods slowly. She does not turn. But the room dries by a degree.',
-              'Her approach stops. She is waiting.',
+              'Her advance stops. The room holds at damp.',
             ],
             scales: { pond: +1, recognition: +1 },
           };
@@ -8848,7 +8848,7 @@ const mire = {
           lines: [
             'I say: it is out by the east lawn.',
             'She answers, without turning: !!I have been there. I have been there recently.!!',
-            'She takes a step closer.',
+            'She takes a step closer. In the wet, her reflection took it before her.',
           ],
           scales: { approach: +1, pond: +1 },
         };
@@ -8863,7 +8863,7 @@ const mire = {
         if (reps >= 1) {
           return {
             lines: [
-              'I stay at the door. She has stopped advancing. But the room is colder.',
+              'I hold the door. She has stopped advancing. The water has not. It comes on at the pace of a tide with an appointment.',
             ],
             scales: { approach: -1, pond: +1 },
             composure: -2,
@@ -8873,7 +8873,7 @@ const mire = {
         return {
           lines: [
             'I move to the door. I put my back to it.',
-            'She does not advance. She has stopped, mid-step. Her face is on the wall still.',
+            'She stops mid-step. The shine at her feet keeps coming a yard farther, then settles, like wake catching up to a stopped boat.',
           ],
           scales: { approach: -2, recognition: +1 },
           composure: -1,
@@ -8892,7 +8892,7 @@ const mire = {
           return {
             lines: [
               'I ask. But I already half-remember it. I say what I remember, and let her correct me.',
-              'She corrects me. Gently. She fills in what I was missing. ~~It is a person.~~ It is a small person.',
+              'She corrects me, gently, the way you straighten a picture in someone else\'s house. ~~It is a person.~~ It is the size of a person who had only just stopped being carried.',
               'She says the name. !!She says the name.!!',
             ],
             scales: { release: +3, pond: +1, recognition: +1 },
@@ -8904,7 +8904,7 @@ const mire = {
           return {
             lines: [
               'I ask: what does the statue look like?',
-              'She begins to describe it. She describes it in great detail. ~~It is a person.~~ It is a small person.',
+              'She describes it: the folded hands, the pleated coat the rain has rounded, the face the moss has been kind to. ~~It is a person.~~ It is of the right size.',
               'Her voice breaks at the end. She does not turn.',
             ],
             scales: { release: +2, pond: +1 },
@@ -8913,7 +8913,7 @@ const mire = {
         return {
           lines: [
             'I ask: what does the statue look like?',
-            'She pauses. She is trying to remember. It is a slow remembering.',
+            'She pauses a long time. Whatever she is reaching for is at the bottom of something.',
           ],
           scales: { pond: +1, recognition: +1 },
         };
@@ -8930,7 +8930,7 @@ const mire = {
             lines: [
               'I ask: what did you put in the pond.',
               'She does not answer. She does not turn. But she stops asking about the pond.',
-              'We are quiet a long time.',
+              'We are quiet a long time. In the corridor, on the hour, a mop bucket is set down.',
             ],
             scales: { release: +2, approach: -1, pond: -1 },
           };
@@ -8939,12 +8939,12 @@ const mire = {
           lines: [
             'I ask: what did you put in the pond.',
             'She is silent. She does not turn. She has pressed herself flat against the wall.',
-            'After a long time she says: ~~Something~~ Something I should not have.',
-            '!!She does not say what.!!',
+            'After a long time she says: I put in [[9]]. The bar lies on the page where the word went under.',
+            '!!She said it whole. The page would not hold it.!!',
           ],
           scales: { release: +3, pond: +1, recognition: +1 },
           composure: -1,
-          composureCost: 'The carpet is gone under me.',
+          composureCost: 'The bar is nine characters wide. I counted. I should not have counted.',
         };
       },
     },
@@ -8957,11 +8957,11 @@ const mire = {
         return {
           lines: [
             'I take her by the wrist. I turn her around slowly. She lets me.',
-            'Her eyes are very tired. She looks at me. She does not look at the wall.',
+            'She comes around the way a boat comes around — slow, the stern swinging wide. Her eyes are very tired. They hold mine and do not go back to the wall.',
           ],
           scales: { recognition: +3, pond: -1 },
           composure: -1,
-          composureCost: 'I should not have told her where the pond is.',
+          composureCost: 'Her wrist was cold, and the cold had a direction.',
         };
       },
     },
@@ -8973,8 +8973,8 @@ const mire = {
       respond() {
         return {
           lines: [
-            'I find a towel. I dry the corner of the room near the door.',
-            'The carpet is fabric again, briefly. She watches me work.',
+            'I find a towel folded on the radiator, waiting, stamped Ward II. I dry the corner by the door.',
+            'The corner becomes shallow end again. She watches me work the way you watch someone bail a sea.',
           ],
           scales: { pond: -2, recognition: +1, approach: -1 },
         };
@@ -8989,11 +8989,11 @@ const mire = {
         return {
           lines: [
             'I sit down on the wet floor. My coat soaks through immediately.',
-            'She turns. All the way. She sits beside me. ~~We are in the same room now.~~',
+            'She turns. All the way. She wades up the gradient and sits beside her own reflection, beside me, and the water settles around the two of us at one level. ~~We are in the same room.~~ We are in the same pond.',
           ],
           scales: { recognition: +3, release: +2, approach: -2 },
           composure: -2,
-          composureCost: 'The floor is wet to my ankles.',
+          composureCost: 'My coat will dry. I will be carrying the waterline a while.',
         };
       },
     },
@@ -9001,7 +9001,7 @@ const mire = {
 
   wait: {
     label: 'wait',
-    desc: 'Let her keep asking the wall. ~~The room is wetter every minute.~~',
+    desc: 'Let her ask the wall. The water keeps its own minutes.',
     when: (p) => p.scales.approach >= 3 || p.scales.pond >= 5 || p.turn >= 4,
   },
 
@@ -9011,7 +9011,7 @@ const mire = {
       once: true,
       when: (p) => p.scales.pond >= 5 && p.scales.recognition >= 2,
       prose: [
-        'She has stopped speaking to the wall. She has not turned, but her shoulders have changed.',
+        'She has stopped asking the wall. She has not turned, but her shoulders have come down, the way water goes still before a thing surfaces.',
         'She asks the wall: ~~Do you remember him?~~',
       ],
       responses: [
@@ -9020,7 +9020,7 @@ const mire = {
           desc: 'Pretend you do.',
           lines: [
             'I say: yes.',
-            'She takes a step away from the wall. She comes closer to me. ~~She is grateful.~~',
+            'She steps back from the wall. In the wet, her reflection stays at the wall a moment before following. ~~She is grateful.~~ She is borrowing.',
           ],
           scales: { release: +2, approach: +1, recognition: +2 },
           scars: ['named'],
@@ -9034,7 +9034,7 @@ const mire = {
           ],
           scales: { release: +3, pond: +1 },
           composure: -1,
-          composureCost: 'The room is wetter than the corridor. By a degree.',
+          composureCost: 'The damp has reached the second tile. I am keeping count.',
         },
         {
           label: 'tell me about him',
@@ -9042,7 +9042,7 @@ const mire = {
           lines: [
             'I say: tell me about him.',
             'She does. For a long time. ~~Some of it is happy.~~ Some of it is.',
-            'At the end she gives me his name.',
+            'At the end she gives me his name. It is dry. It is the only dry thing in the room.',
           ],
           scales: { release: +3, recognition: +2 },
         },
@@ -9063,7 +9063,7 @@ const mire = {
           when: (_, player) => player.wound === 'insomnia',
           lines: [
             'I say: I have not slept enough. The faces have gone soft.',
-            'She nods at the wall. ~~Hers have too.~~',
+            'She nods at the wall. ~~Hers have too.~~ One has not.',
             'After a while she takes a step away from it.',
           ],
           scales: { release: +2, approach: +1, recognition: +1 },
@@ -9089,7 +9089,7 @@ const mire = {
       once: true,
       when: (p) => p.scales.approach >= 5 && p.turn >= 3,
       prose: [
-        'She has crossed half the room. She stops. She looks at me — full on — for the first time.',
+        'She has crossed half the room and stopped, at the middle depth. She looks at me full on, for the first time. The water stills around her ankles, waiting on the answer too.',
         'She asks: ~~Are you going to stop me?~~',
       ],
       responses: [
@@ -9110,18 +9110,18 @@ const mire = {
           lines: [
             'I say: no. I am not going to stop you.',
             'She looks at me a long time. She does not move.',
-            'Eventually she walks back to the wall. ~~She did not want to go.~~',
+            'Then she walks back to the deep end. ~~She did not want to go.~~ She wanted to be kept.',
           ],
           scales: { approach: -3, recognition: +2, pond: +1 },
           composure: -1,
-          composureCost: '!!I have answered her too well.!!',
+          composureCost: '!!Nobody stood in her way the first time either.!!',
         },
         {
           label: "I can't",
           desc: 'Honest.',
           lines: [
             "I say: I can't. But I am here.",
-            'She nods. She sits down where she is. The room has a sitting woman in it.',
+            'She nods. She sits down where she is, at middle depth, her skirt going dark around her in a circle.',
           ],
           scales: { approach: -4, release: +2, recognition: +2 },
         },
@@ -9133,7 +9133,7 @@ const mire = {
       once: true,
       when: (p) => p.scales.pond >= 6 && p.scales.release >= 3,
       prose: [
-        'She has stopped speaking to the wall. Her shoulders are very still.',
+        'Her shoulders are very still — the stillness of a surface that knows it is about to be looked into.',
         'She asks the floor: ~~What is at the bottom of the pond?~~',
       ],
       responses: [
@@ -9142,7 +9142,7 @@ const mire = {
           desc: 'Meet her where she is.',
           lines: [
             'I say: something heavy.',
-            'She nods. ~~She has been remembering its weight.~~',
+            'She nods. Heavy is a measurement she has kept exact for forty years.',
           ],
           scales: { release: +3, recognition: +1, pond: +1 },
           composure: -1,
@@ -9153,7 +9153,7 @@ const mire = {
           desc: 'Do not name it.',
           lines: [
             "I say: I don't know.",
-            'She nods. She does not seem disappointed. ~~She did not want to be told.~~',
+            'She nods. ~~She wanted an answer.~~ She wanted the question to stay a question. I have kept it one.',
           ],
           scales: { release: +1, recognition: +1, pond: -1 },
         },
@@ -9162,12 +9162,12 @@ const mire = {
           desc: 'Name it.',
           lines: [
             'I say: a person.',
-            'She is very quiet. ~~She has not let anyone say it.~~',
+            'The room goes quiet to its corners. ~~She has not let anyone say it.~~ No one has tried it to her face.',
             '!!She does not deny it.!!',
           ],
           scales: { release: +4, recognition: +2, pond: +2 },
           composure: -2,
-          composureCost: 'I should not have told her where the pond is.',
+          composureCost: 'The word is in the room now. The water rose to meet it.',
         },
       ],
     },
@@ -9186,7 +9186,7 @@ const mire = {
           desc: 'Simple.',
           lines: [
             'I say: I know.',
-            'She nods. ~~She has not been told that.~~',
+            'She nods, twice, the second time to herself. ~~She has not been told that.~~ She has not let anyone near enough to tell her.',
           ],
           scales: { release: +3, recognition: +2, pond: -1 },
         },
@@ -9195,11 +9195,11 @@ const mire = {
           desc: 'Invite.',
           lines: [
             'I say: tell me what happened.',
-            'She does. Some of it. ~~She leaves a lot of it under the water.~~',
+            'She does. Some of it. The story has a surface, and she stays above it, and what is below stays below.',
           ],
           scales: { release: +3, recognition: +2 },
           composure: -1,
-          composureCost: 'The floor is wet to my ankles.',
+          composureCost: 'The story has a surface. I did not break it.',
         },
         {
           label: "it doesn't matter",
@@ -9218,7 +9218,7 @@ const mire = {
     if (p.scales.approach >= 4) {
       return {
         lines: [
-          'I wait. She takes another step toward me. The floor is wet to my ankles now.',
+          'I wait. She takes another step up the gradient. The waterline on my shoes has a new high mark. I keep the marks the way a lock-keeper keeps them.',
         ],
         scales: { approach: +1, pond: +1 },
         composure: -1,
@@ -9227,7 +9227,7 @@ const mire = {
     }
     return {
       lines: [
-        'I wait. She is asking the wall about the pond. She does not advance. But the floor is wetter than it was.',
+        'I wait. She asks the wall again, with the patience of someone who has learned that walls outlast staff. The shine at her feet has gained a tile.',
       ],
       scales: { pond: +1, approach: +1 },
       composure: -1,
@@ -9242,7 +9242,7 @@ const mire = {
       title: 'You let her say it',
       lines: [
         'We sit on the wet floor a long time. She does not ask about the pond again.',
-        'She gives me the name of what she put in. !!She has not said it out loud in years.!!',
+        'She gives me the name of what she put in. On this page it reads [[9]]. !!That is not her doing. She said it whole.!!',
         'I take it with me.',
       ],
       item: 'small_bell',
@@ -9252,7 +9252,7 @@ const mire = {
       when: (p) => p.scales.pond <= 1 && p.scales.recognition >= 6,
       title: 'You hold the room from her',
       lines: [
-        'She has not turned. The floor is barely damp now. The pond is somewhere else. Where it always was.',
+        'She has not turned. The floor has dried to a film, then to a floor. There is no pond on the grounds. The file says so three times, each time more formally.',
         'She does not look at me when I leave. But the room is a room.',
       ],
       item: 'worn_ribbon',
@@ -9262,8 +9262,8 @@ const mire = {
       when: (p) => p.scales.release >= 9 && p.scales.pond >= 5,
       title: 'She names the weight',
       lines: [
-        '!!She names it. She gives me the name.!!',
-        'I take it from her. She lets me. ~~I have a thing now I did not come in with.~~',
+        '!!She names it. The name goes into me and not onto the page. The page gets the bar.!!',
+        'I take it from her. She lets it go the way you let go of a railing. ~~I have a thing now I did not come in with.~~ I am heavier by exactly its weight.',
       ],
       item: 'scrap_of_paper',
       scars: ['witnessed'],
@@ -9283,7 +9283,7 @@ const mire = {
       id: 'abandoned',
       when: (p) => p.flags.left,
       title: 'You walk out',
-      lines: ['I leave the room. The corridor is dry. ~~For now.~~'],
+      lines: ['I leave the room. The corridor is dry. My shoes print the terrazzo for eleven steps, and then I am dry too, as far as anyone can see.'],
       item: null,
       scars: ['abandoned'],
     },
