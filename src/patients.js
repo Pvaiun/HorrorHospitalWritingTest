@@ -2016,9 +2016,9 @@ const polonius = {
 
         r_clock_hall: {
           lines: [
-            'A short hall ending in a tall clock. The pendulum is swinging. The face has no hands.',
-            'I stand in front of it. The pendulum is moving. The mechanism is wound. There are no hands.',
-            'Two corridors branch off the hall. One curves toward the back of the house. One goes down — a narrow stair I had not noticed.',
+            'A short hall ending in the tall clock. The pendulum swings. The face has no hands.',
+            'I stand in front of it. If the house has a face, this is the face: wound, working, and refusing to say.',
+            'Two corridors branch off the hall. One curves toward the back of the house. One drops away — a narrow stair that was not in my first count of the stairs.',
             'Polonius, somewhere behind me: The clockmaker took the hands off it himself. He said it made the time easier to bear. I never had the heart to put them back.',
           ],
           flags: { room: 'clock_hall', _been_clock_hall: true, _heard_study: true, _heard_cellar: true },
@@ -2034,7 +2034,7 @@ const polonius = {
         r_clock_branch: {
           // Sub-menu for the two corridors off the clock hall.
           lines: [
-            'I weigh the two corridors. One curves toward the back of the house — the wallpaper darkens. One drops by a narrow stair — the stone smells colder.',
+            'I weigh the two corridors. One curves toward the back of the house, and the wallpaper darkens into it. One drops by a narrow stair, and the cold comes up the stone to meet me.',
           ],
           choices: [
             { label: 'the back corridor', goto: 'r_clock_back_corridor' },
@@ -2045,11 +2045,11 @@ const polonius = {
 
         r_clock_watch: {
           lines: [
-            'I stand against the wall in the clock hall. I let the room have my attention while I have its.',
-            'After a minute, Mrs. Halliwell crosses from the front of the house to the back. She is carrying a small pale thing. She is going down the corridor to the cloakroom.',
-            'A minute later, she returns. Her hands are empty. She is still smiling.',
-            'After a while, Mr. Halliwell crosses from the parlor to the back. He is carrying a small pale thing this time. He is going to a door I have not seen open before. The door has a brass plate on it. The plate reads ~~Study~~.',
-            'The clock pendulum keeps time the clock does not have.',
+            'I put my back to the wall of the clock hall and stand the way the coat-tree stands. The staff do not read furniture.',
+            'After a minute, Mrs. Halliwell crosses front-to-back, smiling at the empty corridor ahead of her, carrying a small pale thing. She goes down toward the cloakroom.',
+            'A minute later she returns. Her hands are empty. The smile has not been put away.',
+            'Later, Mr. Halliwell crosses from the parlor toward the back, all of himself turning at the corner, carrying a small pale thing in his turn. He stops at a door with a brass plate. The plate reads: Study.',
+            'The pendulum keeps time the clock refuses to tell.',
           ],
           flags: { _watched_routes: true, _heard_study: true, _heard_cellar: true, _routes_seen: true, _card_known: true },
           scales: { unease: +3, intimacy: +1 },
@@ -2062,9 +2062,9 @@ const polonius = {
 
         r_clock_face: {
           lines: [
-            'I lean in close to the face of the clock. The pendulum is swinging. The face is plain — the hours are inked but the hands are gone.',
-            'Where the hands should be, set into the wood at the centre, is a small piece of brass with a hole in it. The hole has the shape of a card slot.',
-            '~~The clock keeps time only if someone\'s card is in it. The clock is asking for a card.~~',
+            'I lean in close to the face. The hours are inked. The hands are gone. At the centre, set into the wood, is a small piece of brass with an opening in it.',
+            'I measure the opening with my eye. It is the width of an admission card.',
+            'The house has a face, and the face has a mouth, and the mouth is held open.',
             'Polonius, mild, behind me: Do not, sir. The clock is patient. It has been patient for a long time.',
           ],
           flags: { _saw_clock_slot: true, _heard_how_long: true },
@@ -2078,10 +2078,10 @@ const polonius = {
 
         r_clock_back_corridor: {
           lines: [
-            'I follow the back corridor. It runs along the rear of the house. The wallpaper is darker here.',
-            'There is a door with a brass plate. The plate reads ~~Study~~. The door is closed.',
-            'Further on, there is a smaller door, painted the same colour as the wallpaper. The smaller door does not have a plate. The wood has wear at the level of a maid\'s hip.',
-            '~~The smaller door is the cloakroom.~~',
+            'I follow the back corridor along the rear of the house. The wallpaper is darkest here, the green gone nearly to black.',
+            'A door with a brass plate. I read the plate: Study. The door is closed.',
+            'Further on, a smaller door painted the colour of the wallpaper, no plate, and a band of wear in the wood at the height of a tray carried on a hip.',
+            'A door used hourly by a woman with her hands full. The cloakroom.',
           ],
           flags: { _heard_study: true, _heard_cloakroom: true, _heard_card_in_cloakroom: true, _aware_locked: true },
           scales: { unease: +2 },
@@ -2094,9 +2094,9 @@ const polonius = {
 
         r_clock_descend: {
           lines: [
-            'I follow the stair down. The stair is narrow. The wood creaks at the third step and again at the seventh. The descent ends in a dim chamber. There is a door at the foot, set into the stone.',
-            'The door is the cellar door.',
-            'Above me, on the landing, the cook is standing. He has not followed me. He has been here. He is watching me reach the bottom.',
+            'I take the stair down. Narrow. The wood speaks at the third step and again at the seventh; I file the two steps for the climb back. The descent ends in a dim chamber and a door set into stone.',
+            'The cellar door.',
+            'Above me, on the landing, the cook is standing. He did not follow me down. He was already there. He watches me reach the bottom, and his hands go on wiping themselves on the apron without him.',
           ],
           flags: { _heard_cellar: true, _seen_cook: true },
           scales: { unease: +3 },
@@ -2118,10 +2118,10 @@ const polonius = {
 
         r_clock_cook_intercepts: {
           lines: [
-            'I climb back to the landing. The cook is at the top of the stair, his apron the colour it is. He stops me with a hand. His hand is bigger than I had expected.',
-            'Sir, he says, quietly. His voice is the voice of a man who is not — for the moment — part of the day. The accent is northern. The eyes are awake.',
-            'The cellar is fine, sir. There is a shelf. There is a shard. The shard is what holds him. I have done the wines for forty-one years. I have looked at the shard every time.',
-            'He pauses. Sir. If I leave the kitchen for more than a minute, the day reverts me. I will not remember this conversation in a minute. Go down. I will not stop you. The master cannot stop you on the stair.',
+            'I climb back to the landing. The cook stops me with a hand. The hand is bigger than I had budgeted for. The other hand goes on working at the apron, on its own time.',
+            'Sir, he says, quietly. The voice has a north in it, and the eyes have the lights on. For the moment, no part of him belongs to the day.',
+            'The cellar is fine, sir. There is a shelf. There is a shard. The shard is what holds him. I have done the wines forty-one years. I have looked at that shard every time and put the bottle back in front of it.',
+            'He pauses. Sir. If I am out of the kitchen above a minute, the day takes me back, and this conversation goes with it. Go down. I will not stop you. The master cannot stop you on the stair.',
           ],
           flags: { _heard_cellar: true, _heard_binding: true, _heard_shard_in_cellar: true, _binding_is_shard: true, _knows_free_path: true, _heard_cook_aware: true, _seen_cook: true },
           scales: { unease: +3, intimacy: +1 },
@@ -2141,10 +2141,10 @@ const polonius = {
 
         r_dining: {
           lines: [
-            'The dining room. A long table set for two. The places are already arranged. The candles are already burning. Two covered dishes sit between the settings.',
-            'The cook appears in the doorway. He is wiping his hands on an apron that has bloodstains old and new. He bows.',
+            'The dining room. A long table laid for two, the places arranged, two covered dishes between the settings. The candles burn; the wax has pooled in the holders, and the candles are no shorter for it.',
+            'The cook appears in the doorway, wiping his hands on his apron. He bows. The hands go on wiping after the bow is finished.',
             'Dinner, sir, Polonius says. The cook has prepared it for a long time. It would be unkind to leave it cold.',
-            'A meat-cleaver in a sheath at the cook\'s waist. The handle is bone.',
+            'At the cook\'s waist, in a sheath: a meat-cleaver. The handle is bone.',
           ],
           flags: { room: 'dining', _been_dining: true, _seen_cook: true },
           scales: { tiredness: +1, unease: +1 },
@@ -2158,9 +2158,9 @@ const polonius = {
 
         r_dining_eat: {
           lines: [
-            'I sit. The chair has been warmed. The food is hot. The cook stands by the doorway, watching me eat.',
-            'I take a bite. The food is unspeakably good and tastes of a meal I have eaten before. The wine is poured before I have asked for it.',
-            'Polonius is across the table. He is not eating. His knife and fork lie on the plate at an angle no human elbow could produce. He is watching me eat the way one watches a fire.',
+            'I sit. The chair has been warmed. The food is hot. The cook stands in the doorway, watching me eat, hands working at the apron.',
+            'I take a bite. It is very good, and it tastes of a meal I have eaten before — the exact meal, down to the year. The wine is poured before I have asked.',
+            'Polonius sits across the table. He is not eating. His knife and fork lie on the plate at an angle no human elbow produces. He watches me eat the way one watches a fire take.',
           ],
           scales: { tiredness: +5, intimacy: +3 },
           composure: -1,
@@ -2169,7 +2169,7 @@ const polonius = {
           choices: [
             {
               label: 'set down the cutlery',
-              goto: { to: 'r_dining', lines: ['I set the knife and fork down. The cook, in the doorway, makes a small, unhappy sound.', 'Polonius nods. As you wish, sir. The cook will save it.'], scales: { tiredness: -1, intimacy: -1 }, composure: +1, composureGain: 'I stopped.' },
+              goto: { to: 'r_dining', lines: ['I set the knife and fork down, crossed, the way my mother taught me to refuse seconds. The cook makes a small unhappy sound in the doorway.', 'Polonius nods. As you wish, sir. The cook will save it. The cook saves everything.'], scales: { tiredness: -1, intimacy: -1 }, composure: +1, composureGain: 'I stopped while stopping was mine to do.' },
             },
             {
               label: 'keep eating; finish the plate',
@@ -2180,9 +2180,9 @@ const polonius = {
 
         r_dining_finish: {
           lines: [
-            'I finish the plate. The cook is delighted. The bow he gives me is genuine.',
-            'I push myself up from the chair. The chair holds on for a beat longer than a chair should.',
-            'My limbs are slow. The wine has settled. I will need to walk this off.',
+            'I finish the plate. The cook is delighted. The bow he gives me is the first thing in this room that is not a performance.',
+            'I push up from the table. The chair holds on for one beat past furniture.',
+            'My limbs are slow. The wine has settled into them like a tenant. I will need to walk this off.',
           ],
           scales: { tiredness: +6, intimacy: +2 },
           composure: -2,
@@ -2198,9 +2198,9 @@ const polonius = {
         r_dining_blood: {
           lines: [
             'I say: whose blood is on his apron.',
-            'The cook looks at his apron, as if noticing it for the first time. Polonius says, mild: The lamb. He prepared lamb. He has always been a thorough butcher.',
-            'The cook nods. He is still standing in the doorway behind me. He has not moved.',
-            'I look at the apron again. There are old stains and new. The new are very new.',
+            'The cook looks down at the apron as if it had been handed to him mid-sentence. Polonius, mild: The lamb, sir. He prepared lamb. He has always been a thorough butcher.',
+            'The cook nods. He is still in the doorway behind me. He has not moved. His hands have not stopped.',
+            'I read the apron the way I read the register. Stains in inks of different ages. The newest is very new.',
           ],
           scales: { unease: +3 },
           flags: { _noticed_blood: true },
@@ -2211,12 +2211,12 @@ const polonius = {
 
         r_dining_speak_cook: {
           lines: [
-            'I cross to the cook. The cook is in the doorway. I keep my voice low.',
-            'I say, very quietly: I need to leave. The card. The shard. Any of it.',
-            'The cook\'s smile is fixed. The eyes do not move. He says, in the same fixed voice: the lamb, sir. The lamb is very good.',
-            '~~He cannot hear me here. He is part of the day in the dining room. Polonius is across the table.~~',
+            'I cross to the cook in the doorway. I keep my voice under the candle-hiss.',
+            'I say: I need to leave. The card. The shard. Any of it.',
+            'The smile is fixed. The eyes do not move. He says, in the same fixed voice: the lamb, sir. The lamb is very good.',
+            'In this room he is a sideboard with a voice. Whatever woke in him on the stair does not wake at this table.',
             'Polonius, from across the table: He saves himself for the kitchen, sir. Mr. Cook is at his most useful at the range. If you would like to speak with him at length, do so there.',
-            '~~The cook is lucid only in the kitchen.~~',
+            'The kitchen. Polonius has just told me where his own staff goes to be disloyal. I do not know yet what that costs him, or me.',
           ],
           flags: { _heard_kitchen: true, _heard_cook_lucid_in_kitchen: true },
           scales: { unease: +2, intimacy: +1 },
@@ -2230,10 +2230,10 @@ const polonius = {
 
         r_dining_take_cleaver: {
           lines: [
-            'I reach for the cleaver at the cook\'s waist. His hand intercepts mine. The grip is the same grip the maid had — fixed, strong, sorry.',
-            'Sir, he says, in the dining room voice. The cleaver is for the lamb. The cleaver does not leave the cook.',
-            'He releases me. He bows. The cleaver is still at his waist.',
-            '~~He is part of the day here. He cannot give the cleaver up here.~~',
+            'I reach for the cleaver at his waist. His hand intercepts mine — the house\'s grip again, fixed, strong, sorry.',
+            'Sir, he says, in the dining-room voice. The cleaver is for the lamb. The cleaver does not leave the cook.',
+            'He releases me. He bows. The cleaver stays at his waist, riding the bow.',
+            'In this room the rules wear him. I will have to ask him where the rules are thinner.',
             'Polonius, from the table, smiling: As I said, sir. The kitchen is where you would do best to speak with him.',
           ],
           flags: { _heard_kitchen: true, _heard_cook_lucid_in_kitchen: true },
@@ -2249,8 +2249,8 @@ const polonius = {
         r_dining_decline: {
           lines: [
             'I say: I am not hungry.',
-            'The cook\'s face does not move. Polonius nods. Of course. Perhaps later. Mr. Cook, leave the covers on. He may return to it.',
-            'The cook does not leave. He stands in the doorway behind me.',
+            'The cook\'s face does not move. Polonius nods. Of course. Perhaps later. Mr. Cook — leave the covers on. He may return to it.',
+            'The cook does not leave. He stands in the doorway behind me, hands working, like a clock that has been told to wait.',
           ],
           scales: { unease: +1 },
           composure: +1,
@@ -2270,8 +2270,8 @@ const polonius = {
 
         r_cloakroom_approach: {
           lines: [
-            'I walk to the back of the corridor. The smaller door is set into the wallpaper. Above the handle, in brass: a small lock.',
-            'The maid is in front of the door. She is smiling. She is not blocking. She is, however, in the way.',
+            'I walk to the back of the corridor. The smaller door sits in the wallpaper like a page in a book. Above the handle, in brass: a small lock.',
+            'The maid is in front of the door, smiling before I have given her a reason. She is not blocking. She is, however, in the way.',
           ],
           flags: { room: 'hall' },
           choices: [
@@ -2294,9 +2294,9 @@ const polonius = {
 
         r_cloakroom_locked: {
           lines: [
-            'I try the handle. The handle turns; the lock holds. The door does not open.',
+            'I try the handle. The handle turns; the lock holds. A small lock. A sufficient lock.',
             'The maid, beside me: Locked, sir. Mr. Halliwell has the key.',
-            'She does not smile less. She does not smile more.',
+            'She does not smile less. She does not smile more. The smile is a fixture, like the sconces.',
           ],
           flags: { _aware_keys_needed: true, _heard_parlor_keys: true, _heard_keys_butler: true },
           scales: { unease: +2 },
@@ -2310,9 +2310,9 @@ const polonius = {
         r_cloakroom_ask_maid: {
           lines: [
             'I say: Mrs. Halliwell. Please step aside. I would like to try the door.',
-            'She does. Of course, sir. She moves a quarter-step. The door is still there. So is she. She is now slightly more in the doorframe than before.',
-            'I move past her. Her hand brushes my sleeve. The brush is brief and careful. The brush is the same brush as the coat.',
-            '~~She is the maid. She is also a measure of the doorway.~~',
+            'She does. Of course, sir. She moves a quarter-step. The door is still there. So is she. She has, in moving aside, come to occupy more of the doorframe.',
+            'I move past her. Her hand brushes my sleeve — brief, careful, the same brush as the coat. The smile was already in place when I decided to move.',
+            'She has been rearranged, the way furniture is rearranged: to improve the room\'s defence of itself.',
           ],
           scales: { unease: +2, intimacy: +1 },
           choices: [
@@ -2326,9 +2326,9 @@ const polonius = {
 
         r_cloakroom_slip: {
           lines: [
-            'I feint right and dart left. She does not follow the feint. She does not need to.',
+            'I feint right and go left. She does not follow the feint. She does not need to. She was smiling at the left before I chose it.',
             'Her hand is at my forearm. The grip is far stronger than the body it is attached to.',
-            '~~She has done this many more times than I have.~~',
+            'I have tried this once. She has prevented it a thousand mornings.',
             'She releases me with a small apology. Sir. We have been instructed not to spoil the evening. We are doing our best.',
             'She steps back. Half a step. She is still there.',
           ],
@@ -2343,9 +2343,9 @@ const polonius = {
 
         r_cloakroom_unlock: {
           lines: [
-            'I take the keys from my pocket. The brass-headed key fits the brass-headed lock. The lock turns. The door opens.',
-            'I step inside. The maid does not follow. She stands at the door, smiling. She is part of the day, on this side of the door.',
-            'The cloakroom is small. My coat is on a hook. Two other coats hang beside it; I do not recognise them. A shelf above the rod.',
+            'I take out the keys. Brass head to brass lock. The lock turns over once, softly, like a sleeper.',
+            'I step inside. The maid does not follow. She stands at the threshold, smiling into the small room. Whatever her day is made of, it stops at this jamb.',
+            'The cloakroom is small. My coat is on a hook. Two other coats hang beside it — I do not know them. I touch one in passing. It is warm.',
           ],
           flags: { room: 'cloakroom', _been_cloakroom: true },
           scales: { unease: +2 },
@@ -2364,7 +2364,7 @@ const polonius = {
 
         r_cloakroom_search_coat: {
           lines: [
-            'I take down my coat. I check the inner pocket. The pocket is — depending on what the house has decided —',
+            'I take down my coat. I go for the inner pocket, the one I would use. My fingers find the seam —',
           ],
           choices: [
             {
@@ -2379,10 +2379,10 @@ const polonius = {
 
         r_cloakroom_card_in_coat: {
           lines: [
-            'The pocket is heavier than empty. I bring out my admission card. The number on it is my number.',
+            'The pocket is heavier than empty. I bring out my admission card. I read the number twice. The number is mine.',
             '!!I have it.!!',
-            'I put the coat on. The coat is the right temperature.',
-            'Behind me, in the corridor, Mrs. Halliwell\'s smile widens. She has not moved.',
+            'I put the coat on. Of the three coats on the rail, mine is the only one at room temperature.',
+            'Behind me, at the threshold, Mrs. Halliwell\'s smile has already widened. Whatever it is ahead of has not happened yet.',
           ],
           flags: { _card_location: 'recovered', _recovered_from: 'cloakroom' },
           scales: { unease: +1 },
@@ -2398,10 +2398,10 @@ const polonius = {
 
         r_cloakroom_coat_empty: {
           lines: [
-            'The pocket is empty. The card is not in the coat. It was placed here. It has been moved.',
-            'The other coats: I check them too. Pockets empty. The brass-headed nails in the wall behind them shine faintly.',
-            'I am too late by some minutes. The maid put the card here. The butler has carried it on.',
-            'Behind me, in the corridor, Mrs. Halliwell\'s smile is the same.',
+            'The pocket is empty. The card was placed here. The card has been moved on.',
+            'I check the other coats — the warm ones. Pockets empty. Pockets emptied, by the feel of the turned linings.',
+            'I am minutes behind. The maid carries it in; the butler carries it deeper. The house digests by stages.',
+            'Behind me, at the threshold, Mrs. Halliwell\'s smile is exactly where it was.',
           ],
           flags: { _heard_study: true, _heard_card_moved: true, _card_known: true },
           scales: { unease: +3 },
@@ -2414,10 +2414,10 @@ const polonius = {
 
         r_cloakroom_search_shelf: {
           lines: [
-            'I run my hand along the shelf. The shelf is dusty. There is no card on the shelf. There is a small tin box. I open it.',
-            'Inside the tin: forty-one folded slips of paper. Each is the same size and shape. Each has a name on it. The names are the names from the gallery.',
-            'At the bottom of the tin, where a forty-second slip would go, is a blank one. A pen on the shelf beside the tin.',
-            '~~He has prepared mine. He has not yet written my name.~~',
+            'I run my hand along the shelf. Dust, then tin. No card. A small tin box. I open it.',
+            'Inside: forty-one folded slips of paper, one size, one shape, a name on each. I know the names. They hang in the gallery.',
+            'At the bottom of the tin, where a forty-second slip would go, lies a blank one. A pen waits on the shelf beside the tin.',
+            'My name has an appointment. The stationery is already bought.',
           ],
           flags: { _saw_slips: true, _heard_count: true },
           scales: { unease: +5 },
@@ -2426,7 +2426,7 @@ const polonius = {
           choices: [
             {
               label: 'pocket the blank slip',
-              goto: { to: 'r_cloakroom_unlock', lines: ['I take the blank slip. I fold it into my pocket. If I have a slip with no name on it, I have what they cannot use yet.'], flags: { _have_blank_slip: true }, composure: +1, composureGain: 'I have his next move in my pocket.' },
+              goto: { to: 'r_cloakroom_unlock', lines: ['I take the blank slip and fold it into my pocket. A name not yet written is a thing not yet filed. I will keep the paperwork incomplete.'], flags: { _have_blank_slip: true }, composure: +1, composureGain: 'His next move is in my pocket.' },
             },
             {
               label: 'leave it; keep searching',
