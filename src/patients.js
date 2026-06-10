@@ -3351,13 +3351,13 @@ const polonius = {
 
         k_strike_consider: {
           lines: [
-            'I find him. He is wherever he is — in the parlor by the fire, or in the corridor, or at the foot of the stair. He does not run.',
+            'I find him. He is where he is — by the parlor fire, or in the corridor, or at the foot of the stair. He does not run. Hosts do not run.',
             'I have a weapon in my hand. The weapon is —',
-            (p) => p.flags._weapon === 'poker'   ? 'The iron poker from the parlor grate. It is heavy. It is warm.' :
+            (p) => p.flags._weapon === 'poker'   ? 'The iron poker from the parlor grate. Heavy. Warm at the fire end, like a hand just shaken.' :
                    p.flags._weapon === 'cleaver' ? 'The cook\'s cleaver. The handle is bone. The blade is the colour of old water.' :
-                   p.flags._weapon === 'knife'   ? 'The cook\'s knife. The handle has worn to his hand.' :
+                   p.flags._weapon === 'knife'   ? 'The cook\'s knife. The handle has worn to a stranger\'s grip.' :
                    'My hands. Only my hands.',
-            'He is looking at the weapon. He has gone very still. The stillness is not the prey stillness. It is the stillness of something choosing not to move.',
+            'He looks at the weapon. He has gone very still — not the stillness of prey. The stillness of a thing electing not to move.',
             'Sir. He is mild about it. If you do this, you will have one hour to cross the threshold before dawn. You will not have me. I have done it. The body remains.',
             'He pauses. He adds, more quietly: I would not begrudge you the hour.',
           ],
@@ -3371,23 +3371,23 @@ const polonius = {
             },
             {
               label: 'wait — go find a weapon first',
-              goto: { to: 'hub_corridor', lines: ['I lower my hand. I am unarmed. I need something heavier than a man\'s hand for this.'], composure: -1, composureCost: 'I lost the moment.' },
+              goto: { to: 'hub_corridor', lines: ['I lower my hand. I am unarmed, and what stands in front of me has outworn forty-one guests. I will come back with iron.'], composure: -1, composureCost: 'I lost the moment.' },
               when: (p) => !p.flags._armed || !p.flags._weapon,
             },
             {
               label: 'put it down',
-              goto: { to: 'hub_corridor', lines: ['I lower the weapon. I take a breath. I do not strike. I will not be the man who strikes if I can be the man who finds another way.'], composure: +1, composureGain: 'I did not.', flags: { _refused_strike: true } },
+              goto: { to: 'hub_corridor', lines: ['I lower the weapon. I take one breath, and then the other one. There is another way through this house, and I have not run out of it yet.'], composure: +1, composureGain: 'I did not.', flags: { _refused_strike: true } },
             },
           ],
         },
 
         k_strike_now: {
           lines: [
-            'I bring the weapon down on the side of his head. The first blow is the worst, in that it is the only one I have to commit to. The skull gives the way old wood gives.',
+            'I bring the weapon down on the side of his head. The first blow is the worst, in that it is the only one I have to decide on. The skull gives the way old wood gives.',
             '!!The second blow is mechanical. The third I do not remember.!!',
-            'His body lies on the rug. The blood is the wrong colour — too dark, with a sheen of something metallic. The mouth has stopped being a mouth.',
-            'The staff are gone. They were here a moment ago. They are not here. The clock without hands has stopped swinging.',
-            'I look down at him. He is, somehow, smiling. The smile is the smallest one. It is, I think, gratitude.',
+            'His body lies on the rug. The blood is wrong — too dark, with a metalled sheen, the colour of the decanter. The mouth has stopped being a mouth.',
+            'The staff are gone. They were here a moment ago; the house has put its furniture away. The pendulum of the handless clock hangs dead still.',
+            'I look down at him. The smile has survived me. It is the smallest one he has made all evening, and the only one I believe.',
           ],
           composure: -5,
           composureCost: 'The skull gave the way old wood gives.',
@@ -3402,8 +3402,8 @@ const polonius = {
 
         k_search_body: {
           lines: [
-            'I crouch. I search his pockets. The body weighs less than it should.',
-            'The vest pocket has —',
+            'I crouch and go through his pockets, the way one goes through a drawer of papers. The body weighs less than its clothes.',
+            'The vest pocket —',
           ],
           choices: [
             {
@@ -3417,10 +3417,10 @@ const polonius = {
 
         k_search_card_on_body: {
           lines: [
-            'In the vest pocket: my admission card. It was on him. He had taken it back when his mood cooled, and he had kept it close, the way a man keeps a small ill-advised pet.',
-            'I take the card. The number is my number.',
+            'In the vest pocket: my admission card. He had taken it back onto his person and kept it over his heart, the way a man keeps a small ill-advised pet.',
+            'I take the card. I read the number. Mine.',
             '!!I have it. The body is here. The card is in my pocket.!!',
-            'The clock in the hall begins to chime. It chimes a number. I do not count the chimes. I have an hour.',
+            'The clock in the hall begins to chime. It chimes a number. For the first time tonight I refuse to count. I have an hour.',
           ],
           flags: { _card_location: 'recovered', _recovered_from: 'body' },
           scales: { unease: +2 },
@@ -3436,8 +3436,8 @@ const polonius = {
 
         k_search_no_card_on_body: {
           lines: [
-            'The vest pocket is empty. The card is not on him. The card is in the study, where he left it.',
-            'The clock in the hall begins to chime. It chimes a number. I do not count the chimes. I have an hour. I have less.',
+            'The vest pocket is empty. The card is not on him. It is in the study, behind the lock he showed me.',
+            'The clock in the hall begins to chime. It chimes a number I will not let myself count. An hour. Less, now.',
           ],
           flags: { _card_known: true, _need_to_find_card: true },
           scales: { unease: +3 },
@@ -3450,19 +3450,19 @@ const polonius = {
             },
             {
               label: 'walk; you have time',
-              goto: { to: 'hub_corridor', lines: ['I stand. The house is empty of staff. I have the run of it. I have an hour.'] },
+              goto: { to: 'hub_corridor', lines: ['I stand. The house is empty of staff, and without them it is only rooms. I have the run of it. I have an hour.'] },
             },
           ],
         },
 
         k_sprint_study: {
           lines: [
-            'I run for the back of the house. The corridor is empty. The doors are open. The study door is not locked — there is no butler to lock it, and the lock was at the master\'s direction.',
-            'I find the desk. I find the drawer. The drawer is locked.',
-            'I find the small brass key in the dead man\'s pocket — I went back for it without thinking — and the drawer opens.',
-            'My card is on top of the pile of forty-one. I take it.',
+            'I run for the back of the house. The corridor is empty, the doors stand open. The study door is unlocked — there is no butler left to lock it, and the lock answered to the master.',
+            'The desk. The drawer. Locked.',
+            'The small brass key is in the dead man\'s vest. My legs went back for it before I finished deciding to.',
+            'The drawer opens. My card lies on top of the forty-one. I take it.',
             '!!I have the card.!!',
-            'The clock chimes another number behind me.',
+            'Behind me, the clock pays out another number.',
           ],
           flags: { _card_location: 'recovered', _recovered_from: 'study_after_kill' },
           scales: { unease: +2 },
@@ -3478,11 +3478,11 @@ const polonius = {
 
         k_dawn_walk: {
           lines: [
-            'I walk for the front of the house. The corridor is longer than it should be. The wallpaper has the same dust on it as the rest of the house.',
+            'I walk for the front of the house. I count the doors as they pass: six, five, four. The house has stopped adding.',
             'The foyer. The front door. The brass slot.',
             'I press the card to the slot. The slot reads. The lock clicks. The door swings inward.',
-            'The hospital corridor is on the other side. The lights are too bright after the lamps. The corridor is the corridor.',
-            'I step through. I do not look back.',
+            'The hospital corridor is on the other side, fluorescent, too bright after a night of oil light. The corridor is the corridor.',
+            'I step through. I do not look back. ~~I look back once.~~ I do not look back.',
           ],
           flags: { _walked_free: true, _escaped_violent: true },
           composure: +1,
