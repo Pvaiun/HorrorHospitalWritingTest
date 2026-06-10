@@ -265,12 +265,12 @@ const polonius = {
   role: 'wing', tier: 1,
 
   file: [
-    'Subject was added to the ward register on [[8]], the same day the Greek Wing was annexed to the south of the hospital.',
-    'He is the sole declared tenant. The house staff are not on the payroll. !!They are not on any payroll.!!',
-    'Standing order: no patient is to enter the Greek Wing. !!The wing door reads the admission card. There is no handle on the inside.!!',
-    'Staff who have entered the wing in pairs return with no memory of the visit. They cannot account for the hours.',
+    'Subject entered the register on [[8]] — the same day, the same ink, as the order annexing the Greek Wing. The two lines were written without lifting the pen.',
+    'He is the sole declared **tenant**. Three staff attend him. They draw no wages. ~~They are not staff.~~ They are not on any payroll.',
+    'Standing order: !!no patient is to enter the Greek Wing.!! The wing door reads the admission card. There is no handle on the inside.',
+    'Staff who entered in pairs came back unable to account for the hours. The hours appear on their timesheets regardless, in a hand that is not theirs.',
     'Staff who have entered alone ~~have not returned~~ have not returned the same.',
-    'Subject answers to Polonius. He has answered to ~~other names in other languages~~ many other names.',
+    'Subject answers to Polonius. The file lists prior names. The list continues onto a second page, and the second page is older than the file.',
   ],
 
   intro: [
@@ -6935,16 +6935,16 @@ const frostfin = {
   id: 'frostfin',
   name: '[The Bench]',
   glyph: 'Frostfin',
-  subtitle: 'She is waiting for a husband who died in the war.',
+  subtitle: 'The last service is delayed.',
   role: 'wing', tier: 1,
   file: [
-    'Subject was located at the rail platform in a state of advanced hypothermia. She had been on the bench since [[8]].',
-    'Her husband ~~was killed at~~ was declared killed in action at [[7]]. !!Subject has not been informed.!!',
-    'The bench was admitted with Subject. ~~Staff cannot remove her from it.~~ Staff do not sit on the bench.',
+    'Subject was recovered from the rail platform with a core temperature of [[4]] degrees. The bench was under her. It had been under her since [[8]].',
+    'Her husband ~~was killed at~~ was declared killed in action at [[7]]. !!Subject has not been informed.!! ~~Her son wrote that he would come for her.~~ A relative was notified.',
+    'The bench was admitted with Subject. No removal order was issued. ~~Staff cannot lift her.~~ Staff do not sit on the bench.',
   ],
   intro: [
-    'The room is much colder than the corridor. There is a wooden bench by the window. She is on it.',
-    'Her coat is buttoned to the throat. She does not look up. She is watching the door.',
+    'The cold begins at the threshold, exact as a border. Under it there is an announcement that never quite arrives at words — the acoustics of a high glass roof, in a room with a low ceiling.',
+    'A wooden bench faces the window. She is on it, buttoned to the throat, watching the door the way you watch a board that still says **expected**.',
   ],
 
   scales: {
@@ -6958,25 +6958,25 @@ const frostfin = {
         { at: 9, word: 'kin' },
       ],
       crossUp: {
-        2: 'Her shoulder has shifted toward mine.',
-        3: 'Her arm has rested against mine.',
+        2: 'Her shoulder has found mine. One inch of it.',
+        3: 'Her arm has come to rest against mine, and my arm is colder for it.',
         4: '~~She has decided I will do.~~',
       },
       crossDown: {
-        1: 'She has gone back to watching the door.',
+        1: 'She has gone back to the door. Back to **expected**.',
       },
     },
     waiting: {
       initial: 7, min: 0, max: 10, label: 'waiting', kind: 'negative',
       bands: [
         { at: 0, word: 'settled' },
-        { at: 3, word: 'still hoping' },
+        { at: 3, word: 'between services' },
         { at: 5, word: 'watching the door' },
         { at: 7, word: 'bolt upright' },
         { at: 9, word: 'fused to the bench' },
       ],
       crossUp: {
-        3: 'Her posture has gone rigid. ~~She is locked to the bench.~~',
+        3: 'Her spine has set. ~~The bench has her.~~',
       },
       crossDown: {
         2: 'Her shoulders have eased.',
@@ -6995,12 +6995,12 @@ const frostfin = {
       ],
       crossUp: {
         2: 'My breath has begun to show.',
-        3: '!!The cold has crossed into the body. My fingers are stiff.!!',
-        4: '!!The room is taking something from me.!!',
+        3: '!!The cold has crossed my skin and started on the joints. My fingers answer late.!!',
+        4: '!!The cold has stopped being weather. It is a withdrawal, and it is coming out of me.!!',
       },
       crossDown: {
         2: 'The room has warmed by a degree.',
-        1: 'I can feel my fingers again.',
+        1: 'My fingers report back in, one at a time.',
         0: 'The room is warm now.',
       },
     },
@@ -7013,9 +7013,9 @@ const frostfin = {
   },
 
   fileReveals: [
-    { announce: 'A line fills in. Subject was on the bench from ~~spring~~ summer through winter.' },
-    { announce: 'Another. Her husband ~~died in the trenches~~ was killed in action on [[8]]. The letter is on file.' },
-    { announce: 'The last line. Subject ~~has been told~~ has been informed of his death. !!She does not retain it.!!' },
+    { announce: 'A line fills in. Subject was on the bench from ~~the last service~~ summer until winter. Nothing ran in between.' },
+    { announce: 'Another. Her husband ~~died in the mud at~~ was killed in action on [[8]]. The letter is on file. The envelope was never opened.' },
+    { announce: 'The last line. Subject has been informed on [[2]] occasions. ~~She refuses it.~~ It does not take. !!Each morning he is due again.!!' },
   ],
 
   presented(p) {
@@ -7024,21 +7024,21 @@ const frostfin = {
     const wa = p.scales.warmth;
 
     let temp;
-    if (c >= 7)      temp = '!!The room is white with cold. My breath is visible. Hers is not.!!';
-    else if (c >= 4) temp = 'The room is cold. My fingers are stiff.';
-    else if (c >= 1) temp = 'The room is cool. Warming, slowly.';
+    if (c >= 7)      temp = '!!The room is white with cold. My breath shows. Hers does not.!!';
+    else if (c >= 4) temp = 'The room is cold the way platforms are cold: from below, and patiently.';
+    else if (c >= 1) temp = 'The room is cool, and grudging about every degree it gives back.';
     else             temp = 'The room is warm.';
 
     let post;
-    if (w >= 8)      post = 'She is bolt upright on the bench. She has not shifted her weight in some time.';
-    else if (w >= 5) post = 'She sits upright on the bench. Coat buttoned to the throat.';
+    if (w >= 8)      post = 'She sits bolt upright, the posture of a passenger one stop from home. She has not shifted her weight since I last counted.';
+    else if (w >= 5) post = 'She sits upright, buttoned to the throat, facing the door at the angle you face an arrivals board.';
     else if (w >= 2) post = 'Her shoulders have dropped. The bench has begun to be a bench.';
-    else             post = 'She is leaning, slightly. She has settled.';
+    else             post = 'She leans, slightly. The timetable has loosened its grip.';
 
     let warm;
-    if (wa >= 7)      warm = 'Her arm is against mine. Her head is close.';
-    else if (wa >= 4) warm = 'She has shifted toward me. Her eyes leave the door sometimes.';
-    else if (wa >= 1) warm = 'She glances at me sometimes.';
+    if (wa >= 7)      warm = 'Her arm is against mine. The heat goes one way through the wool.';
+    else if (wa >= 4) warm = 'She has shifted toward me. Her eyes leave the door now, in short visits.';
+    else if (wa >= 1) warm = 'She glances at me the way you check a clock against your own watch.';
     else              warm = 'She is watching the door.';
 
     return `${temp} ${post} ${warm}`;
@@ -7048,28 +7048,28 @@ const frostfin = {
 
     sit_with_her: {
       label: 'sit with her',
-      desc: 'Sit on the bench. Join the wait.',
+      desc: 'Sit on the bench. Join the timetable.',
       respond(p) {
         const reps = streakCount(p, 'sit_with_her');
         if (reps >= 2) {
           return {
             lines: [
-              'I have been sitting a while. Her arm rests against mine.',
-              'We are waiting in the same direction. The room is colder now.',
+              'I have been on the bench long enough to learn it through my coat: the bench is taking heat too.',
+              'We are waiting in the same direction now. Overhead, the announcement almost resolves into a platform number.',
             ],
             scales: { warmth: +2, waiting: -1, cold: +2 },
             composure: -2,
-            composureCost: '!!The cold is in my fingers now.!!',
+            composureCost: '!!Two of my fingers have stopped reporting.!!',
           };
         }
         return {
           lines: [
-            'I sit on the bench beside her. She does not move.',
-            'After a while I am also waiting. The bench is colder than the floor.',
+            'I sit. The bench takes its fee at once, through the coat, a flat rate.',
+            'After a while I am also waiting. I did not choose a train, but I am waiting for it.',
           ],
           scales: { warmth: +1, waiting: -1, cold: +1 },
           composure: -1,
-          composureCost: 'My breath is visible. Hers is not.',
+          composureCost: 'My breath shows. Hers does not.',
         };
       },
     },
@@ -7080,8 +7080,8 @@ const frostfin = {
       respond() {
         return {
           lines: [
-            'I move around the room. I find a small space heater behind the bench. I plug it in.',
-            'The room warms by a degree. She does not look at it, but her hands have moved into her lap.',
+            'I quarter the room. Behind the bench there is a small heater, cord wound tight, stored the way stations store lost property. I plug it in.',
+            'The room comes up a degree. She does not acknowledge the heater. But her hands move into her lap, off the cold wood.',
           ],
           scales: { cold: -2, warmth: +1 },
         };
@@ -7090,22 +7090,22 @@ const frostfin = {
 
     warm_her_hands: {
       label: 'warm her hands',
-      desc: 'Take her hands in mine. She is freezing.',
+      desc: 'Take her hands. Pay the difference.',
       when: (p) => p.scales.warmth >= 1 || p.turn >= 2,
       respond(p) {
         if (p.scales.warmth >= 5) {
           return {
             lines: [
-              'I cup her hands between mine. She lets me.',
-              'After a while there is feeling in them. She looks at her own fingers as if she had not seen them in a while.',
+              'I cup her hands between mine and hold the loss steady. She lets me.',
+              'Feeling comes back into them slowly — mine leaving, hers arriving. She studies her own fingers like luggage she had given up on.',
             ],
             scales: { warmth: +2, waiting: -2, cold: -1 },
           };
         }
         return {
           lines: [
-            'I take her hands. They are colder than the bench.',
-            'She does not pull away. She does not return the contact.',
+            'I take her hands, and my heat leaves at a rate I can count, knuckle by knuckle.',
+            'She does not pull away. She does not return anything. The exchange runs one way.',
           ],
           scales: { warmth: +1, cold: +1 },
           composure: -1,
@@ -7122,8 +7122,8 @@ const frostfin = {
         return {
           lines: [
             'I ask: who are you waiting for?',
-            'She tells me. She tells me carefully. !!It takes her a while.!! She has not said his name in years.',
-            'She watches the door, but it is not the only thing she is paying attention to.',
+            'She tells me. His name comes out in pieces, the way a frozen thing thaws — edges first. She has not said it aloud in years.',
+            'She watches the door while she speaks. But the door has lost a fraction of her. I have it.',
           ],
           scales: { warmth: +2, waiting: -1 },
         };
@@ -7139,17 +7139,17 @@ const frostfin = {
           return {
             lines: [
               'I say: he is not coming. He was killed.',
-              'She looks at me. Her face does not change. She says: ~~I knew.~~ But she says it the way you say something you are not going to remember.',
+              'Nothing in her face moves. She says: I knew. She says it the way you note a delay — confirmed, and not boarded.',
             ],
             scales: { warmth: -1, waiting: +1, cold: +1 },
             composure: -1,
-            composureCost: 'She has heard it. !!She has heard it before.!!',
+            composureCost: '!!She has heard it before. By morning he will be due again.!!',
           };
         }
         return {
           lines: [
             'I say: he was killed. He is not coming.',
-            'She looks at me for a long time. Her eyes fill, but she does not cry.',
+            'She looks at me for a long time. Her eyes fill and hold, the way cold water holds.',
             'She says: ~~yes.~~ I know. ~~I know.~~ I know.',
           ],
           scales: { warmth: +1, waiting: -4 },
@@ -7162,19 +7162,19 @@ const frostfin = {
 
     say_you_are_him: {
       label: 'say you are him',
-      desc: 'Lie. Say his name as he would say it.',
+      desc: 'Lie. Be the one who is due.',
       when: (p) => p.scales.warmth >= 4,
       respond() {
         return {
           lines: [
             'I say: !!I am sorry I am late.!!',
-            'She turns. She does not check. She stands up from the bench. She takes my arm.',
-            'She walks me to the door. ~~She does not look at me close.~~ She is afraid to look at me close.',
+            'She turns. She does not check my face against anything. She stands — the first time the bench has let her — and takes my arm.',
+            'She walks me to the door at a pace for two. ~~She does not look at me closely.~~ She is careful not to look at me closely. There is a discipline to it.',
           ],
           scales: { warmth: +3, waiting: -6 },
           flags: { pretended: true },
           composure: -2,
-          composureCost: 'I have agreed to be a man who is not coming back again.',
+          composureCost: 'I have taken on his lateness. It is forty years deep.',
           scars: ['named'],
         };
       },
@@ -7187,8 +7187,8 @@ const frostfin = {
       respond() {
         return {
           lines: [
-            'I offer my arm. She stands. She is unsteady. The bench is cold beside us, alone.',
-            'She walks to the door without looking back. !!The bench stays where it is.!!',
+            'I offer my arm. She stands the way you step down from a long journey: unsteady, surprised by solid ground.',
+            'She walks to the door without looking back. !!Behind us the bench is just carpentry.!!',
           ],
           scales: { waiting: -5, warmth: +1 },
           flags: { walked_off: true },
@@ -7199,7 +7199,7 @@ const frostfin = {
 
   wait: {
     label: 'wait',
-    desc: 'Sit with her. Let the room go on cooling.',
+    desc: 'Hold the bench. The room bills by the minute.',
     when: (p) => p.scales.waiting >= 6 || p.turn >= 4,
   },
 
@@ -7209,7 +7209,7 @@ const frostfin = {
       once: true,
       when: (p) => p.scales.waiting >= 6 && p.turn >= 2,
       prose: [
-        'She does not turn her head. She asks the door:',
+        'She does not turn her head. She addresses the door, in the voice you keep for staff:',
         '~~Has the train come?~~',
       ],
       responses: [
@@ -7217,8 +7217,8 @@ const frostfin = {
           label: 'yes',
           desc: 'Lie kindly.',
           lines: [
-            'I say: yes. It came in.',
-            'Her shoulders drop. She sits a long time without speaking. She does not check.',
+            'I say: yes. It came in. On time.',
+            'Her shoulders come down a full inch. She does not ask who got off. She has had practice not asking that.',
           ],
           scales: { waiting: -3, warmth: +1, cold: +1 },
           scars: ['named'],
@@ -7228,19 +7228,19 @@ const frostfin = {
           desc: 'Honest.',
           lines: [
             'I say: not yet.',
-            'She nods. Of course. She keeps waiting. But her arm finds its way to mine.',
+            'She nods: of course. A delay is a kind of promise. Her arm finds mine, and the cold finds my arm.',
           ],
           scales: { warmth: +2, waiting: +1 },
           composure: -1,
-          composureCost: 'My breath is visible. Hers is not.',
+          composureCost: 'My breath shows. Hers does not.',
         },
         {
           label: "I don't think it's coming",
           desc: 'The truth.',
           lines: [
             "I say: I don't think it's coming.",
-            'She is quiet. She looks at the empty seat beside her for a long time.',
-            'She says: ~~I knew.~~ Very small.',
+            'She is quiet. She looks at the stretch of bench beside her, the seat kept open through forty years of timetable.',
+            'She says: ~~he said he would come.~~ I knew. Very small.',
           ],
           scales: { waiting: -4, warmth: +1, cold: +1 },
           composure: -2,
@@ -7253,7 +7253,7 @@ const frostfin = {
       once: true,
       when: (p) => p.scales.waiting >= 7 && p.turn >= 4,
       prose: [
-        'She turns her wrist over and presses where a watch should be.',
+        'She turns her wrist over and presses where a watch should be. The skin there is a paler band.',
         'She asks: ~~Is it late?~~',
       ],
       responses: [
@@ -7262,7 +7262,7 @@ const frostfin = {
           desc: 'A small truth.',
           lines: [
             'I say: yes. It is late.',
-            'She nods slowly. She does not stand.',
+            'She nods slowly. She does not stand. Late is still a board word. Late still arrives.',
           ],
           scales: { waiting: +1, cold: +1 },
           composure: -1,
@@ -7273,7 +7273,7 @@ const frostfin = {
           desc: 'A kind lie.',
           lines: [
             'I say: we have time.',
-            'She relaxes a degree. Her eyes have gone back to the door.',
+            'She eases by a degree — I feel the degree leave me. Her eyes go back to the door.',
           ],
           scales: { waiting: -1, warmth: +1 },
           scars: ['named'],
@@ -7283,7 +7283,7 @@ const frostfin = {
           desc: 'Gentle truth.',
           lines: [
             'I say: too late for trains.',
-            'She is quiet. ~~She had not let herself say it.~~',
+            'She is quiet. Overhead, the announcement stops mid-syllable. ~~She had not let herself say it.~~ Someone had to be first.',
           ],
           scales: { waiting: -3, warmth: +1, cold: +1 },
           composure: -2,
@@ -7296,7 +7296,7 @@ const frostfin = {
       once: true,
       when: (p) => p.scales.warmth >= 5,
       prose: [
-        'She has leaned into me. She has stopped watching the door.',
+        'She leans into me. For the first time the door goes unwatched.',
         'She asks me: ~~Will you wait with me?~~',
       ],
       responses: [
@@ -7305,18 +7305,18 @@ const frostfin = {
           desc: 'Commit to the bench.',
           lines: [
             'I say: I will.',
-            'She sets her head against my shoulder. It is the weight of a coat.',
+            'She sets her head against my shoulder. It is the weight of a coat. The cold comes through it like a draft under a door.',
           ],
           scales: { warmth: +3, waiting: -2, cold: +2 },
           composure: -2,
-          composureCost: '!!The cold is in my fingers now.!!',
+          composureCost: '!!Two of my fingers have stopped reporting.!!',
         },
         {
           label: 'only a while',
           desc: 'An honest limit.',
           lines: [
             'I say: only a while. I cannot stay long.',
-            'She nods. She presses against my shoulder once and stays where she is.',
+            'She nods. Terms are a thing she understands; the railway taught her terms. She presses my shoulder once and stays.',
           ],
           scales: { warmth: +1, waiting: -1 },
         },
@@ -7325,11 +7325,11 @@ const frostfin = {
           desc: 'Leave the offer.',
           lines: [
             'I say: I have to go soon.',
-            'She holds against my shoulder a moment longer than is comfortable. Then she eases off.',
+            'She holds my shoulder one beat past comfortable — a passenger keeping a door from closing. Then she eases off.',
           ],
           scales: { warmth: -2, cold: +1, waiting: +2 },
           composure: -2,
-          composureCost: 'My breath is visible. Hers is not.',
+          composureCost: 'My breath shows. Hers does not.',
         },
       ],
     },
@@ -7338,7 +7338,7 @@ const frostfin = {
       once: true,
       when: (p) => p.scales.warmth >= 4,
       prose: [
-        'Her head turns. She squints at me. She has only just noticed.',
+        'Her head turns. She reads my face the way you read a destination through dirty glass.',
         'She asks: ~~Which one are you?~~',
       ],
       responses: [
@@ -7347,7 +7347,7 @@ const frostfin = {
           desc: 'I am not him.',
           lines: [
             'I say: I am Patient 0413. I came in this morning. I am not your husband.',
-            'She nods. ~~She is not disappointed.~~ She had not been sure.',
+            'She nods. ~~She is not disappointed.~~ She is filing me under a different heading. She had not been sure.',
           ],
           scales: { warmth: -1, cold: +1, waiting: +1 },
           composure: -1,
@@ -7358,7 +7358,7 @@ const frostfin = {
           desc: 'Let her have a guess.',
           lines: [
             'I say: I am the one who came.',
-            'She takes my arm and leans into it. ~~She does not check.~~',
+            'She takes my arm and leans her whole wait into it. ~~She does not check.~~ Checking is the one expense she will not make.',
           ],
           scales: { warmth: +3, waiting: -2 },
           scars: ['named'],
@@ -7378,7 +7378,7 @@ const frostfin = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: I do not remember if I was ever one of yours.',
-            'She thinks about that. Carefully.',
+            'She considers it the way you consider a timetable with a line missing.',
             'She says: ~~then we can decide.~~',
           ],
           scales: { warmth: +2, waiting: -1 },
@@ -7389,8 +7389,8 @@ const frostfin = {
           when: (_, player) => player.wound === 'insomnia',
           lines: [
             'I say: the one who came on the late train.',
-            'Her face changes. ~~Recognition.~~ Relief. She has been waiting for the late one.',
-            'She squeezes my sleeve. She does not check.',
+            'Her face changes. ~~Recognition.~~ Relief. It has always been the late one she was holding the bench for.',
+            'She squeezes my sleeve, twice, the press of a conductor\'s punch.',
           ],
           scales: { warmth: +3, waiting: -3, cold: -2 },
           composure: -1,
@@ -7402,7 +7402,7 @@ const frostfin = {
           when: (_, player) => player.wound === 'split_personality',
           lines: [
             'I say: both of us came. One of me stayed at home with the chair pulled out.',
-            'She nods. That is the right number.',
+            'She nods. Two is a number the bench understands.',
             'She does not let go of my arm.',
           ],
           scales: { warmth: +2, waiting: -1 },
@@ -7415,8 +7415,8 @@ const frostfin = {
     if (p.scales.cold >= 5) {
       return {
         lines: [
-          'I wait. The cold has not lessened. I am tired in a way I do not understand.',
-          'I am becoming tired in a way she would recognize.',
+          'I wait. The cold works at me with the patience of scheduled stock. My eyelids have taken on weight.',
+          'I am getting tired in the way she is tired. The bench has begun fitting me.',
         ],
         scales: { cold: +1, waiting: +1 },
         composure: -1,
@@ -7425,14 +7425,14 @@ const frostfin = {
     }
     if (p.scales.waiting >= 6) {
       return {
-        lines: ['I wait. She shifts on the bench. She watches the door. No one comes.'],
+        lines: ['I wait. Overhead, the not-quite announcement runs again — a platform, then a number that never lands. The door admits no one.'],
         scales: { cold: +1, waiting: +1 },
         composure: -1,
         composureCost: '!!I am waiting too.!!',
       };
     }
     return {
-      lines: ['I wait. She shifts. She presses her sleeve to where a watch should be.'],
+      lines: ['I wait. She presses her sleeve to where the watch should be, and reads the time off her own skin.'],
       scales: { warmth: +1, cold: +1 },
     };
   },
