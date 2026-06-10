@@ -286,16 +286,16 @@ const polonius = {
       bands: [
         { at: 0,  word: 'awake' },
         { at: 4,  word: 'comfortable' },
-        { at: 8,  word: 'drowsy' },
-        { at: 12, word: 'heavy' },
-        { at: 16, word: 'sliding' },
-        { at: 19, word: 'falling' },
+        { at: 8,  word: 'heavy-lidded' },
+        { at: 12, word: 'sinking' },
+        { at: 16, word: 'sliding under' },
+        { at: 19, word: 'going' },
       ],
       crossUp: {
         2: 'My shoulders have dropped without my deciding to drop them.',
-        3: 'I rub my eyes. They want to stay shut.',
+        3: 'I count the sconces to keep my eyes in use. I lose the count at four.',
         4: '!!I can hear my own pulse. It is slower than it should be.!!',
-        5: '!!I am losing the thread of this. The room is going dim at the edges.!!',
+        5: '!!The lamps are further away than the walls they hang on. I am going.!!',
       },
       crossDown: {
         4: 'I shake my head clear.',
@@ -308,16 +308,16 @@ const polonius = {
       bands: [
         { at: 0,  word: 'a guest' },
         { at: 4,  word: 'noticed' },
-        { at: 8,  word: 'engaged' },
+        { at: 8,  word: 'attended to' },
         { at: 12, word: 'studied' },
         { at: 16, word: 'preferred' },
         { at: 19, word: 'chosen' },
       ],
       crossUp: {
-        2: 'He is watching me a little longer than feels right.',
-        3: 'He has not looked away in some time.',
+        2: 'His eyes stay on me one beat past politeness. I count the beat.',
+        3: 'He has stopped looking at the fire. There is one other thing in the room to look at.',
         4: '!!He knows the shape of my breathing.!!',
-        5: '!!He is reading me.!!',
+        5: '!!He is reading me the way a collector reads a hallmark.!!',
       },
     },
     unease: {
@@ -331,10 +331,10 @@ const polonius = {
         { at: 19, word: 'fleeing' },
       ],
       crossUp: {
-        2: 'Something about him does not move quite the way it should.',
-        3: 'I have caught two things now. The third would not surprise me.',
-        4: '!!This is not a young man. Not entirely.!!',
-        5: '!!Whatever he is, he is older than the room.!!',
+        2: 'His smile is on time. His eyes arrive late.',
+        3: 'Two wrong details now. I am keeping the count.',
+        4: '!!This is not a young man. This is a thing that keeps one.!!',
+        5: '!!He is older than the room. The room is older than the hospital. I am the newest thing in the house.!!',
       },
     },
   },
@@ -355,10 +355,10 @@ const polonius = {
   },
 
   fileReveals: [
-    { at: 6,  announce: 'A line fills in. Subject was added to the register the day the Greek Wing was annexed.' },
-    { at: 14, announce: 'Another. The house staff are on no payroll.' },
+    { at: 6,  announce: 'A line fills in. Subject was entered in the register the day the wing was annexed. The same hand entered both.' },
+    { at: 14, announce: 'Another. The staff draw no wages. No ledger in the hospital has ever paid for that house\'s candles.' },
     { at: 22, announce: '!!The wing door reads the admission card. There is no handle on the inside.!!' },
-    { at: 32, announce: 'The last line fills in. Staff who have entered alone ~~have not returned~~ have not returned the same.' },
+    { at: 32, announce: 'The last line. Staff who entered alone have ~~not returned~~ been **retained**.' },
   ],
 
   // The whole encounter takes place inside a single beat-graph. The hub
@@ -376,21 +376,21 @@ const polonius = {
     const noticed = poloniusNoticed(p);
     const desc = {
       foyer:      noticed
-        ? 'The foyer is panelled in dark wood. A coat-tree by the door. A grandfather clock against the wall with no hands on its face. The room is the same size it was an hour ago, and yet it feels smaller.'
-        : 'The foyer is panelled in dark wood. A coat-tree by the door. A grandfather clock against the wall. A small fire in an iron grate. The wallpaper is dark green velvet, and the room is warm.',
+        ? 'The foyer again. The coat-tree, the clock, the small fire. I make it nine paces from the parlor door to the front door. On my first crossing it was seven.'
+        : 'The foyer is panelled in dark wood gone soft with beeswax. A coat-tree, three pegs, no coats. A grandfather clock. A small fire in an iron grate. The room is warm the way a held hand is warm.',
       parlor:     noticed
-        ? 'The parlor is hot. The fire has been burning a long time. Two armchairs face it. A decanter on a side table. An iron poker by the grate. The bronze bust on the mantel is older than the room.'
-        : 'The parlor is warm. The fire is small. Two armchairs face it. A decanter on a side table. A bronze bust on the mantel. An iron poker leaning against the grate.',
-      library:    'Floor to ceiling shelves. Books bound in calf, in cloth, in older things. A reading lamp is lit. A lectern in the middle of the room.',
-      gallery:    'A narrow hall hung with portraits — men and women in clothes from every century. The last frame on the row is empty.',
-      clock_hall: 'A hall with a tall clock at its end. The pendulum is swinging. The face has no hands. Two corridors branch off the hall, leading to back rooms.',
-      dining:     'A long table set for two. The places are arranged. The candles are burning. The cook stands in the doorway in his apron.',
-      hall:       'A corridor lined with closed doors. The wallpaper deepens as the corridor lengthens.',
-      bedroom:    'A guest room. The bed is turned down. The window is bricked but painted to look like a window. The painting depicts a night sky I do not recognise.',
-      kitchen:    'The kitchen. A great range. A block of knives. A door to a pantry. The cook is at the range. There is a second narrower door set into the back wall.',
-      cloakroom:  'A small cloakroom at the back of the house. Three coat-hooks. A shelf above the rod.',
-      study:      'A small study. A desk. A bookshelf of ledgers. A locked drawer. A window painted to look like a window.',
-      cellar:     'A wine cellar. Cold. Rows of bottles, stoppered in old wax. A low shelf at the back wall.',
+        ? 'The parlor is hot. The fire has been at the same log all evening, and the log is whole. Two armchairs face it. The decanter, the bust, the iron poker by the grate.'
+        : 'The parlor is warm. A small fire, two armchairs faced to it, a decanter on the side table, a bronze bust on the mantel, an iron poker leaning at the grate.',
+      library:    'Shelves floor to ceiling. Calf, cloth, and bindings I do not put a name to. A reading lamp, a lectern. The spines are sun-faded. There is no window in this room.',
+      gallery:    'A narrow hall of portraits — every century of collar and cuff. The last frame on the row is empty, and the wall behind it has not had time to fade.',
+      clock_hall: 'A hall with the tall clock at its end. The pendulum swings; the face has no hands to show for it. Two corridors branch toward the back rooms.',
+      dining:     'A long table laid for two. The candles burn; the wax has pooled in the holders, but the candles are no shorter. The cook stands in the doorway in his apron.',
+      hall:       'A corridor of closed doors, the wallpaper a shade darker at each lamp. Six doors. I had counted five.',
+      bedroom:    'A guest room. The bed is turned down. The window is brick under paint, and the painted sky holds constellations that are not mine.',
+      kitchen:    'The kitchen. The great range, the block of knives, the pantry door, the narrower door in the back wall. A pot steams over a burner that is not lit.',
+      cloakroom:  'A small cloakroom at the back of the house. Three coat-hooks and a shelf. The two coats that are not mine are warm.',
+      study:      'A small study. A desk, a shelf of ledgers, a locked drawer. The window is paint over brick, finished down to a painted latch.',
+      cellar:     'The wine cellar. Cold rows of bottles under old wax. The dust lies even everywhere but the third row.',
     }[room] || 'A room in the house.';
 
     const cardLine = poloniusCardLine(p);
@@ -402,11 +402,11 @@ const polonius = {
     if (p.flags._mask_on === false) {
       tail = ' !!He has stopped pretending.!!';
     } else if (poloniusFighting(p)) {
-      tail = ' He is being polite, still. He has been polite for a long time.';
+      tail = ' He is still courteous. The courtesy has stopped being a manner and become a grip.';
     } else if (poloniusWondering(p)) {
-      tail = ' He is watching me with the small attention of a host with one guest.';
+      tail = ' He attends me the way a collector attends a new arrival. Where to put it. How to keep it.';
     } else if (poloniusNoticed(p)) {
-      tail = ' He is polite. There is something about the way he stands.';
+      tail = ' He is polite. He stands the way the furniture stands: placed.';
     } else {
       tail = ' He is being a host.';
     }
@@ -450,8 +450,8 @@ const polonius = {
 
         t_arrival: {
           lines: [
-            'He inclines his head. Polonius, sir. The wing has been quiet a long while. You will forgive the formal welcome — we do not get many visitors on this corridor.',
-            'He gestures, with a polite open hand, toward the inner doorway. Come in. The parlor is warmer than the foyer, and there is a kettle on.',
+            'He inclines his head. Polonius, sir. You will forgive the ceremony — the wing keeps its manners the way other houses keep plate. We have so few occasions to bring them out.',
+            'He turns an open hand toward the inner doorway. Do come through. The parlor is warmer, and the kettle has been on, he says, since shortly before I arrived.',
           ],
           choices: [
             { label: 'thank him; step inside', goto: 't_step_inside' },
@@ -463,9 +463,9 @@ const polonius = {
         t_his_name: {
           lines: [
             'I say: I have not had your name, sir. Polonius is a — a Greek name?',
-            'He brightens. He gives a small, formal bow. Polonius. Yes. The Greek of it has held up a long time. The rest is less interesting than the name.',
-            'He smiles. I would offer my hand, sir, but I have been told my hands are cold this evening. I will spare you the courtesy.',
-            'He gestures again to the inner doorway. Come in. We can be more comfortable.',
+            'He brightens. A small formal bow. Polonius, yes. Greek. The name has held up better than anything else I brought with me.',
+            'He smiles. I would offer my hand, sir, but I am told my hands are cold this evening. I will spare you the courtesy.',
+            'He turns again to the inner doorway. Come through. The house does better by a seated guest.',
           ],
           flags: { _name_evasion: true },
           scales: { intimacy: +1 },
@@ -479,9 +479,9 @@ const polonius = {
         t_where_am_i: {
           lines: [
             'I say: I have not been on this corridor. What wing is this.',
-            'He inclines his head. The Greek Wing, sir. It is annexed to the south of the hospital. The wing is not on the printed maps — it has the quality of having always been here without quite being noted.',
-            'He pauses, fond. The house is older than the hospital. The hospital was built around it. I am the only resident.',
-            'He gestures to the inner doorway. But — come in. I would not keep a guest in a hallway.',
+            'He inclines his head. The Greek Wing, sir. Annexed to the south of the hospital. You will not find it on the printed maps. It has always been here without ever being noted, which is a talent some houses have.',
+            'He pauses, fond. The house is older than the hospital. The hospital was built around it, the way flesh closes around a splinter. I am the only **resident**.',
+            'He turns to the inner doorway. But — come in. I would not keep a guest in a hallway.',
           ],
           flags: { _heard_wing_history: true },
           scales: { intimacy: +1 },
@@ -495,9 +495,9 @@ const polonius = {
         t_house_age: {
           lines: [
             'I say: how old is the house, then.',
-            'A long time, sir. The wing has been here in various forms since the first hospital chapel was attached. The house was moved here originally — a man with the means to move a house had it moved.',
+            'Old, sir. The wing has stood here in one form or another since the first hospital chapel went up beside it. The house itself was moved here — a man with the means to move a house had it moved.',
             'He smiles, with a small fondness. A very long time ago.',
-            'He says ~~a very long time ago~~ the way one says it about a thing one no longer counts in years.',
+            'He says it twice. The second saying is not addressed to me.',
           ],
           flags: { _heard_house_old: true, _heard_origin: true },
           scales: { intimacy: +1, unease: +1 },
@@ -511,9 +511,9 @@ const polonius = {
         t_who_moved_house: {
           lines: [
             'I say: who moves a house.',
-            'He shrugs — the easy shrug of a man who has half-forgotten the answer.',
-            'A man of means, sir. The name has held up less well than mine. He had it taken apart in beam-numbered pieces and re-set, by a small army of stonemasons, where you are standing now. I am told the masons were paid in gold.',
-            'He smiles. The masons did not come back for second commissions. The wages may have been once-only.',
+            'He shrugs — a fond gesture, the gesture of a man dusting off an answer kept on a high shelf.',
+            'A man of means, sir. His name has kept less well than mine. He had the house taken apart in numbered beams and re-set where you are standing, by masons paid in gold.',
+            'He smiles. Not one of the masons took a second commission. Gold goes further, sir, when the spending of it is brief.',
           ],
           flags: { _heard_origin: true },
           scales: { intimacy: +1, unease: +1 },
@@ -526,8 +526,8 @@ const polonius = {
         t_why_added: {
           lines: [
             'I say: how did the wing come to be annexed.',
-            'He brightens. The wing has been here since the second hospital was built. Or the third. I do not remember which. The hospital has been built around the house in pieces. Each renovation absorbed the wing a little further. By the present arrangement, the wing is reached only by one corridor — the one you have come down.',
-            'He pauses. He looks at me with attention. He is not the kind of man who has trouble paying attention.',
+            'He brightens. The wing has been here since the second hospital, sir. Or the third. The hospital is built around the house in layers, each renovation swallowing it a little further. By the present arrangement there is one corridor in — the one you came down.',
+            'He pauses. He looks at me with attention. Paying attention is not a thing he has ever had trouble affording.',
             'Most visitors arrive without quite having decided to. The corridor is a quality of the house.',
           ],
           flags: { _heard_wing_history: true, _heard_corridor_draws: true },
@@ -540,8 +540,8 @@ const polonius = {
 
         t_look_around: {
           lines: [
-            'I take in the foyer. Dark wood paneling. A coat-tree to the side of the door. A grandfather clock against the wall, polished, with no dust on it. A small fire in an iron grate. Above the fire: a small painting in an old gold frame. The wallpaper is dark green velvet, with a small repeating laurel pattern.',
-            'Polonius waits. He has the patience of a host who is glad to be looked at slowly.',
+            'I take the foyer in by item. Dark panelling. A coat-tree, three pegs, no coats. The grandfather clock, polished, no dust in the carving. The small fire. Above it, a painting in old gilt. Green velvet paper, a small laurel, repeating.',
+            'Polonius waits. He has the patience of a host who is glad to have his rooms read slowly.',
           ],
           choices: [
             { label: 'examine something in the room', goto: 't_examine' },
@@ -568,9 +568,9 @@ const polonius = {
 
         t_obs_clock: {
           lines: [
-            'I cross to the grandfather clock. The case is dark oak, polished. The pendulum is swinging. I can hear the mechanism wound, very quietly, in the case.',
-            'I look at the face. The face has no hands. The numerals are there. The brass centre, where the hands should be set, is plain.',
-            'I look back at Polonius. He has not remarked on it. He is watching me with polite interest.',
+            'I cross to the grandfather clock. Dark oak, beeswaxed. The pendulum swings. I can hear the mechanism in the case, wound and waiting.',
+            'I look at the face. The numerals are all present. The hands are not. The brass centre where they should sit is worn smooth as a coin rubbed blank.',
+            'I look back at Polonius. He has not remarked on it. He watches me the way a portrait watches a room.',
           ],
           flags: { _obs_clock_no_hands: true },
           scales: { unease: +2 },
@@ -585,7 +585,7 @@ const polonius = {
           lines: [
             'I say: the clock has no hands.',
             'Polonius nods, fond. The clockmaker took the hands off himself, sir. He said it made the time easier to bear. I never had the heart to put them back.',
-            'He pauses. He says the line the way one says a line one has said before. He does not say it the way one says it about a clockmaker one knew.',
+            'He pauses. The line has the polish of long handling. It does not have any grief in it.',
           ],
           flags: { _heard_how_long: true },
           scales: { unease: +1, intimacy: +1 },
@@ -597,10 +597,10 @@ const polonius = {
 
         t_obs_painting: {
           lines: [
-            'I look at the painting. A hillside, gentle, ochre, late afternoon. A man and a small white dog in the foreground.',
-            'I look at the man. The man is in a chiton — a Greek tunic, the kind I have seen on red-figure pottery. Not the kind I would expect in a Victorian frame.',
-            'I look at the brushwork. The brushwork is Victorian. The painting is recent. The clothing is not.',
-            'Polonius, behind me: Most do not stop in front of that one, sir. The hills are in southern Greece. The dog was real, once.',
+            'I look at the painting. A hillside, ochre, late afternoon. A man and a small white dog in the foreground.',
+            'The man wears a chiton. I have seen chitons on red-figure pottery. I have not seen one in Victorian gilt.',
+            'I read the brushwork. The paint is recent. The clothes are some twenty-five centuries older than the paint.',
+            'Polonius, behind me: Most do not stop for that one, sir. The hills are in the south of Greece. The dog was real, once.',
           ],
           flags: { _obs_painting_anachronism: true, _heard_origin: true },
           scales: { unease: +2, intimacy: +1 },
@@ -612,9 +612,9 @@ const polonius = {
 
         t_obs_wallpaper: {
           lines: [
-            'I run my fingertip along the wallpaper. Dark green velvet. The pattern is a small repeating laurel. The velvet has the soft sheen of fabric that has been brushed often.',
-            'I look for the seam between two strips. The seam is straight. I look for another. I cannot find one.',
-            'A house this old should have seams I can see. The wallpaper is old in pattern and not in age.',
+            'I run a fingertip along the wallpaper. Green velvet, a small laurel repeating, the sheen of fabric brushed often and recently.',
+            'I look for the seam between two strips. I find one. I look for the next. There is no next.',
+            'A house this old should have seams I can count. The paper is old in pattern and new in fact.',
           ],
           flags: { _obs_wallpaper_too_new: true },
           scales: { unease: +1 },
@@ -626,9 +626,9 @@ const polonius = {
 
         t_obs_coat_tree: {
           lines: [
-            'I cross to the coat-tree. The wood is dark, polished, old. There are three pegs and a small mirror set into the upright. The mirror is the size of a hand.',
-            'There are no coats on the pegs. I look at the floor where a coat would drip. The floor is dry.',
-            'I look at the mirror. The mirror shows the foyer, and Polonius, and me. He is looking at the back of my head with the kind of attention I associate with people who like to look.',
+            'I cross to the coat-tree. Dark wood, polished, old. Three pegs, and a small mirror set into the upright, the size of a hand.',
+            'No coats on the pegs. I check the floor where a wet coat would have dripped. The boards are dry. The boards have been dry for a long time.',
+            'I look in the mirror. The foyer, Polonius, me. He is studying the back of my head the way one studies a marked page.',
           ],
           flags: { _obs_coat_tree: true },
           scales: { unease: +1 },
@@ -640,9 +640,9 @@ const polonius = {
 
         t_obs_door_behind: {
           lines: [
-            'I look back at the door I came through. The brass slot is at chest height. Below it, the wood is the wood of the door.',
-            'I do not see a handle on this side. The door is set into the wallpaper with no visible mechanism for opening.',
-            'I bring my hand to the slot. The slot is the kind a card slides into. It is the only mechanism on this side.',
+            'I look back at the door I came through. The brass slot sits at chest height. Below it, wood. Above it, wood.',
+            'I look for the handle. I look twice. The door is set into the wallpaper without one — no knob, no latch, no keyhole.',
+            'I put my hand to the slot. It is the kind a card slides into. It is the only mechanism on this side of the house.',
             'Polonius, behind me: The door reads, sir. It does not turn. The house has been particular about its door for a long time. The card, when one has it, is sufficient.',
           ],
           flags: { _obs_door_no_handle: true, _aware_slot: true, _aware_card_needed: true },
@@ -658,7 +658,7 @@ const polonius = {
             'I say: cold hands?',
             'He looks down at his own hands as if surprised to find them folded in front of himself.',
             'A small thing, sir. The fire in this room is not what it once was. Cold hands in a warm room. The house gets its quirks after some time.',
-            'He says ~~quirks~~ with a small fond emphasis, as one says a word one keeps polished.',
+            'Quirks. He sets the word down gently, like good china he did not buy.',
           ],
           flags: { _named_hands: true },
           scales: { unease: +1, intimacy: +1 },
@@ -684,12 +684,12 @@ const polonius = {
             {
               label: 'the painting — the chiton is much older than the frame',
               when: (p) => p.flags._obs_painting_anachronism,
-              goto: { to: 't_look_around', lines: ['I say: the painting. The man is in a chiton. The frame is Victorian.', 'He nods, fond. You have a good eye, sir. The painting was made for the man who lives in it. He is — he was — a friend of the house. The frame I had made later.', '~~Made for the man who lives in it.~~'], flags: { _heard_origin: true }, scales: { intimacy: +1, unease: +1 } },
+              goto: { to: 't_look_around', lines: ['I say: the painting. The man is in a chiton. The frame is Victorian.', 'He nods, fond. You have a good eye, sir. The painting was made for the man who lives in it. He is — he was — a friend of the house. The frame I had made later.', 'He said lives. ~~He misspoke.~~ He corrected himself, which is not the same thing.'], flags: { _heard_origin: true }, scales: { intimacy: +1, unease: +1 } },
             },
             {
               label: 'the wallpaper — it is too new',
               when: (p) => p.flags._obs_wallpaper_too_new,
-              goto: { to: 't_look_around', lines: ['I say: the wallpaper. There are no seams. A house this old should have seams.', 'He smiles. Mrs. Halliwell is meticulous, sir. She re-hangs the wallpaper. She has done so for a long time. I have not had the heart to ask how often.'], scales: { intimacy: +1, unease: +1 } },
+              goto: { to: 't_look_around', lines: ['I say: the wallpaper. One seam. A house this old should be all seams.', 'He smiles. Mrs. Halliwell is meticulous, sir. She re-hangs the paper. She has re-hung it for a long time. I have never had the heart to ask her how often.'], scales: { intimacy: +1, unease: +1 } },
             },
             {
               label: 'the cold hands',
@@ -705,7 +705,7 @@ const polonius = {
 
         t_step_inside: {
           lines: [
-            'I step through the inner doorway. He follows behind me, then ahead — the smooth way of a host showing a guest in.',
+            'I step through the inner doorway. He follows me through, and then he is ahead of me. I did not see the overtaking.',
             'The corridor between the foyer and the parlor is short. The wallpaper continues. The lamps continue.',
           ],
           choices: [
