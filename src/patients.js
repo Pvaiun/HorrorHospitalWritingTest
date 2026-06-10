@@ -3879,16 +3879,16 @@ const polonius = {
                 && !p.flags._card_known_endgame
                 && Math.random() < 0.85,
       prose: [
-        'Mrs. Halliwell crosses the corridor in front of me without acknowledging me. She is carrying a small pale thing in her apron pocket. I can see the corner of it.',
-        '~~My card. She has just moved my card. She is heading for the back of the house.~~',
+        'Mrs. Halliwell crosses the corridor ahead of me without a glance, smiling at the wall she is walking toward. At her apron pocket, a small pale corner shows.',
+        'My card. She is walking my card toward the back of the house at a housemaid\'s pace.',
       ],
       responses: [
         {
           label: 'follow her, fast',
           desc: 'Chase the card.',
           lines: [
-            'I follow. She rounds the corner faster than she walked. By the time I round it, the cloakroom door is closing.',
-            'She is no longer in the corridor. She is on the other side of the cloakroom door. I hear the lock turn.',
+            'I follow. She rounds the corner at a pace her walk did not promise. By the time I round it, the cloakroom door is closing.',
+            'The corridor is empty of her. From the far side of the small door, the lock turns over once.',
           ],
           scales: { unease: +2 },
           flags: { _card_location: 'cloakroom', _card_known: true, _heard_card_in_cloakroom: true, _aware_locked: true, _heard_parlor_keys: true },
@@ -3897,7 +3897,7 @@ const polonius = {
           label: 'let her go; mark where she went',
           desc: 'Stay calm.',
           lines: [
-            'I watch her round the corner. The cloakroom is at the back of the house. The card has gone there.',
+            'I let her go and keep the ledger instead: maid, corridor, corner, cloakroom. The card has been filed at the back of the house.',
           ],
           scales: { unease: +1 },
           composure: +1,
@@ -3914,15 +3914,15 @@ const polonius = {
                 && !p.flags._have_cloakroom_keys
                 && Math.random() < 0.85,
       prose: [
-        'Mr. Halliwell crosses my line of sight. He is folding a small pale thing into the paper. He has just come from the cloakroom.',
-        '~~The card has moved. It is in the newspaper. The newspaper is in the parlor.~~',
+        'Mr. Halliwell crosses my line of sight, all of himself turning at the corner, folding a small pale thing into his newspaper. He has come from the direction of the cloakroom.',
+        'The card has moved. It is riding in the second column of 1888.',
       ],
       responses: [
         {
           label: 'follow him; do not be seen',
           desc: 'Track the card.',
           lines: [
-            'I follow at a distance. He goes to the parlor. He sits in the armchair. He opens the paper. The card is folded into the second column.',
+            'I follow at a furniture-buyer\'s distance. He goes to the parlor, sits, opens the paper. The card is folded into the second column, where the strike is still being settled.',
             'I have the room where the card is. I do not yet have the card.',
           ],
           scales: { unease: +2 },
@@ -3933,8 +3933,8 @@ const polonius = {
           desc: 'Confront.',
           lines: [
             'I step in front of him. I say: the card. Now.',
-            'He looks at me. The face is the polite face. Sir, he says, the cloakroom is locked at this hour. The master will see to the card. I am only delivering it.',
-            'He keeps walking. He is past me before I can answer.',
+            'He looks at me with the polite face, which is the only face issued to him. Sir, he says, the master will see to the card. I am only delivering it.',
+            'He keeps walking — around me, the way water goes around a stone that believes it is a dam. He is past before I have an answer ready.',
           ],
           scales: { unease: +3 },
           flags: { _card_location: 'butler', _card_known: true },
@@ -3948,16 +3948,16 @@ const polonius = {
                 && p.turn >= 10
                 && Math.random() < 0.85,
       prose: [
-        'Mr. Halliwell rises from the armchair. He folds the paper. He walks to the door of the parlor and into the corridor.',
-        'He is going to the study. The card is in the paper. The paper is in his hand.',
+        'Mr. Halliwell rises from the armchair and folds the paper with the finality of a made bed. He walks for the corridor.',
+        'The study. The card is in the paper. The paper is in his hand. The procession is one man long and it is winning.',
       ],
       responses: [
         {
           label: 'cut him off',
           desc: 'Get in his way.',
           lines: [
-            'I step in front of him in the corridor. He does not stop. He passes through the place I am standing — not through me, but around me, in pieces. I am not in his way after all.',
-            'He goes into the study. I hear the lock turn. The card is in the study now.',
+            'I plant myself in the corridor. He does not stop. He passes the place where I am standing — not through me, around me, in pieces, the way movers take a sideboard around a newel post.',
+            'He goes into the study. The lock turns. The card is in the study now.',
           ],
           scales: { unease: +3 },
           composure: -1,
@@ -3968,7 +3968,7 @@ const polonius = {
           label: 'follow at a distance',
           desc: 'Mark the route.',
           lines: [
-            'I keep my distance. He unlocks the study door. He goes in. The door shuts. The lock turns. The card is in the study now.',
+            'I keep my distance and take the minutes: study door, key, in, shut, lock. The card is in the study now.',
             'I have the room. I do not have the keys.',
           ],
           scales: { unease: +1 },
@@ -3986,16 +3986,16 @@ const polonius = {
                 && !p.flags._fired_polonius_at_threshold
                 && Math.random() < 0.9,
       prose: [
-        'I notice — without being told, the way one notices a draught — that Polonius is no longer where I saw him last.',
-        'He is at the front of the house. He has placed himself, with no haste, in the foyer. He is not at the door, but he is closer to it than the door is to me.',
-        '~~He is between me and the threshold. He is making sure he can go first if I go.~~',
+        'It arrives the way a draught arrives, under the door of the attention: Polonius is no longer where I saw him last.',
+        'He is at the front of the house. He has placed himself, without haste, in the foyer — not at the door, but closer to it than the door is to me.',
+        'He has done the same arithmetic I have. He intends to be the first one over if anyone goes.',
       ],
       responses: [
         {
           label: 'walk to the door now; do not think',
           desc: 'Race him.',
           lines: [
-            'I walk for the front of the house. I do not slow. I do not look at him as I pass. The slot. The card. The door.',
+            'I walk for the front of the house. I do not slow. I do not look at him as I pass. Three words only, kept in step: slot, card, door.',
           ],
           flags: { _polonius_at_door: true },
         },
@@ -4003,8 +4003,8 @@ const polonius = {
           label: 'wait; let him commit first',
           desc: 'Hold position.',
           lines: [
-            'I do not move. He does not move. We are both standing very still in the corridor between us. He, eventually, with the small grace of a man who has run out of patience, takes a half-step closer to the foyer.',
-            '~~He cannot wait me out. I can, however, wait him out for a few beats more.~~',
+            'I do not move. He does not move. The corridor stands between us holding its breath. At last, with the small grace of a man whose patience has a bottom after all, he takes a half-step toward the foyer.',
+            'A half-step. After nine hundred years, I have cost him a half-step. I bank it.',
           ],
           scales: { unease: +2 },
           composure: +1,
@@ -4021,8 +4021,8 @@ const polonius = {
                 && !p.flags._walked_free
                 && Math.random() < 0.65,
       prose: [
-        'The clock without hands chimes. It chimes a number I do not count. It chimes for longer than a clock should.',
-        'Polonius, somewhere nearby, says, almost to himself: Late. Later than I thought. Sir — we have less time than I had imagined.',
+        'The clock without hands chimes. I start to count and stop myself; the count is what it wants. It chimes for longer than any hour there is.',
+        'Polonius, somewhere nearby, almost to himself: Late. Later than I thought. Sir — we have less time than I had imagined.',
       ],
       responses: [
         {
@@ -4030,19 +4030,19 @@ const polonius = {
           desc: 'Press him.',
           lines: [
             'I say: what happens when the chimes stop.',
-            'He smiles. The dawn, sir. The dawn returns the staff to the day. The dawn does not return me. The dawn would, in your case, finish the evening.',
-            '~~The dawn would finish the evening. He has been waiting for dawn.~~',
+            'He smiles. The dawn, sir. The dawn returns the staff to the day. The dawn does not return me. The dawn would, in your case, **conclude** the evening.',
+            'Conclude. The house\'s word for it, in the house\'s gilt.',
           ],
           scales: { unease: +4 },
           composure: -2,
-          composureCost: 'The dawn would finish the evening.',
+          composureCost: 'The dawn would conclude the evening.',
           flags: { _heard_dawn: true },
         },
         {
           label: 'use the chimes to move; act now',
           desc: 'Take the pressure.',
           lines: [
-            'I move. While the chimes are still going I am already a corridor closer to where I need to be.',
+            'I move. A chiming house is a house listening to itself. Before the last stroke lands I am a corridor closer to where I need to be.',
           ],
           composure: +1,
           composureGain: 'I am moving with the chimes.',
@@ -4058,16 +4058,16 @@ const polonius = {
                 && p.flags._mask_on !== false
                 && Math.random() < 0.7,
       prose: [
-        'I catch his reflection in the polished side of a silver bowl. The reflection is not quite Polonius. The face is older. The face does not have all of its features in their accustomed places.',
-        'When I look up, he is in the position he was before. He has not moved. The reflection has.',
+        'I catch his reflection in the polished flank of a silver bowl. I read the hallmark first, out of habit; the hallmark is older than hallmarks. The reflection is not quite Polonius. Older. The features are not all at their stations.',
+        'When I look up, he is exactly where he was. He has not moved. The reflection has.',
       ],
       responses: [
         {
           label: 'look back at the bowl',
           desc: 'Verify.',
           lines: [
-            'I look back at the bowl. The reflection is just him now. The features are in their accustomed places. The face is smiling.',
-            'The face was not smiling a moment ago, when I looked away.',
+            'I look back at the bowl. The reflection is only him now, every feature at its station. The face is smiling.',
+            'It was not smiling a moment ago, when I looked away.',
           ],
           scales: { unease: +4 },
           composure: -2,
@@ -4077,8 +4077,8 @@ const polonius = {
           label: 'pretend not to have seen',
           desc: 'Walk on.',
           lines: [
-            'I keep walking. He keeps pace. The reflection in the bowl, when I pass, is what I would expect a reflection to be.',
-            'I do not look at the bowl again.',
+            'I keep walking. He keeps pace. The bowl, when I pass it again, holds an ordinary reflection, polished and patient.',
+            'I do not look at the bowl again. Not looking is a coin, and I pay it the rest of the evening.',
           ],
           scales: { unease: +3 },
         },
@@ -4092,8 +4092,8 @@ const polonius = {
                 && !p.flags._walked_free
                 && Math.random() < 0.85,
       prose: [
-        'The room slides. The lamps double, then resolve. My eyes were closed. I do not remember closing them.',
-        'Polonius is closer than he was. His head is at the angle of someone who has been studying me for some moments.',
+        'The room slides. The lamps double, then resolve. My eyes were closed. Nobody asked me.',
+        'Polonius is closer than he was, his head at the angle of a man partway through an appraisal.',
         'Are you well, sir? You look very tired.',
       ],
       responses: [
@@ -4125,8 +4125,8 @@ const polonius = {
           desc: 'Sit.',
           lines: [
             'I say: I think I need to sit.',
-            'He is delighted. The delight is real. Of course. Of course. Mrs. Halliwell. The chair by the fire.',
-            'The chair is suddenly closer to me than it was.',
+            'He is delighted. The delight is real, which is worse. Of course. Of course. Mrs. Halliwell — the chair by the fire.',
+            'The chair is closer to me than it was. The house moves its furniture the way it moves its staff: while no one is counting.',
           ],
           scales: { tiredness: +3, intimacy: +2 },
         },
@@ -4141,16 +4141,16 @@ const polonius = {
                 && !p.flags._walked_free
                 && Math.random() < 0.5,
       prose: [
-        'The cook passes the corridor end. He is going back to the kitchen with a pot. He is not slowing down.',
-        'As he passes, his head moves — slightly, only an inch — toward me. The eyes are on me for one beat that is too long to be the cook of the dining room.',
-        '~~He is awake. He is being careful.~~',
+        'The cook passes the corridor end with a pot, not slowing, hands working at the handle as if it were the apron.',
+        'As he passes, his head turns — an inch, no more — and the eyes hold me for one beat too long to belong to the dining room.',
+        'Awake, and rationing it.',
       ],
       responses: [
         {
           label: 'follow him into the kitchen',
           desc: 'Press the opening.',
           lines: [
-            'I follow him into the kitchen. The cook is at the range. The eyes are awake. We have a minute.',
+            'I follow him into the kitchen. He is at the range, and the eyes have the lights on. We have a minute, and both of us know which of us is spending it.',
           ],
           scales: { unease: +1 },
           composure: +1,
@@ -4161,7 +4161,7 @@ const polonius = {
           label: 'mark the moment; carry on',
           desc: 'Remember the look.',
           lines: [
-            'I do not break stride. I have, however, marked the look. He is not entirely part of the day in his own room.',
+            'I do not break stride. I enter the look in the ledger I am keeping behind my face: the cook, in his own room, is not entirely the day\'s.',
           ],
           flags: { _heard_cook_aware: true, _heard_kitchen: true },
         },
@@ -4181,18 +4181,18 @@ const polonius = {
                 && !p.flags._fired_polonius_holds_card_over_fire
                 && Math.random() < 0.6,
       prose: [
-        'He is at the parlor fire. The card is between his thumb and forefinger. He holds it over the small fire at a small height.',
-        'Sir, he says, mild. I have decided. If I cannot have the evening, I will at least have the card.',
-        '~~He will drop it. He will drop it if I do not move.~~',
+        'He is at the parlor fire. My card is between his thumb and forefinger, held over the flames at the height of a decision.',
+        'Sir, he says, mild. I have decided. If I cannot have the evening, I will at least have the card. The house keeps what is given to the house. The house keeps.',
+        'His thumb is the whole of the evening now.',
       ],
       responses: [
         {
           label: 'lunge for the card',
           desc: 'Take it from his hand.',
           lines: [
-            'I cross to him. The lunge is short — he is at arm\'s length, and he is not very strong.',
-            'I catch his wrist. The card is between us. I twist his hand toward me, gently. The card comes loose. I have it.',
-            'He smiles. He smiles with a small respect.',
+            'I cross to him before the thought finishes. The lunge is short — arm\'s length, and there is nothing in his arm but arm.',
+            'I catch the wrist. The card stands between us like a small white wall. I turn his hand toward me, gently, and the card comes loose into mine.',
+            'He smiles, with a small respect, the respect one pays a rival house.',
             '!!The card is in my pocket.!!',
           ],
           flags: { _card_location: 'recovered', _recovered_from: 'fire_save' },
@@ -4205,9 +4205,9 @@ const polonius = {
           desc: 'Words instead of motion.',
           lines: [
             'I say: please. Polonius. Please.',
-            'He looks at me. The look is long. The look is tired.',
+            'He looks at me. The look is long, and tired, and for one beat I believe it is going to be enough.',
             'His thumb opens.',
-            'The card falls. The fire takes it. The corners curl. In a moment the card is ash.',
+            'The card falls. The fire takes it the way the house takes everything: politely, completely. In a moment the card is ash.',
           ],
           flags: { _card_location: 'ash', _card_destroyed: true, _card_known: true },
           scales: { unease: +5 },
@@ -4218,8 +4218,8 @@ const polonius = {
           label: 'let it burn',
           desc: 'Make the gamble.',
           lines: [
-            'I do not move. He waits. He waits a beat too long. He drops the card.',
-            'The card falls. The fire takes it. The corners curl. In a moment the card is ash.',
+            'I do not move. He waits. He waits one beat past his own patience, looking for the flinch I am not selling. He drops the card.',
+            'The fire takes it. The corners curl. In a moment the card is ash, and I have traded my door for whatever is in the cellar.',
           ],
           flags: { _card_location: 'ash', _card_destroyed: true, _card_known: true },
           scales: { unease: +5 },
@@ -4236,7 +4236,7 @@ const polonius = {
                 && p.turn >= 4
                 && Math.random() < 0.7,
       prose: [
-        'I pass a mirror in the corridor. The mirror is the kind a Victorian hangs at the end of a passage to make the passage feel longer.',
+        'I pass a mirror in the corridor — the kind a Victorian hangs at the end of a passage to make the passage read longer.',
         'In the mirror, the passage is longer. In the mirror, Polonius is directly behind me. In the corridor, he is not.',
         'I turn around. The corridor is empty.',
         'I turn back to the mirror. He is still in it. He is smiling.',
@@ -4246,7 +4246,7 @@ const polonius = {
           label: 'face the mirror; do not move',
           desc: 'Stare him down.',
           lines: [
-            'I face the mirror. He, in the mirror, faces me. After a length of time I do not measure, the reflection looks slightly tired. He fades, by degrees, until the mirror is only a mirror.',
+            'I face the mirror. He, in the mirror, faces me. I count my breaths into the glass: eleven, twelve. At thirteen the reflection tires first, and fades by degrees, until the mirror is only a mirror.',
             'The corridor is the corridor.',
           ],
           scales: { unease: +3 },
@@ -4257,7 +4257,7 @@ const polonius = {
           label: 'walk past the mirror without looking',
           desc: 'Refuse.',
           lines: [
-            'I walk past. I do not look. I do not give him the seeing of him.',
+            'I walk past. I do not look. Being seen is the rent he charges, and I decline to pay at this window.',
           ],
           scales: { unease: +2 },
         },
