@@ -4652,10 +4652,10 @@ const pram = {
       respond(p) {
         return {
           lines: [
-            'I lay my hand over hers where it rests on the handle. She is warm.',
+            'I lay my hand over hers on the handle. Her hand is warm, and rocking, and mine rocks with it.',
             p.scales.lucidity >= 4
-              ? 'She does not pull away. Her grip on the handle softens, almost without her noticing.'
-              : 'She does not pull away. She does not return the contact either.',
+              ? 'She does not pull away. Under my palm her grip lets down, the way milk lets down, without permission being asked.'
+              : 'She does not pull away. She does not return it either. My hand is in the song now, is all.',
           ],
           scales: { grip: -2, agitation: -2, lucidity: +1 },
         };
@@ -4684,7 +4684,7 @@ const pram = {
         return {
           lines: [
             'I lift the bundle from the pram. She lets me. Her hands stay in the shape of holding.',
-            'She is not all the way here, but the bundle is not in her lap anymore.',
+            'She is under the song still. Her arms go on rocking the weight that is no longer in them.',
           ],
           scales: { grip: -10, agitation: +1, lucidity: +1 },
           flags: { freed: true },
@@ -4707,7 +4707,7 @@ const pram = {
       once: true,
       when: (p) => p.scales.grip >= 7 && p.turn >= 2,
       prose: [
-        'She pauses the rocking. She leans forward over the blanket. Protective.',
+        'The rocking stops mid-travel. She leans in over the blanket, shoulders rounding, a wall going up around the fold.',
         'She looks at me and whispers: !!He is sleeping. Yes?!!',
       ],
       responses: [
@@ -4716,8 +4716,8 @@ const pram = {
           desc: 'Agree. Let her keep him.',
           lines: [
             'I nod. I say: yes. He is sleeping.',
-            'Her rocking finds a slower rhythm. Her shoulders ease. She goes on humming.',
-            '~~She has not been told.~~',
+            'The rocking settles back to its nursing pace. Her shoulders come down a width, and the song picks up its round.',
+            '~~I have not lied.~~ I have answered a question with the answer it came for.',
           ],
           scales: { grip: -1, agitation: -2, lucidity: -1 },
           flags: { sang_with_her: true },
@@ -4728,7 +4728,7 @@ const pram = {
           desc: 'Redirect, without lying.',
           lines: [
             'I say: your arms must be tired. You have been rocking a long time.',
-            'She looks at her own arms as if she has just noticed them.',
+            'She considers her arms a long moment, the full length of them. They have been someone else\'s all morning.',
             'After a moment she sets them down on the handle and does not lift them again.',
           ],
           scales: { grip: -3, lucidity: +2, agitation: -1 },
@@ -4738,7 +4738,7 @@ const pram = {
           desc: 'The truth. Quietly.',
           lines: [
             'I say: he is not sleeping.',
-            'Her face goes white. !!Do not say that,!! she says. !!Do not say that in this room.!!',
+            'The color leaves her face from the mouth outward. !!Do not say that,!! she says. !!Not in this room. Not over him.!!',
           ],
           scales: { lucidity: +2, agitation: +4, grip: +2 },
           composure: -1,
@@ -4752,7 +4752,7 @@ const pram = {
       once: true,
       when: (p) => p.scales.lucidity >= 4,
       prose: [
-        'Her humming stops mid-bar. She squints at me.',
+        'The humming stops mid-bar, on the fourth note. She looks at me with her head tipped, reading me like a label that has come half off.',
         'She says: ~~Do I know you?~~',
       ],
       responses: [
@@ -4761,7 +4761,7 @@ const pram = {
           desc: 'Gentle truth.',
           lines: [
             'I say: I do not think so. I came in this morning.',
-            'She takes that in. She is not upset. She nods.',
+            'She weighs it without alarm. Strangers are no trouble. It is the known faces that have been telling her things.',
           ],
           scales: { lucidity: +2, grip: -1 },
         },
@@ -4770,7 +4770,7 @@ const pram = {
           desc: 'A kind lie.',
           lines: [
             'I say: you do.',
-            'She relaxes. Just a little. She does not check. She does not look at me with full eyes again, after.',
+            'She eases. She does not check. But her eyes never come all the way back to me after — known things do not get looked at.',
           ],
           scales: { agitation: -2, lucidity: -3 },
           scars: ['named'],
@@ -4782,7 +4782,7 @@ const pram = {
           desc: 'Sidestep.',
           lines: [
             'I say: it does not matter. I am here either way.',
-            'She nods slowly. She keeps rocking.',
+            'She nods slowly, files me under visitors, and goes back to the count.',
           ],
           scales: { lucidity: +1 },
         },
@@ -4803,7 +4803,7 @@ const pram = {
           when: (_, player) => player.wound === 'insomnia',
           lines: [
             'I say: I have not slept in days. The faces all slide off.',
-            'She lifts her head. She looks at me as if I have said something useful for the first time.',
+            'She lifts her head. Of everything said in this room today, that is the first thing she has had a use for.',
             '~~She sleeps in this chair.~~ She has not slept in this chair.',
           ],
           scales: { lucidity: +1, agitation: -1 },
@@ -4814,7 +4814,7 @@ const pram = {
           when: (_, player) => player.wound === 'split_personality',
           lines: [
             'I say: one of me does. The other does not.',
-            'She does not seem surprised by that. She nods slowly.',
+            'She takes it without surprise. She nods, slowly, twice — once for each.',
             '~~She has been waiting for someone.~~ She has been waiting for one of me.',
           ],
           scales: { lucidity: +2, agitation: -1, grip: -1 },
@@ -4827,7 +4827,7 @@ const pram = {
       once: true,
       when: (p) => p.scales.lucidity >= 6 && p.scales.grip <= 4,
       prose: [
-        'She has stopped humming. She looks at the blanket. Then at me.',
+        'The humming has run out, and she has let it run. Her eyes come from the blanket to me, carrying the question over carefully, like a full cup.',
         'She asks: ~~Whose was he?~~',
       ],
       responses: [
@@ -4858,7 +4858,7 @@ const pram = {
           desc: 'Soften it.',
           lines: [
             "I say: someone's. Someone you loved.",
-            'She nods. She takes that. Her eyes go past me to the window.',
+            'She nods, and takes it, and her eyes go past me to the window, where the answer can stay unowned.',
           ],
           scales: { lucidity: -1, grip: +1 },
         },
@@ -4870,7 +4870,7 @@ const pram = {
       once: true,
       when: (p) => p.scales.agitation >= 5 && p.scales.grip >= 6,
       prose: [
-        'Her humming has gone loud. Her rocking is at the wrong tempo.',
+        'The humming has gone loud and flat, more breath than note. The rocking has left the song behind.',
         '!!Be quiet,!! she says. !!You will wake him.!!',
       ],
       responses: [
@@ -4879,7 +4879,7 @@ const pram = {
           desc: 'Meet her where she is.',
           lines: [
             'I lower my voice. I stop moving.',
-            'Her humming finds its rhythm again. Slowly. The room loosens a degree.',
+            'Her humming finds the five notes again, one at a time, like stairs in the dark.',
           ],
           scales: { agitation: -3, grip: -1, lucidity: -1 },
           composure: -1,
@@ -4915,8 +4915,8 @@ const pram = {
     if (p.scales.agitation >= 6) {
       return {
         lines: [
-          'I wait. She rocks harder. The wheels click against the floor.',
-          'Her humming is a hum I can hear in my teeth.',
+          'I wait. The rocking has outrun the song. The wheels knock the floor at each end of the travel — four knocks, four knocks.',
+          'The hum has moved into the floor, and up the chair legs, and into my teeth.',
         ],
         scales: { agitation: +2, grip: +1 },
         composure: -1,
@@ -4937,15 +4937,15 @@ const pram = {
     if (p.scales.lucidity >= 5 && p.scales.grip <= 4) {
       return {
         lines: [
-          'I wait. She rocks slower. A long time passes.',
+          'I wait. The rocking lets down by degrees, the way a kettle goes off the boil.',
           'Her eyes leave the pram. They do not return to it right away.',
         ],
         scales: { lucidity: +1 },
       };
     }
     return pick([
-      { lines: ['She rocks faster. Then slower. Her arms tighten and ease.'], scales: { grip: +1, agitation: +1 } },
-      { lines: ['She pauses. She looks at the pram, sidelong, as if she has just remembered something.'], scales: { lucidity: +1 } },
+      { lines: ['The rocking quickens and eases, quickens and eases, hunting a tempo it has misplaced.'], scales: { grip: +1, agitation: +1 } },
+      { lines: ['She pauses, and gives the pram a sidelong look, the kind you give a door you may have left unlocked.'], scales: { lucidity: +1 } },
       { lines: ['I wait. Nothing changes. The five notes go around again. And again.'], scales: { agitation: +1 }, composure: -1 },
     ]);
   },
@@ -4966,7 +4966,7 @@ const pram = {
         }
         return [
           'I have the bundle. She lets me carry it out.',
-          'She is not all the way here. She rocks the empty pram a while. Eventually she stops.',
+          'She is under the song still. The empty pram rocks on a while, lighter, and the lightness takes its time reaching her.',
         ];
       },
       item: 'worn_ribbon',
@@ -4980,7 +4980,7 @@ const pram = {
       lines: [
         'She lifts the blanket. She folds it. She folds it again.',
         'She sets it on the seat of the pram and lets the handle go.',
-        'She cries without sound. !!It is the first time in years.!!',
+        'She cries without sound, in the hours-kept way of this place. !!Nobody has to be quiet for him anymore.!!',
       ],
       item: 'handkerchief',
     },
@@ -5003,7 +5003,7 @@ const pram = {
       when: (p) => p.flags.sang_with_her && p.turn >= 10 && !p.flags.told_her && !p.flags.freed,
       title: 'You sing with her',
       lines: [
-        'I leave eventually. She does not stop humming. She has had a visitor today.',
+        'I leave when the song lets me. She does not look up. She has had a visitor today; the song has had a second voice.',
         'The lullaby continues through the door. !!Five notes.!!',
       ],
       item: null,
@@ -5016,7 +5016,7 @@ const pram = {
       title: 'She outlasts you',
       lines: [
         'She has been rocking longer than I can stay. The hour has moved without me.',
-        'I leave the room. She is still humming. She has not noticed.',
+        'I leave the room. The five notes follow me to the turn of the corridor, and stop being heard without stopping.',
       ],
       item: null,
       scars: ['failed'],
@@ -5025,7 +5025,7 @@ const pram = {
       id: 'abandoned',
       when: (p) => p.flags.left,
       title: 'You walk out',
-      lines: ['I close the door. She is still rocking. She does not see me leave.'],
+      lines: ['I close the door on the fourth note. The fifth comes anyway. It does not need me, and it does not see me go.'],
       item: null,
       scars: ['abandoned'],
     },
