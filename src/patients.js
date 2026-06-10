@@ -3502,10 +3502,10 @@ const polonius = {
 
         free_break_shard: {
           lines: [
-            'I take the shard from my pocket. It is warm — warmer than I am. I close my hand around it.',
-            'I look at it. The name on the inside curve is faded. I close my hand harder.',
-            'The shard breaks. The break is not the sound of clay. The break is the sound of a door, very far away, swinging open.',
-            'The pieces fall through my fingers. The pieces are small and red.',
+            'I take the shard from my pocket. Warm — warmer than my hand. I close my hand around it.',
+            'I look at it once more. The name in the curve has gone faint with being read. I close my hand harder.',
+            'The shard breaks. The break is not the sound of clay. It is the sound of a door, very far away, swinging open.',
+            'The pieces fall through my fingers, small and red, and the cellar exhales nine hundred years of held breath.',
           ],
           flags: { _broke_shard: true },
           scales: { unease: +2 },
@@ -3518,13 +3518,13 @@ const polonius = {
 
         free_he_ages: {
           lines: [
-            'I climb the stair. The cellar is behind me. The kitchen is empty — the cook is gone, and not in the way of staff going. The apron is on the floor. There is no body inside the apron.',
-            'I cross the corridor. The wallpaper is fading as I walk. The lamps are going out one by one. The house is finishing.',
-            'I find him in the parlor. He is in the chair he was always in. He is not the man he was when I came in.',
-            'He is older. He is the age the shard was. His hands are the colour of old paper. His eyes have gone soft and far. He is smiling. The smile is the smallest he has produced and the largest he has meant.',
-            'He says, very quietly: thank you. The Greek is rough on his tongue, in the way it is rough on a tongue that has not used it in centuries.',
+            'I climb the stair. The kitchen is empty — the cook is gone, and not in the way of staff going. The apron lies on the floor. There is no body inside the apron.',
+            'I cross the corridor. The wallpaper is fading as I walk, the laurel pattern letting go of the green. The lamps go out one by one behind me. The house is finishing.',
+            'I find him in the parlor, in the chair he was always in. He is not the man I came in to.',
+            'He is older. He is the age the shard was. His hands are the colour of old paper at last, honestly. His eyes have gone soft and far. He is smiling — the smallest smile he has produced, and the largest he has meant.',
+            'He says, very quietly: thank you. The Greek comes rough off his tongue, the way a word comes off a tongue that has waited centuries to use it.',
             'He closes his eyes. He does not open them.',
-            'The chair holds an old man, not breathing.',
+            'The chair holds an old man, not breathing. For once, the still chest is in order.',
           ],
           flags: { _freed_polonius: true, _polonius_died: true, _staff_dissolved: true },
           scales: { unease: +3 },
@@ -3537,8 +3537,8 @@ const polonius = {
 
         free_card_returns: {
           lines: [
-            'I pat the pocket. The pocket is heavier than empty. I bring out my admission card. The number on it is my number. It is warm.',
-            'I do not know how it got there. The house may have decided. The house is empty now. The house has no opinions.',
+            'I pat the pocket. Heavier than empty. I bring out my admission card. The number is mine. The card is warm, the way the shard was warm.',
+            'I do not know how it got there. The house may have decided, with its last decision. The house is empty now. The house has no opinions.',
             '!!I have the card.!!',
           ],
           flags: { _card_location: 'recovered', _recovered_from: 'freed' },
@@ -3552,12 +3552,12 @@ const polonius = {
 
         free_walk_out: {
           lines: [
-            'I walk to the foyer. The grandfather clock is silent. The clock has no pendulum any more — the pendulum is on the floor, where it has fallen.',
+            'I walk to the foyer. The grandfather clock is silent. The pendulum lies on the floor of the case, where it fell when the house stopped needing a face.',
             'The front door. The brass slot. I press the card.',
             'The slot reads. The lock clicks. The door swings inward.',
             'The hospital corridor is on the other side. I step through.',
-            'Behind me, the wing settles. The wallpaper darkens, the way old paper darkens, all at once.',
-            'When I look back, the door is gone. There is a wall where the door was. There has never been a Greek Wing.',
+            'Behind me, the wing settles — the long creak of a house sitting down.',
+            'When I look back, the door is gone. A wall stands where it stood, wearing the dust of a wall that has always been a wall. There has never been a Greek Wing.',
           ],
           flags: { _walked_free: true, _freed_polonius: true },
           composure: +2,
