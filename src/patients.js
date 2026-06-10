@@ -7511,14 +7511,14 @@ const choir = {
   subtitle: 'They were singing when I came in.',
   role: 'final',
   file: [
-    "The facility's final ward houses the choir. The chord has been incomplete since the building opened.",
-    'Each admission ~~contributes a voice~~ resolves a note. !!The chord is almost full.!!',
-    'Subject 0413 has been ~~the missing note~~ on file since [[8]]. **Subject is expected.**',
+    'The final ward houses the choir. The census lists one patient. The duty nurse counts the voices through the door and stops at a number she does not enter on the form.',
+    'Each admission ~~surrenders a voice~~ resolves a note. !!The chord is almost full.!!',
+    'Subject 0413 has been ~~the missing note~~ on file since [[8]]. The choir keeps her seat. The form says **expected**.',
   ],
   intro: [
-    'The choir is in the room.',
-    'They are looking at me. ~~Several of them have my face.~~',
-    '!!One of them is me.!!',
+    'The door opens on the sound before it opens on the room. The choir is standing in rows. The choir are turning their heads.',
+    'They turn at one speed, the way a field turns under wind. ~~Some of them have my face.~~ All of them have a face I have worn.',
+    '!!One of them is me. She is holding my note for me.!!',
   ],
 
   scales: {
@@ -7532,14 +7532,14 @@ const choir = {
         { at: 9, word: 'whole' },
       ],
       crossDown: {
-        3: 'I am thinner than I was. The room can see through me.',
-        2: 'I am hard to see, even to me.',
-        1: 'There is very little of me left.',
-        0: '!!I am almost gone.!!',
+        3: 'I am thinner than I was. My shadow has gone grey at the edges.',
+        2: 'I am hard to find, even from in here.',
+        1: 'There is enough of me left to write this. That is what is left.',
+        0: '!!I am almost gone. The pen is heavier than the hand.!!',
       },
       crossUp: {
-        2: 'I am back. ~~Mostly.~~',
-        3: 'I am here. All the way here.',
+        2: 'I am back. ~~Most of me.~~ Enough of me.',
+        3: 'I am here. The floor takes my weight again and creaks to confirm it.',
       },
     },
     recognition: {
@@ -7552,11 +7552,11 @@ const choir = {
         { at: 9, word: 'seeing whole' },
       ],
       crossUp: {
-        2: 'I can pick out where my voice would be.',
-        3: 'I can see them. Each one. As themselves.',
-        4: '!!I know what this is.!!',
+        2: 'I can hear the gap in the chord. It is my width exactly.',
+        3: 'The rows have become faces. Each face has a file. I have read some of them.',
+        4: '!!I know what this is. It is a register, and it is being called.!!',
       },
-      crossDown: { 1: 'They have blurred together again.' },
+      crossDown: { 1: 'The faces have gone back to being rows.' },
     },
     chord: {
       initial: 2, min: 0, max: 10, label: 'chord', kind: 'negative',
@@ -7565,17 +7565,17 @@ const choir = {
         { at: 3, word: 'humming' },
         { at: 5, word: 'stacking' },
         { at: 7, word: 'full' },
-        { at: 9, word: 'completed' },
+        { at: 9, word: 'resolving' },
       ],
       crossUp: {
-        2: 'The chord has thickened.',
-        3: '!!The chord wants me in it.!!',
-        4: '!!The chord is full. It knows what shape I would be.!!',
+        2: 'The chord has thickened. The wired glass hums along.',
+        3: '!!The chord has found my pitch. It is holding that door open.!!',
+        4: '!!The chord is one note from full, and the gap is shaped like a person standing where I stand.!!',
       },
       crossDown: {
-        2: 'The chord has come apart.',
-        1: 'One voice has gone.',
-        0: 'The chord is gone.',
+        2: 'The chord has come apart into people.',
+        1: 'One voice has stopped. The rest close over it like water.',
+        0: 'The chord is gone. The room is only breathing.',
       },
     },
     voice: {
@@ -7588,14 +7588,14 @@ const choir = {
         { at: 9, word: 'lost in chord' },
       ],
       crossUp: {
-        2: 'I have begun to hum. ~~I do not remember starting.~~',
-        3: 'My voice is in the chord.',
-        4: '!!I can hear myself from outside.!!',
+        2: 'There is a hum in the room at my pitch. I put my hand to my throat. ~~It is not me.~~ It is me.',
+        3: 'My voice has been seated with the others.',
+        4: '!!I can hear myself from across the room. From over there, I sound settled.!!',
       },
       crossDown: {
         2: 'My mouth has closed.',
-        1: 'I have stopped singing.',
-        0: 'I am silent. ~~For now.~~',
+        1: 'I have stopped singing. The hum runs on a half-second longer than I do.',
+        0: 'I am silent. The chord holds my place at pitch, the way a finger holds a page.',
       },
     },
   },
@@ -7608,9 +7608,9 @@ const choir = {
   },
 
   fileReveals: [
-    { announce: 'A line of the file fills in. ~~The chord has been incomplete since the building opened.~~' },
-    { announce: '**Each admission resolves a note.**' },
-    { announce: '!!Subject 0413 is the missing note.!!' },
+    { announce: 'A line fills in. The choir predates the staff. The choir predates the wards. ~~The choir predates the building.~~ The building was raised around the sound.' },
+    { announce: 'Another. Discharges from the final ward: the column is blank. ~~No one has left.~~ The column was printed blank.' },
+    { announce: '!!The last line is already filled in. Subject 0413 is the missing note. The hand is mine.!!' },
   ],
 
   presented(p) {
@@ -7619,20 +7619,20 @@ const choir = {
     const c = p.scales.chord;
     const v = p.scales.voice;
     let song;
-    if (c >= 8)      song = '!!The chord is full. It has been full a while.!!';
-    else if (c >= 5) song = 'The choir is singing. Several parts. Familiar parts.';
-    else if (c >= 2) song = 'The choir is humming. It has not yet found its key.';
-    else             song = 'The choir is quiet. They are watching me.';
+    if (c >= 8)      song = '!!The chord is full. It is not getting louder. It is getting nearer.!!';
+    else if (c >= 5) song = 'The choir is singing in parts. I can name the wards the parts came from.';
+    else if (c >= 2) song = 'The choir is humming just under the pitch of the fluorescent tubes, waiting for the key to be agreed.';
+    else             song = 'The choir is quiet. The choir are watching me. Both sentences are true. I have checked them twice.';
     let me;
-    if (v >= 7)      me = '~~My voice is in the chord.~~ I can hear it from outside.';
+    if (v >= 7)      me = '~~I am singing.~~ A voice with my name on it is singing. I am over here, listening to it.';
     else if (v >= 4) me = 'I am humming. I did not start.';
-    else if (re >= 3) me = 'I can pick out where my voice would go. I am keeping it back.';
+    else if (re >= 3) me = 'I can hear the gap where my voice would go. I stand back from it the way you stand back from a platform edge.';
     else              me = 'My mouth is closed.';
     let left;
-    if (s >= 7)      left = 'I am still mostly here.';
-    else if (s >= 4) left = '~~I am thinner than I was.~~ The room can see through me.';
-    else if (s >= 1) left = 'I am hard to see, even to me.';
-    else              left = '~~There is very little of me left.~~ I am almost gone.';
+    if (s >= 7)      left = 'I am here. When I count my fingers against the light, the count comes back ten.';
+    else if (s >= 4) left = '~~I am tired.~~ I am thinner. The light through the window takes less trouble going around me.';
+    else if (s >= 1) left = 'There is less of me than the coat says. The coat is keeping my shape on file.';
+    else              left = '~~I am~~ What is left of me is writing this down. The hand is faint but legible.';
     return `${song} ${me} ${left}`;
   },
 
@@ -7640,24 +7640,24 @@ const choir = {
 
     hold_yourself: {
       label: 'hold yourself',
-      desc: 'Do not move. Do not sing. Anchor.',
+      desc: 'Do not move. Do not sing. Be the rest in the bar.',
       respond(p) {
         const reps = streakCount(p, 'hold_yourself');
         if (reps >= 2) {
           return {
             lines: [
-              'I keep holding. The chord widens around me, looking for the gap.',
-              'I do not give it. But it is exhausting work.',
+              'I keep holding. The chord moves around me the way water moves around a piling — patient, taking measurements.',
+              'I do not give it my note. Holding a note back is also a way of holding a note.',
             ],
             scales: { self: -1, recognition: +2 },
             composure: -1,
-            composureCost: '~~My voice is in the chord.~~ I did not start.',
+            composureCost: 'My jaw aches with the not-singing.',
           };
         }
         return {
           lines: [
-            'I stand at the door. I do not move. I do not sing.',
-            'The chord searches for me. It does not find me yet.',
+            'I stand on the pale worn path just inside the door and hold. I am the one who came in. The sentence bears weight, so I stand on it.',
+            'The chord leans my way, then passes, the way a torch beam passes a person standing among coats.',
           ],
           scales: { recognition: +2 },
         };
@@ -7670,12 +7670,12 @@ const choir = {
       respond() {
         return {
           lines: [
-            'I listen. I am there. I have been there. I have been singing for longer than I have been listening.',
-            'I only came in this morning. ~~The voice is older than that.~~',
+            'I listen for myself. I find myself in the second row of the sound, holding a long low note with no strain in it. None at all. The note has had practice.',
+            'I came in this morning. ~~The voice came in~~ The voice did not come in. It was here when the doors were hung.',
           ],
           scales: { recognition: +3, self: -1 },
           composure: -1,
-          composureCost: 'I am thinner than I was.',
+          composureCost: 'I have heard my own breath used by someone else.',
           flags: { found_voice: true },
         };
       },
@@ -7690,7 +7690,7 @@ const choir = {
         if (reps >= 1) {
           return {
             lines: [
-              'I sing more. The chord widens to make room. ~~I narrow.~~ Or I narrow.',
+              'I sing on. The chord makes room for me. The chord makes room of me. One word of that is wrong, and I cannot hear which.',
             ],
             scales: { voice: +3, chord: +2, self: -2 },
             composure: -1,
@@ -7699,8 +7699,8 @@ const choir = {
         }
         return {
           lines: [
-            'I open my mouth. A note comes out. It fits.',
-            'The chord widens to make room. ~~Or I narrow to fit.~~',
+            'I open my mouth and the note is already in it, warmed up, waiting to go.',
+            'It fits. ~~The chord made room.~~ Nothing made room. I was always the size of the gap.',
           ],
           scales: { voice: +2, chord: +1, self: -1 },
         };
@@ -7716,8 +7716,8 @@ const choir = {
         if (reps >= 1) {
           return {
             lines: [
-              'I say it again. !!Patient 0413.!!',
-              'The chord loses a note. My own note. ~~It had been there.~~',
+              'I say it again, louder, the way you repeat an order down a bad line. !!Patient 0413.!!',
+              'The chord loses a note — mine, taken back across the counter. ~~Stolen.~~ Reclaimed.',
             ],
             scales: { self: +2, voice: -2, recognition: +1 },
           };
@@ -7725,7 +7725,7 @@ const choir = {
         return {
           lines: [
             'I say: !!Patient 0413.!!',
-            'The chord falters. One voice loses its place. ~~It might be mine.~~',
+            'The chord stumbles on the number like a stair that is not where the foot expects. One voice loses its place. ~~Mine.~~ The one that was using mine.',
           ],
           scales: { voice: -2, self: +2, chord: -1 },
         };
@@ -7740,8 +7740,8 @@ const choir = {
         if (p.scales.recognition < 7) {
           return {
             lines: [
-              "I reach for what I think is my voice. ~~I find someone else's.~~",
-              'I pull it. They go quiet. ~~I do not know who.~~',
+              'I reach into the sound for my voice. My hand knows the pitch the way it knows a coat in a dark hall. ~~It is my coat.~~ It is a coat my size.',
+              'I pull. A singer goes quiet, somewhere in the third row. ~~Me.~~ Not me. I have silenced a stranger with my name on her breath.',
             ],
             scales: { self: -1, recognition: -1 },
             composure: -2,
@@ -7751,8 +7751,8 @@ const choir = {
         }
         return {
           lines: [
-            'I reach into the chord. My voice is there. Exactly where I left it.',
-            'I pull it out. The chord is poorer for it. I am ~~smaller~~ louder for it.',
+            'I reach into the chord and take hold of my voice. It is exactly where I left it. Nothing in this building is ever lost. That is the trouble with this building.',
+            'I pull it out. The chord closes ranks behind it, one short. I am ~~smaller~~ louder for it.',
             '!!I have me again.!!',
           ],
           scales: { voice: -10, self: +3, chord: -3 },
@@ -7763,14 +7763,14 @@ const choir = {
 
     close_door: {
       label: 'close the door',
-      desc: 'Shut it from the inside. Or the outside. You decide.',
+      desc: 'Shut it. Which side you are on is decided by where you stand.',
       when: (p) => p.scales.self >= 5,
       respond() {
         return {
           lines: [
             'I close the door. ~~From the inside.~~ From the outside.',
-            'The chord goes on without me. I can hear it down the corridor.',
-            'I am out. ~~Mostly.~~',
+            'The rubber seal takes the chord down to one note, soft as a jar closing on it.',
+            'I am out. The count on the corridor side is one. I do not take the count in the room.',
           ],
           flags: { shut_door: true },
         };
@@ -7785,17 +7785,17 @@ const choir = {
         const reps = streakCount(p, 'look_at_yours');
         const which = reps + 1;
         const memories = [
-          ['I look at one of them. She is rocking a pram. Her arms are tight.', 'I have been in this room before. ~~Recently.~~'],
-          ['I look at another. He sits in a chair. He is dictating to a clerk who is not here.', '~~I closed his eyes.~~ I closed his eyes.'],
-          ['I look at another. She is humming a chord. The piano lid is still open.', '~~I never let her finish.~~'],
-          ['I look at another. She is on a bench, waiting. The room is much colder than the corridor.', 'I sat with her. ~~For an hour.~~ For a winter.'],
+          ['I look at one singer. She rocks as she sings, five beats to the bar, the tempo of a lullaby I have counted before.', 'There is no pram. Her arms hold the shape of one anyway, and the shape is sleeping.'],
+          ['I look at another. He sits while the rest stand, dictating his part to a clerk who is not there. He has the dates cold.', '~~I closed his eyes.~~ I closed his eyes.'],
+          ['I look at another. She sings walking — four steps, a pause the length of a pulse taken, four steps — down a row of beds that are not there.', 'Her part is rounds. The tray she carries has been sugar water for years. The rounds go on either way.'],
+          ['I look at another. She sings seated, buttoned to the throat, facing the door the way you face an arrivals board.', 'I sat with her. ~~For an hour.~~ For a winter.'],
         ];
         const m = memories[Math.min(which - 1, memories.length - 1)];
         return {
           lines: [m[0], m[1]],
           scales: { recognition: +2, self: -1 },
           composure: -1,
-          composureCost: 'The door is open. ~~From the inside.~~',
+          composureCost: 'I know them by what I did for them. Knowing is how the chord knows me back.',
         };
       },
     },
@@ -7803,7 +7803,7 @@ const choir = {
 
   wait: {
     label: 'wait',
-    desc: 'Let the chord come for me. ~~It will.~~',
+    desc: 'Stand still. The chord can keep time longer than I can.',
     when: () => true,
   },
 
@@ -7813,8 +7813,8 @@ const choir = {
       once: true,
       when: (p) => p.scales.voice >= 4,
       prose: [
-        'The chord pauses. One voice steps slightly forward. It is mine, I think.',
-        'It asks me: ~~Are you one of us yet?~~',
+        'The chord pauses on a held breath. One singer steps out of the rows. She has my haircut, and my habit of counting — her lips move through the numbers between the lines.',
+        'She asks me, in the plural: ~~Are we one of us yet?~~',
       ],
       responses: [
         {
@@ -7822,19 +7822,19 @@ const choir = {
           desc: 'Concede.',
           lines: [
             'I say: yes.',
-            'The chord widens. Another note. ~~Mine.~~',
-            '!!They have me now.!!',
+            'The chord takes the word the way a collection plate takes a coin — without comment, already moving on.',
+            '!!Somewhere in the rows, a mouth I know closes around my note and keeps it.!!',
           ],
           scales: { voice: +4, chord: +3, self: -3 },
           composure: -2,
-          composureCost: 'I have been here longer than I came in for.',
+          composureCost: 'The yes is entered. There is no column for taking it back.',
         },
         {
           label: 'no',
           desc: 'Refuse.',
           lines: [
             'I say: no.',
-            'The chord wavers. One voice falters. They wait for me to change my mind.',
+            'The chord does not argue. It goes back one bar and sings the question again, unchanged, the way a form sent back unsigned comes back to you unsigned.',
           ],
           scales: { self: +2, voice: -2, recognition: +2 },
         },
@@ -7843,7 +7843,7 @@ const choir = {
           desc: 'Honest.',
           lines: [
             "I say: I don't know.",
-            'They accept it. For now. The chord holds its place.',
+            'The chord holds under it, patient as a pedal note. Not knowing is a note too. They can use it.',
           ],
           scales: { recognition: +3 },
         },
@@ -7854,7 +7854,7 @@ const choir = {
       once: true,
       when: (p) => p.scales.chord >= 7 && p.scales.voice <= 3,
       prose: [
-        'The chord opens. There is a space in it shaped like a person. Shaped like me.',
+        'The chord opens down the middle, the way rows part for a procession. The aisle is my width. The aisle is my height.',
         "One voice asks: ~~Won't you sing with us?~~",
       ],
       responses: [
@@ -7863,7 +7863,7 @@ const choir = {
           desc: 'Firm.',
           lines: [
             'I say: no.',
-            'The chord closes around the space. They continue without me. ~~They have learned to.~~',
+            'The aisle closes without hurry. They go on. ~~They have learned to.~~ They have always had to.',
           ],
           scales: { chord: -2, self: +2 },
         },
@@ -7871,19 +7871,19 @@ const choir = {
           label: 'one note',
           desc: 'Small concession.',
           lines: [
-            'I sing one note. Just one. It fits.',
-            'The chord settles for it.',
+            'I give them one note, the smallest I own.',
+            'The chord settles over it like a stamp coming down on wax. One note is an instalment. The schedule of the rest is theirs now.',
           ],
           scales: { voice: +2, chord: +1, self: -1 },
           composure: -1,
-          composureCost: '~~My voice is in the chord.~~ I did not start.',
+          composureCost: 'The minutes will record that one note was **volunteered**.',
         },
         {
           label: 'I came to take mine out',
           desc: 'Declare intent.',
           lines: [
             'I say: I came to take my voice out.',
-            'They go quiet. They have not been told that. They did not know it was possible.',
+            'The quiet that follows is total and instant, a trained quiet. No one has said that in this room. The room has no procedure for it, and a room without a procedure is only a room.',
           ],
           scales: { self: +3, chord: -3, recognition: +2 },
         },
@@ -7894,7 +7894,7 @@ const choir = {
       once: true,
       when: (p) => p.scales.recognition >= 5 && p.scales.self >= 5,
       prose: [
-        'The chord shifts. Several voices, in unison.',
+        'The chord drops to a single line. Many mouths, one sentence, no leader I can find.',
         'They ask: ~~Who were you, before us?~~',
       ],
       responses: [
@@ -7903,7 +7903,7 @@ const choir = {
           desc: 'Your number. Flatly.',
           lines: [
             'I say: Patient 0413. I came in this morning.',
-            'The chord falters. One voice stops humming. ~~It was mine.~~',
+            'The number goes through the rows like a name called in a waiting room. One voice stops humming. ~~Mine.~~ The one wearing mine.',
           ],
           scales: { self: +3, voice: -2, recognition: +1 },
         },
@@ -7912,22 +7912,22 @@ const choir = {
           desc: 'Less specific.',
           lines: [
             'I say: someone with a file. Someone admitted.',
-            'They accept that. It is not enough to undo what is being done.',
+            'They accept it the way the desk accepts a form with one box blank — provisionally, with the blank box waiting.',
           ],
           scales: { recognition: +1, voice: +1, self: -1 },
           composure: -1,
-          composureCost: 'I am thinner than I was.',
+          composureCost: 'A blank box, somewhere, has my width.',
         },
         {
           label: "I don't remember",
           desc: 'The truest answer.',
           lines: [
             "I say: I don't remember.",
-            'The chord nods. ~~It has been here longer.~~ It remembers for me.',
+            'The chord takes this kindly. ~~It has been here longer.~~ It has been me longer. It offers to remember on my behalf, the way the desk offers to hold valuables.',
           ],
           scales: { voice: +3, chord: +2, self: -2 },
           composure: -1,
-          composureCost: '!!I am being learned.!!',
+          composureCost: 'It remembers me wrong by one detail. I cannot find the detail.',
         },
         {
           label: '[amnesia] I came in with no name',
@@ -7935,8 +7935,8 @@ const choir = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: there was no before. I was admitted without identification.',
-            'The chord goes quiet for a long beat. ~~They have not had a blank one offered.~~',
-            'A voice says: ~~that is the easiest one to take.~~',
+            'The chord goes quiet for one held bar. ~~They have never had a blank one.~~ They have been waiting for a blank one.',
+            'A voice says: ~~that is the easiest kind to take.~~',
           ],
           scales: { voice: +2, chord: +2, self: -2 },
           composure: -2,
@@ -7948,8 +7948,8 @@ const choir = {
           when: (_, player) => player.wound === 'insomnia',
           lines: [
             'I say: someone who could not sleep. Someone the night kept open.',
-            'The chord softens by a degree. The night ones are different here.',
-            'They keep humming. They do not press.',
+            'The chord softens by a degree. The night ones are sung differently here — lower, with longer rests.',
+            'They do not press. For the night ones, the pressing is left to the hours.',
           ],
           scales: { self: +1, voice: +1, recognition: +1 },
         },
@@ -7959,8 +7959,8 @@ const choir = {
           when: (_, player) => player.wound === 'split_personality',
           lines: [
             'I say: I am one of two. The other is at home in a chair you cannot reach.',
-            'The chord falters. ~~They have not had a doubled one before.~~',
-            'A voice says: we will take the one in the room with us. Another says it again, in the same breath.',
+            'The chord recounts itself. ~~They have not had a doubled one.~~ They have, once. No one sings about her.',
+            'A voice says: we will take the one in the room. Another voice says it again, the same words, one beat behind — a round, started on me.',
           ],
           scales: { self: +2, voice: -2, recognition: +1 },
           composure: -1,
@@ -7973,7 +7973,7 @@ const choir = {
       once: true,
       when: (p) => p.scales.voice >= 3 && p.scales.self <= 6,
       prose: [
-        'A single voice — closer than the others — speaks.',
+        'A single voice comes out of the chord, closer than the rows allow. It is at my ear. The rows have not moved.',
         'It says: ~~We missed you.~~ We never lost you.',
       ],
       responses: [
@@ -7982,18 +7982,18 @@ const choir = {
           desc: 'Echo.',
           lines: [
             'I say: I missed you.',
-            'The chord opens around me. ~~I do not move forward.~~ I have already moved.',
+            'The chord opens around me like a door I do not remember knocking on. ~~I do not step forward.~~ The step has been taken with me in it.',
           ],
           scales: { voice: +3, chord: +2, self: -2 },
           composure: -2,
-          composureCost: 'One of them sounds like me. All of them do, in the right light.',
+          composureCost: 'I answered in their tense.',
         },
         {
           label: 'I do not know you',
           desc: 'Refuse the claim.',
           lines: [
             'I say: I do not know you.',
-            'The voice goes quiet. The others continue. ~~The chord is poorer.~~',
+            'The voice withdraws without hurt, the way a hand comes back from a door that did not open. The others continue. ~~The chord is poorer.~~ The chord is the same. That is worse.',
           ],
           scales: { self: +2, chord: -2, recognition: +1 },
         },
@@ -8002,12 +8002,12 @@ const choir = {
           desc: 'Turn it around.',
           lines: [
             'I say: who am I, to you?',
-            'The chord answers. Each voice says a different thing. ~~No two are the same.~~',
-            '!!I do not recognize most of them.!!',
+            'The chord answers all at once, each voice a different word: daughter. Witness. Debt. The late one. 0413. The one who counts.',
+            '!!I answer to more of them than I can afford.!!',
           ],
           scales: { recognition: +3, self: -1 },
           composure: -1,
-          composureCost: 'The door is open. ~~From the inside.~~',
+          composureCost: 'Six names, and a hand going up in me for each.',
         },
       ],
     },
@@ -8017,8 +8017,8 @@ const choir = {
     if (p.scales.chord >= 6) {
       return {
         lines: [
-          'I wait. The chord deepens. One of the singers rocks a pram. One hums the same chord. One watches a door.',
-          'They have learned the whole ward. They are singing it.',
+          'I wait. The chord deepens. One singer rocks to a five-count. One walks her rounds between beds that are not there. One sits, dictating to a clerk the chord does not bother to provide.',
+          'The choir has learned the whole hospital. The choir are singing it back, wing by wing.',
         ],
         scales: { self: -1, voice: +1, chord: +1 },
         composure: -1,
@@ -8026,10 +8026,10 @@ const choir = {
       };
     }
     return {
-      lines: ['I wait. The choir hums. ~~One voice sounds like mine.~~ It always has.'],
+      lines: ['I wait. The choir hums under the failing tube. ~~One voice sounds like mine.~~ One voice is being saved for mine. There is a difference, and the difference is me.'],
       scales: { chord: +1, voice: +1 },
       composure: -1,
-      composureCost: '~~My voice is in the chord.~~ I did not start.',
+      composureCost: 'The hum is at my pitch whenever I stop listening for it.',
     };
   },
 
@@ -8039,8 +8039,8 @@ const choir = {
       when: (p) => p.flags.excised && p.scales.self >= 6,
       title: 'You take yourself out',
       lines: [
-        'I leave the room with my voice still my own. The chord is poorer for it. ~~I am poorer.~~ I am louder.',
-        'I walk past them down the corridor. They continue without me. They always did.',
+        'I leave with my voice where it belongs, behind my teeth. The chord is a note poorer. ~~I am poorer.~~ I am louder.',
+        'The singing goes on behind me, full-sounding, the way it sounded before I learned the gap. It was never short of a voice. !!It was short of a yes.!!',
         'I take the stairs.',
       ],
       item: 'sliver_of_glass',
@@ -8050,9 +8050,9 @@ const choir = {
       when: (p) => p.flags.shut_door && p.scales.self >= 5 && p.scales.voice <= 3,
       title: 'You shut the door',
       lines: [
-        'I close it from the outside. The choir is muffled by an inch of wood.',
+        'I close it from the outside. An inch of door does what it can. Through the wood the chord is one note, knocking politely, like a radiator asking.',
         'I walk back the way I came. ~~A different corridor.~~ The same corridor.',
-        'I leave my file at the desk. The nurse takes it without looking up.',
+        'I leave my file at the desk. The nurse on duty takes it without looking up. There has always been a nurse I have not met.',
       ],
       item: 'ink_bottle',
     },
@@ -8061,8 +8061,8 @@ const choir = {
       when: (p) => p.scales.voice >= 8 && p.scales.self <= 2,
       title: 'You join them',
       lines: [
-        'My voice is in the chord. It has always been in the chord. ~~I am in the chord.~~',
-        'The room is full of me. There are many of me. ~~I am no longer looking out from anywhere.~~',
+        'My voice is in the chord. The chord is full. Somewhere below, the boiler, the trolleys, the failing tube all come into tune with it.',
+        '~~I am the one who came in.~~ We are the one who came in. The grammar settles over me like a sheet drawn up.',
         '!!The door is open. Someone outside is being admitted.!!',
       ],
       item: null,
@@ -8073,7 +8073,7 @@ const choir = {
       when: (p) => p.scales.self <= 0,
       title: 'The chord finishes you',
       lines: [
-        'I am thinner than I should be. The choir has not noticed I am gone. ~~Or that I was ever here.~~',
+        'What is left of me is not enough to pull the door shut. The choir does not mark my going. ~~I was here.~~ The chord holds the place where here was.',
       ],
       item: null,
       scars: ['collapsed'],
