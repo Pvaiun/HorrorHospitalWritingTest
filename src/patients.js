@@ -6330,32 +6330,32 @@ const glimmer = {
   subtitle: 'He has not blinked.',
   role: 'wing', tier: 2,
   file: [
-    'Subject was [[1]] years old when [[8]] entered the road. Subject did not look away.',
-    "Subject's eyes have not closed since. ~~Pupils dilate normally.~~ Pupils do not register staff.",
-    'Staff are instructed !!not to follow Subject\'s line of sight.!! It has been **forty years**.',
+    'Subject was [[1]] years old when [[8]] went into the road. The rest of the household looked away. Subject ~~could not~~ did not.',
+    "Subject's eyes have remained open. Pupils respond to light. ~~They do not respond to anything nearer than the road.~~ They do not respond to staff.",
+    'Standing order: !!do not cross Subject\'s line of sight, and do not follow it.!! The furniture has been arranged accordingly. The arrangement is reviewed yearly.',
   ],
   intro: [
-    'He is on the floor by the wall. He has not stood up. He is in the posture of someone leaning down to reassure something small that is no longer there.',
-    'His eyes are open. They have been open since I came in. ~~They have been open since he was eight.~~',
+    'He is on the floor against the wall, knees up, one hand making a slow petting motion over the boards beside him. The boards are worn pale under the motion, in its exact shape.',
+    'His eyes are open and aimed past me, through the door, at street level. Everything in the room has moved to the walls over the years, out of that line. I come in the long way. So did the furniture.',
   ],
 
   scales: {
     present: {
       initial: 0, min: 0, max: 10, label: 'present', kind: 'positive',
       bands: [
-        { at: 0, word: 'gone' },
+        { at: 0, word: 'at the road' },
         { at: 2, word: 'elsewhere' },
         { at: 5, word: 'stirring' },
         { at: 7, word: 'here' },
         { at: 9, word: 'with me' },
       ],
       crossUp: {
-        2: 'He has noticed I am in the room.',
+        2: 'I have come into the part of the room he keeps track of.',
         3: 'His hand has found my sleeve.',
-        4: '~~He is eight.~~ He is here. He is eight, here.',
+        4: 'He is here. All of him. All eight years.',
       },
       crossDown: {
-        1: 'He has slipped back into the wall.',
+        1: 'He has gone back down the line of sight, all the way to the end of it.',
       },
     },
     stare: {
@@ -6369,10 +6369,10 @@ const glimmer = {
       ],
       crossUp: {
         3: 'His eyes have stopped moving.',
-        4: '!!He has not blinked in some time.!!',
+        4: '!!I have been counting. He has not blinked since I began.!!',
       },
       crossDown: {
-        2: 'He has blinked. ~~Once.~~',
+        2: 'He has blinked. Once. I counted it.',
         1: 'His eyes have begun to close.',
         0: '!!His eyes are closed.!!',
       },
@@ -6381,18 +6381,18 @@ const glimmer = {
       initial: 1, min: 0, max: 10, label: 'pressure', kind: 'negative',
       bands: [
         { at: 0, word: 'quiet' },
-        { at: 3, word: 'stirring' },
+        { at: 3, word: 'gathering' },
         { at: 5, word: 'building' },
-        { at: 7, word: 'imminent' },
-        { at: 9, word: 'about to burst' },
+        { at: 7, word: 'at his teeth' },
+        { at: 9, word: 'about to be asked' },
       ],
       crossUp: {
-        2: 'The question is louder than it was.',
+        2: 'The question has moved up his throat.',
         3: 'His lips are shaping a word.',
         4: '!!The question has come to the front of his mouth.!!',
       },
       crossDown: {
-        2: 'The question has eased.',
+        2: 'The question has settled back down.',
         1: 'The question has been answered.',
         0: 'He is not asking anymore.',
       },
@@ -6406,9 +6406,9 @@ const glimmer = {
   },
 
   fileReveals: [
-    { announce: 'A line of his file fills in. ~~He was eight when it ran into the road.~~' },
-    { announce: 'He **watched**. The rest of the family looked away.' },
-    { announce: 'The last line writes itself in. ~~It has been forty years.~~' },
+    { announce: 'A line fills in. The road is [[4]] miles from this room. ~~You can hear it from here.~~ You cannot hear it from here.' },
+    { announce: 'Another. The household looked away, all of them, at the same instant. The file marks Subject the exception. The file\'s word for it is **witness**.' },
+    { announce: 'The last line. Light crosses his floor and the furniture follows it, an inch a year, like a sundial. He is the gnomon. He has not moved.' },
   ],
 
   presented(p) {
@@ -6416,20 +6416,20 @@ const glimmer = {
     const st = p.scales.stare;
     const ps = p.scales.pressure;
     let eyes;
-    if (st >= 8)      eyes = 'His eyes are wide open. He has not blinked. ~~He cannot.~~';
-    else if (st >= 5) eyes = 'His eyes track me, slowly, then go back to the door.';
-    else if (st >= 2) eyes = 'His eyes are heavier than they were. He blinks, sometimes.';
+    if (st >= 8)      eyes = 'His eyes stand open the whole width. Dust settles on him out of the window light, and he lets it, the way a sill lets it.';
+    else if (st >= 5) eyes = 'His eyes give me a slow length of their attention, then return down the line to the door. The line has right of way.';
+    else if (st >= 2) eyes = 'His eyes have taken on weight. A blink gets through now and then, like a door easing in a draft.';
     else              eyes = 'His eyes are closed. His shoulders are loose.';
     let mouth;
-    if (ps >= 7)      mouth = '!!His mouth is shaping a word he is about to say.!!';
-    else if (ps >= 4) mouth = 'His lips are parted, slightly. The question is waiting.';
-    else if (ps >= 1) mouth = 'His lips are pressed together as if to hold something back.';
-    else              mouth = 'His face is empty in the way only a child can manage.';
+    if (ps >= 7)      mouth = '!!His mouth has begun the first letter of it. It has been the first letter for a while.!!';
+    else if (ps >= 4) mouth = 'His lips are parted the width of a word. Nothing comes through yet.';
+    else if (ps >= 1) mouth = 'His lips are pressed to a seam.';
+    else              mouth = 'His face is at rest the way unvisited rooms are at rest.';
     let reach;
     if (pr >= 7)      reach = 'He has hold of my sleeve. He has not let go.';
     else if (pr >= 4) reach = 'His arm is folded across his own knee. He has remembered it is his.';
-    else if (pr >= 1) reach = 'He is reaching toward me along the floor. Close, but not touching.';
-    else              reach = 'He is leaning down beside himself, toward something on the floor that is not there.';
+    else if (pr >= 1) reach = 'His hand has crossed half the floor between us, flat to the boards, and stopped. The last span is mine to close.';
+    else              reach = 'He leans low over the worn place in the boards, his hand going through the old motion, slow, at the height of a small back.';
     return `${eyes} ${mouth} ${reach}`;
   },
 
@@ -6442,19 +6442,19 @@ const glimmer = {
         if (p.scales.stare >= 7) {
           return {
             lines: [
-              'I sit on the floor against the wall, beside him.',
-              'He does not turn. He does not blink.',
-              'After a while my eyes hurt for him.',
+              'I come down onto the boards beside him, against the wall, out of the line.',
+              'He does not turn. The window light moves a hand\'s width across the floor between us. He does not.',
+              'After a while my eyes water on his behalf. His do not.',
             ],
             scales: { present: +1, pressure: +1 },
             composure: -1,
-            composureCost: 'He is so small, against the wall. ~~He has not grown since.~~',
+            composureCost: 'He is small against the wall. The wall has had forty years to get used to it.',
           };
         }
         return {
           lines: [
-            'I sit beside him. Our shoulders are not touching but they are at the same height.',
-            'He looks at the floor between us. There is nothing on the floor between us.',
+            'I sit beside him. Our shoulders line up at the same height. Mine had farther to come down.',
+            'He looks at the floor between us, at the worn place. I keep my hands off the worn place.',
           ],
           scales: { present: +2, stare: -1 },
         };
@@ -6469,8 +6469,8 @@ const glimmer = {
         if (reps >= 1) {
           return {
             lines: [
-              'I look again. This time I see more. The wallpaper. The doorframe. The gap between.',
-              'I see the shape of what he is looking at. I do not look away.',
+              'I take the line again, farther this time. Past the doorframe. Past the corridor that should stop it. The line does not honor walls.',
+              'At the far end of it the road sound starts up, faint, tires on a wet street. !!Four floors down and forty years back.!! I do not look away.',
             ],
             scales: { present: +2, stare: -2, pressure: -1 },
             composure: -2,
@@ -6479,14 +6479,14 @@ const glimmer = {
         }
         return {
           lines: [
-            'I follow his eyes. They are pointed at the door. ~~At the street beyond it.~~ At the street.',
-            'I see a road. I see a small body in the road. I see a car.',
-            '!!I see what he saw.!!',
-            '~~I look away.~~ I do not. I make myself not.',
+            'I line my eyes up with his. The door. The hallway through it. The line keeps going where the building should interrupt it, and is not interrupted.',
+            'Somewhere down the line there is daylight. Morning daylight, on a road surface. !!I can hear the road. This deep in the building, I can hear the road.!!',
+            'I do not see what is on it. I understand that if I keep looking, I will.',
+            '~~I look away.~~ I do not. I hold the line with him.',
           ],
           scales: { present: +3, pressure: +1 },
           composure: -1,
-          composureCost: 'The question is still in his mouth. ~~Louder.~~',
+          composureCost: 'The road sound stays in my ears after I stop. Like water after swimming.',
         };
       },
     },
@@ -6500,8 +6500,8 @@ const glimmer = {
           return {
             lines: [
               'I crouch and shield his eyes with my palm. His lashes brush warm against the skin.',
-              'His eyes close. For the first time today, they close.',
-              '~~He stops holding his breath.~~ He breathes out. It has been forty years of holding.',
+              'Under my hand, his eyes close. They go down slow, like a window being given permission.',
+              'He breathes out. The breath is longer than he is. It has been going out since he was eight.',
               '!!He leans his forehead against my arm.!!',
             ],
             scales: { stare: -4, present: +2, pressure: -2 },
@@ -6509,8 +6509,8 @@ const glimmer = {
         }
         return {
           lines: [
-            'I reach. His eyes flinch but do not close. He does not let me take it from him.',
-            'I let the gesture fall short. Not yet.',
+            'I raise my hand toward his eyes. They flinch and hold open. The watch is his, and I am not yet anyone who can relieve him of it.',
+            'I let my hand come down empty. Not yet.',
           ],
           scales: { pressure: +2, stare: +1 },
           composure: -1,
@@ -6531,17 +6531,17 @@ const glimmer = {
               'I say: you did not look away.',
               'I say: it was not your fault. It has never been your fault.',
               'He begins to cry. ~~He is forty.~~ He is eight. He is eight. He is eight.',
-              '!!I have given him something I cannot take back.!!',
+              '!!It is said now. Said things stay in rooms like this.!!',
             ],
             scales: { present: +3, pressure: -5, stare: -3 },
             composure: -1,
-            composureCost: 'I have seen what he saw. ~~I cannot unsee it.~~',
+            composureCost: 'I stood at the edge of what he watches. The edge does not wash off.',
           };
         }
         return {
           lines: [
-            'I try to answer. But I am answering nothing. The room does not change.',
-            'He does not stop staring. I do not know if I am too early or too late.',
+            'I start an answer. It goes down the line and falls short of the road. I can tell by his eyes, which do not change.',
+            'I am early, or I am late. The room does not say which. Rooms here keep that to themselves.',
           ],
           scales: { pressure: +2, present: -1 },
           composure: -2,
@@ -6559,7 +6559,7 @@ const glimmer = {
         if (hasWitnessed) {
           return {
             lines: [
-              'I tell him about something I have seen. ~~I will not forget it.~~',
+              'I tell him what I saw in this building, the version of it that can be said indoors.',
               'I tell him the part where I should have looked away and did not.',
               'He listens. His eyes do not move. But his fingers find the hem of my sleeve.',
             ],
@@ -6568,8 +6568,8 @@ const glimmer = {
         }
         return {
           lines: [
-            'I tell him about something I have seen. It is small, what I have to give.',
-            'He listens, partially. It is enough.',
+            'I tell him a thing I watched once and could not put down. It is small, next to his. I offer it at its true size.',
+            'He listens with the near edge of his attention. The near edge is enough.',
           ],
           scales: { present: +2, stare: -1 },
         };
@@ -6583,13 +6583,13 @@ const glimmer = {
       respond() {
         return {
           lines: [
-            'I describe what he is looking at. The road. The gravel. ~~The smaller body~~ The smaller one in the gravel.',
+            'I say it out loud, carefully, in order: the road. The morning. The five minutes. I stop at the curb of it.',
             'I say it without hurry. He listens. His lips move with mine.',
-            'We have agreed on the shape of what happened.',
+            'We have agreed on the edges of it. The middle stays his. The middle was always going to stay his.',
           ],
           scales: { present: +3, stare: -2, pressure: -2 },
           composure: -1,
-          composureCost: 'Now I am the second person who has seen it. ~~It is mine too.~~',
+          composureCost: 'The edges are mine now too. Edges are enough to cut.',
         };
       },
     },
@@ -6602,7 +6602,7 @@ const glimmer = {
         return {
           lines: [
             'I slide my sleeve under his fingers on the floor. They find the cuff.',
-            'The petting motion goes on against my sleeve. ~~Something he has been doing for forty years.~~',
+            'The motion carries on over my cuff, slow and exact, worn smooth as the boards it learned on.',
             'After a while he leans his head against my arm.',
           ],
           scales: { present: +3, stare: -2, pressure: -1 },
@@ -6613,7 +6613,7 @@ const glimmer = {
 
   wait: {
     label: 'wait',
-    desc: 'Let the question keep building. ~~It will not stop on its own.~~',
+    desc: 'Hold still. The question is coming on its own.',
     when: (p) => p.scales.pressure >= 4 || p.scales.stare >= 7 || p.turn >= 4,
   },
 
@@ -6623,8 +6623,8 @@ const glimmer = {
       once: true,
       when: (p) => p.scales.present >= 4 && p.scales.pressure >= 5,
       prose: [
-        'He turns toward me. His lips form a word he has been saving.',
-        'He asks: ~~Did you see?~~',
+        'He turns toward me. It is the first time the line of sight has bent for anyone.',
+        'He asks: ~~Did you see?~~ The words come out stiff at the corners, like furniture out of a sealed room.',
       ],
       responses: [
         {
@@ -6632,8 +6632,8 @@ const glimmer = {
           desc: 'Meet him there.',
           lines: [
             'I say: I saw.',
-            'His face breaks open. Slowly. The way a dam goes.',
-            'He is eight. He is here. He has been very alone.',
+            'His face goes, slowly, the way wet paper goes — holding its shape, holding it, then none at all.',
+            'He is eight, and here. Until this minute he was the only one on watch.',
           ],
           scales: { present: +4, pressure: -4, stare: -3 },
           composure: -1,
@@ -6652,8 +6652,8 @@ const glimmer = {
           label: 'I look away',
           desc: 'Show him that looking away is allowed.',
           lines: [
-            'I look away. I look at the wall. ~~Deliberately.~~',
-            'He watches me do it. He is allowed to do it too. Eventually.',
+            'I look away. At the wall, where nothing has ever happened. I make the looking loud.',
+            'He watches me do it. Watching me is already not watching the road. Neither of us says so.',
           ],
           scales: { stare: -4, pressure: -2, present: +1 },
         },
@@ -6663,7 +6663,7 @@ const glimmer = {
           when: (_, player) => player.wound === 'amnesia',
           lines: [
             'I say: I do not remember. I was there. I do not have it any more.',
-            'He looks at me very carefully. He has been hoping for that answer for a long time.',
+            'He looks at me a long, careful time. Of all the answers, that is the one he has been saving a hope for.',
             'He blinks. Once.',
           ],
           scales: { pressure: -2, stare: -2, present: +1 },
@@ -6675,7 +6675,7 @@ const glimmer = {
           lines: [
             'I say: I have not slept since. The eyes stay open. The picture stays.',
             'He nods. Quickly. Twice.',
-            '~~He has been waiting for someone who carries it the same way.~~',
+            'Two of us now, holding our eyes open in the same building.',
           ],
           scales: { present: +3, pressure: -2, stare: -1 },
           composure: -1,
@@ -6700,7 +6700,7 @@ const glimmer = {
       once: true,
       when: (p) => p.scales.present >= 5 && p.scales.stare <= 5,
       prose: [
-        'He is making the petting motion on the floor between us.',
+        'His hand is at the worn place, going through the motion, slower than usual. A question pace.',
         'He asks, very small: ~~Where did he go?~~',
       ],
       responses: [
@@ -6709,7 +6709,7 @@ const glimmer = {
           desc: 'Gentle. No specifics.',
           lines: [
             'I say: somewhere quiet. Where it does not hurt.',
-            'He considers this. Eventually he nods.',
+            'He weighs it the way children weigh what adults say: entirely. Then he nods, and the nod is small and final.',
           ],
           scales: { present: +2, stare: -1, pressure: -2 },
         },
@@ -6718,7 +6718,7 @@ const glimmer = {
           desc: 'Honest.',
           lines: [
             "I say: I don't know.",
-            'He nods. He expected that answer. ~~It is his answer too.~~',
+            'He nods. It is the answer he keeps in his own mouth. Now we both keep it.',
           ],
           scales: { present: +3, stare: -3 },
         },
@@ -6727,7 +6727,7 @@ const glimmer = {
           desc: 'Place him.',
           lines: [
             'I say: with the others. The rest of yours.',
-            'He sits with that. He is somewhere I cannot follow for a moment.',
+            'He goes down the line with it, farther than I can follow, and is gone the length of three breaths.',
             'When he comes back, he is holding my sleeve and does not let go.',
           ],
           scales: { present: +2, pressure: -3 },
@@ -6742,7 +6742,7 @@ const glimmer = {
       once: true,
       when: (p) => p.scales.pressure >= 6 && p.scales.present >= 4,
       prose: [
-        'He is rocking slightly. His lips move without sound for a moment.',
+        'He has begun to rock, a small travel, an inch each way. His lips go through the words once without sound. A rehearsal.',
         'He asks me: ~~Can we go now? Can we go home?~~',
       ],
       responses: [
@@ -6761,7 +6761,7 @@ const glimmer = {
           desc: 'The harder truth.',
           lines: [
             'I say: we have to stay a little longer.',
-            'He is very quiet. ~~He is older than eight, in this moment.~~ He is forty for a moment.',
+            'He takes it quietly. For a moment the forty years sit on him where they belong. Then they get off again.',
           ],
           scales: { stare: -1, pressure: -1, present: +2 },
           composure: -1,
@@ -6772,12 +6772,12 @@ const glimmer = {
           desc: 'Ask him.',
           lines: [
             'I ask: where is home?',
-            'He tells me. A street name. A number. ~~His voice is very small.~~ His voice is the voice of a small person.',
-            '!!A place that has not been there in forty years.!!',
+            'He gives it to me. A street name. A number. The words have kept their creases, like clothes out of a case no one opened.',
+            '!!The number is gone. The street is gone. The five minutes are still running.!!',
           ],
           scales: { present: +3, pressure: -2 },
           composure: -2,
-          composureCost: 'I have seen what he saw. ~~I cannot unsee it.~~',
+          composureCost: 'An address with no door left to it. I have it by heart already.',
         },
       ],
     },
@@ -6788,7 +6788,7 @@ const glimmer = {
       when: (p) => p.scales.stare >= 7 && p.turn >= 3,
       prose: [
         'The petting motion has stopped. He is very still.',
-        'He says, ~~to her~~ to no one: she said five minutes. ~~It has been forty years.~~ It has been a while.',
+        'He says, ~~to her~~ to the door: she said five minutes. ~~It has been forty years.~~ It has been longer than five minutes.',
       ],
       responses: [
         {
@@ -6796,7 +6796,7 @@ const glimmer = {
           desc: 'A kind, terrible lie.',
           lines: [
             "I say: she'll come.",
-            'He nods. ~~He has been waiting for someone to say that.~~',
+            'He nods, and settles back into the waiting as if the waiting had just been freshly made up, like a bed.',
           ],
           scales: { stare: +1, pressure: -2 },
           scars: ['named'],
@@ -6808,7 +6808,7 @@ const glimmer = {
           desc: 'A different lie.',
           lines: [
             'I say: she came back. She has been here. You have been here with her.',
-            'He is confused. ~~He wants to believe me.~~',
+            'His eyes come partway off the line, for the first time, and do not know where else to be.',
           ],
           scales: { pressure: -1, stare: -1, present: +1 },
           composure: -1,
@@ -6834,8 +6834,8 @@ const glimmer = {
     if (p.scales.pressure >= 7) {
       return {
         lines: [
-          'I wait. His lips part. He is about to ask.',
-          'He closes his mouth again. But the question is louder now.',
+          'I wait. His lips part on the question and hold there, open the width of it.',
+          'Then they close over it again. It is not smaller for being swallowed.',
         ],
         scales: { pressure: +1, stare: +1 },
         composure: -1,
@@ -6845,7 +6845,7 @@ const glimmer = {
     if (p.scales.pressure >= 4) {
       return {
         lines: [
-          'I wait. The petting motion goes on against the floorboards beside him.',
+          'I wait. The petting motion keeps its slow time against the boards. The window light has moved a board\'s width. He has not.',
           'His fingers are very small.',
         ],
         scales: { stare: +1 },
@@ -6854,7 +6854,7 @@ const glimmer = {
       };
     }
     return {
-      lines: ['I wait. He stares. Nothing else happens for a long time.'],
+      lines: ['I wait. Dust comes down through the window light. It is the only thing in the room with somewhere to be.'],
       scales: { pressure: +1 },
     };
   },
@@ -6865,7 +6865,7 @@ const glimmer = {
       when: (p) => p.scales.stare <= 2 && p.scales.present >= 6,
       title: 'You close his eyes',
       lines: [
-        'He is leaning against my arm. His eyes are closed. It is the first time in a long time.',
+        'He is asleep against my arm, or near it. His eyes are closed. The lids look new. They have hardly been used.',
         'I do not move. I do not want to be the one who makes him open them.',
       ],
       item: 'photograph',
@@ -6875,8 +6875,8 @@ const glimmer = {
       when: (p) => p.scales.pressure <= 1 && p.scales.present >= 7,
       title: 'You give him an answer',
       lines: [
-        'He is crying. He is eight. Eight, finally. ~~For the first time in forty years.~~',
-        '!!The room has aged forty years in a minute.!!',
+        'He is crying, at last, at eight years old — on schedule by a clock that runs forty years slow.',
+        '!!The room catches up all at once. The furniture is suddenly old.!!',
       ],
       item: 'scrap_of_paper',
     },
@@ -6885,9 +6885,9 @@ const glimmer = {
       when: (p) => p.scales.present >= 8 && p.scales.stare >= 5,
       title: 'You see for him',
       lines: [
-        'I sit beside him. We look at the door together. ~~We do not look away.~~ Neither of us looks away.',
-        'I do not know how long. I keep what we saw. He sets his head against my arm.',
-        '!!I am the one who saw it now. It is in me.!!',
+        'I sit beside him and take up the line where it leaves the door. We hold it together, two pairs of eyes on one watch.',
+        'I do not count the time. It is the first thing in this building I have not counted. He sets his head against my arm.',
+        '!!The watch is mine now. It does not end at the door.!!',
       ],
       item: 'ink_bottle',
       scars: ['witnessed'],
@@ -6897,8 +6897,8 @@ const glimmer = {
       when: (p) => p.scales.pressure >= 10,
       title: 'The question outlasts you',
       lines: [
-        'The question is the loudest thing in the room. It is louder than I am.',
-        '!!I have to leave before he asks it out loud.!!',
+        'The question fills the room to the sills. It is louder than the road, and the road should not be audible at all.',
+        '!!I leave before it is asked. If it is asked, it will have to be answered, and I do not have the answer on me.!!',
       ],
       item: null,
       scars: ['witnessed', 'failed'],
@@ -6907,7 +6907,7 @@ const glimmer = {
       id: 'abandoned',
       when: (p) => p.flags.left,
       title: 'You walk out',
-      lines: ['I close the door behind me. ~~He was watching the door I came through.~~ He is still watching it.'],
+      lines: ['I close the door behind me. The line of sight goes through it. ~~Through me.~~ I stand in it a moment, on the wrong side, and then I step out of the line.'],
       item: null,
       scars: ['abandoned'],
     },
