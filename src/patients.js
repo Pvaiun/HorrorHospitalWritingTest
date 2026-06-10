@@ -13385,19 +13385,19 @@ const sculpture = {
   subtitle: 'It is in the corner. It does not move while you are looking.',
   role: 'wing', tier: 1,
   file: [
-    'Containment item is concrete, humanoid proportions, approximately child-sized. Rebar fixture at the mouth.',
-    'Item is stationary under continuous line of sight. ~~Frequency of containment breach is correlated with staff blink rate.~~',
-    'Standard protocol: two-person observation, alternating blinks. ~~Subject is one person.~~',
-    'The door has been bolted from the outside. The override is on the wall in the corridor.',
-    'Item has been observed to make sounds while no one is in the room. ~~Scraping. Wet noises.~~',
-    'The light fixture is on a flicker schedule. ~~The schedule is unpredictable.~~ The schedule is the item\'s.',
+    'Item: concrete, humanoid, the height of a child of seven. Two lengths of rebar fixed at the mouth, bent past each other.',
+    'Item is **stationary** under continuous line of sight. ~~Breaches correlate with the staff blink rate.~~ Breaches do not occur.',
+    'Protocol: two observers, blinks alternating. ~~Subject is one observer.~~ Subject will alternate.',
+    'The door is bolted from the corridor side. The override is mounted on the corridor wall, at a height convenient to staff.',
+    'Sounds are logged from the cell while it stands empty. ~~Concrete dragged on concrete. Then something softer.~~ Settling.',
+    'The strip light flickers. Maintenance has logged it as ~~faulty~~ scheduled. The schedule is not ours.',
   ],
   intro: [
-    'The room is small. White. The floor is poured concrete. The walls are poured concrete.',
-    'There is no furniture. There is no window. There is a single door, behind me, bolted from outside.',
-    'A strip light along one wall, recessed behind frosted glass. It flickers and steadies.',
-    'There is a figure in the far corner. The size of a child. The color of cement.',
-    'It is facing me. I do not look away. I have not looked away since the door closed.',
+    'The cell is four paces by five. I count them on the way in. Poured concrete, floor and walls, one pour older than the other.',
+    'No furniture. No window. One door, behind me. The bolt went home before I had finished turning around.',
+    'A strip light along one wall, recessed behind frosted glass. It flickers once, as if taking attendance, and steadies.',
+    'In the far corner, a figure. Child-height. Floor-colored. Last verified: now.',
+    'It is facing me. ~~It was facing the door when the bolt went home.~~ It is facing me.',
   ],
 
   scales: {
@@ -13412,15 +13412,15 @@ const sculpture = {
         { at: 19, word: 'against the far wall' },
       ],
       crossDown: {
-        4: 'It has crossed half the room.',
-        3: 'It is a step closer than the wall.',
-        2: '!!It is within arm. Its hands are at its sides.!!',
-        1: '!!It is within arm. Its mouth is open.!!',
-        0: '!!It is at my throat. The rebar is in its open mouth.!!',
+        4: 'Half the room is behind it now. I did not see the half go.',
+        3: 'It stands a pace nearer than the record says.',
+        2: '!!It is within arm. Its hands are at its sides, which is the posture of waiting.!!',
+        1: '!!Within arm. The mouth is open now. No log records it opening.!!',
+        0: '!!At my throat. The rebar is the nearest thing in the room.!!',
       },
       crossUp: {
-        3: 'I have backed up a step. It has not moved.',
-        4: 'I have backed up another. The far corner is empty behind it.',
+        3: 'One step back. The count to the door comes down by one. It has not moved.',
+        4: 'Another step back. Behind it, the corner it started in stands empty, like a plinth between exhibits.',
       },
     },
     strain: {
@@ -13434,13 +13434,13 @@ const sculpture = {
         { at: 19, word: 'shut' },
       ],
       crossUp: {
-        3: 'My eyes have begun to water. The figure is blurred at the edges.',
-        4: '!!I cannot keep them open much longer.!!',
-        5: '!!The room is going dark at the rim. My eyes are closing on me.!!',
+        3: 'Water now. The figure goes soft at the edges, like a photograph of itself.',
+        4: '!!My eyelids have stopped taking instructions.!!',
+        5: '!!Dark at the rim of everything. My eyes are closing whether I am consulted or not.!!',
       },
       crossDown: {
-        2: 'My eyes have rested. The figure is sharper.',
-        1: 'The burning has eased.',
+        2: 'Rested. The figure comes back sharp, every edge accounted for.',
+        1: 'The burning stands down.',
       },
     },
     door: {
@@ -13454,8 +13454,8 @@ const sculpture = {
         { at: 19, word: 'pounding' },
       ],
       crossUp: {
-        3: 'My back is against the door.',
-        4: '!!The handle is in my hand. The door is locked from the outside.!!',
+        3: 'My back finds the door. Wood, then the cold line of the hinge.',
+        4: '!!The handle is in my hand. The bolt is on the other side of it, doing its work.!!',
       },
     },
   },
@@ -13470,12 +13470,12 @@ const sculpture = {
   },
 
   fileReveals: [
-    { at: 5,  announce: 'A line fills in. Containment breaches average 4.2 seconds. Subject\'s blink rate is logged at 16 per minute.' },
-    { at: 10, announce: 'Another. Item has been observed to make sounds while no one is in the room. ~~Scraping. Wet noises.~~' },
-    { at: 16, announce: 'Another. The bolt on this door is on the corridor wall. ~~There is no override on the inside.~~' },
-    { at: 24, announce: 'Another. Item has not been moved from this cell since [[4]]. ~~The cell was built around it.~~' },
-    { at: 32, announce: 'Another. The strip light flickers on a schedule. ~~The schedule is the item\'s.~~' },
-    { at: 42, announce: '!!The last line. Two researchers in this room have not been recovered.!!' },
+    { at: 5,  announce: 'A line fills in. Mean duration of a breach: 4.2 seconds. My blink rate, logged at admission: sixteen the minute. The two figures are kept on separate pages.' },
+    { at: 10, announce: 'Another. The item has been measured at four prior intakes. The four heights on file do not agree.' },
+    { at: 16, announce: 'Another. The override is mounted on the corridor wall. ~~There is no override on this side.~~ This side was not expected to need one.' },
+    { at: 24, announce: 'Another. Item has stood in this cell since [[4]]. ~~The cell was poured around it.~~' },
+    { at: 32, announce: 'Another. Condition: **stationary**. Last verified: ~~continuously~~ at intervals.' },
+    { at: 42, announce: '!!The last line. Two observers assigned to this cell are carried in the ledger as **reassigned**. Neither signed out.!!' },
   ],
 
   presented(p) {
@@ -13484,27 +13484,27 @@ const sculpture = {
     const dr = p.scales.door;
 
     let it;
-    if (d <= 1)      it = '!!It is at my throat. Its hands have come up to either side of my jaw. I am looking past the rebar. The mouth is open wide.!!';
-    else if (d <= 4) it = '!!It is within reach. I can see the chip on its left elbow. I can count the lines in the rebar.!!';
-    else if (d <= 8) it = 'It has crossed the floor. It is between me and the corner. Its hands are open. Its head is tilted forward by maybe two degrees.';
-    else if (d <= 12)it = 'It has come halfway across the room. It is on the seam where two concrete pours meet.';
-    else if (d <= 16)it = 'It is in the corner where it started. Its hands are at its sides. Its mouth is closed.';
-    else             it = 'It is against the far wall. Its back is in the corner. It has not moved from where it started.';
+    if (d <= 1)      it = '!!It is at my throat. Its hands are at either side of my jaw, fitted, like a frame around an exhibit. Past the rebar there is the back of the mouth, and I am looking at it.!!';
+    else if (d <= 4) it = '!!Within reach. I can count the bends in the rebar from here. Four. Yesterday\'s count was four. I do not have a yesterday in this room.!!';
+    else if (d <= 8) it = 'It has crossed the floor between blinks I did not record. Its hands are open. The head is tilted forward two degrees, the angle of reading a placard.';
+    else if (d <= 12)it = 'It stands at the seam where the two pours of the floor meet. Mid-room. The seam was nine paces from the door when I counted on the way in. ~~Nine.~~ Eight.';
+    else if (d <= 16)it = 'It is in its corner. Hands at sides. Mouth closed. Last verified: now, and now, and now.';
+    else             it = 'It is against the far wall, backed into its corner like a thing on loan that no one will claim. It has not moved from where it ~~started~~ was installed.';
 
     let eye;
-    if (s >= 16)     eye = '!!My eyes are at the limit. The room is going dark at the rim. I am holding them open with the muscles of my forehead. They will close.!!';
-    else if (s >= 12)eye = '!!My eyes are watering. The room is blurred. I am holding them open with the muscles of my forehead.!!';
-    else if (s >= 8) eye = 'My eyes are burning. The figure has a halo at its edges. I have begun to count to keep from blinking.';
-    else if (s >= 4) eye = 'My eyes are dry. The figure has a soft outline against the wall behind it.';
-    else             eye = 'My eyes are clear. The figure is sharp at the edges.';
+    if (s >= 16)     eye = '!!My eyes are at their limit. The rim of the room is going dark. I am holding the lids up with my forehead, with my scalp, with whatever still answers. They will close. The only open question is when.!!';
+    else if (s >= 12)eye = '!!Watering hard. The room runs at the edges. My forehead is doing the work my eyelids have resigned from.!!';
+    else if (s >= 8) eye = 'Burning now. The figure wears a halo it has not earned. I have started counting to hold the blink off — the count is the only schedule in this room that is mine.';
+    else if (s >= 4) eye = 'Dry. The outline of the figure has loosened by a thread against the wall behind it.';
+    else             eye = 'My eyes are clear. The figure is sharp to its last edge. I have counted its edges. I will count them again.';
 
     let back;
-    if (dr >= 16)    back = 'My back is against the door. The handle is at my hip. The door is bolted from the outside.';
-    else if (dr >= 12)back = 'My back is against the door. Both of my hands are at my sides, near the handle.';
-    else if (dr >= 8) back = 'I have backed across most of the room. The wall is a few steps behind me.';
-    else if (dr >= 4) back = 'I have backed a few steps toward the door.';
-    else if (dr >= 1) back = 'I have backed a step. One step.';
-    else              back = 'I have not moved.';
+    if (dr >= 16)    back = 'My back is on the door. The handle sits at my hip like a confiscated thing. The bolt is on the corridor side, where the protocol keeps it.';
+    else if (dr >= 12)back = 'My back is at the door. Both hands at my sides, near the handle, not on it. Reaching is a decision I am saving.';
+    else if (dr >= 8) back = 'Most of the room is behind me now. I have counted the paces left. ~~Four.~~ The count comes back five.';
+    else if (dr >= 4) back = 'A few steps gained toward the door. I keep the count under my breath, where the room cannot amend it.';
+    else if (dr >= 1) back = 'One step back. I have logged it. One.';
+    else              back = 'I have not moved. The record can say that much for me.';
 
     return `${it} ${eye} ${back}`;
   },
@@ -13519,42 +13519,42 @@ const sculpture = {
         if (reps >= 3) {
           return {
             lines: [
-              'I keep staring. My eyes are watering badly. The figure is doubled at the edges.',
-              'It has not moved. It has not moved. It has not moved.',
-              'The strip light flickers. I do not blink. The figure has not moved.',
+              'I keep staring. The water doubles every edge it touches. There are two figures now, overlapping, and both of them are still.',
+              'It has not moved. It has not moved. I write it twice because twice is how often I checked.',
+              'The strip light flickers. I do not blink. The flicker is logged. The blink is not.',
             ],
             scales: { strain: +5 },
             composure: -3,
-            composureCost: 'I have been holding my eyes open against my body.',
+            composureCost: 'My body has filed an objection. I am holding my eyes open over it.',
           };
         }
         if (reps >= 2) {
           return {
             lines: [
-              'I keep staring. The figure does not move. The room does not move.',
-              'I count my heartbeats. I count past sixty.',
-              'My eyes are very dry.',
+              'I keep staring. The figure keeps being a figure. The room keeps being four paces by five.',
+              'I count heartbeats instead of blinking. I pass sixty. I pass sixty again.',
+              'My eyes are two dry stones.',
             ],
             scales: { strain: +4 },
             composure: -2,
-            composureCost: 'My eyes have been open longer than they want to be.',
+            composureCost: 'Past sixty twice, and nothing in the room is mine but the count.',
           };
         }
         if (reps >= 1) {
           return {
             lines: [
-              'I keep staring. The figure does not move. My eyes are beginning to water.',
-              'I am very aware of the wall behind me. I do not look at it.',
+              'I keep staring. The figure does not move. Water gathers at the rim of my sight, patient as everything else in here.',
+              'The wall is somewhere behind me. I know the distance as a number. I do not turn to confirm the number.',
             ],
             scales: { strain: +3 },
             composure: -1,
-            composureCost: 'I have been holding my eyes open for a long time.',
+            composureCost: 'The count to the door is a number I am taking on faith.',
           };
         }
         return {
           lines: [
-            'I do not blink. The figure does not move.',
-            'The room is very quiet. I can hear the strip light hum.',
+            'I do not blink. The figure does not move. We are both exhibits now.',
+            'The room is quiet enough to hear the strip light: a thin hum, filed under maintenance.',
           ],
           scales: { strain: +2 },
         };
@@ -13569,29 +13569,29 @@ const sculpture = {
         if (reps >= 2) {
           return {
             lines: [
-              'I take another step backward. My heel finds the door. The handle is at my hip.',
-              'The figure has not moved. My eyes are watering. The figure is blurred but it is in the same place.',
+              'Another step back. My heel finds the door before the count says it should. ~~Three paces short.~~ The room has been shortened, or the count has.',
+              'The figure has not moved. Through the water it is a grey smear in the corner, exactly where the record wants it.',
             ],
             scales: { door: +4, strain: +3 },
             composure: -1,
-            composureCost: 'I cannot see the floor behind me. I have to trust it.',
+            composureCost: 'The floor behind me is unverified. I am walking on the last count I took.',
           };
         }
         if (reps >= 1) {
           return {
             lines: [
-              'I take another step backward. The wall is behind me. I find it with the back of my calf.',
-              'The figure has not moved. My eyes are dry.',
+              'Another step back. My calf finds the wall. The wall is where I counted it. Small mercies, logged.',
+              'The figure has not moved. My eyes are dry as paper.',
             ],
             scales: { door: +3, strain: +2 },
             composure: -1,
-            composureCost: 'I am most of the way to the door.',
+            composureCost: 'Most of the way to the door, by my own arithmetic.',
           };
         }
         return {
           lines: [
-            'I step backward. I do not turn my head. I keep my eyes on the figure.',
-            'The figure does not move. The wall is closer than I thought.',
+            'I step backward without turning my head. The pace is half a pace. I log it as one anyway.',
+            'The figure does not move. The wall arrives sooner than the count said it would.',
           ],
           scales: { door: +2, strain: +1 },
         };
@@ -13605,12 +13605,12 @@ const sculpture = {
       respond(p) {
         return {
           lines: [
-            'I shift my weight onto one leg. I bring the other across the floor. Quietly.',
-            'I do not turn my head. The figure does not move. My foot finds the seam in the floor.',
+            'I pour my weight into one leg and bring the other across. Quietly. The way you move in a room where you are not meant to be the exhibit.',
+            'My foot reads the seam in the concrete. I do not look down to check it. The seam will have to take my word.',
           ],
           scales: { door: +2, strain: +1 },
           composure: -1,
-          composureCost: 'I had to feel for the seam with my foot. I could not look.',
+          composureCost: 'I surveyed the floor with a foot. The eyes were spoken for.',
         };
       },
     },
@@ -13622,13 +13622,13 @@ const sculpture = {
       respond(p) {
         return {
           lines: [
-            'I take two steps backward in quick succession. My eyes water badly.',
-            'For a moment the figure is doubled. I cannot tell where it is.',
-            'When my eyes resettle, the figure is in the same place. My back is closer to the wall.',
+            'Two steps, fast, backward. The water jumps in my eyes.',
+            'For one beat there are two of it, side by side, and I cannot say which one is on the record.',
+            'My sight resettles. One figure. Same corner. My back is nearer the wall by two counted steps.',
           ],
           scales: { door: +5, strain: +4 },
           composure: -2,
-          composureCost: 'For a moment I did not know where it was.',
+          composureCost: 'For a beat there were two of it, and no way to file the second.',
         };
       },
     },
