@@ -10471,8 +10471,8 @@ const children = {
             'I say: who are you. The two of you.',
             'The shorter one says: ~~we are children, mister. From Saint Anselm\'s. Down the road.~~',
             (p) => p.flags.heard_lesson
-              ? 'It is the rehearsed answer, word for word. He wrote it. She has delivered it.'
-              : 'Saint Anselm\'s. ~~I have heard the name. I do not remember in what context.~~',
+              ? 'The answer arrives word for word as he set it at the gap. He drafts. She delivers.'
+              : 'Saint Anselm\'s. The name is filed in me somewhere low, with the things I knew before this building.',
           ],
           scales: { suspicion: (p) => p.flags.heard_lesson ? +4 : +3 },
           flags: { asked_who: true, knows_anselms: true, mister_count: (p) => (p.flags.mister_count || 0) + 1 },
@@ -10485,7 +10485,7 @@ const children = {
         which: {
           lines: [
             'I say: there are two Saint Anselm\'s within a mile of here. Which.',
-            'There is a pause. The taller one murmurs something into her ear. The shorter one says: ~~the one with the red roof, mister.~~',
+            'A pause the length of a whisper. His voice goes under the door of her ear. Then the shorter one says: ~~the one with the red roof, mister.~~',
             'Neither of them has a red roof. ~~Neither of them has had a roof for some years.~~',
           ],
           scales: { suspicion: +5, invitation: -1 },
